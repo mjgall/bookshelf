@@ -26,7 +26,8 @@ export default class Scanner extends React.Component {
       search_value: '',
       isOpen: false,
       currentBook: null,
-      useCamera: false
+      useCamera: false,
+      alert: false
     };
 
     // react component class bindings for methods, for scope access.
@@ -156,7 +157,15 @@ export default class Scanner extends React.Component {
         this.state.canvas.height
       );
     });
+    this.alert();
   }
+
+  alert = () => {
+    this.setState({ alert: true });
+    setTimeout(() => {
+      this.setState({ alert: false });
+    }, 300);
+  };
 
   // add new detected barcode to state
   addDetectedCode(code) {
@@ -234,7 +243,16 @@ export default class Scanner extends React.Component {
     };
     return (
       <>
-        <div style={{ position: 'sticky', top: '0px' }} className="scanner">
+        <div
+          style={{ position: 'sticky', top: '0px' }}
+          className={'scanner' + ' ' + this.props.className}>
+          {this.state.alert ? (
+            <div
+              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded absolute .z-50 w-full"
+              role="alert">
+              <strong className="font-bold">Scanned</strong>
+            </div>
+          ) : null}
           <div
             style={{ display: this.state.useCamera ? 'block' : 'none' }}
             id="live-stream"></div>
