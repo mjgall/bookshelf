@@ -6,11 +6,13 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const keys = require('./config/keys');
 const db = require('./config/db/connection');
+const enforce = require('express-sslify');
 
 require('./config/db/Models/User.Model');
 require('./config/db/Models/Book.Model');
 require('./services/passport');
 
+app.use(enforce.HTTPS({ trustProtoHeader: true }));
 // The request handler must be the first middleware on the app
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
