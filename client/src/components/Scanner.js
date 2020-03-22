@@ -111,12 +111,16 @@ export default class Scanner extends React.Component {
     Quagga.offDetected();
 
     // check if the code is already in state, and alert if it is, or add to state and capture if not.
-    this.state.codes.includes(codeResult.code)
-      ? this.displayDuplicateAlert()
-      : (() => {
-          this.captureImage();
-          this.addDetectedCode(codeResult.code);
-        })();
+    // this.state.codes.includes(codeResult.code)
+    //   ? this.displayDuplicateAlert()
+    //   : (() => {
+    //       this.captureImage();
+    //       this.addDetectedCode(codeResult.code);
+    //   })();
+    (() => {
+      this.captureImage();
+      this.addDetectedCode(codeResult.code);
+    })();
 
     /* re-assign handler to event listener with delay, because it was removed after successful barcode detection, 
     to prevent a stream of barcode detection events from being triggered and created a mess of multiple images.
@@ -172,7 +176,6 @@ export default class Scanner extends React.Component {
     if (response.data) {
       this.setState({ currentBook: response.data });
       this.toggleModal();
-      this.updateFunction(response.data);
     } else {
       return;
     }
@@ -198,16 +201,49 @@ export default class Scanner extends React.Component {
     this.setState({ isOpen: !this.state.isOpen });
   };
 
+  addBook = () => {
+    this.updateFunction(this.state.currentBook);
+    this.toggleModal();
+  };
+
   render = () => {
     Modal.setAppElement(document.querySelector('#root'));
+    Modal.defaultStyles = {
+      overlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(255, 255, 255, 0.75)'
+      },
+      content: {
+        position: 'absolute',
+        top: '40px',
+        left: '40px',
+        right: '40px',
+        bottom: '40px',
+        border: '1px solid #ccc',
+        borderRadius: '5px',
+        background: '#fff',
+        overflow: 'auto',
+        WebkitOverflowScrolling: 'touch',
+        outline: 'none',
+        padding: '20px'
+      }
+    };
     return (
       <>
         <div style={{ position: 'sticky', top: '0px' }} className="scanner">
           <div
             style={{ display: this.state.useCamera ? 'block' : 'none' }}
             id="live-stream"></div>
-          <Button onClick={this.useCamera}>Use Camera</Button>
-          <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <Button onClick={this.useCamera}>
+            {this.state.useCamera ? 'Close camera' : 'Use camera'}
+          </Button>
+          <form
+            onSubmit={this.handleManualSubmit}
+            className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <Label htmlFor="isbn">ISBN</Label>
             <div className="flex items-center justify-between">
               <Input
@@ -222,18 +258,22 @@ export default class Scanner extends React.Component {
             </div>
           </form>
           <Modal
+            className="custom-modal border-solid border-2 border-gray-600 w-1/2 rounded outline-none bg-white container mx-auto relative p-4"
             shouldCloseOnEsc
             shouldCloseOnOverlayClick
             isOpen={this.state.isOpen}>
             {this.state.currentBook ? (
               <div>
                 <h3>{this.state.currentBook.title}</h3>
-                <img src={this.state.currentBook.image} alt="cover"></img>
+                <img
+                  style={{ maxHeight: '50vh' }}
+                  src={this.state.currentBook.image}
+                  alt="cover"></img>
               </div>
             ) : null}
+            <Button onClick={this.addBook}>Add</Button>
             <Button onClick={this.toggleModal}>Close</Button>
           </Modal>
-          <Button onClick={this.toggleModal}>Open Modal</Button>
         </div>
       </>
     );
