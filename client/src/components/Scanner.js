@@ -258,9 +258,7 @@ export default class Scanner extends React.Component {
           <div
             style={{ display: this.state.useCamera ? 'block' : 'none' }}
             id="live-stream"></div>
-          <Button onClick={this.useCamera}>
-            {this.state.useCamera ? 'Close camera' : 'Use camera'}
-          </Button>
+
           <form
             onSubmit={this.handleManualSubmit}
             className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -270,6 +268,9 @@ export default class Scanner extends React.Component {
                 onChange={this.handleManualChange}
                 value={this.state.manualISBN}
                 name="isbn"></Input>
+              <Button onClick={this.useCamera}>
+                {this.state.useCamera ? 'Close' : 'Scan'}
+              </Button>
               <Button
                 onClick={this.handleManualSubmit}
                 className="inline-block">
