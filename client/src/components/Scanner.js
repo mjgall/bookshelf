@@ -210,7 +210,9 @@ export default class Scanner extends React.Component {
     this.setState({ isOpen: !this.state.isOpen });
   };
 
-  addBook = () => {
+  addBook = async () => {
+    const response = await axios.post('/api/books', this.state.currentBook);
+    console.log(response.data);
     this.updateFunction(this.state.currentBook);
     this.toggleModal();
   };
@@ -244,7 +246,7 @@ export default class Scanner extends React.Component {
     return (
       <>
         <div
-          style={{ position: 'sticky', top: '0px' }}
+          // style={{ position: 'sticky', top: '0px' }}
           className={'scanner' + ' ' + this.props.className}>
           {this.state.alert ? (
             <div

@@ -4,20 +4,26 @@ const path = require('path');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
-// const keys = require('./config/keys');
+const keys = require('./config/keys');
+const db = require('./config/db/connection');
 
-// require('./services/passport');
+require('./config/db/Models/User.Model');
+require('./config/db/Models/Book.Model');
+require('./services/passport');
 
 // The request handler must be the first middleware on the app
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(
+  cookieSession({ maxAge: 30 * 24 * 60 * 60 * 1000, keys: [keys.cookieKey] })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
-// app.use(
-//   cookieSession({ maxAge: 30 * 24 * 60 * 60 * 1000, keys: [keys.cookieKey] })
-// );
-
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use((req, res, next) => {
+  console.log(req.user);
+  next();
+});
 
 //ROUTES
 //AUTH

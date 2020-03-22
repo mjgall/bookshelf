@@ -3,11 +3,22 @@ import React from 'react';
 // import './App.css';
 import './styles/tailwind.css';
 import './App.css';
+import axios from 'axios';
 
 import Scanner from './components/Scanner';
+import BookTable from './components/BookTable';
 
 export default class App extends React.Component {
-  state = { books: [], manualISBN: '' };
+  state = { books: [], manualISBN: '', user: null };
+
+  componentDidMount = async () => {
+    const userResponse = await axios.get('/api/current_user');
+
+    this.setState({
+      user: userResponse.data,
+      books: userResponse.data.books || []
+    });
+  };
 
   updateFunction = book => {
     this.setState({ books: [...this.state.books, book] });
@@ -30,13 +41,6 @@ export default class App extends React.Component {
                   </g>
                 </g>
               </g>
-              {/* <g
-                id="SvgjsG1253"
-                featurekey="6c7PTl-0"
-                transform="matrix(2.5786672755681117,0,0,2.5786672755681117,126.63637226355503,82.57956595410539)"
-                fill="#ffffff">
-                <path d="M3.18 20 c-0.6 0 -1.1 -0.5 -1.1 -1.1 l0 -11.8 c0 -0.62 0.5 -1.1 1.1 -1.1 l0.06 0 l0.02 0 l2.76 0 c2.1 0 3.8 1.7 3.8 3.8 c0 0.86 -0.28 1.64 -0.76 2.28 c1.2 0.76 2.02 2.1 2.02 3.62 c0 2.38 -1.92 4.3 -4.28 4.3 l-3.54 0 c-0.02 0 -0.02 -0.02 -0.02 -0.02 c-0.04 0 -0.04 0.02 -0.06 0.02 z M4.3 8.22 l0 3.2 l1.72 0 c0.88 0 1.58 -0.74 1.58 -1.62 s-0.7 -1.58 -1.58 -1.58 l-1.72 0 z M4.3 13.64 l0 4.14 l2.5 0 c1.14 -0.02 2.06 -0.92 2.06 -2.08 c0 -1.14 -0.92 -2.04 -2.06 -2.06 l-2.5 0 z M18.1 20.06 c-1.38 0 -2.54 -0.58 -3.44 -1.52 c-0.86 -0.88 -1.38 -2.12 -1.38 -3.52 c0 -1.36 0.52 -2.54 1.38 -3.5 c0.9 -0.94 2.06 -1.52 3.44 -1.52 c1.32 0 2.52 0.58 3.34 1.52 c0.9 0.96 1.4 2.14 1.4 3.5 l0 0 c0 1.4 -0.5 2.64 -1.4 3.52 c-0.82 0.94 -2.02 1.52 -3.34 1.52 l0 0 z M16.18 12.940000000000001 c-0.46 0.54 -0.72 1.26 -0.72 2.08 c0 0.86 0.26 1.56 0.72 2.12 c0.5 0.48 1.16 0.74 1.92 0.74 c0.7 0 1.34 -0.26 1.84 -0.74 c0.5 -0.56 0.78 -1.26 0.78 -2.12 l0 0 c0 -0.82 -0.28 -1.54 -0.78 -2.08 c-0.5 -0.44 -1.14 -0.76 -1.84 -0.76 c-0.76 0 -1.42 0.32 -1.92 0.76 z M30.6 20.06 c-1.38 0 -2.54 -0.58 -3.44 -1.52 c-0.86 -0.88 -1.38 -2.12 -1.38 -3.52 c0 -1.36 0.52 -2.54 1.38 -3.5 c0.9 -0.94 2.06 -1.52 3.44 -1.52 c1.32 0 2.52 0.58 3.34 1.52 c0.9 0.96 1.4 2.14 1.4 3.5 l0 0 c0 1.4 -0.5 2.64 -1.4 3.52 c-0.82 0.94 -2.02 1.52 -3.34 1.52 l0 0 z M28.680000000000003 12.940000000000001 c-0.46 0.54 -0.72 1.26 -0.72 2.08 c0 0.86 0.26 1.56 0.72 2.12 c0.5 0.48 1.16 0.74 1.92 0.74 c0.7 0 1.34 -0.26 1.84 -0.74 c0.5 -0.56 0.78 -1.26 0.78 -2.12 l0 0 c0 -0.82 -0.28 -1.54 -0.78 -2.08 c-0.5 -0.44 -1.14 -0.76 -1.84 -0.76 c-0.76 0 -1.42 0.32 -1.92 0.76 z M39.84 20 c-0.62 0 -1.1 -0.5 -1.1 -1.1 l0 -11.8 c0 -0.6 0.48 -1.1 1.1 -1.1 s1.12 0.5 1.12 1.1 l0 6.92 l4.1 -4.1 c0.42 -0.42 1.14 -0.42 1.56 0 c0.44 0.44 0.44 1.14 0 1.56 l-3 3 l3.08 3.7 c0.38 0.48 0.32 1.18 -0.16 1.56 c-0.2 0.18 -0.46 0.26 -0.7 0.26 c-0.32 0 -0.64 -0.14 -0.84 -0.4 l-2.94 -3.56 l-1.1 1.1 l0 1.76 c0 0.6 -0.5 1.1 -1.12 1.1 z M49.60000000000001 18.62 c-0.44 -0.36 -0.5 -1.04 -0.14 -1.48 l0 0 c0.36 -0.48 1.06 -0.54 1.5 -0.16 l0 0 c0.52 0.44 1.42 0.9 2.2 0.88 l0 0 c0.54 0 1.04 -0.18 1.36 -0.38 l0 0 c0.28 -0.24 0.36 -0.44 0.36 -0.6 l0 0 c0 -0.1 -0.02 -0.14 -0.06 -0.2 l0 0 c-0.02 -0.06 -0.1 -0.14 -0.26 -0.24 l0 0 c-0.28 -0.2 -0.88 -0.42 -1.6 -0.56 l0 0 l0 0 l0 0 l-0.02 0 c-0.62 -0.12 -1.22 -0.28 -1.74 -0.52 l0 0 c-0.54 -0.26 -1.02 -0.62 -1.38 -1.16 l0 0 c-0.22 -0.36 -0.34 -0.8 -0.34 -1.26 l0 0 c0 -0.92 0.52 -1.7 1.18 -2.2 l0 0 c0.7 -0.48 1.54 -0.74 2.46 -0.74 l0 0 c1.38 0 2.36 0.66 3 1.1 l0 0 l0 0 c0.48 0.32 0.62 0.98 0.32 1.48 l0 0 c-0.32 0.48 -0.98 0.62 -1.48 0.28 l0 0 c-0.64 -0.42 -1.2 -0.74 -1.84 -0.74 l0 0 c-0.5 0 -0.94 0.16 -1.2 0.36 l0 0 c-0.26 0.18 -0.32 0.36 -0.32 0.46 l0 0 c0 0.08 0 0.1 0.04 0.16 l0 0 c0.02 0.04 0.08 0.12 0.22 0.2 l0 0 c0.26 0.18 0.78 0.36 1.46 0.48 l0 0 l0.02 0.02 l0.02 0 c0.66 0.12 1.28 0.3 1.86 0.58 l0 0 c0.54 0.24 1.08 0.62 1.42 1.18 l0 0 c0.24 0.4 0.38 0.86 0.38 1.32 l0 0 c0 0.98 -0.54 1.8 -1.26 2.32 l0 0 c-0.72 0.5 -1.62 0.8 -2.6 0.8 l0 0 c-1.56 -0.02 -2.76 -0.74 -3.56 -1.38 l0 0 z M62 14.379999999999999 l0 4.52 c0 0.62 -0.5 1.1 -1.12 1.1 c-0.5 0 -0.92 -0.36 -1.06 -0.82 c-0.02 -0.08 -0.04 -0.18 -0.04 -0.28 l0 -11.8 c0 -0.62 0.5 -1.1 1.1 -1.1 c0.62 0 1.12 0.48 1.12 1.1 l0 3.48 c0.64 -0.34 1.36 -0.58 2.14 -0.58 c2.42 0 4.36 1.98 4.36 4.38 l0 4.52 c0 0.62 -0.48 1.1 -1.1 1.1 s-1.1 -0.48 -1.1 -1.1 l0 -4.52 c0 -1.18 -0.96 -2.14 -2.16 -2.16 c-1.18 0.02 -2.12 0.98 -2.14 2.16 z M76.22000000000001 20 c-2.74 -0.02 -4.86 -2.28 -4.88 -5 c0.02 -2.72 2.14 -5 4.88 -5 c2.6 0 4.66 1.94 4.82 4.64 l0 0.1 l0 0 l0 0 c0 0.04 0 0.14 -0.02 0.18 c-0.06 0.48 -0.48 0.8 -1.04 0.8 l-6.36 0 c0.1 0.46 0.32 0.98 0.68 1.32 c0.42 0.48 1.22 0.84 1.92 0.9 c0.72 0.06 1.58 -0.12 2.08 -0.5 c0.42 -0.44 1.24 -0.38 1.5 -0.06 c0.26 0.28 0.46 0.88 0 1.3 c-0.98 0.9 -2.16 1.32 -3.58 1.32 z M76.22000000000001 11.9 c-1.7 0.08 -2.54 1.3 -2.7 2.12 l5.66 0 c-0.2 -0.8 -1.22 -1.98 -2.96 -2.12 z M84.36000000000001 7.1 c0 -0.6 0.5 -1.1 1.1 -1.1 c0.62 0 1.12 0.5 1.12 1.1 l0 11.8 c0 0.6 -0.5 1.1 -1.12 1.1 c-0.6 0 -1.1 -0.5 -1.1 -1.1 l0 -11.8 z M92.66000000000003 8.32 c-0.02 0 -0.18 0.28 -0.18 1.02 l0 0.28 l0.6 0 c0.6 0 1.1 0.48 1.1 1.1 c0 0.6 -0.5 1.1 -1.1 1.1 l-0.6 0 l0 7.06 c0 0.6 -0.48 1.1 -1.1 1.1 s-1.1 -0.5 -1.1 -1.1 l0 -7.06 l-0.52 0 c-0.62 0 -1.12 -0.5 -1.12 -1.1 c0 -0.62 0.5 -1.1 1.12 -1.1 l0.52 0 l0 -0.28 c0 -0.74 0.08 -1.38 0.38 -1.96 c0.28 -0.6 0.84 -1.06 1.44 -1.24 c0.4 -0.12 0.78 -0.16 1.2 -0.16 c0.6 0 1.1 0.5 1.1 1.1 c0 0.62 -0.5 1.12 -1.1 1.12 c-0.26 0 -0.44 0.02 -0.52 0.06 c-0.08 0.02 -0.1 0.04 -0.12 0.06 z"></path>
-              </g> */}
             </svg>
             <span class="font-semibold text-xl tracking-tight">Bookshelf</span>
           </div>
@@ -53,40 +57,38 @@ export default class App extends React.Component {
           </div>
           <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
             <div class="text-sm lg:flex-grow">
-              {/* <a
-                href="#responsive-header"
-                class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
-                Docs
-              </a> */}
+              <span class="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-white mr-4">
+                {this.state?.user?.full}
+              </span>
             </div>
             <div>
-              <a
-                href="#"
-                class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
-                Login
-              </a>
+              {!this.state.user ? (
+                <a
+                  href="/auth/google"
+                  class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
+                  Login
+                </a>
+              ) : (
+                <a
+                  href="/api/logout"
+                  class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
+                  Logout
+                </a>
+              )}
             </div>
           </div>
         </nav>
         <div className="w-5/6 container mx-auto my-4">
-          <Scanner
-            className="max-w-screen-md container mx-auto"
-            onChange={this.updateFunction}></Scanner>
-          <ul
-            style={{
-              listStyle: 'none',
-              display: 'grid',
-              gridTemplateColumns: 'auto auto auto auto auto'
-            }}>
-            {this.state.books.map((book, index) => {
-              return (
-                <li key={index}>
-                  <div>{book.title}</div>
-                  <img alt={book.title} src={book.image}></img>
-                </li>
-              );
-            })}
-          </ul>
+          {this.state.user ? (
+            <>
+              <Scanner
+                className="max-w-screen-md container mx-auto"
+                onChange={this.updateFunction}></Scanner>
+              <BookTable books={this.state.books}></BookTable>
+            </>
+          ) : (
+            <span className="text-3xl">Log in to start adding books!</span>
+          )}
         </div>
       </>
     );
