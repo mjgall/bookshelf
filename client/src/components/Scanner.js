@@ -128,7 +128,7 @@ export default class Scanner extends React.Component {
     The delay gives the  user time to physically move the code away from the camera */
     setTimeout(() => {
       Quagga.onDetected(this.onDetectedHandler);
-    }, 2000);
+    }, 3000);
   }
 
   // save the image as a blob in local state
@@ -179,7 +179,6 @@ export default class Scanner extends React.Component {
 
   getBook = async code => {
     const response = await axios.get(`/api/book/lookup/${code}`);
-
     if (response.data) {
       this.setState({ currentBook: response.data });
       this.toggleModal();
