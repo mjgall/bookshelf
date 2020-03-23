@@ -12,7 +12,10 @@ require('./config/db/Models/User.Model');
 require('./config/db/Models/Book.Model');
 require('./services/passport');
 
-app.use(enforce.HTTPS({ trustProtoHeader: true }));
+if (process.env.NODE_ENV === 'production') {
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
+
 // The request handler must be the first middleware on the app
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -21,11 +24,6 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use((req, res, next) => {
-  console.log(req.user);
-  next();
-});
 
 //ROUTES
 //AUTH

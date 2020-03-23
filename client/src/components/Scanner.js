@@ -262,9 +262,10 @@ export default class Scanner extends React.Component {
           <form
             onSubmit={this.handleManualSubmit}
             className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <Label htmlFor="isbn">ISBN</Label>
+
             <div className="flex items-center justify-between">
               <Input
+                placeholder="Type in ISBN or scan"
                 onChange={this.handleManualChange}
                 value={this.state.manualISBN}
                 name="isbn"></Input>
