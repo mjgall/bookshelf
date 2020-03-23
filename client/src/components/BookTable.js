@@ -1,7 +1,14 @@
 import React from 'react';
+import { Redirect, withRouter } from 'react-router-dom';
 
-export default class BookTable extends React.Component {
+class BookTable extends React.Component {
+
+  viewBook = id => {
+    this.props.history.push(`/book/${id}`);
+  };
+
   render = () => {
+
     return (
       <>
         <table className="table-auto max-w-screen-md container mx-auto shadow-md">
@@ -15,7 +22,7 @@ export default class BookTable extends React.Component {
           <tbody>
             {this.props.books.map((book, index) => {
               return (
-                <tr key={index}>
+                <tr className="hover:bg-gray-100 cursor-pointer" key={index} onClick={() => this.viewBook(book.isbn)}>
                   <td className="border px-4 py-2">{book.title}</td>
                   <td className="border px-4 py-2">{book.authors[0]}</td>
                   <td className="border px-4 py-2">
@@ -33,3 +40,5 @@ export default class BookTable extends React.Component {
     );
   };
 }
+
+export default withRouter(BookTable);

@@ -1,11 +1,20 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 
-export default class NavBar extends React.Component {
+class NavBar extends React.Component {
+
+  goHome = () => {
+    this.props.history.push('')
+  }
+
   render = () => {
     return (
-      <nav className="flex items-center justify-between flex-wrap bg-blue-500 py-2 px-8">
-        <div className="flex items-center flex-shrink-0 text-white mr-6">
-          <svg width="150" height="100" viewBox="0 0 50 100">
+      <nav className="flex items-center justify-between flex-wrap bg-blue-500 px-8 sticky top-0">
+        <div className="flex items-center flex-shrink-0 text-white mr-6 cursor-pointer" onClick={this.goHome}>
+          <svg
+            width={this.props.scrollPosition > 0 || this.props.location.pathname.indexOf('/book/') >= 0 ? '75' : '150'}
+            height={this.props.scrollPosition > 0 || this.props.location.pathname.indexOf('/book/') >= 0 ? '50' : '100'}
+            viewBox="0 0 50 100">
             <g fill="#e4ceb2">
               <g xmlns="http://www.w3.org/2000/svg">
                 <g>
@@ -18,7 +27,7 @@ export default class NavBar extends React.Component {
               </g>
             </g>
           </svg>
-          <span className="font-semibold text-xl tracking-tight">
+          <span className="font-semibold text-lg tracking-tight">
             Bookshelf
           </span>
         </div>
@@ -37,7 +46,7 @@ export default class NavBar extends React.Component {
           <div className="text-sm lg:flex-grow">
             <span className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-white mr-4">
               {this.props.user
-                ? `${this.props?.user?.full} has ${this.props?.user?.books?.length} books!`
+                ? `${this.props?.user?.full} has ${this.props.books.length} books!`
                 : null}
             </span>
           </div>
@@ -61,3 +70,5 @@ export default class NavBar extends React.Component {
     );
   };
 }
+
+export default withRouter(NavBar)
