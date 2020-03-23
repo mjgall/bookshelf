@@ -178,9 +178,7 @@ export default class Scanner extends React.Component {
   }
 
   getBook = async code => {
-    const response = await axios.get(`/api/book/lookup/${code}`, {
-      headers: { Authorization: '43911_8b18bf16825dc5f4f5c3bfe3b0cea146' }
-    });
+    const response = await axios.get(`/api/book/lookup/${code}`);
 
     if (response.data) {
       this.setState({ currentBook: response.data });
@@ -262,7 +260,6 @@ export default class Scanner extends React.Component {
           <form
             onSubmit={this.handleManualSubmit}
             className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-
             <div className="flex items-center justify-between">
               <Input
                 placeholder="Type in ISBN or scan"
