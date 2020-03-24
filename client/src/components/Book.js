@@ -20,13 +20,13 @@ export default class Book extends React.Component {
     console.log(this.props);
     return (
       <div className="container mx-auto">
-        <div className="max-w-sm rounded overflow-hidden shadow-lg">
+        <div className="max-w-sm rounded overflow-hidden shadow-lg mx-auto">
           <img
             className="w-1/2 mx-auto"
             src={this.state?.currentBook?.image}
             alt="cover"></img>
           <div className="px-6 py-4">
-            <div className="font-bold text-xl mb-2">
+            <div className="font-bold text-xl mb-2 text-center">
               {this.state?.currentBook?.title}
             </div>
           </div>
