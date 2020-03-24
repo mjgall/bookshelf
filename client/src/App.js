@@ -10,6 +10,7 @@ import NavBar from './components/NavBar';
 
 import Home from './components/Home';
 import Book from './components/Book';
+import BookTable from './components/BookTable2';
 
 export default class App extends React.Component {
   state = {
@@ -77,6 +78,15 @@ export default class App extends React.Component {
                       <Book
                         isbn={props.match.params.id}
                         books={this.state?.user?.books}></Book>
+                    );
+                  }}></Route>
+                <Route
+                  path="/table"
+                  exact
+                  render={ props => {
+                    
+                    return (
+                      <BookTable history={props.history} books={this.state?.user?.books}></BookTable>
                     );
                   }}></Route>
               </Switch>
