@@ -1,6 +1,7 @@
 import React from 'react';
 import Scanner from './Scanner';
 import BookTable from './BookTable2';
+import MarketingHome from './MarketingHome';
 import { withRouter } from 'react-router-dom';
 
 class Home extends React.Component {
@@ -10,20 +11,20 @@ class Home extends React.Component {
 
   render = () => {
     return (
-      <div className="w-5/6 container mx-auto my-4">
+      <>
         {this.props.user && this.props.loaded ? (
-          <>
+          <div className="w-5/6 container mx-auto my-4">
             <Scanner
-              className="max-w-screen-md container mx-auto"
+              className="max-w-screen-md container mx-auto mt-5"
               onChange={this.updateFunction}></Scanner>
             <BookTable
               history={this.props.history}
               books={this.props.books}></BookTable>
-          </>
+          </div>
         ) : this.props.loaded && !this.props.user ? (
-          <span className="text-3xl">Log in to start adding books!</span>
+          <MarketingHome></MarketingHome>
         ) : null}
-      </div>
+      </> 
     );
   };
 }
