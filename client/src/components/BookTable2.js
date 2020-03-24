@@ -275,7 +275,7 @@ function Table({ columns, data, history }) {
     <>
       <table
         {...getTableProps()}
-        className="table-auto max-w-screen-md container mx-auto shadow-md">
+        className="table-auto max-w-screen-md sm:w-full container mx-auto shadow-md">
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>

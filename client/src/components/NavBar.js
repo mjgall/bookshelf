@@ -9,7 +9,7 @@ class NavBar extends React.Component {
 
   render = () => {
     return (
-      <nav className="flex items-center justify-between flex-wrap bg-blue-500 px-8 sticky top-0 ">
+      <nav className="flex items-center justify-between flex-wrap bg-blue-500 px-8 sticky top-0 mb-5">
         <div className="flex items-center flex-shrink-0 text-white mr-6 cursor-pointer" onClick={this.goHome}>
           <svg
             width={this.props.scrollPosition > 0 || this.props.location.pathname.indexOf('/book/') >= 0 ? '75' : '150'}
