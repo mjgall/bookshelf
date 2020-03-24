@@ -383,7 +383,7 @@ function BookTable(props) {
     return props.books.map(book => {
       return {
         ...book,
-        author: book.authors[0]
+        author: book?.authors[0]
       };
     });
   }, []);

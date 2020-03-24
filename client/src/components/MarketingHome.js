@@ -19,9 +19,11 @@ export default class MarketingHome extends React.Component {
           <div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded md:shadow-sm">
             <img className=" shadow-lg" src={screenshot1}></img>
             <div className="text-3xl pl-10">Scan books</div>
+    
           </div>
           <div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded md:shadow-sm">
             <div className="text-3xl pr-10">Search for books</div>
+       
             <img className="shadow-lg" src={screenshot2}></img>
           </div>
         </div>
