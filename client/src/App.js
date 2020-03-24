@@ -1,4 +1,5 @@
 import React from 'react';
+
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // import './App.css';
 import './styles/tailwind.css';
@@ -83,10 +84,11 @@ export default class App extends React.Component {
                 <Route
                   path="/table"
                   exact
-                  render={ props => {
-                    
+                  render={props => {
                     return (
-                      <BookTable history={props.history} books={this.state?.user?.books}></BookTable>
+                      <BookTable
+                        history={props.history}
+                        books={this.state?.user?.books}></BookTable>
                     );
                   }}></Route>
               </Switch>

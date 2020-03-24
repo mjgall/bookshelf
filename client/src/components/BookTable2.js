@@ -1,8 +1,9 @@
 import React from 'react';
-import { useTable, useFilters, useGlobalFilter } from 'react-table';
+import { useTable, useFilters, useSortBy, useGlobalFilter } from 'react-table';
 import { withRouter } from 'react-router-dom';
 import Book from './Book';
 import matchSorter from 'match-sorter';
+import MediaQuery, { useMediaQuery } from 'react-responsive';
 
 // import React from 'react';
 import styled from 'styled-components';
@@ -262,7 +263,8 @@ function Table({ columns, data, history }) {
       filterTypes
     },
     useFilters, // useFilters!
-    useGlobalFilter // useGlobalFilter!
+    useGlobalFilter, // useGlobalFilter!
+    useSortBy
   );
 
   // We don't want to render all of the rows for this example, so cap
@@ -278,15 +280,24 @@ function Table({ columns, data, history }) {
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()} className="px-4 py-2 border">
+                <th
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  className="px-4 py-2 border">
                   {column.render('Header')}
+                  <span>
+                    {column.isSorted
+                      ? column.isSortedDesc
+                        ? ' 🔽'
+                        : ' 🔼'
+                      : null}
+                  </span>
                   {/* Render the columns filter UI */}
                   {/* <div>{column.canFilter ? column.render('Filter') : null}</div> */}
                 </th>
               ))}
             </tr>
           ))}
-          <tr>
+          <tr className="border leading-11">
             <th
               colSpan={visibleColumns.length}
               style={{
@@ -339,24 +350,34 @@ function filterGreaterThan(rows, id, filterValue) {
 filterGreaterThan.autoRemove = val => typeof val !== 'number';
 
 function BookTable(props) {
-  const columns = React.useMemo(
-    () => [
-      { Header: 'Title', accessor: 'title' },
-      { Header: 'Author', accessor: 'author' },
-      {
-        Header: 'Cover',
-        Cell: props => {
-          return (
-            <img
-              style={{ maxHeight: '5rem' }}
-              src={props.row.original.image}
-              alt="cover"></img>
-          );
+  const isTabletOrMobileDevice = useMediaQuery({
+    query: '(max-device-width: 1224px)'
+  });
+
+  const columns = React.useMemo(() => {
+    if (!isTabletOrMobileDevice || isTabletOrMobileDevice) {
+      return [
+        { Header: 'Title', accessor: 'title' },
+        { Header: 'Author', accessor: 'author' },
+        {
+          Header: 'Cover',
+          Cell: props => {
+            return (
+              <img
+                className="w-20"
+                src={props.row.original.image}
+                alt="cover"></img>
+            );
+          }
         }
-      }
-    ],
-    []
-  );
+      ];
+    } else {
+      return [
+        { Header: 'Title', accessor: 'title' },
+        { Header: 'Author', accessor: 'author' }
+      ];
+    }
+  }, []);
 
   const data = React.useMemo(() => {
     return props.books.map(book => {
