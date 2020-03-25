@@ -1,4 +1,8 @@
 import React from 'react';
+import editable from './Editable';
+
+const EditDiv = editable('div');
+const EditP = editable('p');
 
 export default class Book extends React.Component {
   state = {
@@ -13,21 +17,90 @@ export default class Book extends React.Component {
 
     const currentBook = currentBooksArray[0];
 
-    this.setState({ currentBook });
+    this.setState({
+      currentBook: { ...currentBook, notes: '', read: false }
+    });
+  };
+
+  update = (value, fieldName) => {
+    switch (fieldName) {
+      case 'title':
+        this.setState({
+          currentBook: { ...this.state.currentBook, title: value }
+        });
+        break;
+      case 'author':
+        console.log('in author');
+        this.setState({
+          currentBook: { ...this.state.currentBook, authors: [value] }
+        });
+      default:
+        break;
+    }
   };
 
   render = () => {
-    console.log(this.props);
     return (
-      <div className="container mx-auto">
-        <div className="max-w-sm rounded overflow-hidden shadow-lg mx-auto">
-          <img
-            className="w-1/2 mx-auto"
-            src={this.state?.currentBook?.image}
-            alt="cover"></img>
-          <div className="px-6 py-4">
-            <div className="font-bold text-xl mb-2 text-center">
-              {this.state?.currentBook?.title}
+      <div className="container mx-auto mt-12">
+        <div className="px-6">
+          <div className="flex flex-wrap justify-center">
+            <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
+              <div className="">
+                <img
+                  className="w-1/2 mx-auto"
+                  src={this.state?.currentBook?.image}
+                  alt="cover"></img>
+              </div>
+            </div>
+            <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center"></div>
+            <div className="w-full lg:w-4/12 px-4 lg:order-1">
+              <div className="flex justify-center py-4 lg:pt-4 pt-8">
+                <div className="mr-4 p-3 text-center">
+                  <div className="`text-md text-gray-500 cursor-pointer">
+                    {this.state?.currentBook?.read ? (
+                      `You've read this book!`
+                    ) : (
+                      <div
+                        onClick={
+                          this.state?.currentBook?.read
+                            ? null
+                            : () =>
+                                this.setState({
+                                  currentBook: {
+                                    ...this.state.currentBook,
+                                    read: true
+                                  }
+                                })
+                        }
+                        className="bg-blue-500 rounded text-white text-center p-4">
+                        Mark as read!
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="text-center mt-12">
+            <EditDiv
+              value={this.state?.currentBook?.title}
+              update={this.update}
+              className="text-4xl font-semibold leading-normal mb-2 text-gray-800 mb-2"></EditDiv>
+
+            <EditDiv
+              value={this.state?.currentBook?.authors[0]}
+              update={this.update}
+              className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold uppercase"></EditDiv>
+          </div>
+          <div className="mt-10 py-10 border-t border-gray-300 text-center">
+            <div className="flex flex-wrap justify-center">
+              <div className="w-full lg:w-9/12 px-4">
+                <div className="text-lg font-semibold">Notes:</div>
+                <EditP
+                  update={this.update}
+                  value={ this.state?.currentBook?.notes ? this.state?.currentBook?.notes : 'Click to add notes'}
+                  className="mb-4 text-lg leading-relaxed text-gray-800"></EditP>
+              </div>
             </div>
           </div>
         </div>
