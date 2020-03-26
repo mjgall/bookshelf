@@ -15,11 +15,12 @@ class Home extends React.Component {
         {this.props.user && this.props.loaded ? (
           <div className="max-w-screen-md container my-4">
             <Scanner
+              user={this.props.user}
               className="max-w-screen-md container mx-auto mt-5"
               onChange={this.updateFunction}></Scanner>
             <BookTable
               history={this.props.history}
-              books={this.props.books}></BookTable>
+              books={this.props.user.books}></BookTable>
           </div>
         ) : this.props.loaded && !this.props.user ? (
           <MarketingHome></MarketingHome>

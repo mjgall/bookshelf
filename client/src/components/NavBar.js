@@ -15,7 +15,6 @@ class NavBar extends React.Component {
   };
 
   render = () => {
-    console.log(this.props.location)
     return (
       <nav className="flex items-center justify-between flex-wrap bg-blue-500 px-8 py-1 md:py-3 sticky top-0">
         <div className="flex items-center">

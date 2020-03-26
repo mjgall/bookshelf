@@ -51,7 +51,8 @@ export default class Scanner extends React.Component {
   };
 
   updateFunction = book => {
-    this.props.onChange(book);
+    const newUser = {...this.props.user, books: [this.props.books, book]}
+    this.props.onChange(newUser);
   };
 
   startScanning() {

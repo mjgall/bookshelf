@@ -40,4 +40,28 @@ module.exports = app => {
       }
     });
   });
+
+  app.put('/api/users', async (req, res) => {
+    //construct new books array
+    const modifyingUser = req.user;
+    // console.log(req.body)
+    User.findOne({ googleId: modifyingUser.googleId }, (err, User) => {
+      // res.send(User.books)
+      const index = User.books.findIndex(book => {
+        return book.isbn === req.body.isbn;
+      });
+
+      const books = [...User.books];
+      books.splice(index, 1, req.body);
+      // res.send(books);
+      User.books = books;
+      User.save((err, updated) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(updated);
+        }
+      });
+    });
+  });
 };

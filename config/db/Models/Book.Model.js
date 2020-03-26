@@ -57,6 +57,11 @@ const bookSchema = new Schema({
   isbn: {
     type: String,
     required: false
+  },
+  read: {
+    type: Boolean,
+    required: false,
+    default: false
   }
 });
 

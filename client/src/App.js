@@ -26,6 +26,10 @@ export default class App extends React.Component {
     this.setState({ books: [...this.state.books, book] });
   };
 
+  updateUser = user => {
+    this.setState({user})
+  }
+  
   componentDidMount = async () => {
     window.addEventListener('scroll', this.listenToScroll);
     window.addEventListener('resize', this.listenToResize);
@@ -33,7 +37,7 @@ export default class App extends React.Component {
 
     this.setState({
       user: userResponse.data,
-      books: userResponse.data.books || [],
+      // books: userResponse.data.books || [],
       loaded: true
     });
   };
@@ -76,7 +80,7 @@ export default class App extends React.Component {
               <Switch>
                 <Route exact path="/">
                   <Home
-                    updateFunction={this.updateFunction}
+                    updateFunction={this.updateUser}
                     {...this.state}></Home>
                 </Route>
                 <Route
@@ -85,6 +89,7 @@ export default class App extends React.Component {
                   render={props => {
                     return (
                       <Book
+                        updateGlobal={this.updateUser}
                         isbn={props.match.params.id}
                         books={this.state?.user?.books}></Book>
                     );

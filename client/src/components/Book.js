@@ -1,5 +1,6 @@
 import React from 'react';
 import editable from './Editable';
+import axios from 'axios';
 
 const EditDiv = editable('div');
 const EditP = editable('p');
@@ -10,7 +11,8 @@ export default class Book extends React.Component {
   };
 
   componentDidMount = () => {
-    console.log(this.props);
+    window.scroll(0,0)
+    console.log('CDM called');
     const currentBooksArray = this.props?.books?.filter(book => {
       return book.isbn === this.props.isbn;
     });
@@ -22,21 +24,31 @@ export default class Book extends React.Component {
     });
   };
 
-  update = (value, fieldName) => {
+  update = async (value, fieldName) => {
+    console.log(value, fieldName);
     switch (fieldName) {
       case 'title':
-        this.setState({
+        await this.setState({
           currentBook: { ...this.state.currentBook, title: value }
         });
+       this.saveToDb(this.state)
         break;
       case 'author':
         console.log('in author');
-        this.setState({
+        await this.setState({
           currentBook: { ...this.state.currentBook, authors: [value] }
         });
+        await this.saveToDb(this.state);
+        break
       default:
         break;
     }
+  };
+
+  saveToDb = async (state) => {
+    const response = await axios.put('/api/users', state.currentBook)
+    const user = response.data
+    this.props.updateGlobal(user)
   };
 
   render = () => {
@@ -83,14 +95,16 @@ export default class Book extends React.Component {
           </div>
           <div className="text-center mt-12">
             <EditDiv
+              name="title"
               value={this.state?.currentBook?.title}
               update={this.update}
               className="text-4xl font-semibold leading-normal mb-2 text-gray-800 mb-2"></EditDiv>
 
             <EditDiv
+              name="author"
               value={this.state?.currentBook?.authors[0]}
               update={this.update}
-              className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold uppercase"></EditDiv>
+              className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold"></EditDiv>
           </div>
           <div className="mt-10 py-10 border-t border-gray-300 text-center">
             <div className="flex flex-wrap justify-center">
@@ -98,7 +112,11 @@ export default class Book extends React.Component {
                 <div className="text-lg font-semibold">Notes:</div>
                 <EditP
                   update={this.update}
-                  value={ this.state?.currentBook?.notes ? this.state?.currentBook?.notes : 'Click to add notes'}
+                  value={
+                    this.state?.currentBook?.notes
+                      ? this.state?.currentBook?.notes
+                      : 'Click to add notes'
+                  }
                   className="mb-4 text-lg leading-relaxed text-gray-800"></EditP>
               </div>
             </div>

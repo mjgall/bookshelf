@@ -3,7 +3,8 @@ import React from 'react';
 export default function contentEditable(WrappedComponent) {
   return class extends React.Component {
     state = {
-      editing: false
+      editing: false,
+      saved: false
     };
 
     toggleEdit = e => {
@@ -29,7 +30,8 @@ export default function contentEditable(WrappedComponent) {
     save = () => {
       this.setState(
         {
-          editing: false
+          editing: false,
+          saved: true
         },
         () => {
           if (this.props.onSave && this.isValueChanged()) {
@@ -37,6 +39,9 @@ export default function contentEditable(WrappedComponent) {
           }
         }
       );
+      setTimeout(() => {
+        this.setState({ saved: false });
+      }, 1000);
       this.props.update(this.domElm.textContent, this.props.name);
     };
 
@@ -54,7 +59,6 @@ export default function contentEditable(WrappedComponent) {
       const { key } = e;
       switch (key) {
         case 'Enter':
-        case 'Escape':
           this.save();
           break;
       }
@@ -66,17 +70,24 @@ export default function contentEditable(WrappedComponent) {
       if (this.props.editOnClick !== undefined) {
         editOnClick = this.props.editOnClick;
       }
+
       return (
         <div>
+          {this.state.saved ? (
+            <div className="text-red-600 text-xl">Saved</div>
+          ) : null}
+
           <WrappedComponent
-            className={editing ? 'editing' : {...this.props.className}}
+            className={editing ? 'editing' : { ...this.props.className }}
             onClick={editOnClick ? this.toggleEdit : undefined}
             // onClick={editOnClick ? this.edit : undefined}
             contentEditable={editing}
             ref={domNode => {
               this.domElm = domNode;
             }}
-            onBlur={this.save}
+            onBlur={() => {
+              this.setState({ editing: false });
+            }}
             onKeyDown={this.handleKeyDown}
             {...this.props}>
             {this.props.value}
