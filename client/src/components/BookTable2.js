@@ -317,7 +317,9 @@ function Table({ columns, data, history }) {
             return (
               <tr
                 {...row.getRowProps()}
-                className="hover:bg-gray-100 cursor-pointer"
+                className={`hover:bg-gray-100 cursor-pointer ${
+                  row.original.read ? 'bg-green-100' : null
+                }`}
                 onClick={() => history.push(`/book/${row.original.isbn}`)}>
                 {row.cells.map(cell => {
                   return (

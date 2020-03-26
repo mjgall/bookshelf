@@ -9,6 +9,10 @@ video {
     margin: 0 auto;
 }
 
+.read-indicator::after {
+  content: 'Read';
+}
+
 /* .ReactModal__Body--open {
   overflow: hidden;
 } */
