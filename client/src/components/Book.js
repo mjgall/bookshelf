@@ -49,7 +49,15 @@ export default class Book extends React.Component {
         });
         await this.saveToDb(this.state);
         break;
+      case 'read':
+        console.log('doing the read one');
+        await this.setState({
+          currentBook: { ...this.state.currentBook, read: true }
+        });
+        await this.saveToDb(this.state);
+        break;
       default:
+        console.log('defautl');
         break;
     }
   };
@@ -82,17 +90,9 @@ export default class Book extends React.Component {
                       `You've read this book!`
                     ) : (
                       <div
-                        onClick={
-                          this.state?.currentBook?.read
-                            ? null
-                            : () =>
-                                this.setState({
-                                  currentBook: {
-                                    ...this.state.currentBook,
-                                    read: true
-                                  }
-                                })
-                        }
+                        onClick={() => {
+                          this.update(true, 'read');
+                        }}
                         className="bg-blue-500 rounded text-white text-center p-4">
                         Mark as read!
                       </div>

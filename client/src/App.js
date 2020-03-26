@@ -29,7 +29,7 @@ export default class App extends React.Component {
   updateUser = user => {
     this.setState({user})
   }
-  
+
   componentDidMount = async () => {
     window.addEventListener('scroll', this.listenToScroll);
     window.addEventListener('resize', this.listenToResize);
@@ -44,7 +44,7 @@ export default class App extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.listenToScroll);
-    window.addEventListener('resize', this.listenToResize);
+    window.removeEventListener('resize', this.listenToResize);
   }
 
   listenToResize = e => {
