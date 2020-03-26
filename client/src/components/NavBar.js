@@ -7,7 +7,7 @@ class NavBar extends React.Component {
     this.props.history.push('');
   };
   calcLogoSize = () => {
-    if (this.props.windowWidth < 1025 || this.props.scrollPosition > 0) {
+    if (this.props.windowWidth < 1025 || this.props.scrollPosition > 0 || this.props.location.path.indexOf('/book/') > -1) {
       return '1.5rem';
     } else {
       return '3rem';
