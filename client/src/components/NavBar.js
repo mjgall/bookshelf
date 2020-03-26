@@ -7,7 +7,7 @@ class NavBar extends React.Component {
     this.props.history.push('');
   };
   calcLogoSize = () => {
-    if (this.props.windowWidth < 1025 || this.props.scrollPosition > 0 || this.props.location.path.indexOf('/book/') > -1) {
+    if (this.props.windowWidth < 1025 || this.props.scrollPosition > 0 || this.props.location.pathname.indexOf('/book/') > -1) {
       return '1.5rem';
     } else {
       return '3rem';
@@ -15,6 +15,7 @@ class NavBar extends React.Component {
   };
 
   render = () => {
+    console.log(this.props.location)
     return (
       <nav className="flex items-center justify-between flex-wrap bg-blue-500 px-8 py-1 md:py-3 sticky top-0">
         <div className="flex items-center">
