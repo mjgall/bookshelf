@@ -51,6 +51,8 @@ module.exports = app => {
         return book.isbn === req.body.isbn;
       });
 
+      console.log(req.body)
+
       const books = [...User.books];
       books.splice(index, 1, req.body);
       // res.send(books);

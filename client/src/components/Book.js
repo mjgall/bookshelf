@@ -11,7 +11,7 @@ export default class Book extends React.Component {
   };
 
   componentDidMount = () => {
-    window.scroll(0,0)
+    window.scroll(0, 0);
     console.log('CDM called');
     const currentBooksArray = this.props?.books?.filter(book => {
       return book.isbn === this.props.isbn;
@@ -20,7 +20,10 @@ export default class Book extends React.Component {
     const currentBook = currentBooksArray[0];
 
     this.setState({
-      currentBook: { ...currentBook, notes: '', read: false }
+      currentBook: {
+        ...currentBook,
+        notes: currentBook.notes ? currentBook.notes : 'Click to add notes.'
+      }
     });
   };
 
@@ -31,7 +34,7 @@ export default class Book extends React.Component {
         await this.setState({
           currentBook: { ...this.state.currentBook, title: value }
         });
-       this.saveToDb(this.state)
+        this.saveToDb(this.state);
         break;
       case 'author':
         console.log('in author');
@@ -39,16 +42,22 @@ export default class Book extends React.Component {
           currentBook: { ...this.state.currentBook, authors: [value] }
         });
         await this.saveToDb(this.state);
-        break
+        break;
+      case 'notes':
+        await this.setState({
+          currentBook: { ...this.state.currentBook, notes: value }
+        });
+        await this.saveToDb(this.state);
+        break;
       default:
         break;
     }
   };
 
-  saveToDb = async (state) => {
-    const response = await axios.put('/api/users', state.currentBook)
-    const user = response.data
-    this.props.updateGlobal(user)
+  saveToDb = async state => {
+    const response = await axios.put('/api/users', state.currentBook);
+    const user = response.data;
+    this.props.updateGlobal(user);
   };
 
   render = () => {
@@ -111,12 +120,9 @@ export default class Book extends React.Component {
               <div className="w-full lg:w-9/12 px-4">
                 <div className="text-lg font-semibold">Notes:</div>
                 <EditP
+                  name="notes"
                   update={this.update}
-                  value={
-                    this.state?.currentBook?.notes
-                      ? this.state?.currentBook?.notes
-                      : 'Click to add notes'
-                  }
+                  value={this.state.currentBook?.notes}
                   className="mb-4 text-lg leading-relaxed text-gray-800"></EditP>
               </div>
             </div>
