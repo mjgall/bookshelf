@@ -86,7 +86,7 @@ export default function contentEditable(WrappedComponent) {
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4  mx-1 rounded"
                 onClick={this.save}>
-                Submit
+                Save
               </button>
             </div>
           ) : null}
