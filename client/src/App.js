@@ -8,7 +8,7 @@ import axios from 'axios';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 import NavBar from './components/NavBar';
-
+import Footer from './components/Footer';
 import Home from './components/Home';
 import Book from './components/Book';
 import BookTable from './components/BookTable2';
@@ -19,7 +19,8 @@ export default class App extends React.Component {
     manualISBN: '',
     user: null,
     loaded: false,
-    scrollPosition: '0'
+    scrollPosition: '0',
+    windowWidth: null
   };
   updateFunction = book => {
     this.setState({ books: [...this.state.books, book] });
@@ -27,6 +28,7 @@ export default class App extends React.Component {
 
   componentDidMount = async () => {
     window.addEventListener('scroll', this.listenToScroll);
+    window.addEventListener('resize', this.listenToResize);
     const userResponse = await axios.get('/api/current_user');
 
     this.setState({
@@ -38,7 +40,12 @@ export default class App extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.listenToScroll);
+    window.addEventListener('resize', this.listenToResize);
   }
+
+  listenToResize = e => {
+    this.setState({ windowWidth: e.srcElement.innerWidth });
+  };
 
   listenToScroll = () => {
     const winScroll =
@@ -62,6 +69,7 @@ export default class App extends React.Component {
           <>
             <Router>
               <NavBar
+                windowWidth={this.state.windowWidth}
                 scrollPosition={this.state.scrollPosition}
                 books={this.state?.user?.books}
                 user={this.state.user}></NavBar>
@@ -93,7 +101,7 @@ export default class App extends React.Component {
                   }}></Route>
               </Switch>
             </Router>
-            <div className="w-full fixed bottom-0 p-2">&copy; MJG 2020</div>
+   
           </>
         ) : null}
       </>

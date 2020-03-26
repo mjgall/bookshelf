@@ -14,7 +14,7 @@ export default class MarketingHome extends React.Component {
           className="h-32 lg:h-64 bg-cover bg-local bg-center shadow-inner"
           style={{
             backgroundImage: `url(${banner3})`,
-            filter: 'grayscale(75%)'
+            // filter: 'grayscale(75%)'
           }}></div>
         <div className="w-5/6 container mx-auto my-4">
           <div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded md:shadow-sm">

@@ -1,17 +1,28 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import logo from '../images/logo.png';
 
 class NavBar extends React.Component {
-
   goHome = () => {
-    this.props.history.push('')
-  }
+    this.props.history.push('');
+  };
+  calcLogoSize = () => {
+    if (this.props.windowWidth < 1025 || this.props.scrollPosition > 0) {
+      return '1.5rem';
+    } else {
+      return '3rem';
+    }
+  };
 
   render = () => {
     return (
-      <nav className="flex items-center justify-between flex-wrap bg-blue-500 px-8 sticky top-0">
-        <div className="flex items-center flex-shrink-0 text-white mr-6 cursor-pointer" onClick={this.goHome}>
-          <svg
+      <nav className="flex items-center justify-between flex-wrap bg-blue-500 px-8 py-3 sticky top-0">
+        <div className="flex">
+          <div
+            className="flex items-center flex-shrink-0 text-white mr-6 cursor-pointer"
+            onClick={this.goHome}>
+            <img className="mr-4" src={logo} style={{ width: this.calcLogoSize() }}></img>
+            {/* <svg
             width={this.props.scrollPosition > 0 || this.props.location.pathname.indexOf('/book/') >= 0 ? '75' : '150'}
             height={this.props.scrollPosition > 0 || this.props.location.pathname.indexOf('/book/') >= 0 ? '50' : '100'}
             viewBox="0 0 50 100">
@@ -26,44 +37,35 @@ class NavBar extends React.Component {
                 </g>
               </g>
             </g>
-          </svg>
-          <span className="font-semibold text-lg tracking-tight">
-            Bookshelf
-          </span>
-        </div>
-        <div className="block lg:hidden">
-          <button className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
-            <svg
-              className="fill-current h-3 w-3"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg">
-              <title>Menu</title>
-              <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-            </svg>
-          </button>
-        </div>
-        <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-          <div className="text-sm lg:flex-grow">
-            <span className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-white mr-4">
-              {this.props.user
-                ? `${this.props?.user?.full} has ${this.props.books.length} books!`
-                : null}
+          </svg> */}
+            <span className="font-semibold text-lg tracking-tight">
+              Bookshelf
             </span>
           </div>
-          <div>
-            {!this.props.user ? (
-              <a
-                href="/auth/google"
-                className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
-                Login 📚
-              </a>
-            ) : (
-              <a
-                href="/api/logout"
-                className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white mt-4 lg:mt-0">
-                Logout
-              </a>
-            )}
+
+          <div className="w-full block flex-grow flex-auto lg:flex lg:items-center lg:w-auto">
+            {/* <div className="text-sm lg:flex-grow">
+              <span className="block mt-4 lg:inline-block lg:mt-0 text-white hover:text-white mr-4">
+                {this.props.user
+                  ? `${this.props?.user?.full} has ${this.props.books.length} books!`
+                  : null}
+              </span>
+            </div> */}
+            <div>
+              {!this.props.user ? (
+                <a
+                  href="/auth/google"
+                  className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0">
+                  Login 📚
+                </a>
+              ) : (
+                <a
+                  href="/api/logout"
+                  className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0">
+                  Logout
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </nav>
@@ -71,4 +73,4 @@ class NavBar extends React.Component {
   };
 }
 
-export default withRouter(NavBar)
+export default withRouter(NavBar);
