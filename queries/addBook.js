@@ -1,12 +1,17 @@
 const db = require('../config/db/mysql').pool;
+const sqlString = require('sqlstring');
 
 module.exports = book => {
   const { userId, title, author, isbn10, isbn13, cover } = book;
 
   const query1 = `
+
   
-  
-  INSERT INTO global_books (title, author, isbn10, isbn13, cover) VALUES ('${title}', '${author}', '${isbn10}', '${isbn13}', '${cover}');
+  INSERT INTO global_books (title, author, isbn10, isbn13, cover) VALUES (${sqlString.escape(
+    title
+  )}, ${sqlString.escape(author)}, ${sqlString.escape(
+    isbn10
+  )}, ${sqlString.escape(isbn13)}, ${sqlString.escape(cover)});
 
 
   `;
@@ -15,9 +20,16 @@ module.exports = book => {
     db.getConnection((err, connnection) => {
       connnection.beginTransaction(err => {
         connnection.query(query1, (err, results, fields) => {
+          console.log(err);
           const query2 = `
   
-  INSERT INTO user_books (user_id, global_id, title, author, isbn10, isbn13, cover) VALUES (${userId}, ${results.insertId}, '${title}', '${author}', '${isbn10}', '${isbn13}', '${cover}');
+  INSERT INTO user_books (user_id, global_id, title, author, isbn10, isbn13, cover) VALUES (${userId}, ${
+            results.insertId
+          }, ${sqlString.escape(title)}, ${sqlString.escape(
+            author
+          )}, ${sqlString.escape(isbn10)}, ${sqlString.escape(
+            isbn13
+          )}, ${sqlString.escape(cover)});
 
   `;
           connnection.query(query2, (err, results2, fields) => {
