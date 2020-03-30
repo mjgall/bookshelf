@@ -39,8 +39,12 @@ module.exports = app => {
 
   //get a users books
   app.get('/api/books', async (req, res) => {
-    const response = await getBooks(req.user.id);
-    res.send({ success: true, books: response });
+    if (req.user) {
+      const response = await getBooks(req.user.id);
+      res.send({ success: true, books: response });
+    } else {
+      res.send({ success: false, books: [] });
+    }
   });
 
   //update the information about a book
