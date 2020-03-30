@@ -17,7 +17,7 @@ module.exports = app => {
   });
 
   //get information about the number of users and the number of books in total
-  app.get('/api/analytics', async (req, res) => {
+  app.get('/api/data', async (req, res) => {
     const response = await getAnalytics()
     res.send(response)
   });

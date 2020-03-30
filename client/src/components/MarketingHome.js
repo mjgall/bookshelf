@@ -11,7 +11,7 @@ export default class MarketingHome extends React.Component {
   state = { analytics: null };
 
   componentDidMount = async () => {
-    const response = await axios.get('/api/analytics');
+    const response = await axios.get('/api/data');
     this.setState({ analytics: {...response.data, loaded: true} });
   };
 
