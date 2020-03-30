@@ -216,7 +216,7 @@ export default class Scanner extends React.Component {
       isbn10: this.state.currentBook.isbn
     });
     console.log(response.data);
-    this.updateFunction(this.state.currentBook);
+    this.props.addBookToGlobalState(response.data);
     this.toggleModal();
   };
 

@@ -5,9 +5,7 @@ import MarketingHome from './MarketingHome';
 import { withRouter } from 'react-router-dom';
 
 class Home extends React.Component {
-  updateFunction = book => {
-    this.props.updateFunction(book);
-  };
+
 
   render = () => {
     return (
@@ -17,7 +15,7 @@ class Home extends React.Component {
             <Scanner
               user={this.props.user}
               className="max-w-screen-md container mx-auto mt-5"
-              onChange={this.updateFunction}></Scanner>
+              addBookToGlobalState={this.props.addBookToGlobalState}></Scanner>
             <BookTable
               history={this.props.history}
               books={this.props.books}></BookTable>

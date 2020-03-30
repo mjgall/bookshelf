@@ -22,7 +22,8 @@ export default class App extends React.Component {
     scrollPosition: '0',
     windowWidth: null
   };
-  updateFunction = book => {
+
+  addBookToGlobalState = book => {
     this.setState({ books: [...this.state.books, book] });
   };
 
@@ -80,8 +81,10 @@ export default class App extends React.Component {
               <Switch>
                 <Route exact path="/">
                   <Home
-                    updateFunction={this.updateUser}
-                    {...this.state}></Home>
+                    loaded={this.state.loaded}
+                    user={this.state.user}
+                    addBookToGlobalState={this.addBookToGlobalState}
+                    books={this.state?.books}></Home>
                 </Route>
                 <Route
                   exact
@@ -89,7 +92,7 @@ export default class App extends React.Component {
                   render={props => {
                     return (
                       <Book
-                        updateGlobal={this.updateUser}
+                        updateGlobal={this.updateFunction}
                         isbn10={props.match.params.id}
                         books={this.state?.books}></Book>
                     );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useTable, useFilters, useSortBy, useGlobalFilter } from 'react-table';
 import { withRouter } from 'react-router-dom';
 import Book from './Book';
@@ -352,6 +352,7 @@ function filterGreaterThan(rows, id, filterValue) {
 filterGreaterThan.autoRemove = val => typeof val !== 'number';
 
 function BookTable(props) {
+
   const isTabletOrMobileDevice = useMediaQuery({
     query: '(max-device-width: 1224px)'
   });
@@ -381,9 +382,6 @@ function BookTable(props) {
     }
   }, []);
 
-  console.log(props);
-  
-
   const data = React.useMemo(() => {
     return props?.books?.map(book => {
       return {
@@ -391,7 +389,7 @@ function BookTable(props) {
         author: book?.author
       };
     });
-  }, []);
+  }, [props.books]);
 
   return <Table history={props.history} columns={columns} data={data} />;
 }
