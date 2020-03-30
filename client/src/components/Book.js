@@ -14,7 +14,7 @@ export default class Book extends React.Component {
     window.scroll(0, 0);
     console.log('CDM called');
     const currentBooksArray = this.props?.books?.filter(book => {
-      return book.isbn === this.props.isbn;
+      return book.isbn10 === this.props.isbn10;
     });
 
     const currentBook = currentBooksArray[0];
@@ -77,7 +77,7 @@ export default class Book extends React.Component {
               <div className="">
                 <img
                   className="w-1/2 mx-auto"
-                  src={this.state?.currentBook?.image}
+                  src={this.state?.currentBook?.cover}
                   alt="cover"></img>
               </div>
             </div>
@@ -111,7 +111,7 @@ export default class Book extends React.Component {
 
             <EditDiv
               name="author"
-              value={this.state?.currentBook?.authors[0]}
+              value={this.state?.currentBook?.author}
               update={this.update}
               className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold"></EditDiv>
           </div>

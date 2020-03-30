@@ -20,7 +20,7 @@ class Home extends React.Component {
               onChange={this.updateFunction}></Scanner>
             <BookTable
               history={this.props.history}
-              books={this.props.user.books}></BookTable>
+              books={this.props.books}></BookTable>
           </div>
         ) : this.props.loaded && !this.props.user ? (
           <MarketingHome></MarketingHome>

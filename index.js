@@ -5,11 +5,9 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const keys = require('./config/keys');
-const db = require('./config/db/connection');
 const enforce = require('express-sslify');
 
-require('./config/db/Models/User.Model');
-require('./config/db/Models/Book.Model');
+
 require('./services/passport');
 
 if (process.env.NODE_ENV === 'production') {

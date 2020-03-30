@@ -1,7 +1,4 @@
 const passport = require('passport');
-const mongoose = require('mongoose');
-require('../config/db/Models/User.Model');
-const User = mongoose.model('User');
 
 module.exports = app => {
 

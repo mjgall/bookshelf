@@ -1,9 +1,9 @@
 const axios = require('axios');
-const mongoose = require('mongoose');
-const Book = mongoose.model('Book');
-const User = mongoose.model('User');
+const getBooks = require('../queries/getBooks');
+const addBook = require('../queries/addBook.js');
 
 module.exports = app => {
+  //lookup book information by isbn10
   app.get('/api/book/lookup/:isbn', async (req, res) => {
     const response = await axios.get(
       `https://api2.isbndb.com/book/${req.params.isbn}`,
@@ -15,55 +15,34 @@ module.exports = app => {
     res.send({ ...response.data.book });
   });
 
-  app.post('/api/books/', async (req, res) => {
-    User.findOne({ googleId: req.user.googleId }, (err, User) => {
-      if (err) {
-        res.send({ error: true, success: false });
-      }
-      if (User) {
-        if (
-          User.books.find(book => {
-            if (book.isbn === req.body.isbn) return true;
-          })
-        ) {
-          res.send('Already exists');
-        } else {
-          User.books = [...User.books, req.body];
-          User.save(err => {
-            if (err) {
-              res.send({ err });
-            } else {
-              res.send({ success: true, books: User.books });
-            }
-          });
-        }
-      }
+  //get information about the number of users and the number of books in total
+  app.get('/api/analytics', (req, res) => {
+    User.countDocuments({}, (err, result) => {
+      res.send(result.toString());
     });
   });
 
-  app.put('/api/users', async (req, res) => {
-    //construct new books array
-    const modifyingUser = req.user;
-    // console.log(req.body)
-    User.findOne({ googleId: modifyingUser.googleId }, (err, User) => {
-      // res.send(User.books)
-      const index = User.books.findIndex(book => {
-        return book.isbn === req.body.isbn;
-      });
+  //add a book
+  app.post('/api/books', async (req, res) => {
+    const { title, author, isbn10, isbn13, cover } = req.body;
 
-      console.log(req.body)
-
-      const books = [...User.books];
-      books.splice(index, 1, req.body);
-      // res.send(books);
-      User.books = books;
-      User.save((err, updated) => {
-        if (err) {
-          res.send(err);
-        } else {
-          res.send(updated);
-        }
-      });
+    const response = await addBook({
+      userId: req.user.id,
+      title,
+      author,
+      isbn10,
+      isbn13,
+      cover
     });
+    res.send(response);
   });
+
+  //get a users books
+  app.get('/api/books', async (req, res) => {
+    const response = await getBooks(req.user.id);
+    res.send({ success: true, books: response });
+  });
+
+  //update the information about a book
+  app.put('/api/books', async (req, res) => {});
 };

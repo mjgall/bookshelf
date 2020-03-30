@@ -22,9 +22,9 @@ class BookTable extends React.Component {
           <tbody>
             {this.props.books.map((book, index) => {
               return (
-                <tr className="hover:bg-gray-100 cursor-pointer" key={index} onClick={() => this.viewBook(book.isbn)}>
+                <tr className="hover:bg-gray-100 cursor-pointer" key={index} onClick={() => this.viewBook(book.isbn10)}>
                   <td className="border px-4 py-2">{book.title}</td>
-                  <td className="border px-4 py-2">{book.authors[0]}</td>
+                  <td className="border px-4 py-2">{book.author}</td>
                   <td className="border px-4 py-2">
                     <img
                       style={{ maxHeight: '5rem' }}

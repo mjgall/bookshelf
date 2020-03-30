@@ -320,7 +320,7 @@ function Table({ columns, data, history }) {
                 className={`hover:bg-gray-100 cursor-pointer ${
                   row.original.read ? 'bg-green-100' : null
                 }`}
-                onClick={() => history.push(`/book/${row.original.isbn}`)}>
+                onClick={() => history.push(`/book/${row.original.isbn10}`)}>
                 {row.cells.map(cell => {
                   return (
                     <td {...cell.getCellProps()} className="border px-4 py-2">
@@ -367,7 +367,7 @@ function BookTable(props) {
             return (
               <img
                 className="w-20 container"
-                src={props.row.original.image}
+                src={props.row.original.cover}
                 alt="cover"></img>
             );
           }
@@ -381,11 +381,14 @@ function BookTable(props) {
     }
   }, []);
 
+  console.log(props);
+  
+
   const data = React.useMemo(() => {
-    return props.books.map(book => {
+    return props?.books?.map(book => {
       return {
         ...book,
-        author: book?.authors[0]
+        author: book?.author
       };
     });
   }, []);

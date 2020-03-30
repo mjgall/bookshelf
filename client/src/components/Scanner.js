@@ -51,7 +51,7 @@ export default class Scanner extends React.Component {
   };
 
   updateFunction = book => {
-    const newUser = {...this.props.user, books: [this.props.books, book]}
+    const newUser = { ...this.props.user, books: [this.props.books, book] };
     this.props.onChange(newUser);
   };
 
@@ -209,7 +209,12 @@ export default class Scanner extends React.Component {
   };
 
   addBook = async () => {
-    const response = await axios.post('/api/books', this.state.currentBook);
+    const response = await axios.post('/api/books', {
+      ...this.state.currentBook,
+      cover: this.state.currentBook.image,
+      author: this.state.currentBook.authors[0],
+      isbn10: this.state.currentBook.isbn
+    });
     console.log(response.data);
     this.updateFunction(this.state.currentBook);
     this.toggleModal();

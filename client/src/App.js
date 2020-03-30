@@ -27,17 +27,17 @@ export default class App extends React.Component {
   };
 
   updateUser = user => {
-    this.setState({user})
-  }
+    this.setState({ user });
+  };
 
   componentDidMount = async () => {
     window.addEventListener('scroll', this.listenToScroll);
     window.addEventListener('resize', this.listenToResize);
     const userResponse = await axios.get('/api/current_user');
-
+    const booksResponse = await axios.get('/api/books');
     this.setState({
       user: userResponse.data,
-      // books: userResponse.data.books || [],
+      books: booksResponse.data.books || [],
       loaded: true
     });
   };
@@ -75,7 +75,7 @@ export default class App extends React.Component {
               <NavBar
                 windowWidth={this.state.windowWidth}
                 scrollPosition={this.state.scrollPosition}
-                books={this.state?.user?.books}
+                books={this.state?.books}
                 user={this.state.user}></NavBar>
               <Switch>
                 <Route exact path="/">
@@ -90,8 +90,8 @@ export default class App extends React.Component {
                     return (
                       <Book
                         updateGlobal={this.updateUser}
-                        isbn={props.match.params.id}
-                        books={this.state?.user?.books}></Book>
+                        isbn10={props.match.params.id}
+                        books={this.state?.books}></Book>
                     );
                   }}></Route>
                 <Route
@@ -106,7 +106,6 @@ export default class App extends React.Component {
                   }}></Route>
               </Switch>
             </Router>
-   
           </>
         ) : null}
       </>

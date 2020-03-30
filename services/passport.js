@@ -1,17 +1,25 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const keys = require('../config/keys')
-const mongoose = require('mongoose');
-
-const User = mongoose.model('User');
+const keys = require('../config/keys');
+const db = require('../config/db/mysql').pool;
+const getUserByGoogleId = require('../queries/getUser');
+const addUser = require('../queries/addUser');
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
 passport.deserializeUser((id, done) => {
-  User.findById(id).then(user => {
-    done(null, user);
+  db.getConnection((err, connection) => {
+    if (err) throw err;
+    connection.query(
+      `SELECT * FROM users WHERE id = ${id}`,
+      (err, users, fields) => {
+        if (err) throw err;
+        done(null, users[0]);
+      }
+    );
+    connection.release();
   });
 });
 
@@ -24,24 +32,29 @@ passport.use(
       proxy: true
     },
     async (accessToken, refreshToken, profile, done) => {
-      const existingUser = await User.findOne({ googleId: profile.id });
+      //check for existing user, if there is one call done with that user as the second argument, if there is not create one then call done with that user
 
-      if (!existingUser) {
-        //create new user instance then save it then call done
-        const user = await new User({
-          googleId: profile.id,
-          email: profile._json.email,
-          first: profile._json.given_name,
-          last: profile._json.family_name,
-          full: profile._json.name,
-          picture: profile._json.picture,
-        });
-        user.save();
-        done(null, user);
-      } else {
-        //Already a user, don't do anything
-
-        done(null, existingUser);
+      try {
+        const user = await getUserByGoogleId(profile.id);
+        if (user) {
+          done(null, user);
+        } else if (!user) {
+          try {
+            const user = await addUser({
+              googleId: profile.id,
+              first: profile._json.given_name,
+              last: profile._json.family_name,
+              email: profile._json.email,
+              full: profile._json.name,
+              picture: profile._json.picture
+            });
+            done(null, user);
+          } catch (err) {
+            throw err;
+          }
+        }
+      } catch (err) {
+        throw err;
       }
     }
   )
