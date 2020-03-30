@@ -1,6 +1,7 @@
 const axios = require('axios');
 const getBooks = require('../queries/getBooks');
 const addBook = require('../queries/addBook.js');
+const getAnalytics = require('../queries/getAnalytics')
 
 module.exports = app => {
   //lookup book information by isbn10
@@ -16,10 +17,9 @@ module.exports = app => {
   });
 
   //get information about the number of users and the number of books in total
-  app.get('/api/analytics', (req, res) => {
-    User.countDocuments({}, (err, result) => {
-      res.send(result.toString());
-    });
+  app.get('/api/analytics', async (req, res) => {
+    const response = await getAnalytics()
+    res.send(response)
   });
 
   //add a book
