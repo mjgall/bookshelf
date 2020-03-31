@@ -16,9 +16,9 @@ passport.deserializeUser((id, done) => {
     connection.query(
       `SELECT * FROM users WHERE id = ${id}`,
       (err, results, fields) => {
-        if (!results[0]) {
+        if (!results[0] || err) {
           connection.query(
-            `SELECT FROM users WHERE mongo_id = ${id}`,
+            `SELECT FROM users WHERE mongo_id = '${id}'`,
             (err, results, fields) => {
               if (err) throw err;
               done(null, results[0]);
