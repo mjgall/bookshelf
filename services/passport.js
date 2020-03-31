@@ -12,13 +12,32 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
   db.getConnection((err, connection) => {
     if (err) throw err;
+
     connection.query(
-      `SELECT * FROM users WHERE id = '${id}'`,
-      (err, users, fields) => {
-        if (err) throw err;
-        done(null, users[0]);
+      `SELECT * FROM users WHERE id = ${id}`,
+      (err, results, fields) => {
+        if (!results[0]) {
+          connection.query(
+            `SELECT FROM users WHERE mongo_id = ${id}`,
+            (err, results, fields) => {
+              if (err) throw err;
+              done(null, results[0]);
+            }
+          );
+        } else {
+          if (err) throw err;
+          done(null, results[0]);
+        }
       }
     );
+
+    // connection.query(
+    //   `SELECT * FROM users WHERE id = ${id}`,
+    //   (err, users, fields) => {
+    //     if (err) throw err;
+    //     done(null, users[0]);
+    //   }
+    // );
     connection.release();
   });
 });
