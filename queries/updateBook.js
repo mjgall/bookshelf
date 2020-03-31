@@ -9,7 +9,6 @@ module.exports = book => {
       book.notes
     )}, \`read\` = ${sqlString.escape(book.read)} WHERE id = ${book.id};`;
 
-    console.log(query);
     db.query(query, (err, results, fields) => {
       if (err) {
         throw Error(err);
