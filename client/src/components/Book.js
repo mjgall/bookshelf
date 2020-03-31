@@ -39,7 +39,7 @@ export default class Book extends React.Component {
       case 'author':
         console.log('in author');
         await this.setState({
-          currentBook: { ...this.state.currentBook, authors: [value] }
+          currentBook: { ...this.state.currentBook, author: [value] }
         });
         await this.saveToDb(this.state);
         break;
@@ -63,9 +63,10 @@ export default class Book extends React.Component {
   };
 
   saveToDb = async state => {
-    const response = await axios.put('/api/users', state.currentBook);
-    const user = response.data;
-    this.props.updateGlobal(user);
+    const response = await axios.put('/api/books', state.currentBook);
+    console.log(response);
+    // const user = response.data;
+    this.props.updateBook(state.currentBook);
   };
 
   render = () => {

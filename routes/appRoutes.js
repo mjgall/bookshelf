@@ -1,7 +1,8 @@
 const axios = require('axios');
 const getBooks = require('../queries/getBooks');
 const addBook = require('../queries/addBook.js');
-const getAnalytics = require('../queries/getAnalytics')
+const getAnalytics = require('../queries/getAnalytics');
+const updateBook = require('../queries/updateBook');
 
 module.exports = app => {
   //lookup book information by isbn10
@@ -18,8 +19,8 @@ module.exports = app => {
 
   //get information about the number of users and the number of books in total
   app.get('/api/data', async (req, res) => {
-    const response = await getAnalytics()
-    res.send(response)
+    const response = await getAnalytics();
+    res.send(response);
   });
 
   //add a book
@@ -48,5 +49,13 @@ module.exports = app => {
   });
 
   //update the information about a book
-  app.put('/api/books', async (req, res) => {});
+  app.put('/api/books', async (req, res) => {
+    const book = { ...req.body };
+    if (!book.id || !book.title || !book.author || !book.notes || !book.read) {
+      res.send({ success: false, message: 'Missing fields' });
+    } else {
+      const response = await updateBook(book);
+      res.send({ success: true, book: response });
+    }
+  });
 };

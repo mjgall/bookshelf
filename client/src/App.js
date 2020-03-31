@@ -23,6 +23,15 @@ export default class App extends React.Component {
     windowWidth: null
   };
 
+  updateBook = book => {
+    const index = this.state.books.findIndex(
+      existingBook => existingBook.id === book.id
+    );
+    const newBooks = [...this.state.books];
+    newBooks.splice(index, 1, book);
+    this.setState({ books: newBooks });
+  };
+
   addBookToGlobalState = book => {
     this.setState({ books: [...this.state.books, book] });
   };
@@ -92,7 +101,7 @@ export default class App extends React.Component {
                   render={props => {
                     return (
                       <Book
-                        updateGlobal={this.updateFunction}
+                        updateBook={this.updateBook}
                         isbn10={props.match.params.id}
                         books={this.state?.books}></Book>
                     );
