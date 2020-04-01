@@ -5,7 +5,7 @@ import React from 'react';
 import './styles/tailwind.css';
 import './App.css';
 import axios from 'axios';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';

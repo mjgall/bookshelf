@@ -3,6 +3,9 @@ const getBooks = require('../queries/getBooks');
 const addBook = require('../queries/addBook.js');
 const getAnalytics = require('../queries/getAnalytics');
 const updateBook = require('../queries/updateBook');
+const addHousehold = require('../queries/addHousehold');
+const getUserByEmail = require('../queries/getUserByEmail');
+const getHouseholds = require('../queries/getHouseholds');
 
 module.exports = app => {
   //lookup book information by isbn10
@@ -57,5 +60,20 @@ module.exports = app => {
       const response = await updateBook(book);
       res.send({ success: true, book: response });
     }
+  });
+
+  app.post('/api/households', async (req, res) => {
+    const invitedUser = await getUserByEmail(req.body.invitedEmail);
+    if (!invitedUser) {
+      res.send({ success: false, message: 'No user found with that email' });
+    } else {
+      const household = await addHousehold(req.user.id, invitedUser.id);
+      res.send({ ...household, invited_email: invitedUser.email });
+    }
+  });
+
+  app.get('/api/households', async (req, res) => {
+    const households = await getHouseholds(req.user.id);
+    res.send(households);
   });
 };
