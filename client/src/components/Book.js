@@ -12,9 +12,10 @@ export default class Book extends React.Component {
 
   componentDidMount = () => {
     window.scroll(0, 0);
-    console.log('CDM called');
+
     const currentBooksArray = this.props?.books?.filter(book => {
-      return book.isbn10 === this.props.isbn10;
+
+      return book.id == this.props.id;
     });
 
     const currentBook = currentBooksArray[0];

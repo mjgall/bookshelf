@@ -320,7 +320,7 @@ function Table({ columns, data, history }) {
                 className={`hover:bg-gray-100 cursor-pointer ${
                   row.original.read ? 'bg-green-100' : null
                 }`}
-                onClick={() => history.push(`/book/${row.original.isbn10}`)}>
+                onClick={() => history.push(`/book/${row.original.id}`)}>
                 {row.cells.map(cell => {
                   return (
                     <td {...cell.getCellProps()} className="border px-4 py-2">

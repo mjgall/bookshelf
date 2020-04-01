@@ -12,6 +12,7 @@ import Footer from './components/Footer';
 import Home from './components/Home';
 import Book from './components/Book';
 import BookTable from './components/BookTable2';
+import Profile from './components/Profile';
 
 export default class App extends React.Component {
   state = {
@@ -88,6 +89,11 @@ export default class App extends React.Component {
                 books={this.state?.books}
                 user={this.state.user}></NavBar>
               <Switch>
+                <Route path="/profile" exact>
+                  <Profile user={ this.state.user }>
+                    
+                  </Profile>
+                </Route>
                 <Route exact path="/">
                   <Home
                     loaded={this.state.loaded}
@@ -102,7 +108,7 @@ export default class App extends React.Component {
                     return (
                       <Book
                         updateBook={this.updateBook}
-                        isbn10={props.match.params.id}
+                        id={props.match.params.id}
                         books={this.state?.books}></Book>
                     );
                   }}></Route>
