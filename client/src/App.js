@@ -46,10 +46,14 @@ export default class App extends React.Component {
     window.addEventListener('resize', this.listenToResize);
     const userResponse = await axios.get('/api/current_user');
     const booksResponse = await axios.get('/api/books');
- 
+    const householdMembers = await axios.get('/api/user/households/members');
+    const households = await axios.get('/api/households');
+
     this.setState({
       user: userResponse.data,
       books: booksResponse.data.books || [],
+      householdMembers: householdMembers.data,
+      households: households.data,
       loaded: true
     });
   };
@@ -91,7 +95,10 @@ export default class App extends React.Component {
                 user={this.state.user}></NavBar>
               <Switch>
                 <Route path="/profile" exact>
-                  <Profile user={this.state.user}></Profile>
+                  <Profile
+                    members={this.state.householdMembers}
+                    households={this.state.households}
+                    user={this.state.user}></Profile>
                 </Route>
                 <Route exact path="/">
                   <Home

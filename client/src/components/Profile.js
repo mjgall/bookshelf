@@ -10,11 +10,13 @@ export default class Profile extends React.Component {
   };
 
   componentDidMount = async () => {
-    const householdMembers = await axios.get('/api/user/households/members');
-    const households = await axios.get('/api/households');
+    // const householdMembers = await axios.get('/api/user/households/members');
+    // const households = await axios.get('/api/households');
     this.setState({
-      households: households.data,
-      members: householdMembers.data
+      // households: households.data,
+      // members: householdMembers.data
+      households: this.props.households,
+      members: this.props.members
     });
   };
 

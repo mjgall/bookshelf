@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import logo from '../images/logo.png';
 
 class NavBar extends React.Component {
@@ -7,7 +7,11 @@ class NavBar extends React.Component {
     this.props.history.push('');
   };
   calcLogoSize = () => {
-    if (this.props.windowWidth < 1025 || this.props.scrollPosition > 0 || this.props.location.pathname.indexOf('/book/') > -1) {
+    if (
+      this.props.windowWidth < 1025 ||
+      this.props.scrollPosition > 0 ||
+      this.props.location.pathname.indexOf('/book/') > -1
+    ) {
       return '1.5rem';
     } else {
       return '3rem';
@@ -48,11 +52,18 @@ class NavBar extends React.Component {
               Login 📚
             </a>
           ) : (
-            <a
-              href="/api/logout"
-              className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0">
-              Logout
-            </a>
+            <>
+              <Link
+                to="/profile"
+                className="inline-block mx-1 text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0">
+                Profile
+              </Link>
+              <a
+                href="/api/logout"
+                className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0">
+                Logout
+              </a>
+            </>
           )}
         </div>
       </nav>
