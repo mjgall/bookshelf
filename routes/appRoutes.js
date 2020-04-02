@@ -10,20 +10,23 @@ const getHouseholdInvitations = require('../queries/getHouseholdInvitations');
 const acceptPendingHousehold = require('../queries/acceptPendingHousehold');
 const getUserById = require('../queries/getUserById');
 const addHousehold = require('../queries/addHousehold');
-const getHouseholdMembersByUserId = require('../queries/getHouseholdMembersByUserId')
+const getHouseholdMembersByUserId = require('../queries/getHouseholdMembersByUserId');
 
 module.exports = app => {
   //lookup book information by isbn10
 
   app.get('/api/bootstrap', async (req, res) => {
-    
-    const currentUser = req.user
-    const books = await getBooks(req.user.id);
-    const households = await getHouseholds(req.user.id);
-    const householdMembers = await getHouseholdMembersByUserId(req.user.id)
+    if (!req.user) {
+      res.send(null);
+    } else {
+      const currentUser = req.user;
+      const books = await getBooks(req.user.id);
+      const households = await getHouseholds(req.user.id);
+      const householdMembers = await getHouseholdMembersByUserId(req.user.id);
 
-    res.send({currentUser, books, households, householdMembers})
-  })
+      res.send({ currentUser, books, households, householdMembers });
+    }
+  });
 
   app.get('/api/book/lookup/:isbn', async (req, res) => {
     const response = await axios.get(
@@ -77,7 +80,7 @@ module.exports = app => {
   app.put('/api/books', async (req, res) => {
     const book = { ...req.body };
     console.log(book);
-    
+
     if (!book.id || !book.title || !book.author) {
       res.send({ success: false, message: 'Missing fields' });
     } else {
@@ -94,9 +97,9 @@ module.exports = app => {
   });
 
   app.get('/api/user/households/members', async (req, res) => {
-    const householdMembers = await getHouseholdMembersByUserId(req.user.id)
-    res.send(householdMembers)
-  })
+    const householdMembers = await getHouseholdMembersByUserId(req.user.id);
+    res.send(householdMembers);
+  });
 
   app.get('/api/households', async (req, res) => {
     const households = await getHouseholds(req.user.id);
@@ -105,7 +108,7 @@ module.exports = app => {
 
   app.post('/api/invitations', async (req, res) => {
     console.log(req.body);
-    
+
     const correspondingUser = await getUserByEmail(req.body.invitedEmail);
     if (!correspondingUser) {
       res.send({ success: false, message: 'No user found with that email' });
