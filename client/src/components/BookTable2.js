@@ -379,6 +379,7 @@ function BookTable(props) {
           Cell: props => {
             return (
               <img
+                loading="lazy"
                 className="w-20 container"
                 src={props.row.original.cover}
                 alt="cover"></img>
