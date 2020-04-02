@@ -11,6 +11,7 @@ const acceptPendingHousehold = require('../queries/acceptPendingHousehold');
 const getUserById = require('../queries/getUserById');
 const addHousehold = require('../queries/addHousehold');
 const getHouseholdMembersByUserId = require('../queries/getHouseholdMembersByUserId');
+const declinePendingHousehold = require('../queries/declinePendingHousehold');
 
 module.exports = app => {
   //lookup book information by isbn10
@@ -128,7 +129,12 @@ module.exports = app => {
   });
 
   app.put('/api/invitations', async (req, res) => {
-    const accepted = await acceptPendingHousehold(req.body.id);
-    res.send(accepted);
+    if (req.body.accept) {
+      const accepted = await acceptPendingHousehold(req.body.id);
+      res.send(accepted);
+    } else if (req.body.decline) {
+      const declined = await declinePendingHousehold(req.body.id);
+      res.send(declined);
+    }
   });
 };

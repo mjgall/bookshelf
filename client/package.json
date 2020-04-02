@@ -20,6 +20,7 @@
     "react-scripts": "3.4.1",
     "react-table": "^7.0.0",
     "styled-components": "^5.0.1",
+    "styled-icons": "^10.2.1",
     "tailwind": "^4.0.0",
     "tailwindcss": "^1.2.0"
   },
