@@ -14,6 +14,17 @@ const getHouseholdMembersByUserId = require('../queries/getHouseholdMembersByUse
 
 module.exports = app => {
   //lookup book information by isbn10
+
+  app.get('/api/bootstrap', async (req, res) => {
+    
+    const currentUser = req.user
+    const books = await getBooks(req.user.id);
+    const households = await getHouseholds(req.user.id);
+    const householdMembers = await getHouseholdMembersByUserId(req.user.id)
+
+    res.send({currentUser, books, households, householdMembers})
+  })
+
   app.get('/api/book/lookup/:isbn', async (req, res) => {
     const response = await axios.get(
       `https://api2.isbndb.com/book/${req.params.isbn}`,

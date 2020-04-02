@@ -44,16 +44,20 @@ export default class App extends React.Component {
   componentDidMount = async () => {
     window.addEventListener('scroll', this.listenToScroll);
     window.addEventListener('resize', this.listenToResize);
-    const userResponse = await axios.get('/api/current_user');
-    const booksResponse = await axios.get('/api/books');
-    const householdMembers = await axios.get('/api/user/households/members');
-    const households = await axios.get('/api/households');
+
+    const bootstrap = await axios.get('/api/bootstrap');
+    const fresh = bootstrap.data
+
+    // const userResponse = await axios.get('/api/current_user');
+    // const booksResponse = await axios.get('/api/books');
+    // const householdMembers = await axios.get('/api/user/households/members');
+    // const households = await axios.get('/api/households');
 
     this.setState({
-      user: userResponse.data,
-      books: booksResponse.data.books || [],
-      householdMembers: householdMembers.data,
-      households: households.data,
+      user: fresh.currentUser,
+      books: fresh.books || [],
+      householdMembers: fresh.householdMembers,
+      households: fresh.households,
       loaded: true
     });
   };
