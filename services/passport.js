@@ -14,11 +14,17 @@ passport.deserializeUser((id, done) => {
     if (err) throw err;
 
     connection.query(
-      `SELECT bookshelf.users.*, bookshelf.households.user_id_2 as household_member_id FROM bookshelf.users LEFT OUTER JOIN bookshelf.households ON bookshelf.households.user_id_1 = bookshelf.users.id WHERE bookshelf.users.id = ${id}`,
+      `SELECT 
+      bookshelf.users.*
+      FROM bookshelf.users
+      WHERE bookshelf.users.id = ${id}`,
       (err, results, fields) => {
         if (!results || err) {
           connection.query(
-            `SELECT bookshelf.users.*, bookshelf.households.user_id_2 as household_member_id FROM bookshelf.users LEFT OUTER JOIN bookshelf.households ON bookshelf.households.user_id_1 = bookshelf.users.id WHERE mongo_id = '${id}'`,
+            `SELECT 
+            bookshelf.users.*
+            FROM bookshelf.users
+            WHERE mongo_id = '${id}'`,
             (err, results, fields) => {
               if (err) throw err;
               done(null, results[0]);

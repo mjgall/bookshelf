@@ -3,9 +3,14 @@ const getBooks = require('../queries/getBooks');
 const addBook = require('../queries/addBook.js');
 const getAnalytics = require('../queries/getAnalytics');
 const updateBook = require('../queries/updateBook');
-const addHousehold = require('../queries/addHousehold');
+const addHouseholdInvitation = require('../queries/addHouseholdInvitation');
 const getUserByEmail = require('../queries/getUserByEmail');
 const getHouseholds = require('../queries/getHouseholds');
+const getHouseholdInvitations = require('../queries/getHouseholdInvitations');
+const acceptPendingHousehold = require('../queries/acceptPendingHousehold');
+const getUserById = require('../queries/getUserById');
+const addHousehold = require('../queries/addHousehold');
+const getHouseholdMembersByUserId = require('../queries/getHouseholdMembersByUserId')
 
 module.exports = app => {
   //lookup book information by isbn10
@@ -26,6 +31,11 @@ module.exports = app => {
     res.send(response);
   });
 
+  app.get('/api/users/:id', async (req, res) => {
+    const response = await getUserById(req.params.id);
+    res.send(response.data);
+  });
+
   //add a book
   app.post('/api/books', async (req, res) => {
     const { title, author, isbn10, isbn13, cover } = req.body;
@@ -43,6 +53,7 @@ module.exports = app => {
 
   //get a users books
   app.get('/api/books', async (req, res) => {
+    console.log(req.user);
     if (req.user) {
       const response = await getBooks(req.user.id);
       res.send({ success: true, books: response });
@@ -63,17 +74,45 @@ module.exports = app => {
   });
 
   app.post('/api/households', async (req, res) => {
-    const invitedUser = await getUserByEmail(req.body.invitedEmail);
-    if (!invitedUser) {
-      res.send({ success: false, message: 'No user found with that email' });
-    } else {
-      const household = await addHousehold(req.user.id, invitedUser.id);
-      res.send({ ...household, invited_email: invitedUser.email });
-    }
+    const { name, userId } = req.body;
+    const newHousehold = await addHousehold(name, userId);
+    //sends new households_user data
+    res.send(newHousehold);
   });
+
+  app.get('/api/user/households/members', async (req, res) => {
+    const householdMembers = await getHouseholdMembersByUserId(req.user.id)
+    res.send(householdMembers)
+  })
 
   app.get('/api/households', async (req, res) => {
     const households = await getHouseholds(req.user.id);
     res.send(households);
+  });
+
+  app.post('/api/invitations', async (req, res) => {
+    console.log(req.body);
+    
+    const correspondingUser = await getUserByEmail(req.body.invitedEmail);
+    if (!correspondingUser) {
+      res.send({ success: false, message: 'No user found with that email' });
+    } else {
+      const household = await addHouseholdInvitation(
+        req.user.id,
+        req.body.householdId,
+        correspondingUser.id
+      );
+      res.send({ ...household, invited_email: correspondingUser.email });
+    }
+  });
+
+  app.get('/api/invitations', async (req, res) => {
+    const households = await getHouseholdInvitations(req.user.id);
+    res.send(households);
+  });
+
+  app.put('/api/invitations', async (req, res) => {
+    const accepted = await acceptPendingHousehold(req.body.id);
+    res.send(accepted);
   });
 };

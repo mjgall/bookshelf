@@ -2,9 +2,12 @@ const db = require('../config/db/mysql').pool;
 
 module.exports = userID => {
   return new Promise((resolve, reject) => {
-    const query = `SELECT bookshelf.households.*, bookshelf.users.email AS invited_email FROM bookshelf.households INNER JOIN bookshelf.users ON bookshelf.households.user_id_2 = bookshelf.users.id WHERE user_id_1 = ${userID};`;
+    const query = `SELECT * FROM households_users JOIN households ON households.id = households_users.household_id WHERE user_id = ${userID};`;
+    console.log(query);
+
     db.query(query, (err, results, fields) => {
       if (err) throw Error(err);
+      console.log(results);
       resolve(results);
     });
   });

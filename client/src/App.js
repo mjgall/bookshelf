@@ -46,6 +46,7 @@ export default class App extends React.Component {
     window.addEventListener('resize', this.listenToResize);
     const userResponse = await axios.get('/api/current_user');
     const booksResponse = await axios.get('/api/books');
+ 
     this.setState({
       user: userResponse.data,
       books: booksResponse.data.books || [],
@@ -90,9 +91,7 @@ export default class App extends React.Component {
                 user={this.state.user}></NavBar>
               <Switch>
                 <Route path="/profile" exact>
-                  <Profile user={ this.state.user }>
-                    
-                  </Profile>
+                  <Profile user={this.state.user}></Profile>
                 </Route>
                 <Route exact path="/">
                   <Home

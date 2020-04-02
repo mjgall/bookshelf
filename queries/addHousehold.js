@@ -1,17 +1,25 @@
 const db = require('../config/db/mysql').pool;
+const sqlString = require('sqlstring');
 
-module.exports = (initiatingUser, invitedUser) => {
-  return new Promise((resolve, reject) => {
-    const query = `INSERT INTO households (user_id_1, user_id_2, accepted) VALUES ('${initiatingUser}', '${invitedUser}', false);`;
-    db.query(query, (err, results, fields) => {
+module.exports = (name, userId) => {
+  return new Promise((resolve, rejects) => {
+    const addHouseholdQuery = `INSERT INTO households (name, create_date) VALUES (${sqlString.escape(
+      name
+    )}, '${Date.now()}');`;
+    console.log(addHouseholdQuery);
+    db.query(addHouseholdQuery, (err, results, fields) => {
       if (err) throw Error(err);
-      db.query(
-        `SELECT * FROM households WHERE id = ${results.insertId};`,
-        (err, results, fields) => {
-          if (err) throw Error(err);
-          resolve(results[0]);
-        }
-      );
+      const addHouseholdsUsersQuery = `INSERT INTO households_users (user_id, household_id, is_owner, invite_accepted) VALUES ('${userId}', '${results.insertId}', true, true)`;
+      db.query(addHouseholdsUsersQuery, (err, results, fields) => {
+        if (err) throw Error(err);
+        db.query(
+          `SELECT * FROM households_users WHERE id = ${results.insertId}`,
+          (err, results, fields) => {
+            if (err) throw Error(err);
+            resolve({ ...results[0], name });
+          }
+        );
+      });
     });
   });
 };
