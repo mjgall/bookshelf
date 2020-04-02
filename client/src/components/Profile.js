@@ -75,7 +75,7 @@ export default class Profile extends React.Component {
         {this.state.members.map(membership => {
           if (
             membership.user_id == this.props.user.id &&
-            !membership.is_owner
+            !membership.is_owner && membership.invite_accepted
           ) {
             return (
               <div className="border border-gray-400 shadow-lg rounded-lg p-4 my-2">
