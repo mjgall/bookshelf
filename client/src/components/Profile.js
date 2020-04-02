@@ -48,30 +48,54 @@ export default class Profile extends React.Component {
     const response = await axios.put('/api/invitations', { id });
   };
 
+  acceptInvitation = async id => {
+    const response = await axios.put('/api/invitations', { id });
+    console.log(response.data);
+  };
+
   render = () => {
     return (
       <div className="max-w-screen-md container my-4">
         {this.state.members.map(member => {
           if (!member.invite_accepted && member.user_id == this.props.user.id) {
             return (
-              <div>
+              <div className="inline">
                 {member.inviter_full} ({member.inviter_email}) invited you to
                 their {member.household_name} household.
+                <button
+                  onClick={() => this.acceptInvitation(member.id)}
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined">
+                  Accept
+                </button>
               </div>
             );
           }
         })}
+        <div className="text-lg">Others' households you are a part of:</div>
+        {this.state.members.map(membership => {
+          if (
+            membership.user_id == this.props.user.id &&
+            !membership.is_owner
+          ) {
+            return (
+              <div className="border border-gray-400 shadow-lg rounded-lg p-4 my-2">
+                <div className="text-md">{membership.household_name}</div>
+              </div>
+            );
+          }
+        })}
+        <div className="text-lg">Households you own:</div>
         <form onSubmit={this.handleHouseholdSubmit} class="w-full max-w-md">
-          <div class="flex items-center border-b border-b-2 border-blue-500 ">
+          <div class="flex items-center border-b border-b-1 border-blue-500 ">
             <input
               class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
               type="text"
-              placeholder="Household Name"
+              placeholder="New household name"
               value={this.state.householdNameValue}
               onChange={this.handleHouseholdNameChange}
               aria-label="Household Name"></input>
             <button
-              class="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
               type="submit">
               Create
             </button>
@@ -89,7 +113,7 @@ export default class Profile extends React.Component {
                     <input
                       class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
                       type="text"
-                      placeholder="Email"
+                      placeholder="User email to invite"
                       value={this.state.inviteValue}
                       onChange={this.handleInviteChange}
                       aria-label="Email"></input>
@@ -97,7 +121,7 @@ export default class Profile extends React.Component {
                       onClick={() =>
                         this.handleInviteSubmit(household.household_id)
                       }
-                      class="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
+                      class="bg-blue-500 hover:bg-blue-700 text-white font-bold my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
                       type="submit">
                       Invite
                     </button>
@@ -110,12 +134,8 @@ export default class Profile extends React.Component {
                       member.household_id == household.household_id &&
                       member.invite_accepted
                     ) {
-                      if (member.is_owner) {
-                        return (
-                          <li className="text-blue-400">
-                            {member.member_email}*
-                          </li>
-                        );
+                      if (member.is_owner && member.user_id == this.props.user.id) {
+                        return null;
                       }
                       return <li>{member.member_email}</li>;
                     }
