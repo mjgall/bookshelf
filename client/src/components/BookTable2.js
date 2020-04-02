@@ -99,20 +99,27 @@ function SelectColumnFilter({
   }, [id, preFilteredRows]);
 
   // Render a multi-select box
-  return (
-    <select
-      value={filterValue}
-      onChange={e => {
-        setFilter(e.target.value || undefined);
-      }}>
-      <option value="">All</option>
-      {options.map((option, i) => (
-        <option key={i} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-  );
+
+  if (options.length === 1) {
+    return null
+  } else {
+    return (
+      <select
+        value={filterValue}
+        onChange={e => {
+          setFilter(e.target.value || undefined);
+        }}>
+        <option value="">All</option>
+        {options.map((option, i) => (
+          <option key={i} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    );
+  }
+
+  
 }
 
 // This is a custom filter UI that uses a
@@ -279,11 +286,14 @@ function Table({ columns, data, history }) {
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
+              { headerGroup.headers.map(column => (
+              
+                
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   className="px-4 py-2 border">
-                  {column.render('Header')}
+                  { column.render('Header') }
+                  
                   <span>
                     {column.isSorted
                       ? column.isSortedDesc
@@ -291,9 +301,11 @@ function Table({ columns, data, history }) {
                         : ' 🔼'
                       : null}
                   </span>
-                  {/* Render the columns filter UI */}
+                  {/* Render the columns filter UI */ }
+                  <div>{column.canFilter ? column.render('Filter') : null}</div>
                   {/* <div>{column.canFilter ? column.render('Filter') : null}</div> */}
-                </th>
+                  </th>
+                
               ))}
             </tr>
           ))}
@@ -360,8 +372,8 @@ function BookTable(props) {
   const columns = React.useMemo(() => {
     if (!isTabletOrMobileDevice || isTabletOrMobileDevice) {
       return [
-        { Header: 'Title', accessor: 'title' },
-        { Header: 'Author', accessor: 'author' },
+        { Header: 'Title', accessor: 'title', disableFilters: true },
+        { Header: 'Author', accessor: 'author', disableFilters: true },
         {
           Header: 'Cover',
           Cell: props => {
@@ -372,7 +384,8 @@ function BookTable(props) {
                 alt="cover"></img>
             );
           }
-        }
+        },
+        {Header: 'Owner', accessor: 'user_id', Filter: SelectColumnFilter, filter: 'equals', disableSortBy: true}
       ];
     } else {
       return [
