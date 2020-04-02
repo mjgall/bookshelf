@@ -2,7 +2,21 @@ const db = require('../config/db/mysql').pool;
 
 module.exports = userId => {
   return new Promise((resolve, reject) => {
-    const query = `SELECT households_users.*, users.email AS member_email FROM households_users JOIN users ON users.id = households_users.user_id WHERE household_id IN (SELECT household_id FROM households_users WHERE user_id = ${userId} AND is_owner = true)`;
+    const query = `SELECT DISTINCT households_users.*, users.email AS member_email, inviters.email AS inviter_email, inviters.full AS inviter_full, households.name AS household_name
+
+    FROM households_users
+    
+    JOIN users 
+    ON users.id = households_users.user_id
+    
+    JOIN households
+    ON households_users.household_id = households.id
+    
+    LEFT OUTER JOIN users AS inviters
+    ON inviters.id = households_users.inviter_id
+    
+    WHERE household_id 
+    IN (SELECT household_id FROM households_users WHERE user_id = ${userId})`;
     console.log(query);
 
     db.query(query, (err, results, fields) => {

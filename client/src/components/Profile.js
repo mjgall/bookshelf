@@ -27,8 +27,7 @@ export default class Profile extends React.Component {
       invitedEmail: this.state.inviteValue,
       householdId
     });
-
-    console.log(response.data);
+    this.setState({ members: [...this.state.members, response.data] });
   };
 
   handleHouseholdSubmit = async e => {
@@ -38,7 +37,6 @@ export default class Profile extends React.Component {
       userId: this.props.user.id
     });
     this.setState({ households: [...this.state.households, response.data] });
-    console.log(response.data);
   };
 
   handleHouseholdNameChange = async e => {
@@ -48,12 +46,21 @@ export default class Profile extends React.Component {
   handleHouseholdAccept = async id => {
     console.log({ idtoaccept: id });
     const response = await axios.put('/api/invitations', { id });
-    console.log(response.data);
   };
 
   render = () => {
     return (
       <div className="max-w-screen-md container my-4">
+        {this.state.members.map(member => {
+          if (!member.invite_accepted && member.user_id == this.props.user.id) {
+            return (
+              <div>
+                {member.inviter_full} ({member.inviter_email}) invited you to
+                their {member.household_name} household.
+              </div>
+            );
+          }
+        })}
         <form onSubmit={this.handleHouseholdSubmit} class="w-full max-w-md">
           <div class="flex items-center border-b border-b-2 border-blue-500 ">
             <input
@@ -74,7 +81,6 @@ export default class Profile extends React.Component {
           if (household.is_owner) {
             return (
               <div className="border border-gray-400 shadow-lg rounded-lg p-4 my-2">
-                
                 <div>{household.name}</div>
                 <form
                   onSubmit={e => e.preventDefault()}
@@ -88,7 +94,9 @@ export default class Profile extends React.Component {
                       onChange={this.handleInviteChange}
                       aria-label="Email"></input>
                     <button
-                      onClick={() => this.handleInviteSubmit(household.household_id)}
+                      onClick={() =>
+                        this.handleInviteSubmit(household.household_id)
+                      }
                       class="bg-blue-500 hover:bg-blue-700 text-white font-bold my-2 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
                       type="submit">
                       Invite
@@ -98,9 +106,16 @@ export default class Profile extends React.Component {
                 <div>Current Members</div>
                 <ul>
                   {this.state.members.map(member => {
-                    if (member.household_id == household.id && member.invite_accepted) {
+                    if (
+                      member.household_id == household.household_id &&
+                      member.invite_accepted
+                    ) {
                       if (member.is_owner) {
-                        return <li className="text-blue-400">{member.member_email}*</li>
+                        return (
+                          <li className="text-blue-400">
+                            {member.member_email}*
+                          </li>
+                        );
                       }
                       return <li>{member.member_email}</li>;
                     }
@@ -109,12 +124,17 @@ export default class Profile extends React.Component {
                 <div>Awaiting Response</div>
                 <ul>
                   {this.state.members.map(member => {
-                    if (member.household_id == household.id && !member.invite_accepted) {
-                      return <li>{member.member_email}</li>;
+                    if (
+                      member.household_id == household.household_id &&
+                      !member.invite_accepted
+                    ) {
+                      return (
+                        <li>{member.member_email || member.invited_email}</li>
+                      );
                     }
                   })}
                 </ul>
-                </div>
+              </div>
             );
           }
         })}
