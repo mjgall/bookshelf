@@ -37,6 +37,7 @@ export default class Profile extends React.Component {
       name: this.state.householdNameValue,
       userId: this.props.user.id
     });
+    this.setState({ members: [...this.state.members, response.data] });
     this.setState({ households: [...this.state.households, response.data] });
   };
 
@@ -110,14 +111,15 @@ export default class Profile extends React.Component {
           ) {
             return (
               <div
-                class="shadow text-sm bg-blue-100 border border-blue-400 text-blue-700 my-2 px-4 py-3 rounded relative"
+                class="shadow text-sm bg-blue-100 border border-blue-400 text-blue-700 my-2 px-4 py-3 rounded"
                 role="alert">
                 <strong class="font-bold">🏠 </strong>
                 <span class="block sm:inline">
                   {member.inviter_full} ({member.inviter_email}) invited you to
                   their {member.household_name} household.
                 </span>
-                <span class="absolute top-0 bottom-0 right-0 px-4 py-2 ">
+
+                <span class="float-right">
                   <CheckSquare
                     size="2em"
                     className="  cursor-pointer text-green-400"
@@ -134,97 +136,121 @@ export default class Profile extends React.Component {
           }
         })}
         {this.state.flash ? <div>{this.state.flashMessage}</div> : null}
-        <div className="text-lg">Others' households you are a part of:</div>
-        {this.state.members.map(membership => {
-          if (
-            membership.user_id == this.props.user.id &&
-            !membership.is_owner &&
-            membership.invite_accepted
-          ) {
-            return (
-              <div className="border border-gray-400 shadow-lg rounded-lg p-4 my-2">
-                <div className="text-md">{membership.household_name}</div>
-              </div>
-            );
-          }
-        })}
-        <div className="text-lg">Households you own:</div>
-        <form onSubmit={this.handleHouseholdSubmit} class="w-full max-w-md">
-          <div class="flex items-center border-b border-b-1 border-blue-500 ">
-            <input
-              class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
-              type="text"
-              placeholder="New household name"
-              value={this.state.householdNameValue}
-              onChange={this.handleHouseholdNameChange}
-              aria-label="Household Name"></input>
-            <button
-              class="bg-blue-500 hover:bg-blue-700 text-white font-bold my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
-              type="submit">
-              Create
-            </button>
-          </div>
-        </form>
-        {this.state.households.map(household => {
-          if (household.is_owner) {
-            return (
-              <div className="border border-gray-400 shadow-lg rounded-lg p-4 my-2">
-                <div>{household.name}</div>
-                <form
-                  onSubmit={e => e.preventDefault()}
-                  class="w-full max-w-md">
-                  <div class="flex items-center border-b border-b-2 border-blue-500 ">
-                    <input
-                      class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
-                      type="text"
-                      placeholder="User email to invite"
-                      value={this.state.inviteValue}
-                      onChange={this.handleInviteChange}
-                      aria-label="Email"></input>
-                    <button
-                      onClick={() =>
-                        this.handleInviteSubmit(household.household_id)
-                      }
-                      class="bg-blue-500 hover:bg-blue-700 text-white font-bold my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
-                      type="submit">
-                      Invite
-                    </button>
+        <div className="w-5/6 md:w-full container">
+          <div className="text-3xl font-bold">Households</div>
+          <form
+            onSubmit={this.handleHouseholdSubmit}
+            class="w-full md:max-w-md">
+            <div class="flex items-center border-b border-b-1 border-blue-500 ">
+              <input
+                class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none"
+                type="text"
+                placeholder="New household name"
+                value={this.state.householdNameValue}
+                onChange={this.handleHouseholdNameChange}
+                aria-label="Household Name"></input>
+              <button
+                class="bg-blue-500 hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
+                type="submit">
+                Create
+              </button>
+            </div>
+          </form>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 my-2 md:w-full w-5/6 container">
+          {this.state.members.map(membership => {
+            if (
+              membership.invite_accepted &&
+              membership.user_id == this.props.user.id
+            ) {
+              return (
+                <div className="border border-gray-400 shadow rounded-lg p-4">
+                  <div className="text-2xl font-bold mb-3">
+                    {membership.household_name}
                   </div>
-                </form>
-                <div>Current Members</div>
-                <ul>
-                  {this.state.members.map(member => {
-                    if (
-                      member.household_id == household.household_id &&
-                      member.invite_accepted
-                    ) {
+                  <form
+                    onSubmit={e => e.preventDefault()}
+                    class="w-full max-w-md">
+                    {membership.is_owner ? (
+                      <div class="flex items-center border-b border-b-2 border-blue-500 ">
+                        <input
+                          class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none"
+                          type="text"
+                          placeholder="User email to invite"
+                          value={this.state.inviteValue}
+                          onChange={this.handleInviteChange}
+                          aria-label="Email"></input>
+                        <button
+                          onClick={() =>
+                            this.handleInviteSubmit(membership.household_id)
+                          }
+                          class="bg-blue-500 hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
+                          type="submit">
+                          Invite
+                        </button>
+                      </div>
+                    ) : null}
+                  </form>
+                  <ul>
+                    {this.state.members.map(member => {
                       if (
-                        member.is_owner &&
-                        member.user_id == this.props.user.id
+                        member.household_id == membership.household_id &&
+                        member.invite_accepted
                       ) {
-                        return null;
+                        return (
+                          <li className="flex my-2">
+                            <img
+                              class="h-12 w-12 rounded-full"
+                              src={member.picture}
+                            />
+                            <span className="ml-5 mt-3">
+                              {' '}
+                              {member.member_email}
+                            </span>
+                          </li>
+                        );
                       }
-                      return <li>{member.member_email}</li>;
-                    }
-                  })}
-                </ul>
-                <div>Awaiting Response</div>
-                <ul>
-                  {this.state.members.map(member => {
-                    if (
-                      member.household_id == household.household_id &&
-                      !member.invite_accepted
-                    ) {
-                      return (
-                        <li>{member.member_email || member.invited_email}</li>
-                      );
-                    }
-                  })}
-                </ul>
-              </div>
-            );
-          }
-        })}
+                    })}
+                  </ul>
+                  {membership.is_owner ? (
+                    <>
+                      {this.state.members.some(
+                        members =>
+                          members.invite_accepted &&
+                          members.household_id == membership.household_id
+                     
+                      ) ? (
+                        <div>Awaiting Response</div>
+                      ) : null}
+
+                      <ul>
+                        {this.state.members.map(member => {
+                          if (
+                            !member.invite_accepted &&
+                            !member.invite_declined &&
+                            member.household_id == membership.household_id
+                          )
+                            return (
+                              <li className="flex my-2">
+                                <img
+                                  class="h-12 w-12 rounded-full"
+                                  src={member.picture}
+                                />
+                                <span className="ml-5 mt-3">
+                                  {' '}
+                                  {member.member_email}
+                                </span>
+                              </li>
+                            );
+                        })}
+                      </ul>
+                    </>
+                  ) : null}
+                </div>
+              );
+            }
+          })}
+        </div>
       </div>
     );
   };

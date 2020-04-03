@@ -16,7 +16,7 @@ module.exports = (name, userId) => {
           `SELECT * FROM households_users WHERE id = ${results.insertId}`,
           (err, results, fields) => {
             if (err) throw Error(err);
-            resolve({ ...results[0], name });
+            resolve({ ...results[0], household_name: name });
           }
         );
       });
