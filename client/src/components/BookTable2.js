@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useTable, useFilters, useSortBy, useGlobalFilter } from 'react-table';
 import { withRouter } from 'react-router-dom';
 import Book from './Book';
@@ -101,7 +101,7 @@ function SelectColumnFilter({
   // Render a multi-select box
 
   if (options.length === 1) {
-    return null
+    return null;
   } else {
     return (
       <select
@@ -118,8 +118,6 @@ function SelectColumnFilter({
       </select>
     );
   }
-
-  
 }
 
 // This is a custom filter UI that uses a
@@ -286,14 +284,12 @@ function Table({ columns, data, history }) {
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-              { headerGroup.headers.map(column => (
-              
-                
+              {headerGroup.headers.map(column => (
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   className="px-4 py-2 border">
-                  { column.render('Header') }
-                  
+                  {column.render('Header')}
+
                   <span>
                     {column.isSorted
                       ? column.isSortedDesc
@@ -301,11 +297,10 @@ function Table({ columns, data, history }) {
                         : ' 🔼'
                       : null}
                   </span>
-                  {/* Render the columns filter UI */ }
+                  {/* Render the columns filter UI */}
                   <div>{column.canFilter ? column.render('Filter') : null}</div>
                   {/* <div>{column.canFilter ? column.render('Filter') : null}</div> */}
-                  </th>
-                
+                </th>
               ))}
             </tr>
           ))}
@@ -364,13 +359,12 @@ function filterGreaterThan(rows, id, filterValue) {
 filterGreaterThan.autoRemove = val => typeof val !== 'number';
 
 function BookTable(props) {
-
   const isTabletOrMobileDevice = useMediaQuery({
     query: '(max-device-width: 1224px)'
   });
 
   const columns = React.useMemo(() => {
-    if (!isTabletOrMobileDevice || isTabletOrMobileDevice) {
+    if (!props.books.every(book => book.user_id == props.user.id)) {
       return [
         { Header: 'Title', accessor: 'title', disableFilters: true },
         { Header: 'Author', accessor: 'author', disableFilters: true },
@@ -386,12 +380,30 @@ function BookTable(props) {
             );
           }
         },
-        {Header: 'Owner', accessor: 'user_id', Filter: SelectColumnFilter, filter: 'equals', disableSortBy: true}
+        {
+          Header: 'Owner',
+          accessor: 'user_id',
+          Filter: SelectColumnFilter,
+          filter: 'equals',
+          disableSortBy: true
+        }
       ];
     } else {
       return [
-        { Header: 'Title', accessor: 'title' },
-        { Header: 'Author', accessor: 'author' }
+        { Header: 'Title', accessor: 'title', disableFilters: true },
+        { Header: 'Author', accessor: 'author', disableFilters: true },
+        {
+          Header: 'Cover',
+          Cell: props => {
+            return (
+              <img
+                loading="lazy"
+                className="w-20 container"
+                src={props.row.original.cover}
+                alt="cover"></img>
+            );
+          }
+        }
       ];
     }
   }, []);
