@@ -68,7 +68,7 @@ module.exports = app => {
 
   //get a users books
   app.get('/api/books', async (req, res) => {
-    console.log(req.user);
+
     if (req.user) {
       const response = await getBooks(req.user.id);
       res.send({ success: true, books: response });
@@ -80,7 +80,6 @@ module.exports = app => {
   //update the information about a book
   app.put('/api/books', async (req, res) => {
     const book = { ...req.body };
-    console.log(book);
 
     if (!book.id || !book.title || !book.author) {
       res.send({ success: false, message: 'Missing fields' });
@@ -108,7 +107,6 @@ module.exports = app => {
   });
 
   app.post('/api/invitations', async (req, res) => {
-    console.log(req.body);
 
     const correspondingUser = await getUserByEmail(req.body.invitedEmail);
     if (!correspondingUser) {

@@ -17,11 +17,11 @@ module.exports = userId => {
     
     WHERE invite_declined = false AND household_id 
     IN (SELECT household_id FROM households_users WHERE user_id = ${userId} )`;
-    console.log(query);
+
 
     db.query(query, (err, results, fields) => {
       if (err) throw Error(err);
-      console.log(results);
+
       resolve(results);
     });
   });

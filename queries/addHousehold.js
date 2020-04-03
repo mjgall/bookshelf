@@ -6,7 +6,7 @@ module.exports = (name, userId) => {
     const addHouseholdQuery = `INSERT INTO households (name, create_date) VALUES (${sqlString.escape(
       name
     )}, '${Date.now()}');`;
-    console.log(addHouseholdQuery);
+
     db.query(addHouseholdQuery, (err, results, fields) => {
       if (err) throw Error(err);
       const addHouseholdsUsersQuery = `INSERT INTO households_users (user_id, household_id, is_owner, invite_accepted) VALUES ('${userId}', '${results.insertId}', true, true)`;

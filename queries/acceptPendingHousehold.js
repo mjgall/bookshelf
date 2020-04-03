@@ -6,7 +6,6 @@ module.exports = id => {
 
     db.query(query, (err, results, fields) => {
       if (err) throw Error(err);
-      console.log(results);
       db.query(
         `SELECT households_users.*, households.name AS household_name FROM households_users JOIN households ON households_users.household_id = households.id WHERE households_users.id = ${id}`,
         (err, results, fields) => {

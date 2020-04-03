@@ -50,7 +50,6 @@ export default class Profile extends React.Component {
       decline: false,
       id
     });
-    console.log(response.data);
     if (response.data) {
       this.moveMembership({ id, membership: response.data, accepted: true });
     }
@@ -62,7 +61,6 @@ export default class Profile extends React.Component {
       decline: true,
       id
     });
-    console.log(response.data);
     if (response.data) {
       this.moveMembership({ id, membership: response.data, accepted: false });
     }
@@ -72,12 +70,9 @@ export default class Profile extends React.Component {
     const indexOfMembership = this.state.members.findIndex(membership => {
       return membership.id == status.id;
     });
-    console.log(indexOfMembership);
 
     const newMembers = [...this.state.members];
     newMembers.splice(indexOfMembership, 1, status.membership);
-
-    console.log(newMembers);
 
     this.setState({
       members: newMembers,

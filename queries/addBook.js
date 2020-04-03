@@ -20,7 +20,6 @@ module.exports = book => {
     db.getConnection((err, connnection) => {
       connnection.beginTransaction(err => {
         connnection.query(query1, (err, results, fields) => {
-          console.log(err);
           const query2 = `
   
   INSERT INTO user_books (user_id, global_id, title, author, isbn10, isbn13, cover) VALUES (${userId}, ${

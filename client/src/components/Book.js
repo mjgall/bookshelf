@@ -29,43 +29,38 @@ export default class Book extends React.Component {
   };
 
   update = async (value, fieldName) => {
-    console.log(value, fieldName);
     switch (fieldName) {
       case 'title':
-        await this.setState({
+        this.setState({
           currentBook: { ...this.state.currentBook, title: value }
         });
         this.saveToDb(this.state);
         break;
       case 'author':
-        console.log('in author');
-        await this.setState({
+        this.setState({
           currentBook: { ...this.state.currentBook, author: [value] }
         });
-        await this.saveToDb(this.state);
+        this.saveToDb(this.state);
         break;
       case 'notes':
-        await this.setState({
+        this.setState({
           currentBook: { ...this.state.currentBook, notes: value }
         });
         await this.saveToDb(this.state);
         break;
       case 'read':
-        console.log('doing the read one');
-        await this.setState({
+        this.setState({
           currentBook: { ...this.state.currentBook, read: true }
         });
         await this.saveToDb(this.state);
         break;
       default:
-        console.log('defautl');
         break;
     }
   };
 
   saveToDb = async state => {
     const response = await axios.put('/api/books', state.currentBook);
-    console.log(response);
     // const user = response.data;
     this.props.updateBook(state.currentBook);
   };

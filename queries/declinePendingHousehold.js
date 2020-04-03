@@ -7,7 +7,7 @@ module.exports = id => {
 
     db.query(query, (err, results, fields) => {
       if (err) throw Error(err);
-      console.log(results);
+
       db.query(
         `SELECT * FROM households_users WHERE id = ${id}`,
         (err, results, fields) => {
