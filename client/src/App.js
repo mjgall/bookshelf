@@ -109,7 +109,9 @@ export default class App extends React.Component {
                     loaded={this.state.loaded}
                     user={this.state.user}
                     addBookToGlobalState={this.addBookToGlobalState}
-                    books={this.state?.books}></Home>
+                    books={ this.state?.books }
+                    members={this.state.householdMembers}></Home>
+                    
                 </Route>
                 <Route
                   exact

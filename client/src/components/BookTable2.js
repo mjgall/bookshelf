@@ -46,36 +46,39 @@ const Styles = styled.div`
 function GlobalFilter({
   preGlobalFilteredRows,
   globalFilter,
-  setGlobalFilter
+  setGlobalFilter,
 }) {
   const count = preGlobalFilteredRows.length;
 
   return (
-    <input
-      className="px-3"
-      value={globalFilter || ''}
-      onChange={e => {
-        setGlobalFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
-      }}
-      placeholder={`Search ${count} books...`}
-      style={{
-        height: '2rem',
-        width: '100%'
-      }}
-    />
+    <div className="flex">
+      <input
+        className="px-3"
+        value={globalFilter || ''}
+        onChange={ (e) => {
+
+          setGlobalFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
+        }}
+        placeholder={`Search ${count} books...`}
+        style={{
+          height: '2rem',
+          width: '100%',
+        }}
+      />
+    </div>
   );
 }
 
 // Define a default UI for filtering
 function DefaultColumnFilter({
-  column: { filterValue, preFilteredRows, setFilter }
+  column: { filterValue, preFilteredRows, setFilter },
 }) {
   const count = preFilteredRows.length;
 
   return (
     <input
       value={filterValue || ''}
-      onChange={e => {
+      onChange={(e) => {
         setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
       }}
       placeholder={`Search ${count} records...`}
@@ -86,13 +89,13 @@ function DefaultColumnFilter({
 // This is a custom filter UI for selecting
 // a unique option from a list
 function SelectColumnFilter({
-  column: { filterValue, setFilter, preFilteredRows, id }
+  column: { filterValue, setFilter, preFilteredRows, id },
 }) {
   // Calculate the options for filtering
   // using the preFilteredRows
   const options = React.useMemo(() => {
     const options = new Set();
-    preFilteredRows.forEach(row => {
+    preFilteredRows.forEach((row) => {
       options.add(row.values[id]);
     });
     return [...options.values()];
@@ -106,7 +109,7 @@ function SelectColumnFilter({
     return (
       <select
         value={filterValue}
-        onChange={e => {
+        onChange={(e) => {
           setFilter(e.target.value || undefined);
         }}>
         <option value="">All</option>
@@ -124,7 +127,7 @@ function SelectColumnFilter({
 // slider to set the filter value between a column's
 // min and max values
 function SliderColumnFilter({
-  column: { filterValue, setFilter, preFilteredRows, id }
+  column: { filterValue, setFilter, preFilteredRows, id },
 }) {
   // Calculate the min and max
   // using the preFilteredRows
@@ -132,7 +135,7 @@ function SliderColumnFilter({
   const [min, max] = React.useMemo(() => {
     let min = preFilteredRows.length ? preFilteredRows[0].values[id] : 0;
     let max = preFilteredRows.length ? preFilteredRows[0].values[id] : 0;
-    preFilteredRows.forEach(row => {
+    preFilteredRows.forEach((row) => {
       min = Math.min(row.values[id], min);
       max = Math.max(row.values[id], max);
     });
@@ -146,7 +149,7 @@ function SliderColumnFilter({
         min={min}
         max={max}
         value={filterValue || min}
-        onChange={e => {
+        onChange={(e) => {
           setFilter(parseInt(e.target.value, 10));
         }}
       />
@@ -159,12 +162,12 @@ function SliderColumnFilter({
 // filter. It uses two number boxes and filters rows to
 // ones that have values between the two
 function NumberRangeColumnFilter({
-  column: { filterValue = [], preFilteredRows, setFilter, id }
+  column: { filterValue = [], preFilteredRows, setFilter, id },
 }) {
   const [min, max] = React.useMemo(() => {
     let min = preFilteredRows.length ? preFilteredRows[0].values[id] : 0;
     let max = preFilteredRows.length ? preFilteredRows[0].values[id] : 0;
-    preFilteredRows.forEach(row => {
+    preFilteredRows.forEach((row) => {
       min = Math.min(row.values[id], min);
       max = Math.max(row.values[id], max);
     });
@@ -174,39 +177,39 @@ function NumberRangeColumnFilter({
   return (
     <div
       style={{
-        display: 'flex'
+        display: 'flex',
       }}>
       <input
         value={filterValue[0] || ''}
         type="number"
-        onChange={e => {
+        onChange={(e) => {
           const val = e.target.value;
           setFilter((old = []) => [
             val ? parseInt(val, 10) : undefined,
-            old[1]
+            old[1],
           ]);
         }}
         placeholder={`Min (${min})`}
         style={{
           width: '70px',
-          marginRight: '0.5rem'
+          marginRight: '0.5rem',
         }}
       />
       to
       <input
         value={filterValue[1] || ''}
         type="number"
-        onChange={e => {
+        onChange={(e) => {
           const val = e.target.value;
           setFilter((old = []) => [
             old[0],
-            val ? parseInt(val, 10) : undefined
+            val ? parseInt(val, 10) : undefined,
           ]);
         }}
         placeholder={`Max (${max})`}
         style={{
           width: '70px',
-          marginLeft: '0.5rem'
+          marginLeft: '0.5rem',
         }}
       />
     </div>
@@ -214,11 +217,11 @@ function NumberRangeColumnFilter({
 }
 
 function fuzzyTextFilterFn(rows, id, filterValue) {
-  return matchSorter(rows, filterValue, { keys: [row => row.values[id]] });
+  return matchSorter(rows, filterValue, { keys: [(row) => row.values[id]] });
 }
 
 // Let the table remove the filter if the string is empty
-fuzzyTextFilterFn.autoRemove = val => !val;
+fuzzyTextFilterFn.autoRemove = (val) => !val;
 
 // Our table component
 function Table({ columns, data, history }) {
@@ -229,7 +232,7 @@ function Table({ columns, data, history }) {
       // Or, override the default text filter to use
       // "startWith"
       text: (rows, id, filterValue) => {
-        return rows.filter(row => {
+        return rows.filter((row) => {
           const rowValue = row.values[id];
           return rowValue !== undefined
             ? String(rowValue)
@@ -237,7 +240,7 @@ function Table({ columns, data, history }) {
                 .startsWith(String(filterValue).toLowerCase())
             : true;
         });
-      }
+      },
     }),
     []
   );
@@ -245,7 +248,7 @@ function Table({ columns, data, history }) {
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
-      Filter: DefaultColumnFilter
+      Filter: DefaultColumnFilter,
     }),
     []
   );
@@ -259,18 +262,19 @@ function Table({ columns, data, history }) {
     state,
     visibleColumns,
     preGlobalFilteredRows,
-    setGlobalFilter
+    setGlobalFilter,
   } = useTable(
     {
       columns,
       data,
       defaultColumn, // Be sure to pass the defaultColumn option
-      filterTypes
+      filterTypes,
     },
     useFilters, // useFilters!
     useGlobalFilter, // useGlobalFilter!
     useSortBy
-  );
+    );
+  
 
   // We don't want to render all of the rows for this example, so cap
   // it for this use case
@@ -282,9 +286,9 @@ function Table({ columns, data, history }) {
         {...getTableProps()}
         className="max-w-screen-md container shadow-md text-xs md:text-base">
         <thead>
-          {headerGroups.map(headerGroup => (
+          {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
+              {headerGroup.headers.map((column) => (
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
                   className="px-4 py-2 border">
@@ -308,7 +312,7 @@ function Table({ columns, data, history }) {
             <th
               colSpan={visibleColumns.length}
               style={{
-                textAlign: 'left'
+                textAlign: 'left',
               }}>
               <GlobalFilter
                 preGlobalFilteredRows={preGlobalFilteredRows}
@@ -328,7 +332,7 @@ function Table({ columns, data, history }) {
                   row.original.read ? 'bg-green-100' : null
                 }`}
                 onClick={() => history.push(`/book/${row.original.id}`)}>
-                {row.cells.map(cell => {
+                {row.cells.map((cell) => {
                   return (
                     <td {...cell.getCellProps()} className="border px-4 py-2">
                       {cell.render('Cell')}{' '}
@@ -346,7 +350,7 @@ function Table({ columns, data, history }) {
 
 // Define a custom filter filter function!
 function filterGreaterThan(rows, id, filterValue) {
-  return rows.filter(row => {
+  return rows.filter((row) => {
     const rowValue = row.values[id];
     return rowValue >= filterValue;
   });
@@ -356,21 +360,21 @@ function filterGreaterThan(rows, id, filterValue) {
 // when given the new filter value and returns true, the filter
 // will be automatically removed. Normally this is just an undefined
 // check, but here, we want to remove the filter if it's not a number
-filterGreaterThan.autoRemove = val => typeof val !== 'number';
+filterGreaterThan.autoRemove = (val) => typeof val !== 'number';
 
 function BookTable(props) {
   const isTabletOrMobileDevice = useMediaQuery({
-    query: '(max-device-width: 1224px)'
+    query: '(max-device-width: 1224px)',
   });
 
   const columns = React.useMemo(() => {
-    if (!props.books.every(book => book.user_id == props.user.id)) {
+    if (!props.books.every((book) => book.user_id == props.user.id)) {
       return [
         { Header: 'Title', accessor: 'title', disableFilters: true },
         { Header: 'Author', accessor: 'author', disableFilters: true },
         {
           Header: 'Cover',
-          Cell: props => {
+          Cell: (props) => {
             return (
               <img
                 loading="lazy"
@@ -378,15 +382,15 @@ function BookTable(props) {
                 src={props.row.original.cover}
                 alt="cover"></img>
             );
-          }
+          },
         },
         {
           Header: 'Owner',
-          accessor: 'user_id',
+          accessor: 'owner_name',
           Filter: SelectColumnFilter,
           filter: 'equals',
-          disableSortBy: true
-        }
+          disableSortBy: true,
+        },
       ];
     } else {
       return [
@@ -394,7 +398,7 @@ function BookTable(props) {
         { Header: 'Author', accessor: 'author', disableFilters: true },
         {
           Header: 'Cover',
-          Cell: props => {
+          Cell: (props) => {
             return (
               <img
                 loading="lazy"
@@ -402,17 +406,22 @@ function BookTable(props) {
                 src={props.row.original.cover}
                 alt="cover"></img>
             );
-          }
-        }
+          },
+        },
       ];
     }
   }, []);
 
+
   const data = React.useMemo(() => {
-    return props?.books?.map(book => {
+    return props?.books?.map((book) => {
       return {
         ...book,
-        author: book?.author
+        author: book?.author,
+        owner_name:
+          props.members[
+            props.members.findIndex((member) => member.user_id == book.user_id)
+          ].member_first,
       };
     });
   }, [props.books]);
