@@ -12,8 +12,9 @@ const getUserById = require('../queries/getUserById');
 const addHousehold = require('../queries/addHousehold');
 const getHouseholdMembersByUserId = require('../queries/getHouseholdMembersByUserId');
 const declinePendingHousehold = require('../queries/declinePendingHousehold');
+const deleteHousehold = require('../queries/deleteHousehold');
 
-module.exports = app => {
+module.exports = (app) => {
   //lookup book information by isbn10
 
   app.get('/api/bootstrap', async (req, res) => {
@@ -33,7 +34,7 @@ module.exports = app => {
     const response = await axios.get(
       `https://api2.isbndb.com/book/${req.params.isbn}`,
       {
-        headers: { Authorization: '43911_8b18bf16825dc5f4f5c3bfe3b0cea146' }
+        headers: { Authorization: '43911_8b18bf16825dc5f4f5c3bfe3b0cea146' },
       }
     );
 
@@ -61,14 +62,13 @@ module.exports = app => {
       author,
       isbn10,
       isbn13,
-      cover
+      cover,
     });
     res.send(response);
   });
 
   //get a users books
   app.get('/api/books', async (req, res) => {
-
     if (req.user) {
       const response = await getBooks(req.user.id);
       res.send({ success: true, books: response });
@@ -80,13 +80,19 @@ module.exports = app => {
   //update the information about a book
   app.put('/api/books', async (req, res) => {
     const book = { ...req.body };
-    console.log(book)
+    console.log(book);
     if (!book.id || !book.title || !book.author) {
       res.send({ success: false, message: 'Missing fields' });
     } else {
       const response = await updateBook(book);
       res.send({ success: true, book: response });
     }
+  });
+
+  app.delete('/api/households/:householdId', async (req, res) => {
+    const { householdId } = req.params;
+    const householdDeleted = await deleteHousehold(householdId);
+    res.send(householdDeleted);
   });
 
   app.post('/api/households', async (req, res) => {
@@ -107,7 +113,6 @@ module.exports = app => {
   });
 
   app.post('/api/invitations', async (req, res) => {
-
     const correspondingUser = await getUserByEmail(req.body.invitedEmail);
     if (!correspondingUser) {
       res.send({ success: false, message: 'No user found with that email' });

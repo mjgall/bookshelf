@@ -9,66 +9,66 @@ export default class Profile extends React.Component {
     members: [],
     householdNameValue: '',
     flash: false,
-    flashMessage: ''
+    flashMessage: '',
   };
 
   componentDidMount = async () => {
     this.setState({
       households: this.props.households,
-      members: this.props.members
+      members: this.props.members,
     });
   };
 
-  handleInviteChange = e => {
+  handleInviteChange = (e) => {
     this.setState({ inviteValue: e.target.value });
   };
 
-  handleInviteSubmit = async householdId => {
+  handleInviteSubmit = async (householdId) => {
     const response = await axios.post('/api/invitations', {
       invitedEmail: this.state.inviteValue,
-      householdId
+      householdId,
     });
     this.setState({ members: [...this.state.members, response.data] });
   };
 
-  handleHouseholdSubmit = async e => {
+  handleHouseholdSubmit = async (e) => {
     e.preventDefault();
     const response = await axios.post('/api/households', {
       name: this.state.householdNameValue,
-      userId: this.props.user.id
+      userId: this.props.user.id,
     });
     this.setState({ members: [...this.state.members, response.data] });
     this.setState({ households: [...this.state.households, response.data] });
   };
 
-  handleHouseholdNameChange = async e => {
+  handleHouseholdNameChange = async (e) => {
     this.setState({ householdNameValue: e.target.value });
   };
 
-  acceptInvitation = async id => {
+  acceptInvitation = async (id) => {
     const response = await axios.put('/api/invitations', {
       accept: true,
       decline: false,
-      id
+      id,
     });
     if (response.data) {
       this.moveMembership({ id, membership: response.data, accepted: true });
     }
   };
 
-  declineInvitation = async id => {
+  declineInvitation = async (id) => {
     const response = await axios.put('/api/invitations', {
       accept: false,
       decline: true,
-      id
+      id,
     });
     if (response.data) {
       this.moveMembership({ id, membership: response.data, accepted: false });
     }
   };
 
-  moveMembership = status => {
-    const indexOfMembership = this.state.members.findIndex(membership => {
+  moveMembership = (status) => {
+    const indexOfMembership = this.state.members.findIndex((membership) => {
       return membership.id == status.id;
     });
 
@@ -94,16 +94,25 @@ export default class Profile extends React.Component {
           <span class="block sm:inline">Declined!</span>
           <span class="absolute top-0 bottom-0 right-0 px-4 py-2 "></span>
         </div>
-      )
+      ),
     });
 
     setTimeout(() => this.setState({ flashMessage: false }), 1000);
   };
 
+  deleteHousehold = async (householdId, index) => {
+    const response = await axios.delete(`/api/households/${householdId}`);
+    if (response.data.affectedRows > 1) {
+      const newMembers = [...this.state.members];
+      newMembers.splice(index, 1);
+      this.setState({ members: newMembers });
+    }
+  };
+
   render = () => {
     return (
       <div className="max-w-screen-md container my-4 ">
-        {this.state.members.map(member => {
+        {this.state.members.map((member) => {
           if (
             !member.invite_declined &&
             !member.invite_accepted &&
@@ -158,18 +167,26 @@ export default class Profile extends React.Component {
           </form>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 my-2 md:w-full w-5/6 container">
-          {this.state.members.map(membership => {
+          {this.state.members.map((membership, index) => {
             if (
               membership.invite_accepted &&
               membership.user_id == this.props.user.id
             ) {
               return (
                 <div className="border border-gray-400 shadow rounded-lg p-4">
-                  <div className="text-2xl font-bold mb-3">
-                    {membership.household_name}
+                  <div className="text-2xl font-bold mb-3 flex justify-between items-center">
+                    <span>{membership.household_name}</span>
+                    {membership.is_owner ? (
+                      <XSquare
+                        size="1em"
+                        className="cursor-pointer text-red-600"
+                        onClick={async () =>
+                          this.deleteHousehold(membership.household_id, index)
+                        }></XSquare>
+                    ) : null}
                   </div>
                   <form
-                    onSubmit={e => e.preventDefault()}
+                    onSubmit={(e) => e.preventDefault()}
                     class="w-full max-w-md">
                     {membership.is_owner ? (
                       <div class="flex items-center border-b border-b-2 border-blue-500 ">
@@ -192,7 +209,7 @@ export default class Profile extends React.Component {
                     ) : null}
                   </form>
                   <ul>
-                    {this.state.members.map(member => {
+                    {this.state.members.map((member) => {
                       if (
                         member.household_id == membership.household_id &&
                         member.invite_accepted
@@ -215,16 +232,15 @@ export default class Profile extends React.Component {
                   {membership.is_owner ? (
                     <>
                       {this.state.members.some(
-                        members =>
+                        (members) =>
                           members.invite_accepted &&
                           members.household_id == membership.household_id
-                     
                       ) ? (
                         <div>Awaiting Response</div>
                       ) : null}
 
                       <ul>
-                        {this.state.members.map(member => {
+                        {this.state.members.map((member) => {
                           if (
                             !member.invite_accepted &&
                             !member.invite_declined &&
