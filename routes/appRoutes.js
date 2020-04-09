@@ -80,7 +80,7 @@ module.exports = app => {
   //update the information about a book
   app.put('/api/books', async (req, res) => {
     const book = { ...req.body };
-
+    console.log(book)
     if (!book.id || !book.title || !book.author) {
       res.send({ success: false, message: 'Missing fields' });
     } else {

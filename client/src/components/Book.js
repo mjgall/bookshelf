@@ -7,14 +7,13 @@ const EditP = editable('p');
 
 export default class Book extends React.Component {
   state = {
-    currentBook: null
+    currentBook: null,
   };
 
   componentDidMount = () => {
     window.scroll(0, 0);
 
-    const currentBooksArray = this.props?.books?.filter(book => {
-
+    const currentBooksArray = this.props?.books?.filter((book) => {
       return book.id == this.props.id;
     });
 
@@ -23,8 +22,8 @@ export default class Book extends React.Component {
     this.setState({
       currentBook: {
         ...currentBook,
-        notes: currentBook.notes ? currentBook.notes : 'Click to add notes.'
-      }
+        notes: currentBook.notes ? currentBook.notes : 'Click to add notes.',
+      },
     });
   };
 
@@ -32,25 +31,25 @@ export default class Book extends React.Component {
     switch (fieldName) {
       case 'title':
         this.setState({
-          currentBook: { ...this.state.currentBook, title: value }
+          currentBook: { ...this.state.currentBook, title: value },
         });
         this.saveToDb(this.state);
         break;
       case 'author':
         this.setState({
-          currentBook: { ...this.state.currentBook, author: [value] }
+          currentBook: { ...this.state.currentBook, author: [value] },
         });
         this.saveToDb(this.state);
         break;
       case 'notes':
         this.setState({
-          currentBook: { ...this.state.currentBook, notes: value }
+          currentBook: { ...this.state.currentBook, notes: value },
         });
         await this.saveToDb(this.state);
         break;
       case 'read':
         this.setState({
-          currentBook: { ...this.state.currentBook, read: true }
+          currentBook: { ...this.state.currentBook, read: true },
         });
         await this.saveToDb(this.state);
         break;
@@ -59,7 +58,8 @@ export default class Book extends React.Component {
     }
   };
 
-  saveToDb = async state => {
+  saveToDb = async (state) => {
+    console.log(state)
     const response = await axios.put('/api/books', state.currentBook);
     // const user = response.data;
     this.props.updateBook(state.currentBook);
