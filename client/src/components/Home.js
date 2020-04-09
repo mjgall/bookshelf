@@ -41,16 +41,19 @@ class Home extends React.Component {
               </label>
             </div>
             <BookTable
+              selfOnly={this.state.selfOnly}
               members={this.props.members}
               user={this.props.user}
-              history={this.props.history}
+              history={ this.props.history }
+              books={this.props.books}
               books={this.props.books.filter((book) => {
                 if (this.state.selfOnly == false) {
                   return book;
                 } else {
                   return book.user_id == this.props.user.id;
                 }
-              })}></BookTable>
+              }) }
+            ></BookTable>
           </div>
         ) : this.props.loaded && !this.props.user ? (
           <MarketingHome></MarketingHome>

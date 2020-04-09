@@ -55,8 +55,7 @@ function GlobalFilter({
       <input
         className="px-3"
         value={globalFilter || ''}
-        onChange={ (e) => {
-
+        onChange={(e) => {
           setGlobalFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
         }}
         placeholder={`Search ${count} books...`}
@@ -252,6 +251,12 @@ function Table({ columns, data, history }) {
     }),
     []
   );
+  const skipPageResetRef = React.useRef();
+  skipPageResetRef.current = true
+  // React.useEffect(() => {
+  //   // After the table has updated, always remove the flag
+  //   skipPageResetRef.current = false;
+  // });
 
   const {
     getTableProps,
@@ -269,12 +274,18 @@ function Table({ columns, data, history }) {
       data,
       defaultColumn, // Be sure to pass the defaultColumn option
       filterTypes,
+      autoResetPage: !skipPageResetRef.current,
+      autoResetExpanded: !skipPageResetRef.current,
+      autoResetGroupBy: !skipPageResetRef.current,
+      autoResetSelectedRows: !skipPageResetRef.current,
+      autoResetSortBy: !skipPageResetRef.current,
+      autoResetFilters: !skipPageResetRef.current,
+      autoResetRowState: !skipPageResetRef.current,
     },
     useFilters, // useFilters!
     useGlobalFilter, // useGlobalFilter!
     useSortBy
-    );
-  
+  );
 
   // We don't want to render all of the rows for this example, so cap
   // it for this use case
@@ -411,7 +422,6 @@ function BookTable(props) {
       ];
     }
   }, []);
-
 
   const data = React.useMemo(() => {
     return props?.books?.map((book) => {
