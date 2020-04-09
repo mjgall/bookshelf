@@ -96,7 +96,10 @@ export default class App extends React.Component {
                 windowWidth={this.state.windowWidth}
                 scrollPosition={this.state.scrollPosition}
                 books={this.state?.books}
-                user={this.state.user}></NavBar>
+                user={ this.state.user }
+                members={ this.state.householdMembers } Profile
+                
+              ></NavBar>
               <Switch>
                 <Route path="/profile" exact>
                   <Profile

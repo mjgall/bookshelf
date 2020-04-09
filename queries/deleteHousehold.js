@@ -3,7 +3,6 @@ const db = require('../config/db/mysql').pool;
 module.exports = (householdId) => {
   return new Promise((resolve, reject) => {
     const query = `DELETE households, households_users FROM households INNER JOIN households_users ON households.id = households_users.household_id WHERE households.id = ${householdId} AND households_users.household_id = '${householdId}'`;
-    console.log(query);
 
     db.query(query, (err, results, fields) => {
       if (err) throw Error(err);

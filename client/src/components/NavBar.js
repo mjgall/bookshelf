@@ -40,10 +40,6 @@ class NavBar extends React.Component {
           </span>
         </div>
 
-        {/* <div className="text-sm lg:flex-grow">
-              
-            </div> */}
-
         <div>
           {!this.props.user ? (
             <a
@@ -56,7 +52,16 @@ class NavBar extends React.Component {
               <Link
                 to="/profile"
                 className="inline-block mx-1 text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0">
-                Profile
+                {this.props.members.some((membership) => {
+                  return (
+                    !membership.invite_declined &&
+                    !membership.invite_accepted &&
+                    membership.user_id == this.props.user.id
+                  );
+                }) ? (
+                  <div className="mr-2 inline-block rounded-full bg-red-600 p-1 "></div>
+                ) : null}
+                <div className="inline-block">Profile</div>
               </Link>
               <a
                 href="/api/logout"
