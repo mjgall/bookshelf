@@ -28,31 +28,14 @@ class Home extends React.Component {
               user={this.props.user}
               className="max-w-screen-md container mx-auto mt-5"
               addBookToGlobalState={this.props.addBookToGlobalState}></Scanner>
-            <div class="md:flex md:items-center mb-6">
-              <div class="md:w-1/3"></div>
-              <label class="md:w-2/3 block text-gray-500">
-                <input
-                  checked={this.state.selfOnly}
-                  onChange={(e) => this.selfOnly(e.target.checked)}
-                  class="mr-2 leading-tight"
-                  type="checkbox"></input>
-                <span class="text-sm"></span>
-                Only show my books (not the household's)
-              </label>
-            </div>
+         
             <BookTable
               selfOnly={this.state.selfOnly}
               members={this.props.members}
               user={this.props.user}
               history={ this.props.history }
               books={this.props.books}
-              books={this.props.books.filter((book) => {
-                if (this.state.selfOnly == false) {
-                  return book;
-                } else {
-                  return book.user_id == this.props.user.id;
-                }
-              }) }
+
             ></BookTable>
           </div>
         ) : this.props.loaded && !this.props.user ? (
