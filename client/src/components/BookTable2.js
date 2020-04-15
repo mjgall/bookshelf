@@ -79,7 +79,7 @@ function SelectColumnFilter({
         }}>
         <option value="">All</option>
         {options.map((option, i) => (
-          <option key={i} value={option}>
+          <option key={i} value={ option}>
             {option}
           </option>
         ))}
@@ -89,7 +89,7 @@ function SelectColumnFilter({
 }
 
 // table component
-function Table({ columns, data, history, user }) {
+function Table({ columns, data, history, user, userOnly }) {
   const filterTypes = React.useMemo(
     () => ({
       text: (rows, id, filterValue) => {
@@ -133,18 +133,16 @@ function Table({ columns, data, history, user }) {
       data,
       defaultColumn,
       debug: true,
-      initialState: { sortBy: [{ id: 'author', desc: false }], filters: [{id: 'owner_name', value: user.first}] },
+      initialState: {
+        sortBy: [{ id: 'author', desc: false }],
+        filters: [{ id: 'owner_name', value: user.first }],
+      },
     },
     useFilters, // useFilters!
     useGlobalFilter, // useGlobalFilter!
     useSortBy
   );
 
-  console.log(state);
-  // We don't want to render all of the rows for this example, so cap
-  // it for this use case
-  const firstPageRows = rows.slice(0, 10);
-  console.log(headerGroups);
   return (
     <>
       <table
@@ -270,7 +268,15 @@ function BookTable(props) {
     });
   }, [props.books]);
 
-  return <Table history={ props.history } columns={ columns } data={ data } user={props.user}/>;
+  return (
+    <Table
+      history={props.history}
+      columns={columns}
+      data={data}
+      user={props.user}
+      userOnly={props.userOnly}
+    />
+  );
 }
 
 export default BookTable;
