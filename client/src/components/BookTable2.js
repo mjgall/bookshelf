@@ -79,7 +79,7 @@ function SelectColumnFilter({
         }}>
         <option value="">All</option>
         {options.map((option, i) => (
-          <option key={i} value={ option}>
+          <option key={i} value={option}>
             {option}
           </option>
         ))}
@@ -128,7 +128,13 @@ function Table({ columns, data, history, user, userOnly }) {
     preGlobalFilteredRows,
     setGlobalFilter,
   } = useTable(
-    {
+    {autoResetPage: false,
+      autoResetExpanded: false,
+      autoResetGroupBy: false,
+      autoResetSelectedRows: false,
+      autoResetSortBy: false,
+      autoResetFilters: false,
+      autoResetRowState: false,
       columns,
       data,
       defaultColumn,
@@ -211,6 +217,7 @@ function Table({ columns, data, history, user, userOnly }) {
 }
 
 function BookTable(props) {
+  console.log(props.books)
   const columns = React.useMemo(() => {
     if (!props.books.every((book) => book.user_id == props.user.id)) {
       return [
@@ -259,7 +266,8 @@ function BookTable(props) {
     return props?.books?.map((book) => {
       return {
         ...book,
-        author: book?.author,
+        author: book?.author
+        ,
         owner_name:
           props.members[
             props.members.findIndex((member) => member.user_id == book.user_id)

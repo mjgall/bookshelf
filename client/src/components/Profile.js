@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import Modal from 'react-modal';
+
 import { CheckSquare, XSquare } from '@styled-icons/boxicons-solid';
 
 export default class Profile extends React.Component {
@@ -10,6 +12,8 @@ export default class Profile extends React.Component {
     householdNameValue: '',
     flash: false,
     flashMessage: '',
+    alert: false,
+    alertMessage: '',
   };
 
   componentDidMount = async () => {
@@ -28,7 +32,29 @@ export default class Profile extends React.Component {
       invitedEmail: this.state.inviteValue,
       householdId,
     });
-    this.setState({ members: [...this.state.members, response.data] });
+    if (response.data.success == false) {
+      this.setState({
+        alert: true,
+        alertMessage:
+          'No user with that email found - would you like to invite them to Bookself?',
+      });
+    } else {
+      this.setState({ members: [...this.state.members, response.data] });
+    }
+  };
+
+  handleBookshelfInviteSend = async (invitedEmailAddress) => {
+    const response = await axios.post('/api/email', {
+      recipientAddress: invitedEmailAddress,
+      subject: `You've been invited to join Bookshelf!`,
+      body: `<p>Someone invited you to join bookshelf.mikegallagher.app</p><a href="https://bookshelf.mikegallagher.app">Bookshelf.MikeGallagher.app</a>`,
+    });
+    if (response.data.success) {
+      this.setState({
+        alert: true,
+        alertMessage: `Invitation sent to ${invitedEmailAddress}`,
+      });
+    }
   };
 
   handleHouseholdSubmit = async (e) => {
@@ -112,6 +138,26 @@ export default class Profile extends React.Component {
   render = () => {
     return (
       <div className="max-w-screen-md container my-4 ">
+        {this.state.alert ? (
+          <div
+            class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            role="alert">
+            <span class="block sm:inline">{this.state.alertMessage}</span>
+            <span class="float-right">
+              <CheckSquare
+                size="2em"
+                className="  cursor-pointer text-green-400"
+                onClick={() =>
+                  this.handleBookshelfInviteSend(this.state.inviteValue)
+                }></CheckSquare>
+              <XSquare
+                size="2em"
+                className="cursor-pointer text-red-400"
+                onClick={() => this.setState({ alert: false})}></XSquare>
+            </span>
+          </div>
+        ) : null}
+
         {this.state.members.map((member) => {
           if (
             !member.invite_declined &&

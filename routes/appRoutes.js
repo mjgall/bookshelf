@@ -14,6 +14,8 @@ const getHouseholdMembersByUserId = require('../queries/getHouseholdMembersByUse
 const declinePendingHousehold = require('../queries/declinePendingHousehold');
 const deleteHousehold = require('../queries/deleteHousehold');
 
+const sendEmail = require('../services/aws-ses');
+
 module.exports = (app) => {
   //lookup book information by isbn10
 
@@ -139,5 +141,11 @@ module.exports = (app) => {
       const declined = await declinePendingHousehold(req.body.id);
       res.send(declined);
     }
+  });
+
+  app.post('/api/email', async (req, res) => {
+    const { recipientAddress, subject, body } = req.body;
+    const email = await sendEmail(recipientAddress, subject, body);
+    res.send({ success: true, email });
   });
 };

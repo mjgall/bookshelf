@@ -36,6 +36,7 @@ export default class Book extends React.Component {
         this.saveToDb(this.state);
         break;
       case 'author':
+        console.log(value)
         this.setState({
           currentBook: { ...this.state.currentBook, author: [value] },
         });
