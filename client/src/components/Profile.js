@@ -75,8 +75,8 @@ export default class Profile extends React.Component {
     const response = await axios.post('/api/email', {
       recipientAddress: invitedEmailAddress,
       // recipientAddress: 'mike.gallagh@gmail.com',
-      subject: `You've been invited to join Bookshelf!`,
-      body: `<p>Someone invited you to join bookshelf.mikegallagher.app</p><a href="https://bookshelf.mikegallagher.app">bookshelf.mikegallagher.app</a>`,
+      subject: `📚 You've been invited to join Bookshelf!`,
+      body: `<p>${this.props.user.full} (${this.props.user.email}) invited you to join bookshelf.mikegallagher.app</p><a href="https://bookshelf.mikegallagher.app">bookshelf.mikegallagher.app</a>`,
     });
     if (response.data.success) {
       this.setState({
