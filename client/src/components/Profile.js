@@ -6,7 +6,7 @@ import { CheckSquare, XSquare } from '@styled-icons/boxicons-solid';
 
 export default class Profile extends React.Component {
   state = {
-    inviteValue: '',
+    inviteValues: [],
     households: [],
     members: [],
     householdNameValue: '',
@@ -14,20 +14,32 @@ export default class Profile extends React.Component {
     flashMessage: '',
     alert: false,
     alertMessage: '',
+    alertNoAction: false,
   };
 
   componentDidMount = async () => {
     this.setState({
       households: this.props.households,
       members: this.props.members,
+      inviteValues: this.props.members.map((member) => {
+        return '';
+      }),
     });
   };
 
-  handleInviteChange = (e) => {
-    this.setState({ inviteValue: e.target.value });
+  handleInviteChange = (e, index) => {
+    this.setState({
+      inviteValues: this.state.inviteValues.map((inviteValue, i) => {
+        if (i == index) {
+          return e.target.value;
+        } else {
+          return inviteValue;
+        }
+      }),
+    });
   };
 
-  handleInviteSubmit = async (householdId) => {
+  handleInviteSubmit = async (householdId, index) => {
     const response = await axios.post('/api/invitations', {
       invitedEmail: this.state.inviteValue,
       householdId,
@@ -37,23 +49,28 @@ export default class Profile extends React.Component {
         alert: true,
         alertMessage:
           'No user with that email found - would you like to invite them to Bookself?',
+        affectedHouseholdIndex: index,
       });
     } else {
       this.setState({ members: [...this.state.members, response.data] });
     }
   };
 
-  handleBookshelfInviteSend = async (invitedEmailAddress) => {
+  handleBookshelfInviteSend = async (invitedEmailAddress, index) => {
     const response = await axios.post('/api/email', {
       recipientAddress: invitedEmailAddress,
       subject: `You've been invited to join Bookshelf!`,
-      body: `<p>Someone invited you to join bookshelf.mikegallagher.app</p><a href="https://bookshelf.mikegallagher.app">Bookshelf.MikeGallagher.app</a>`,
+      body: `<p>Someone invited you to join bookshelf.mikegallagher.app</p><a href="https://bookshelf.mikegallagher.app">bookshelf.mikegallagher.app</a>`,
     });
     if (response.data.success) {
       this.setState({
-        alert: true,
+        alertNoAction: true,
+        alert: false,
         alertMessage: `Invitation sent to ${invitedEmailAddress}`,
       });
+      setTimeout(() => {
+        this.setState({ alertNoAction: false });
+      }, 1200);
     }
   };
 
@@ -138,6 +155,13 @@ export default class Profile extends React.Component {
   render = () => {
     return (
       <div className="max-w-screen-md container my-4 ">
+        {this.state.alertNoAction ? (
+          <div
+            class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            role="alert">
+            <span class="block sm:inline">{this.state.alertMessage}</span>
+          </div>
+        ) : null}
         {this.state.alert ? (
           <div
             class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
@@ -146,19 +170,20 @@ export default class Profile extends React.Component {
             <span class="float-right">
               <CheckSquare
                 size="2em"
-                className="  cursor-pointer text-green-400"
+                className="cursor-pointer text-green-400"
                 onClick={() =>
-                  this.handleBookshelfInviteSend(this.state.inviteValue)
+                  this.handleBookshelfInviteSend(
+                    this.state.inviteValues[this.state.affectedHouseholdIndex]
+                  )
                 }></CheckSquare>
               <XSquare
                 size="2em"
                 className="cursor-pointer text-red-400"
-                onClick={() => this.setState({ alert: false})}></XSquare>
+                onClick={() => this.setState({ alert: false })}></XSquare>
             </span>
           </div>
         ) : null}
-
-        {this.state.members.map((member) => {
+        {this.state.members.map((member, index) => {
           if (
             !member.invite_declined &&
             !member.invite_accepted &&
@@ -221,7 +246,9 @@ export default class Profile extends React.Component {
               return (
                 <div className="border border-gray-400 shadow rounded-lg p-4">
                   <div className="text-2xl font-bold mb-3 flex justify-between items-center">
-                    <span>{membership.household_name}</span>
+                    <span className="overflow-x-hidden">
+                      {membership.household_name}
+                    </span>
                     {membership.is_owner ? (
                       <XSquare
                         size="1em"
@@ -240,12 +267,15 @@ export default class Profile extends React.Component {
                           class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none"
                           type="text"
                           placeholder="User email to invite"
-                          value={this.state.inviteValue}
-                          onChange={this.handleInviteChange}
+                          value={this.state.inviteValues[index]}
+                          onChange={(e) => this.handleInviteChange(e, index)}
                           aria-label="Email"></input>
                         <button
                           onClick={() =>
-                            this.handleInviteSubmit(membership.household_id)
+                            this.handleInviteSubmit(
+                              membership.household_id,
+                              index
+                            )
                           }
                           class="bg-blue-500 hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
                           type="submit">

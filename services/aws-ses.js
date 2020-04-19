@@ -46,7 +46,7 @@ module.exports = (recipientAddress, subject, body) => {
 
       // Try to send the email.
       ses.sendEmail(params, function (err, data) {
-        // If something goes wrong, print an error message.
+        // If something goes wrong, error message.
         if (err) {
           console.log(err.message);
           reject(err.message);
@@ -56,7 +56,7 @@ module.exports = (recipientAddress, subject, body) => {
         }
       });
     } catch (error) {
-      reject();
+      reject(error);
       console.log(error);
       throw new Error(error);
     }
