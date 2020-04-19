@@ -58,7 +58,7 @@ class NavBar extends React.Component {
                     !membership.invite_accepted &&
                     membership.user_id == this.props.user.id
                   );
-                }) ? (
+                }) && this.props.windowWidth > 380 ? (
                   <div className="mr-2 inline-block rounded-full bg-red-600 p-1 "></div>
                 ) : null}
                 <div className="inline-block">Profile</div>
