@@ -97,12 +97,16 @@ export default class App extends React.Component {
     this.setState({ referrer });
   };
 
+  clearReferrer = () => {
+    this.setState({ referrer: null });
+  };
+
   render = () => {
     return (
       <>
         {this.state.loaded ? (
           <>
-            <Router>
+            <Router history={browserHistory}>
               <NavBar
                 referrer={this.state.referrer}
                 windowWidth={this.state.windowWidth}
@@ -114,6 +118,7 @@ export default class App extends React.Component {
               <Switch>
                 <Route exact path="/">
                   <Home
+                    clearReferrer={this.clearReferrer}
                     updateNavReferrer={this.updateNavReferrer}
                     loaded={this.state.loaded}
                     user={this.state.user}

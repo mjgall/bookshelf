@@ -44,6 +44,7 @@ class NavBar extends React.Component {
         <div>
           {!this.props.user ? (
             <a
+              onClick={this.props.clearReferrer}
               href={
                 this.props.referrer
                   ? `/auth/google/redirect${this.props.referrer}`

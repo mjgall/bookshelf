@@ -8,19 +8,21 @@ module.exports = (app) => {
     })(req, res, next);
   });
 
-  app.get(
-    '/auth/google',
+  app.get('/auth/google', (req, res, next) => {
+    req.session.redirect = null;
     passport.authenticate('google', {
       scope: ['profile', 'email'],
-    })
-  );
+    })(req, res, next);
+  });
 
   app.get(
     '/auth/google/callback',
     passport.authenticate('google'),
     (req, res) => {
       if (req.session.redirect) {
-        res.redirect(`/${req.session.redirect}`);
+        const redirect = req.session.redirect;
+        req.session.redirect = null;
+        res.redirect(`/${redirect}`);
       } else {
         res.redirect('/');
       }
@@ -28,6 +30,7 @@ module.exports = (app) => {
   );
 
   app.get('/api/logout', (req, res) => {
+    req.session.redirect = null;
     req.logout();
     res.redirect('/');
   });

@@ -55,7 +55,7 @@ class Home extends React.Component {
         ) : this.props.loaded && !this.props.user ? (
           <MarketingHome
             updateNavReferrer={this.updateNavReferrer}
-            referrer={this.props?.location?.state?.referrer}></MarketingHome>
+            referrer={this.props?.location?.state?.referrer} clearReferrer={this.props.clearReferrer}></MarketingHome>
         ) : null}
       </>
     );
