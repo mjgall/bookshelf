@@ -271,7 +271,7 @@ function BookTable(props) {
         owner_name:
           props.members[
             props.members.findIndex((member) => member.user_id == book.user_id)
-          ].member_first,
+          ]?.member_first,
       };
     });
   }, [props.books]);
