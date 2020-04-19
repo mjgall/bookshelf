@@ -101,6 +101,7 @@ export default class Profile extends React.Component {
       members: [...this.state.members, response.data],
       inviteValues: [...this.state.inviteValues, ''],
       householdNameValue: '',
+      addHousehold: false
     });
   };
 

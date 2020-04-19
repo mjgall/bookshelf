@@ -5,7 +5,13 @@ import React from 'react';
 import './styles/tailwind.css';
 import './App.css';
 import axios from 'axios';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+  withRouter,
+} from 'react-router-dom';
 
 import NavBar from './components/NavBar';
 import Home from './components/Home';
@@ -13,6 +19,7 @@ import Book from './components/Book';
 import BookTable from './components/BookTable2';
 import Profile from './components/Profile';
 import MarketingHome from './components/MarketingHome';
+import PrivateRoute from './components/PrivateRoute';
 
 export default class App extends React.Component {
   state = {
@@ -86,6 +93,10 @@ export default class App extends React.Component {
     });
   };
 
+  updateNavReferrer = (referrer) => {
+    this.setState({ referrer });
+  };
+
   render = () => {
     return (
       <>
@@ -93,43 +104,47 @@ export default class App extends React.Component {
           <>
             <Router>
               <NavBar
+                referrer={this.state.referrer}
                 windowWidth={this.state.windowWidth}
                 scrollPosition={this.state.scrollPosition}
                 books={this.state?.books}
                 user={this.state.user}
                 members={this.state.householdMembers}
                 Profile></NavBar>
-              {this.state.user ? (
-                <Switch>
-                  <Route path="/profile" exact>
-                    <Profile
-                      members={this.state.householdMembers}
-                      households={this.state.households}
-                      user={this.state.user}></Profile>
-                  </Route>
-                  <Route exact path="/">
-                    <Home
-                      loaded={this.state.loaded}
-                      user={this.state.user}
-                      addBookToGlobalState={this.addBookToGlobalState}
-                      books={this.state?.books}
-                      members={this.state.householdMembers}></Home>
-                  </Route>
-                  <Route
-                    exact
-                    path="/book/:id"
-                    render={(props) => {
-                      return (
-                        <Book
-                          updateBook={this.updateBook}
-                          id={props.match.params.id}
-                          books={this.state?.books}></Book>
-                      );
-                    }}></Route>
-                </Switch>
-              ) : (
-                <MarketingHome></MarketingHome>
-              )}
+              <Switch>
+                <Route exact path="/">
+                  <Home
+                    updateNavReferrer={this.updateNavReferrer}
+                    loaded={this.state.loaded}
+                    user={this.state.user}
+                    addBookToGlobalState={this.addBookToGlobalState}
+                    books={this.state?.books}
+                    members={this.state.householdMembers}></Home>
+                </Route>
+                <PrivateRoute path="/profile" user={this.state.user} exact>
+                  <Profile
+                    members={this.state.householdMembers}
+                    households={this.state.households}
+                    user={this.state.user}></Profile>
+                </PrivateRoute>
+                <PrivateRoute user={this.state.user} exact path="/book/:id">
+                  <Book
+                    updateBook={this.updateBook}
+                    books={this.state?.books}></Book>
+                </PrivateRoute>
+                <PrivateRoute path="/protected" user={this.state.user}>
+                  <Protected test={'hello'}></Protected>
+                </PrivateRoute>
+                <Route path="*">
+                  <Home
+                    updateNavReferrer={this.updateNavReferrer}
+                    loaded={this.state.loaded}
+                    user={this.state.user}
+                    addBookToGlobalState={this.addBookToGlobalState}
+                    books={this.state?.books}
+                    members={this.state.householdMembers}></Home>
+                </Route>
+              </Switch>
             </Router>
           </>
         ) : null}
@@ -137,3 +152,5 @@ export default class App extends React.Component {
     );
   };
 }
+
+const Protected = (props) => <h3>{props.test}</h3>;

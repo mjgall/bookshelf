@@ -18,6 +18,9 @@ class Home extends React.Component {
     window.localStorage.setItem('selfOnly', value ? 'enabled' : 'disabled');
     this.setState({ selfOnly: !this.state.selfOnly });
   };
+  updateNavReferrer = (i) => {
+    this.props.updateNavReferrer(i);
+  };
 
   render = () => {
     return (
@@ -45,15 +48,14 @@ class Home extends React.Component {
               members={this.props.members}
               user={this.props.user}
               history={this.props.history}
-              books={ this.props.books }
-              
+              books={this.props.books}
               // books = {this.state.selfOnly ? this.props.books.map(book => book.user_id == this.props.user.id) : this.props.books}
-              userOnly={ this.state.selfOnly }>
-              
-              </BookTable>
+              userOnly={this.state.selfOnly}></BookTable>
           </div>
         ) : this.props.loaded && !this.props.user ? (
-          <MarketingHome></MarketingHome>
+          <MarketingHome
+            updateNavReferrer={this.updateNavReferrer}
+            referrer={this.props?.location?.state?.referrer}></MarketingHome>
         ) : null}
       </>
     );

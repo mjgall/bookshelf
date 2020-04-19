@@ -14,7 +14,7 @@ export default class Book extends React.Component {
     window.scroll(0, 0);
 
     const currentBooksArray = this.props?.books?.filter((book) => {
-      return book.id == this.props.id;
+      return book.id == this.props.computedMatch.params.id;
     });
 
     const currentBook = currentBooksArray[0];

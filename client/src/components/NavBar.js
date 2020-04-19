@@ -44,7 +44,11 @@ class NavBar extends React.Component {
         <div>
           {!this.props.user ? (
             <a
-              href="/auth/google"
+              href={
+                this.props.referrer
+                  ? `/auth/google/redirect${this.props.referrer}`
+                  : `/auth/google`
+              }
               className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0">
               Login 📚
             </a>

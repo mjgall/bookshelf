@@ -13,7 +13,10 @@ export default class MarketingHome extends React.Component {
 
   componentDidMount = async () => {
     const response = await axios.get('/api/data');
-    this.setState({ analytics: {...response.data, loaded: true} });
+    this.setState({ analytics: { ...response.data, loaded: true } });
+    if (this.props.referrer) {
+      this.props.updateNavReferrer(this.props.referrer);
+    }
   };
 
   render = () => {
@@ -22,7 +25,7 @@ export default class MarketingHome extends React.Component {
         <div
           className="h-32 lg:h-64 bg-cover bg-local bg-center shadow-inner"
           style={{
-            backgroundImage: `url(${banner3})`
+            backgroundImage: `url(${banner3})`,
             // filter: 'grayscale(75%)'
           }}></div>
         <div className="w-5/6 container mx-auto my-4">
@@ -42,7 +45,8 @@ export default class MarketingHome extends React.Component {
                   </div>
                   <div className="ml-2 mr-6">
                     <span className="font-semibold">
-                      {this.state?.analytics?.users} user{this.state?.analytics?.users > 1 ? 's' : null} storing{' '}
+                      {this.state?.analytics?.users} user
+                      {this.state?.analytics?.users > 1 ? 's' : null} storing{' '}
                       {this.state?.analytics?.books} books!
                     </span>
                   </div>
