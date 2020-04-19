@@ -124,7 +124,7 @@ module.exports = (app) => {
         req.body.householdId,
         correspondingUser.id
       );
-      res.send({ ...household, invited_email: correspondingUser.email });
+      res.send({ ...household, invited_email: correspondingUser.email, invited_photo: correspondingUser.picture });
     }
   });
 

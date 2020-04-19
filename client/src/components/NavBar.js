@@ -26,6 +26,7 @@ class NavBar extends React.Component {
             className="flex items-center flex-shrink-0 text-white mr-6 cursor-pointer"
             onClick={this.goHome}>
             <img
+              alt="Bookshelf logo"
               className="mr-4"
               src={logo}
               style={{ width: this.calcLogoSize() }}></img>

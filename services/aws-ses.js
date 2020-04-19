@@ -8,7 +8,7 @@ module.exports = (recipientAddress, subject, body) => {
       // AWS.config.loadFromPath(jsonPath);
 
       AWS.config.update({ accessKeyId: keys.accessKeyId, secretAccessKey: keys.secretAccessKey, region: keys.region })
-      const sender = 'bookshelf.mikegallagher.app <mike@michaeljamesgallagher.com>';
+      const sender = 'Bookshelf <mike@michaeljamesgallagher.com>';
 
       const recipient = recipientAddress;
 

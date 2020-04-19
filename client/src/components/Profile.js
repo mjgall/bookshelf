@@ -1,8 +1,12 @@
 import React from 'react';
 import axios from 'axios';
-import Modal from 'react-modal';
 
-import { CheckSquare, XSquare } from '@styled-icons/boxicons-solid';
+import {
+  CheckSquare,
+  XSquare,
+  PlusSquare,
+  ChevronDownSquare,
+} from '@styled-icons/boxicons-solid';
 
 export default class Profile extends React.Component {
   state = {
@@ -54,17 +58,23 @@ export default class Profile extends React.Component {
     } else {
       const emailResponse = await axios.post('/api/email', {
         recipientAddress: this.state.inviteValues[index],
+        // recipientAddress: 'mike.gallagh@gmail.com',
         subject: `🏠 You've been invited to join a household!`,
         body: `<p>${this.props.user.first} (${this.props.user.email}) invited you to their household to share your books at bookshelf.mikegallagher.app.</p><a href="https://bookshelf.mikegallagher.app/profile">Accept here</a>`,
       });
-      console.log(emailResponse.data);
-      this.setState({ members: [...this.state.members, response.data] });
+
+      this.setState({
+        members: [...this.state.members, response.data],
+        invitedUserPhoto: response.data.invited_photo,
+        invitedUserEmail: response.data.invited_email,
+      });
     }
   };
 
   handleBookshelfInviteSend = async (invitedEmailAddress, index) => {
     const response = await axios.post('/api/email', {
       recipientAddress: invitedEmailAddress,
+      // recipientAddress: 'mike.gallagh@gmail.com',
       subject: `You've been invited to join Bookshelf!`,
       body: `<p>Someone invited you to join bookshelf.mikegallagher.app</p><a href="https://bookshelf.mikegallagher.app">bookshelf.mikegallagher.app</a>`,
     });
@@ -86,8 +96,12 @@ export default class Profile extends React.Component {
       name: this.state.householdNameValue,
       userId: this.props.user.id,
     });
-    this.setState({ members: [...this.state.members, response.data] });
-    this.setState({ households: [...this.state.households, response.data] });
+    this.setState({
+      households: [...this.state.households, response.data],
+      members: [...this.state.members, response.data],
+      inviteValues: [...this.state.inviteValues, ''],
+      householdNameValue: '',
+    });
   };
 
   handleHouseholdNameChange = async (e) => {
@@ -129,19 +143,19 @@ export default class Profile extends React.Component {
       flash: true,
       flashMessage: status.accepted ? (
         <div
-          class="shadow text-sm bg-green-100 border border-green-400 text-green-700 my-2 px-4 py-3 rounded relative"
+          className="w-5/6 md:w-full container  shadow text-sm bg-green-100 border border-green-400 text-green-700 my-2 px-4 py-3 rounded relative"
           role="alert">
-          <strong class="font-bold">🏠 </strong>
-          <span class="block sm:inline">Accepted!</span>
-          <span class="absolute top-0 bottom-0 right-0 px-4 py-2 "></span>
+          <strong className="font-bold">🏠 </strong>
+          <span className="block sm:inline">Accepted!</span>
+          <span className="absolute top-0 bottom-0 right-0 px-4 py-2 "></span>
         </div>
       ) : (
         <div
-          class="shadow text-sm bg-red-100 border border-red-400 text-red-700 my-2 px-4 py-3 rounded relative"
+          className="w-5/6 md:w-full container shadow text-sm bg-red-100 border border-red-400 text-red-700 my-2 px-4 py-3 rounded relative"
           role="alert">
-          <strong class="font-bold">🏠 </strong>
-          <span class="block sm:inline">Declined!</span>
-          <span class="absolute top-0 bottom-0 right-0 px-4 py-2 "></span>
+          <strong className="font-bold">🏠 </strong>
+          <span className="block sm:inline">Declined!</span>
+          <span className="absolute top-0 bottom-0 right-0 px-4 py-2 "></span>
         </div>
       ),
     });
@@ -163,17 +177,17 @@ export default class Profile extends React.Component {
       <div className="max-w-screen-md container my-4 ">
         {this.state.alertNoAction ? (
           <div
-            class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            className="w-5/6 md:w-full container bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
             role="alert">
-            <span class="block sm:inline">{this.state.alertMessage}</span>
+            <span className="block sm:inline">{this.state.alertMessage}</span>
           </div>
         ) : null}
         {this.state.alert ? (
           <div
-            class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            className="w-5/6 md:w-full container bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
             role="alert">
-            <span class="block sm:inline">{this.state.alertMessage}</span>
-            <span class="float-right">
+            <span className="block sm:inline">{this.state.alertMessage}</span>
+            <span className="float-right">
               <CheckSquare
                 size="2em"
                 className="cursor-pointer text-green-400"
@@ -197,15 +211,15 @@ export default class Profile extends React.Component {
           ) {
             return (
               <div
-                class="shadow text-sm bg-blue-100 border border-blue-400 text-blue-700 my-2 px-4 py-3 rounded"
+                className="w-5/6 md:w-full container shadow text-sm bg-blue-100 border border-blue-400 text-blue-700 my-2 px-4 py-3 rounded flex justify-between"
                 role="alert">
-                <strong class="font-bold">🏠 </strong>
-                <span class="block sm:inline">
+                <span>
+                  <strong className="font-bold">🏠 </strong>
                   {member.inviter_full} ({member.inviter_email}) invited you to
                   their {member.household_name} household.
                 </span>
 
-                <span class="float-right">
+                <span>
                   <CheckSquare
                     size="2em"
                     className="  cursor-pointer text-green-400"
@@ -223,25 +237,44 @@ export default class Profile extends React.Component {
         })}
         {this.state.flash ? <div>{this.state.flashMessage}</div> : null}
         <div className="w-5/6 md:w-full container">
-          <div className="text-3xl font-bold">Households</div>
-          <form
-            onSubmit={this.handleHouseholdSubmit}
-            class="w-full md:max-w-md">
-            <div class="flex items-center border-b border-b-1 border-blue-500 ">
-              <input
-                class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none"
-                type="text"
-                placeholder="New household name"
-                value={this.state.householdNameValue}
-                onChange={this.handleHouseholdNameChange}
-                aria-label="Household Name"></input>
-              <button
-                class="bg-blue-500 hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
-                type="submit">
-                Create
-              </button>
-            </div>
-          </form>
+          <div className="flex items-center md:w-1/2 justify-between">
+            <div className="text-3xl font-bold">Households</div>
+            {this.state.addHousehold ? (
+              <ChevronDownSquare
+                onClick={() => {
+                  this.setState({ addHousehold: false });
+                }}
+                size="2em"
+                className="cursor-pointer text-green-400"></ChevronDownSquare>
+            ) : (
+              <PlusSquare
+                onClick={() => {
+                  this.setState({ addHousehold: true });
+                }}
+                size="2em"
+                className="cursor-pointer text-green-400"></PlusSquare>
+            )}
+          </div>
+          {this.state.addHousehold ? (
+            <form
+              onSubmit={this.handleHouseholdSubmit}
+              className="w-full md:w-1/2">
+              <div className="flex items-center border-b border-b-1 border-blue-500 ">
+                <input
+                  className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none"
+                  type="text"
+                  placeholder="New household name"
+                  value={this.state.householdNameValue}
+                  onChange={this.handleHouseholdNameChange}
+                  aria-label="Household Name"></input>
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
+                  type="submit">
+                  Create
+                </button>
+              </div>
+            </form>
+          ) : null}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 my-2 md:w-full w-5/6 container">
           {this.state.members.map((membership, index) => {
@@ -266,11 +299,11 @@ export default class Profile extends React.Component {
                   </div>
                   <form
                     onSubmit={(e) => e.preventDefault()}
-                    class="w-full max-w-md">
+                    className="w-full max-w-md">
                     {membership.is_owner ? (
-                      <div class="flex items-center border-b border-b-2 border-blue-500 ">
+                      <div className="flex items-center border-b border-b-2 border-blue-500 ">
                         <input
-                          class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none"
+                          className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none"
                           type="text"
                           placeholder="User email to invite"
                           value={this.state.inviteValues[index]}
@@ -283,7 +316,7 @@ export default class Profile extends React.Component {
                               index
                             )
                           }
-                          class="bg-blue-500 hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
+                          className="bg-blue-500 hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
                           type="submit">
                           Invite
                         </button>
@@ -299,12 +332,13 @@ export default class Profile extends React.Component {
                         return (
                           <li className="flex my-2">
                             <img
-                              class="h-12 w-12 rounded-full"
+                              className="h-12 w-12 rounded-full"
                               src={member.picture}
                             />
                             <span className="ml-5 mt-3">
-                              {' '}
-                              {member.member_email}
+                              {member.user_id == this.props.user.id
+                                ? 'You'
+                                : member.member_email || member.email}
                             </span>
                           </li>
                         );
@@ -313,14 +347,19 @@ export default class Profile extends React.Component {
                   </ul>
                   {membership.is_owner ? (
                     <>
-                      {this.state.members.some(
-                        (members) =>
-                          members.invite_accepted &&
-                          members.household_id == membership.household_id
-                      ) ? (
+                      {this.state.members
+                        .filter((member) => {
+                          return (
+                            member.user_id != this.props.user.id &&
+                            member.household_id == membership.household_id
+                          );
+                        })
+                        .some(
+                          (members) =>
+                            !members.invite_accepted && !members.invite_declined
+                        ) ? (
                         <div>Awaiting Response</div>
                       ) : null}
-
                       <ul>
                         {this.state.members.map((member) => {
                           if (
@@ -331,12 +370,15 @@ export default class Profile extends React.Component {
                             return (
                               <li className="flex my-2">
                                 <img
-                                  class="h-12 w-12 rounded-full"
-                                  src={member.picture}
+                                  className="h-12 w-12 rounded-full"
+                                  src={
+                                    member.picture ||
+                                    this.state.invitedUserPhoto
+                                  }
                                 />
                                 <span className="ml-5 mt-3">
-                                  {' '}
-                                  {member.member_email}
+                                  {member.member_email ||
+                                    this.state.invitedUserEmail}
                                 </span>
                               </li>
                             );

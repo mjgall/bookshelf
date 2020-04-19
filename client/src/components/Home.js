@@ -9,7 +9,7 @@ class Home extends React.Component {
 
   componentDidMount = () => {
     const enabled =
-      window.localStorage.getItem('selfOnly') == 'enabled' ? true : false;
+      window.localStorage.getItem('selfOnly') === 'enabled' ? true : false;
 
     this.setState({ selfOnly: enabled });
   };
@@ -28,15 +28,15 @@ class Home extends React.Component {
               user={this.props.user}
               className="max-w-screen-md container mx-auto mt-5"
               addBookToGlobalState={this.props.addBookToGlobalState}></Scanner>
-            {/* <div class="md:flex md:items-center mb-6">
-              <div class="md:w-1/3"></div>
-              <label class="md:w-2/3 block text-gray-500">
+            {/* <div className="md:flex md:items-center mb-6">
+              <div className="md:w-1/3"></div>
+              <label className="md:w-2/3 block text-gray-500">
                 <input
                   checked={this.state.selfOnly}
                   onChange={(e) => this.selfOnly(e.target.checked)}
-                  class="mr-2 leading-tight"
+                  className="mr-2 leading-tight"
                   type="checkbox"></input>
-                <span class="text-sm"></span>
+                <span className="text-sm"></span>
                 Only show my books (not the household's)
               </label>
             </div> */}

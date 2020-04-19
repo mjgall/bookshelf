@@ -13,7 +13,7 @@ module.exports = (name, userId) => {
       db.query(addHouseholdsUsersQuery, (err, results, fields) => {
         if (err) throw Error(err);
         db.query(
-          `SELECT * FROM households_users WHERE id = ${results.insertId}`,
+          `SELECT * FROM households_users INNER JOIN users ON users.id = ${userId} WHERE households_users.id = ${results.insertId}`,
           (err, results, fields) => {
             if (err) throw Error(err);
             resolve({ ...results[0], household_name: name });

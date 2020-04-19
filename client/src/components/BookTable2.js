@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTable, useFilters, useSortBy, useGlobalFilter } from 'react-table';
-import { withRouter } from 'react-router-dom';
-import Book from './Book';
-import matchSorter from 'match-sorter';
-import MediaQuery, { useMediaQuery } from 'react-responsive';
+
 
 // import matchSorter from 'match-sorter';
 
@@ -37,7 +34,7 @@ function GlobalFilter({
 function DefaultColumnFilter({
   column: { filterValue, preFilteredRows, setFilter },
 }) {
-  const count = preFilteredRows.length;
+  // const count = preFilteredRows.length;
 
   return null;
   // return (
