@@ -41,7 +41,7 @@ export default class Profile extends React.Component {
 
   handleInviteSubmit = async (householdId, index) => {
     const response = await axios.post('/api/invitations', {
-      invitedEmail: this.state.inviteValue,
+      invitedEmail: this.state.inviteValues[index],
       householdId,
     });
     if (response.data.success == false) {
@@ -52,6 +52,12 @@ export default class Profile extends React.Component {
         affectedHouseholdIndex: index,
       });
     } else {
+      const emailResponse = await axios.post('/api/email', {
+        recipientAddress: this.state.inviteValues[index],
+        subject: `🏠 You've been invited to join a household!`,
+        body: `<p>${this.props.user.first} (${this.props.user.email}) invited you to their household to share your books at bookshelf.mikegallagher.app.</p><a href="https://bookshelf.mikegallagher.app/profile">Accept here</a>`,
+      });
+      console.log(emailResponse.data);
       this.setState({ members: [...this.state.members, response.data] });
     }
   };
