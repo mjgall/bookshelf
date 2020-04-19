@@ -106,7 +106,7 @@ export default class App extends React.Component {
       <>
         {this.state.loaded ? (
           <>
-            <Router history={browserHistory}>
+            <Router>
               <NavBar
                 referrer={this.state.referrer}
                 windowWidth={this.state.windowWidth}
