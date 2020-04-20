@@ -55,11 +55,6 @@ export default class App extends React.Component {
     const bootstrap = await axios.get('/api/bootstrap');
     const fresh = bootstrap.data;
 
-    // const userResponse = await axios.get('/api/current_user');
-    // const booksResponse = await axios.get('/api/books');
-    // const householdMembers = await axios.get('/api/user/households/members');
-    // const households = await axios.get('/api/households');
-
     this.setState({
       user: fresh.currentUser,
       books: fresh.books || [],
@@ -126,19 +121,17 @@ export default class App extends React.Component {
                     books={this.state?.books}
                     members={this.state.householdMembers}></Home>
                 </Route>
-                <PrivateRoute path="/profile" user={this.state.user} exact>
+                <PrivateRoute path="/profile" user={ this.state.user } exact>
                   <Profile
                     members={this.state.householdMembers}
                     households={this.state.households}
                     user={this.state.user}></Profile>
                 </PrivateRoute>
-                <PrivateRoute user={this.state.user} exact path="/book/:id">
+                <PrivateRoute user={ this.state.user } exact path="/book/:id">
+                 
                   <Book
                     updateBook={this.updateBook}
                     books={this.state?.books}></Book>
-                </PrivateRoute>
-                <PrivateRoute path="/protected" user={this.state.user}>
-                  <Protected test={'hello'}></Protected>
                 </PrivateRoute>
                 <Route path="*">
                   <Home
@@ -157,5 +150,3 @@ export default class App extends React.Component {
     );
   };
 }
-
-const Protected = (props) => <h3>{props.test}</h3>;

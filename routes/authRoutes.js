@@ -1,8 +1,16 @@
 const passport = require('passport');
 
 module.exports = (app) => {
-  app.get('/auth/google/redirect/:referrer', (req, res, next) => {
+  app.get('/auth/google/redirect/:referrer/', (req, res, next) => {
     req.session.redirect = req.params.referrer;
+    console.log(req);
+    passport.authenticate('google', {
+      scope: ['profile', 'email'],
+    })(req, res, next);
+  });
+  app.get('/auth/google/redirect/:referrer/:id', (req, res, next) => {
+    req.session.redirect = req.params.referrer + '/' + req.params.id;
+    console.log(req);
     passport.authenticate('google', {
       scope: ['profile', 'email'],
     })(req, res, next);
