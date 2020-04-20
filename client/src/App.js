@@ -124,6 +124,7 @@ export default class App extends React.Component {
                 </Route>
                 <PrivateRoute path="/profile" user={ this.state.user } exact>
                   <Profile
+                    books = {this.state.books}
                     members={this.state.householdMembers}
                     households={this.state.households}
                     user={this.state.user}></Profile>

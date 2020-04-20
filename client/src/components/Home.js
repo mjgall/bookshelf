@@ -30,7 +30,7 @@ class Home extends React.Component {
     return (
       <>
         {this.props.user && this.props.loaded ? (
-          <div className="max-w-screen-md container my-4">
+          <div className="max-w-screen-lg container my-4">
             <Scanner
               user={this.props.user}
               className="max-w-screen-md container mx-auto mt-5"

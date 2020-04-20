@@ -150,7 +150,7 @@ function Table({ columns, data, history, user, userOnly }) {
     <>
       <table
         {...getTableProps()}
-        className="max-w-screen-md container shadow-md text-xs md:text-base">
+        className="max-w-screen-lg container shadow-md text-xs md:text-base">
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
