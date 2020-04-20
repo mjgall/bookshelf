@@ -18,8 +18,8 @@ const PrivateRoute = (props) => {
         ) : (
           <Redirect
             to={{
-              pathname: '/',
-              state: { referrer: window.location.pathname },
+              pathname: `/?redirect=${window.location.pathname}`,
+              state: { redirect: true },
             }}
           />
         )}

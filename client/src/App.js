@@ -29,6 +29,7 @@ export default class App extends React.Component {
     loaded: false,
     scrollPosition: '0',
     windowWidth: null,
+    
   };
 
   updateBook = (book) => {

@@ -3,9 +3,13 @@ import Scanner from './Scanner';
 import BookTable from './BookTable2';
 import MarketingHome from './MarketingHome';
 import { withRouter } from 'react-router-dom';
+import queryString from 'query-string';
 
 class Home extends React.Component {
-  state = { selfOnly: false };
+  state = {
+    selfOnly: false,
+    redirect: queryString.parse(window.location.search).redirect,
+  };
 
   componentDidMount = () => {
     const enabled =
@@ -55,7 +59,9 @@ class Home extends React.Component {
         ) : this.props.loaded && !this.props.user ? (
           <MarketingHome
             updateNavReferrer={this.updateNavReferrer}
-            referrer={this.props?.location?.state?.referrer} clearReferrer={this.props.clearReferrer}></MarketingHome>
+            redirect={this.state.redirect}
+            referrer={this.props?.location?.state?.referrer}
+            clearReferrer={this.props.clearReferrer}></MarketingHome>
         ) : null}
       </>
     );

@@ -13,6 +13,7 @@
     "match-sorter": "^4.0.2",
     "postcss-cli": "^7.1.0",
     "quagga": "^0.12.1",
+    "query-string": "^6.12.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.0-beta.17",
     "react-dom": "^16.13.1",
