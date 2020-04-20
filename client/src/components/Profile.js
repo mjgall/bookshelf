@@ -195,17 +195,18 @@ export default class Profile extends React.Component {
             <div class="flex justify-center pb-3 text-grey-dark">
               <div class="text-center mr-3 border-r pr-3">
                 <h2>{this.props.books.length}</h2>
-                <span>Books</span>
+                <span>Books saved</span>
               </div>
               <div class="text-center">
-                <h2>
+                {/* <h2>
                   {this.props.members.filter(
                     (membership) =>
                       membership.user_id == this.props.user.id &&
                       membership.invite_accepted
                   ).length}
-                </h2>
-                <span>Households</span>
+                </h2> */}
+                <h2>{this.props.books.filter((book) => book.read).length}</h2>
+                <span>Books read</span>
               </div>
             </div>
           </div>
