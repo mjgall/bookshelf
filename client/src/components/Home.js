@@ -35,7 +35,7 @@ class Home extends React.Component {
               user={this.props.user}
               className="max-w-screen-md container mx-auto mt-5"
               addBookToGlobalState={this.props.addBookToGlobalState}></Scanner>
-            {/* <div className="md:flex md:items-center mb-6">
+            <div className="md:flex md:items-center mb-6">
               <div className="md:w-1/3"></div>
               <label className="md:w-2/3 block text-gray-500">
                 <input
@@ -46,14 +46,22 @@ class Home extends React.Component {
                 <span className="text-sm"></span>
                 Only show my books (not the household's)
               </label>
-            </div> */}
+            </div>
             <BookTable
               selfOnly={this.state.selfOnly}
               members={this.props.members}
               user={this.props.user}
               history={this.props.history}
-              books={this.props.books}
-              // books = {this.state.selfOnly ? this.props.books.map(book => book.user_id == this.props.user.id) : this.props.books}
+              // books={this.props.books}
+              books={
+                this.state.selfOnly
+                  ? this.props.books.filter((book) => {
+                      if (book.user_id == this.props.user.id) {
+                        return book;
+                      }
+                    })
+                  : this.props.books
+              }
               userOnly={this.state.selfOnly}></BookTable>
           </div>
         ) : this.props.loaded && !this.props.user ? (

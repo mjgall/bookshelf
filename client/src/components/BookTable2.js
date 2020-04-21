@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTable, useFilters, useSortBy, useGlobalFilter } from 'react-table';
 
-
 // import matchSorter from 'match-sorter';
 
 // Global string filter
@@ -125,7 +124,8 @@ function Table({ columns, data, history, user, userOnly }) {
     preGlobalFilteredRows,
     setGlobalFilter,
   } = useTable(
-    {autoResetPage: false,
+    {
+      autoResetPage: false,
       autoResetExpanded: false,
       autoResetGroupBy: false,
       autoResetSelectedRows: false,
@@ -214,9 +214,28 @@ function Table({ columns, data, history, user, userOnly }) {
 }
 
 function BookTable(props) {
-  console.log(props.books)
   const columns = React.useMemo(() => {
-    if (!props.books.every((book) => book.user_id == props.user.id)) {
+    if (props.selfOnly) {
+      console.log('self only is true');
+      
+      return [
+        { Header: 'Title', accessor: 'title', disableFilters: true },
+        { Header: 'Author', accessor: 'author', disableFilters: true },
+        {
+          Header: 'Cover',
+          Cell: (props) => {
+            return (
+              <img
+                loading="lazy"
+                className="w-20 container"
+                src={props.row.original.cover}
+                alt="cover"></img>
+            );
+          },
+        },
+      ];
+    } else {
+      console.log('self only is false');
       return [
         { Header: 'Title', accessor: 'title', disableFilters: true },
         { Header: 'Author', accessor: 'author', disableFilters: true },
@@ -239,32 +258,14 @@ function BookTable(props) {
           filter: 'equals',
         },
       ];
-    } else {
-      return [
-        { Header: 'Title', accessor: 'title', disableFilters: true },
-        { Header: 'Author', accessor: 'author', disableFilters: true },
-        {
-          Header: 'Cover',
-          Cell: (props) => {
-            return (
-              <img
-                loading="lazy"
-                className="w-20 container"
-                src={props.row.original.cover}
-                alt="cover"></img>
-            );
-          },
-        },
-      ];
     }
-  }, []);
+  }, [props]);
 
   const data = React.useMemo(() => {
     return props?.books?.map((book) => {
       return {
         ...book,
-        author: book?.author
-        ,
+        author: book?.author,
         owner_name:
           props.members[
             props.members.findIndex((member) => member.user_id == book.user_id)
@@ -279,7 +280,7 @@ function BookTable(props) {
       columns={columns}
       data={data}
       user={props.user}
-      userOnly={props.userOnly}
+      selfOnly={props.selfOnly}
     />
   );
 }
