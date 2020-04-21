@@ -176,37 +176,41 @@ export default class Profile extends React.Component {
   render = () => {
     return (
       <div className="max-w-screen-lg container my-4 ">
-        <div className="md:grid grid-cols-2 col-gap-12" style={{gridTemplateColumns: "25% 75%"}}>
-          <div class="rounded-lg overflow-hidden shadow w-full mx-auto md:mx-0 md:w-64 md:max-w-md my-3">
-            <div class="h-24 w-full bg-blue-400"></div>
-            <div class="flex justify-center -mt-16">
-              <img
-                src={this.props.user.picture}
-                class="rounded-full h-32 w-32 border-solid border-white border-2 -mt-3"></img>
-            </div>
-            <div class="text-center px-3 pb-6 pt-2">
-              <h3 class="text-black text-lg bold font-sans">
-                {this.props.user.full}
-              </h3>
-              <p class="mt-1 text-sm font-sans font-light text-grey-dark">
-                {this.props.user.email}
-              </p>
-            </div>
-            <div class="flex justify-center pb-3 text-grey-dark">
-              <div class="text-center mr-3 border-r pr-3">
-                <h2>{this.props.books.length}</h2>
-                <span>Books saved</span>
+        <div
+          className="md:grid grid-cols-2"
+          style={{ gridTemplateColumns: '25% 70%', gridColumnGap: '5%' }}>
+          <div>
+            <div class="rounded-lg overflow-hidden shadow w-5/6 mx-auto md:mx-0 md:w-64 md:max-w-md my-3">
+              <div class="h-24 w-full bg-blue-400"></div>
+              <div class="flex justify-center -mt-16">
+                <img
+                  src={this.props.user.picture}
+                  class="rounded-full h-32 w-32 border-solid border-white border-2 -mt-3"></img>
               </div>
-              <div class="text-center">
-                {/* <h2>
+              <div class="text-center px-3 pb-6 pt-2">
+                <h3 class="text-black text-lg bold font-sans">
+                  {this.props.user.full}
+                </h3>
+                <p class="mt-1 text-sm font-sans font-light text-grey-dark">
+                  {this.props.user.email}
+                </p>
+              </div>
+              <div class="flex justify-center pb-3 text-grey-dark">
+                <div class="text-center mr-3 border-r pr-3">
+                  <h2>{this.props.books.length}</h2>
+                  <span>Books saved</span>
+                </div>
+                <div class="text-center">
+                  {/* <h2>
                   {this.props.members.filter(
                     (membership) =>
                       membership.user_id == this.props.user.id &&
                       membership.invite_accepted
                   ).length}
                 </h2> */}
-                <h2>{this.props.books.filter((book) => book.read).length}</h2>
-                <span>Books read</span>
+                  <h2>{this.props.books.filter((book) => book.read).length}</h2>
+                  <span>Books read</span>
+                </div>
               </div>
             </div>
           </div>
@@ -253,35 +257,36 @@ export default class Profile extends React.Component {
               ) {
                 return (
                   <div
-                    className="w-5/6 md:w-full container shadow text-sm bg-blue-100 border border-blue-400 text-blue-700 my-2 px-4 py-3 rounded flex justify-between"
+                    className="w-5/6 md:w-full container shadow text-sm bg-blue-100 border border-blue-400 text-blue-700 my-2 px-4 py-3 rounded md:flex justify-between"
                     role="alert">
-                    <span>
+                    
+                    <div className="text-center md:text-left">
                       <strong className="font-bold">🏠 </strong>
                       {member.inviter_full} ({member.inviter_email}) invited you
                       to their {member.household_name} household.
-                    </span>
+                    </div>
 
-                    <span>
+                    <div className="md:mt-0 mt-2">
                       <CheckSquare
                         size="2em"
-                        className="  cursor-pointer text-green-400"
+                        className="w-1/2 cursor-pointer text-green-400"
                         onClick={() =>
                           this.acceptInvitation(member.id)
                         }></CheckSquare>
                       <XSquare
                         size="2em"
-                        className="cursor-pointer text-red-400"
+                        className="w-1/2 cursor-pointer text-red-400"
                         onClick={() =>
                           this.declineInvitation(member.id)
                         }></XSquare>
-                    </span>
+                    </div>
                   </div>
                 );
               }
             })}
             {this.state.flash ? <div>{this.state.flashMessage}</div> : null}
             <div className="w-5/6 md:w-full container">
-              <div className="flex items-center md:w-1/2 justify-between">
+              <div className="flex items-center w-full justify-between">
                 <div className="text-3xl font-bold">Households</div>
                 {this.state.addHousehold ? (
                   <ChevronDownSquare
@@ -302,7 +307,7 @@ export default class Profile extends React.Component {
               {this.state.addHousehold ? (
                 <form
                   onSubmit={this.handleHouseholdSubmit}
-                  className="w-full md:w-1/2">
+                  className="w-full">
                   <div className="flex items-center border-b border-b-1 border-blue-500 ">
                     <input
                       className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none"
