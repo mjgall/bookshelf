@@ -50,8 +50,8 @@ export default class App extends React.Component {
   };
 
   componentDidMount = async () => {
-    window.addEventListener('scroll', this.listenToScroll);
-    window.addEventListener('resize', this.listenToResize);
+    // window.addEventListener('scroll', this.listenToScroll);
+    // window.addEventListener('resize', this.listenToResize);
 
     const bootstrap = await axios.get('/api/bootstrap');
     const fresh = bootstrap.data;
@@ -70,24 +70,24 @@ export default class App extends React.Component {
     window.removeEventListener('resize', this.listenToResize);
   }
 
-  listenToResize = (e) => {
-    this.setState({ windowWidth: e.srcElement.innerWidth });
-  };
+  // listenToResize = (e) => {
+  //   this.setState({ windowWidth: e.srcElement.innerWidth });
+  // };
 
-  listenToScroll = () => {
-    const winScroll =
-      document.body.scrollTop || document.documentElement.scrollTop;
+  // listenToScroll = () => {
+  //   const winScroll =
+  //     document.body.scrollTop || document.documentElement.scrollTop;
 
-    const height =
-      document.documentElement.scrollHeight -
-      document.documentElement.clientHeight;
+  //   const height =
+  //     document.documentElement.scrollHeight -
+  //     document.documentElement.clientHeight;
 
-    const scrolled = winScroll / height;
+  //   const scrolled = winScroll / height;
 
-    this.setState({
-      scrollPosition: scrolled * 100,
-    });
-  };
+  //   this.setState({
+  //     scrollPosition: scrolled * 100,
+  //   });
+  // };
 
   updateNavReferrer = (referrer) => {
     this.setState({ referrer });

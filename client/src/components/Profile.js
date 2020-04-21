@@ -176,8 +176,8 @@ export default class Profile extends React.Component {
   render = () => {
     return (
       <div className="max-w-screen-lg container my-4 ">
-        <div className="md:flex md:justify-between">
-          <div class="rounded-lg overflow-hidden shadow w-5/6 container md:w-64 md:max-w-md my-3">
+        <div className="md:grid grid-cols-2 col-gap-12" style={{gridTemplateColumns: "25% 75%"}}>
+          <div class="rounded-lg overflow-hidden shadow w-full mx-auto md:mx-0 md:w-64 md:max-w-md my-3">
             <div class="h-24 w-full bg-blue-400"></div>
             <div class="flex justify-center -mt-16">
               <img
