@@ -22,7 +22,7 @@ export default class Book extends React.Component {
     this.setState({
       currentBook: {
         ...currentBook,
-        notes: currentBook.notes ? currentBook.notes : 'Click to add notes.',
+        notes: currentBook.user_notes || currentBook.household_notes,
       },
     });
   };
