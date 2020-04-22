@@ -173,6 +173,20 @@ export default class Profile extends React.Component {
     }
   };
 
+  removeMember = async (householdId, userId, index) => {
+    console.log({ householdId, userId, index });
+    const response = await axios.put('/api/invitations', {
+      householdId,
+      userId,
+      remove: true,
+    });
+    if (response.data.affectedRows > 0) {
+      const newMembers = [...this.state.members];
+      newMembers.splice(index, 1);
+      this.setState({ members: newMembers });
+    }
+  };
+
   render = () => {
     return (
       <div className="max-w-screen-lg container my-4 ">
@@ -259,7 +273,6 @@ export default class Profile extends React.Component {
                   <div
                     className="w-5/6 md:w-full container shadow text-sm bg-blue-100 border border-blue-400 text-blue-700 my-2 px-4 py-3 rounded md:flex justify-between"
                     role="alert">
-                    
                     <div className="text-center md:text-left">
                       <strong className="font-bold">🏠 </strong>
                       {member.inviter_full} ({member.inviter_email}) invited you
@@ -305,9 +318,7 @@ export default class Profile extends React.Component {
                 )}
               </div>
               {this.state.addHousehold ? (
-                <form
-                  onSubmit={this.handleHouseholdSubmit}
-                  className="w-full">
+                <form onSubmit={this.handleHouseholdSubmit} className="w-full">
                   <div className="flex items-center border-b border-b-1 border-blue-500 ">
                     <input
                       className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none"
@@ -378,7 +389,7 @@ export default class Profile extends React.Component {
                         ) : null}
                       </form>
                       <ul>
-                        {this.state.members.map((member) => {
+                        {this.state.members.map((member, index) => {
                           if (
                             member.household_id == membership.household_id &&
                             member.invite_accepted
@@ -389,11 +400,30 @@ export default class Profile extends React.Component {
                                   className="h-12 w-12 rounded-full"
                                   src={member.picture}
                                 />
-                                <span className="ml-5 mt-3">
-                                  {member.user_id == this.props.user.id
-                                    ? 'You'
-                                    : member.member_email || member.email}
-                                </span>
+                                <div className="ml-5 mt-3 flex justify-between w-full items-center ">
+                                  <div>
+                                    {member.user_id == this.props.user.id
+                                      ? 'You'
+                                      : member.member_email || member.email}
+                                  </div>
+                                  <div>
+                                    {member.user_id ==
+                                    this.props.user
+                                      .id ? null : membership.is_owner ? (
+                                      <XSquare
+                                        size="2rem"
+                                        className="cursor-pointer text-red-600"
+                                        onClick={() => {
+                                          console.log(member);
+                                          this.removeMember(
+                                            membership.household_id,
+                                            member.user_id,
+                                            index
+                                          );
+                                        }}></XSquare>
+                                    ) : null}
+                                  </div>
+                                </div>
                               </li>
                             );
                           }

@@ -13,6 +13,8 @@ const addHousehold = require('../queries/addHousehold');
 const getHouseholdMembersByUserId = require('../queries/getHouseholdMembersByUserId');
 const declinePendingHousehold = require('../queries/declinePendingHousehold');
 const deleteHousehold = require('../queries/deleteHousehold');
+const addUserBooksToHousehold = require('../queries/addUserBooksToHousehold');
+const removeHouseholdMember = require('../queries/removeHouseholdMember');
 
 const sendEmail = require('../services/aws-ses');
 
@@ -91,29 +93,40 @@ module.exports = (app) => {
     }
   });
 
+  //delete a household
   app.delete('/api/households/:householdId', async (req, res) => {
     const { householdId } = req.params;
     const householdDeleted = await deleteHousehold(householdId);
     res.send(householdDeleted);
   });
 
+  //add a household
   app.post('/api/households', async (req, res) => {
     const { name, userId } = req.body;
     const newHousehold = await addHousehold(name, userId);
+
+    const booksAdded = await addUserBooksToHousehold(
+      userId,
+      newHousehold.household_id
+    );
+
     //sends new households_user data
     res.send(newHousehold);
   });
 
+  //get members of a household
   app.get('/api/user/households/members', async (req, res) => {
     const householdMembers = await getHouseholdMembersByUserId(req.user.id);
     res.send(householdMembers);
   });
 
+  //get households that a user is a part of
   app.get('/api/households', async (req, res) => {
     const households = await getHouseholds(req.user.id);
     res.send(households);
   });
 
+  //send invitation
   app.post('/api/invitations', async (req, res) => {
     const correspondingUser = await getUserByEmail(req.body.invitedEmail);
     if (!correspondingUser) {
@@ -124,7 +137,11 @@ module.exports = (app) => {
         req.body.householdId,
         correspondingUser.id
       );
-      res.send({ ...household, invited_email: correspondingUser.email, invited_photo: correspondingUser.picture });
+      res.send({
+        ...household,
+        invited_email: correspondingUser.email,
+        invited_photo: correspondingUser.picture,
+      });
     }
   });
 
@@ -133,13 +150,35 @@ module.exports = (app) => {
     res.send(households);
   });
 
+  // app.post('/api/invitations', async (req, res) => {
+
+  // })
+
+  //accept, decline, delete a membership
   app.put('/api/invitations', async (req, res) => {
     if (req.body.accept) {
+      //update households_users to invite_accepted = true, should return the id of the user accepting (accepted.user_id)
       const accepted = await acceptPendingHousehold(req.body.id);
-      res.send(accepted);
+
+      //add all of the users' books to the households_books table
+      const booksAdded = await addUserBooksToHousehold(
+        accepted.user_id,
+        accepted.household_id
+      );
+
+      res.send(booksAdded);
     } else if (req.body.decline) {
       const declined = await declinePendingHousehold(req.body.id);
       res.send(declined);
+    } else if (req.body.remove) {
+      console.log(req.body);
+      const response = await removeHouseholdMember(
+        req.body.householdId,
+        req.body.userId
+      );
+      res.send(response);
+    } else {
+      res.status(400).send('No status');
     }
   });
 
