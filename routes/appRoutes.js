@@ -25,10 +25,15 @@ module.exports = (app) => {
 
   app.get('/api/bootstrap', async (req, res) => {
     if (!req.user) {
-      res.send(null);
+      res.send({
+        currentUser: null,
+        books: { userBooks: [], householdBooks: [] },
+        households: [],
+        householdMembers: [],
+      });
     } else {
       const currentUser = req.user;
-      const books = await getBooks(req.user.id);
+      // const books = await getBooks(req.user.id);
 
       const userBooks = await getUserBooks(req.user.id);
       const householdBooks = await getHouseholdBooks(
@@ -91,9 +96,7 @@ module.exports = (app) => {
       // const response = await getBooks(req.user.id);
 
       const userBooks = await getUserBooks(req.body.id);
-      const householdBooks = await getHouseholdBooks(
-        req.body.id,
-      );
+      const householdBooks = await getHouseholdBooks(req.body.id);
 
       res.send({
         success: true,
