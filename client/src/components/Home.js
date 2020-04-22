@@ -81,6 +81,9 @@ class Home extends React.Component {
               {this.state.selfOnly ? null : (
                 <>
                   <Select
+                    placeholder='Household...'
+                    blurInputOnSelect
+                    isSearchable={false}
                     className="w-full"
                     defaultValue={{ value: 'all', label: 'All' }}
                     options={[
