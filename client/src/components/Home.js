@@ -10,7 +10,7 @@ class Home extends React.Component {
   state = {
     selfOnly: false,
     redirect: queryString.parse(window.location.search).redirect,
-    householdSelect: {value: null, label: null},
+    householdSelect: { value: null, label: null },
   };
 
   componentDidMount = () => {
@@ -81,9 +81,8 @@ class Home extends React.Component {
               {this.state.selfOnly ? null : (
                 <>
                   <Select
-                  placeholder="Household..."
-                   className="w-full"
-                   defaultValue={{ value: 'all', label: 'All' }}
+                    className="w-full"
+                    defaultValue={{ value: 'all', label: 'All' }}
                     options={[
                       { value: 'all', label: 'All' },
                       ...this.props.households.map((household) => ({
