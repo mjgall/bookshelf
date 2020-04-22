@@ -4,6 +4,7 @@ import BookTable from './BookTable2';
 import MarketingHome from './MarketingHome';
 import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
+import Select from 'react-select';
 
 class Home extends React.Component {
   state = {
@@ -13,7 +14,6 @@ class Home extends React.Component {
   };
 
   componentDidMount = () => {
-
     const enabled =
       window.localStorage.getItem('selfOnly') === 'enabled' ? true : false;
 
@@ -68,7 +68,6 @@ class Home extends React.Component {
               className="max-w-screen-md container mx-auto mt-5"
               addBookToGlobalState={this.props.addBookToGlobalState}></Scanner>
             <div className="md:flex md:items-center mb-6">
-              <div className="md:w-1/3"></div>
               <input
                 checked={this.state.selfOnly}
                 onChange={(e) => this.selfOnly(e.target.checked)}
@@ -81,20 +80,32 @@ class Home extends React.Component {
 
               {this.state.selfOnly ? null : (
                 <>
-                  <label for="households">Household</label>
-                  <select
-                    onChange={(e) => {
-
-                      this.setState({ householdSelect: e.target.value });
-                    }}
-                    id="households">
-                    <option value="all">All</option>
-                    {this.props.households.map((household) => (
-                      <option value={Number(household.household_id)}>
-                        {household.name}
-                      </option>
-                    ))}
-                  </select>
+                  <Select
+                    className="w-full"
+                   
+                    options={[
+                      { value: 'all', label: 'All' },
+                      ...this.props.households.map((household) => ({
+                        value: household.household_id,
+                        label: household.name,
+                      })),
+                    ]}
+                    value={this.state.householdSelect}
+                    onChange={(selected) => {
+                      this.setState({ householdSelect: selected.value });
+                    }}></Select>
+                  {/* <select
+                      onChange={(e) => {
+                        this.setState({ householdSelect: e.target.value });
+                      }}
+                      id="households">
+                      <option value="all">All</option>
+                      {this.props.households.map((household) => (
+                        <option value={Number(household.household_id)}>
+                          {household.name}
+                        </option>
+                      ))}
+                    </select> */}
                 </>
               )}
             </div>
