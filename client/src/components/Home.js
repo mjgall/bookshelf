@@ -10,7 +10,7 @@ class Home extends React.Component {
   state = {
     selfOnly: false,
     redirect: queryString.parse(window.location.search).redirect,
-    householdSelect: null,
+    householdSelect: {value: null, label: null},
   };
 
   componentDidMount = () => {
@@ -36,8 +36,8 @@ class Home extends React.Component {
 
   filterHouseholdBooks = (books) => {
     if (
-      this.state.householdSelect == 'all' ||
-      this.state.householdSelect == null
+      this.state.householdSelect.value == 'all' ||
+      this.state.householdSelect.value == null
     ) {
       return books;
     }
@@ -45,7 +45,7 @@ class Home extends React.Component {
     const newBooks = books.filter((book) => {
       return (
         book.household_id == null ||
-        book.household_id == this.state.householdSelect
+        book.household_id == this.state.householdSelect.value
       );
     });
 
@@ -81,8 +81,9 @@ class Home extends React.Component {
               {this.state.selfOnly ? null : (
                 <>
                   <Select
-                    className="w-full"
-                   
+                  placeholder="Household..."
+                   className="w-full"
+                   defaultValue={{ value: 'all', label: 'All' }}
                     options={[
                       { value: 'all', label: 'All' },
                       ...this.props.households.map((household) => ({
@@ -92,7 +93,7 @@ class Home extends React.Component {
                     ]}
                     value={this.state.householdSelect}
                     onChange={(selected) => {
-                      this.setState({ householdSelect: selected.value });
+                      this.setState({ householdSelect: selected });
                     }}></Select>
                   {/* <select
                       onChange={(e) => {
