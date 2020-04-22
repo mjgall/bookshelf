@@ -248,12 +248,12 @@ function BookTable(props) {
             );
           },
         },
-        {
-          Header: 'Owner',
-          accessor: 'owner_name',
-          Filter: SelectColumnFilter,
-          filter: 'equals',
-        },
+        // {
+        //   Header: 'Owner',
+        //   accessor: 'owner_name',
+        //   Filter: SelectColumnFilter,
+        //   filter: 'equals',
+        // },
       ];
     }
   }, [props]);
