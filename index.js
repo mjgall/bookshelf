@@ -42,5 +42,5 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.listen(process.env.PORT || 2001, () =>
-  console.log("We're running on 2001")
+  console.log("Server running on 2001")
 );

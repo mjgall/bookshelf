@@ -138,7 +138,7 @@ function Table({ columns, data, history, user, userOnly }) {
       debug: true,
       initialState: {
         sortBy: [{ id: 'author', desc: false }],
-        filters: [{ id: 'owner_name', value: user.first }],
+        // filters: [{ id: 'owner_name', value: user.first }],
       },
     },
     useFilters, // useFilters!
@@ -216,8 +216,6 @@ function Table({ columns, data, history, user, userOnly }) {
 function BookTable(props) {
   const columns = React.useMemo(() => {
     if (props.selfOnly) {
-      console.log('self only is true');
-      
       return [
         { Header: 'Title', accessor: 'title', disableFilters: true },
         { Header: 'Author', accessor: 'author', disableFilters: true },
@@ -235,7 +233,6 @@ function BookTable(props) {
         },
       ];
     } else {
-      console.log('self only is false');
       return [
         { Header: 'Title', accessor: 'title', disableFilters: true },
         { Header: 'Author', accessor: 'author', disableFilters: true },
@@ -262,6 +259,7 @@ function BookTable(props) {
   }, [props]);
 
   const data = React.useMemo(() => {
+
     return props?.books?.map((book) => {
       return {
         ...book,
@@ -281,6 +279,7 @@ function BookTable(props) {
       data={data}
       user={props.user}
       selfOnly={props.selfOnly}
+      householdSelect={props.householdSelect}
     />
   );
 }

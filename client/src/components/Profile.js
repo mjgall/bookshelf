@@ -175,7 +175,6 @@ export default class Profile extends React.Component {
   };
 
   removeMember = async (householdId, userId, index) => {
-    console.log({ householdId, userId, index });
     const response = await axios.put('/api/invitations', {
       householdId,
       userId,
@@ -186,6 +185,28 @@ export default class Profile extends React.Component {
       newMembers.splice(index, 1);
       this.setState({ members: newMembers });
     }
+  };
+
+  canRemoveMember = (member, membership, index) => {
+    // if (member.user_id == this.props.user.id && !membership.is_owner) {
+    //   return (
+    //     <XSquare
+    //       size="2rem"
+    //       className="cursor-pointer text-red-600"
+    //       onClick={() => {
+    //         this.removeMember(membership.household_id, member.user_id, index);
+    //       }}></XSquare>
+    //   );
+    // }
+
+    return member.user_id == this.props.user.id ? null : membership.is_owner ? (
+      <XSquare
+        size="2rem"
+        className="cursor-pointer text-red-600"
+        onClick={() => {
+          this.removeMember(membership.household_id, member.user_id, index);
+        }}></XSquare>
+    ) : null;
   };
 
   render = () => {
@@ -212,7 +233,13 @@ export default class Profile extends React.Component {
               </div>
               <div class="flex justify-center pb-3 text-grey-dark">
                 <div class="text-center mr-3 border-r pr-3">
-                  <h2>{this.props.books.length}</h2>
+                  <h2>
+                    {
+                      this.props.books.filter(
+                        (book) => book.user_id == this.props.user.id
+                      ).length
+                    }
+                  </h2>
                   <span>Books saved</span>
                 </div>
                 <div class="text-center">
@@ -408,21 +435,25 @@ export default class Profile extends React.Component {
                                       : member.member_email || member.email}
                                   </div>
                                   <div>
-                                    {member.user_id ==
+                                    {this.canRemoveMember(
+                                      member,
+                                      membership,
+                                      index
+                                    )}
+                                    {/* {member.user_id ==
                                     this.props.user
                                       .id ? null : membership.is_owner ? (
                                       <XSquare
                                         size="2rem"
                                         className="cursor-pointer text-red-600"
                                         onClick={() => {
-                                          console.log(member);
                                           this.removeMember(
                                             membership.household_id,
                                             member.user_id,
                                             index
                                           );
                                         }}></XSquare>
-                                    ) : null}
+                                    ) : null} */}
                                   </div>
                                 </div>
                               </li>
