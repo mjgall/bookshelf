@@ -13,7 +13,7 @@ class Home extends React.Component {
   };
 
   componentDidMount = () => {
-    console.log(this.filterHouseholdBooks(this.props.books));
+
     const enabled =
       window.localStorage.getItem('selfOnly') === 'enabled' ? true : false;
 
@@ -48,7 +48,7 @@ class Home extends React.Component {
         book.household_id == this.state.householdSelect
       );
     });
-    console.log(newBooks);
+
     return newBooks;
   };
 
@@ -84,7 +84,7 @@ class Home extends React.Component {
                   <label for="households">Household</label>
                   <select
                     onChange={(e) => {
-                      console.log(e.target.value);
+
                       this.setState({ householdSelect: e.target.value });
                     }}
                     id="households">

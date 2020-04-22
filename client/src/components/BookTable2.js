@@ -259,7 +259,7 @@ function BookTable(props) {
   }, [props]);
 
   const data = React.useMemo(() => {
-    console.log(props.books)
+
     return props?.books?.map((book) => {
       return {
         ...book,
