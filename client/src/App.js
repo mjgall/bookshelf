@@ -117,6 +117,7 @@ export default class App extends React.Component {
               <Switch>
                 <Route exact path="/">
                   <Home
+                    households={this.state.households}
                     clearReferrer={this.clearReferrer}
                     updateNavReferrer={this.updateNavReferrer}
                     loaded={this.state.loaded}
@@ -140,6 +141,7 @@ export default class App extends React.Component {
                 </PrivateRoute>
                 <Route path="*">
                   <Home
+                    
                     updateNavReferrer={this.updateNavReferrer}
                     loaded={this.state.loaded}
                     user={this.state.user}

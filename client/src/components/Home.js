@@ -9,9 +9,11 @@ class Home extends React.Component {
   state = {
     selfOnly: false,
     redirect: queryString.parse(window.location.search).redirect,
+    householdSelect: null,
   };
 
   componentDidMount = () => {
+    console.log(this.filterHouseholdBooks(this.props.books));
     const enabled =
       window.localStorage.getItem('selfOnly') === 'enabled' ? true : false;
 
@@ -26,6 +28,36 @@ class Home extends React.Component {
     this.props.updateNavReferrer(i);
   };
 
+  filterPersonalBooks = (books) => {
+    if (this.state.selfOnly) {
+      return books.filter((book) => book.user_id == this.props.user.id);
+    } else return books;
+  };
+
+  filterHouseholdBooks = (books) => {
+    if (
+      this.state.householdSelect == 'all' ||
+      this.state.householdSelect == null
+    ) {
+      return books;
+    }
+
+    const newBooks = books.filter((book) => {
+      return (
+        book.household_id == null ||
+        book.household_id == this.state.householdSelect
+      );
+    });
+    console.log(newBooks);
+    return newBooks;
+  };
+
+  filterBooks = (books) => {
+    return this.state.selfOnly
+      ? this.filterPersonalBooks(books)
+      : this.filterHouseholdBooks(books);
+  };
+
   render = () => {
     return (
       <>
@@ -38,32 +70,51 @@ class Home extends React.Component {
             <div className="md:flex md:items-center mb-6">
               <div className="md:w-1/3"></div>
               <input
-                  checked={this.state.selfOnly}
-                  onChange={(e) => this.selfOnly(e.target.checked)}
-                  className="mr-2 leading-tight"
-                  type="checkbox"></input>
+                checked={this.state.selfOnly}
+                onChange={(e) => this.selfOnly(e.target.checked)}
+                className="mr-2 leading-tight"
+                type="checkbox"></input>
               <label className="md:w-2/3 block text-gray-500">
-                
                 <span className="text-sm"></span>
                 Only show my books (not the household's)
               </label>
-              
+
+              {this.state.selfOnly ? null : (
+                <>
+                  <label for="households">Household</label>
+                  <select
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                      this.setState({ householdSelect: e.target.value });
+                    }}
+                    id="households">
+                    <option value="all">All</option>
+                    {this.props.households.map((household) => (
+                      <option value={Number(household.household_id)}>
+                        {household.name}
+                      </option>
+                    ))}
+                  </select>
+                </>
+              )}
             </div>
             <BookTable
+              householdSelect={this.state.householdSelect}
               selfOnly={this.state.selfOnly}
+              householdSelect={this.state.householdSelect}
               members={this.props.members}
               user={this.props.user}
               history={this.props.history}
-              // books={this.props.books}
-              books={
-                this.state.selfOnly
-                  ? this.props.books.filter((book) => {
-                      if (book.user_id == this.props.user.id) {
-                        return book;
-                      }
-                    })
-                  : this.props.books
-              }
+              books={this.filterBooks(this.props.books)}
+              // books={
+              //   this.state.selfOnly
+              //     ? this.props.books.filter((book) => {
+              //         if (book.user_id == this.props.user.id) {
+              //           return book;
+              //         }
+              //       })
+              //     : this.props.books
+              // }
               userOnly={this.state.selfOnly}></BookTable>
           </div>
         ) : this.props.loaded && !this.props.user ? (
