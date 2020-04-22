@@ -56,9 +56,12 @@ export default class App extends React.Component {
     const bootstrap = await axios.get('/api/bootstrap');
     const fresh = bootstrap.data;
 
+    const books = fresh.books.userBooks.concat(fresh.books.householdBooks)
+    console.log(books)
+
     this.setState({
       user: fresh.currentUser,
-      books: fresh.books || [],
+      books: books || [],
       householdMembers: fresh.householdMembers,
       households: fresh.households,
       loaded: true,

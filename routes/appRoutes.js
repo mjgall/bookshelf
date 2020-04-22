@@ -15,6 +15,8 @@ const declinePendingHousehold = require('../queries/declinePendingHousehold');
 const deleteHousehold = require('../queries/deleteHousehold');
 const addUserBooksToHousehold = require('../queries/addUserBooksToHousehold');
 const removeHouseholdMember = require('../queries/removeHouseholdMember');
+const getUserBooks = require('../queries/getUserBooks');
+const getHouseholdBooks = require('../queries/getHouseholdBooks');
 
 const sendEmail = require('../services/aws-ses');
 
@@ -27,10 +29,22 @@ module.exports = (app) => {
     } else {
       const currentUser = req.user;
       const books = await getBooks(req.user.id);
+
+      const userBooks = await getUserBooks(req.user.id);
+      const householdBooks = await getHouseholdBooks(
+        req.user.id,
+        req.body.householdId
+      );
+
       const households = await getHouseholds(req.user.id);
       const householdMembers = await getHouseholdMembersByUserId(req.user.id);
 
-      res.send({ currentUser, books, households, householdMembers });
+      res.send({
+        currentUser,
+        books: { userBooks, householdBooks },
+        households,
+        householdMembers,
+      });
     }
   });
 
@@ -74,8 +88,17 @@ module.exports = (app) => {
   //get a users books
   app.get('/api/books', async (req, res) => {
     if (req.user) {
-      const response = await getBooks(req.user.id);
-      res.send({ success: true, books: response });
+      // const response = await getBooks(req.user.id);
+
+      const userBooks = await getUserBooks(req.body.id);
+      const householdBooks = await getHouseholdBooks(
+        req.body.id,
+      );
+
+      res.send({
+        success: true,
+        books: { user: userBooks, household: householdBooks },
+      });
     } else {
       res.send({ success: false, books: [] });
     }
