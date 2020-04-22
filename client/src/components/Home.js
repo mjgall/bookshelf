@@ -37,15 +37,17 @@ class Home extends React.Component {
               addBookToGlobalState={this.props.addBookToGlobalState}></Scanner>
             <div className="md:flex md:items-center mb-6">
               <div className="md:w-1/3"></div>
-              <label className="md:w-2/3 block text-gray-500">
-                <input
+              <input
                   checked={this.state.selfOnly}
                   onChange={(e) => this.selfOnly(e.target.checked)}
                   className="mr-2 leading-tight"
                   type="checkbox"></input>
+              <label className="md:w-2/3 block text-gray-500">
+                
                 <span className="text-sm"></span>
                 Only show my books (not the household's)
               </label>
+              
             </div>
             <BookTable
               selfOnly={this.state.selfOnly}

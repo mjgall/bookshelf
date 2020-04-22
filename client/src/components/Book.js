@@ -99,27 +99,22 @@ export default class Book extends React.Component {
             </div>
           </div>
           <div className="text-center mt-12">
-            <EditDiv
-              name="title"
-              value={this.state?.currentBook?.title}
-              update={this.update}
-              className="text-4xl font-semibold leading-normal mb-2 text-gray-800 mb-2"></EditDiv>
+            <div className="text-4xl font-semibold leading-normal mb-2 text-gray-800 mb-2">
+              {this.state?.currentBook?.title}
+            </div>
 
-            <EditDiv
-              name="author"
-              value={this.state?.currentBook?.author}
-              update={this.update}
-              className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold"></EditDiv>
+            <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold">
+              {this.state?.currentBook?.author}
+            </div>
           </div>
           <div className="mt-10 py-10 border-t border-gray-300 text-center">
             <div className="flex flex-wrap justify-center">
               <div className="w-full lg:w-9/12 px-4">
                 <div className="text-lg font-semibold">Notes:</div>
-                <EditP
-                  name="notes"
-                  update={this.update}
-                  value={this.state.currentBook?.notes}
-                  className="mb-4 text-lg leading-relaxed text-gray-800"></EditP>
+                <div className="mb-4 text-lg leading-relaxed text-gray-800">
+                  {this.state?.currentBook?.user_notes ||
+                    this.state?.currentBook?.household_notes}
+                </div>
               </div>
             </div>
           </div>
