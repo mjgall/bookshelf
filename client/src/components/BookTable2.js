@@ -220,6 +220,7 @@ function BookTable(props) {
           Cell: (props) => {
             return (
               <img
+                width="5rem"
                 loading="lazy"
                 className="w-20 container"
                 src={props.row.original.cover}
@@ -246,6 +247,7 @@ function BookTable(props) {
         },
         {
           Header: 'Owner',
+          disableSortBy: true,
           accessor: 'owner_name',
           Filter: SelectColumnFilter,
           filter: 'equals',

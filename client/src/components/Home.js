@@ -70,13 +70,19 @@ class Home extends React.Component {
               addBookToGlobalState={this.props.addBookToGlobalState}></Scanner>
             <div className="max-w-screen-md mx-auto mb-6">
               <Select
+                isOptionDisabled={(option) => option.value == 'no-households'}
                 placeholder="Household..."
                 blurInputOnSelect
                 isSearchable={false}
                 className="w-full"
                 options={[
-                  { value: 'none', label: `⛔ None (Only your own)` },
-                  { value: 'all', label: `🏠 All` },
+                  { value: 'none', label: `⛔ None (Only your own books)` },
+                  (this.props.households.length == 0
+                    ? {
+                        value: 'no-households',
+                        label: `🏠 Add households from Profile`,
+                      }
+                    : { value: 'all', label: `🏠 All` }),
                   ...this.props.households.map((household) => ({
                     value: household.household_id,
                     label: `🏠 ${household.name}`,
