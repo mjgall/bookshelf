@@ -138,7 +138,7 @@ function Table({ columns, data, history, user, userOnly }) {
       debug: true,
       initialState: {
         sortBy: [{ id: 'author', desc: false }],
-        // filters: [{ id: 'owner_name', value: user.first }],
+        // filters: [{ id: 'owner_name', value: 'all' }],
       },
     },
     useFilters, // useFilters!
@@ -215,7 +215,7 @@ function Table({ columns, data, history, user, userOnly }) {
 
 function BookTable(props) {
   const columns = React.useMemo(() => {
-    if (props.selfOnly) {
+    if (props.householdSelect.value == 'none') {
       return [
         { Header: 'Title', accessor: 'title', disableFilters: true },
         { Header: 'Author', accessor: 'author', disableFilters: true },
@@ -248,12 +248,12 @@ function BookTable(props) {
             );
           },
         },
-        // {
-        //   Header: 'Owner',
-        //   accessor: 'owner_name',
-        //   Filter: SelectColumnFilter,
-        //   filter: 'equals',
-        // },
+        {
+          Header: 'Owner',
+          accessor: 'owner_name',
+          Filter: SelectColumnFilter,
+          filter: 'equals',
+        },
       ];
     }
   }, [props]);
@@ -270,7 +270,7 @@ function BookTable(props) {
           ]?.member_first,
       };
     });
-  }, [props.books]);
+  }, [props]);
 
   return (
     <Table
