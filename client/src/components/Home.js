@@ -5,7 +5,6 @@ import MarketingHome from './MarketingHome';
 import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
 import Select from 'react-select';
-import Toggle from 'react-toggle';
 
 class Home extends React.Component {
   state = {
