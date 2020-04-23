@@ -201,7 +201,7 @@ export default class Profile extends React.Component {
 
     return member.user_id == this.props.user.id ? null : membership.is_owner ? (
       <XSquare
-        size="2rem"
+        size="1.5em"
         className="cursor-pointer text-red-600"
         onClick={() => {
           this.removeMember(membership.household_id, member.user_id, index);
@@ -378,7 +378,7 @@ export default class Profile extends React.Component {
                         </span>
                         {membership.is_owner ? (
                           <XSquare
-                            size="1em"
+                            size="2rem"
                             className="cursor-pointer text-red-600"
                             onClick={async () =>
                               this.deleteHousehold(
@@ -416,51 +416,35 @@ export default class Profile extends React.Component {
                           </div>
                         ) : null}
                       </form>
-                      <ul>
+                      <div>
                         {this.state.members.map((member, index) => {
                           if (
                             member.household_id == membership.household_id &&
                             member.invite_accepted
                           ) {
                             return (
-                              <li className="flex my-2">
+                              <div className="flex my-2 items-center ">
                                 <img
                                   className="h-12 w-12 rounded-full"
                                   src={member.picture}
                                 />
-                                <div className="ml-5 mt-3 flex justify-between w-full items-center ">
-                                  <div>
-                                    {member.user_id == this.props.user.id
-                                      ? 'You'
-                                      : member.member_email || member.email}
-                                  </div>
-                                  <div>
-                                    {this.canRemoveMember(
-                                      member,
-                                      membership,
-                                      index
-                                    )}
-                                    {/* {member.user_id ==
-                                    this.props.user
-                                      .id ? null : membership.is_owner ? (
-                                      <XSquare
-                                        size="2rem"
-                                        className="cursor-pointer text-red-600"
-                                        onClick={() => {
-                                          this.removeMember(
-                                            membership.household_id,
-                                            member.user_id,
-                                            index
-                                          );
-                                        }}></XSquare>
-                                    ) : null} */}
-                                  </div>
+                                <div className="ml-5 overflow-x-hidden">
+                                  {member.user_id == this.props.user.id
+                                    ? 'You'
+                                    : member.member_email || member.email}
                                 </div>
-                              </li>
+                                <div className="ml-auto">
+                                  {this.canRemoveMember(
+                                    member,
+                                    membership,
+                                    index
+                                  )}
+                                </div>
+                              </div>
                             );
                           }
                         })}
-                      </ul>
+                      </div>
                       {membership.is_owner ? (
                         <>
                           {this.state.members
