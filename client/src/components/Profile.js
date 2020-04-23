@@ -380,7 +380,7 @@ export default class Profile extends React.Component {
                           <XSquare
                             size="2rem"
                             className="cursor-pointer text-red-600"
-                            onClick={async () =>
+                            onClick={ () =>
                               this.deleteHousehold(
                                 membership.household_id,
                                 index

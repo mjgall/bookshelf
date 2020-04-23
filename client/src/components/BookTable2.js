@@ -123,15 +123,9 @@ function Table({ columns, data, history, user, userOnly }) {
     visibleColumns,
     preGlobalFilteredRows,
     setGlobalFilter,
+    setFilter,
   } = useTable(
     {
-      autoResetPage: false,
-      autoResetExpanded: false,
-      autoResetGroupBy: false,
-      autoResetSelectedRows: false,
-      autoResetSortBy: false,
-      autoResetFilters: false,
-      autoResetRowState: false,
       columns,
       data,
       defaultColumn,
@@ -144,7 +138,9 @@ function Table({ columns, data, history, user, userOnly }) {
     useFilters, // useFilters!
     useGlobalFilter, // useGlobalFilter!
     useSortBy
-  );
+    );
+  
+  
 
   return (
     <>
@@ -259,7 +255,6 @@ function BookTable(props) {
   }, [props]);
 
   const data = React.useMemo(() => {
-
     return props?.books?.map((book) => {
       return {
         ...book,
