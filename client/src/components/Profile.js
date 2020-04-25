@@ -56,6 +56,8 @@ export default class Profile extends React.Component {
         affectedHouseholdIndex: index,
       });
     } else {
+
+      //invite user to household
       const emailResponse = await axios.post('/api/email', {
         recipientAddress: this.state.inviteValues[index],
         // recipientAddress: 'mike.gallagh@gmail.com',
