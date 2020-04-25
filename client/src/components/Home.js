@@ -80,7 +80,7 @@ class Home extends React.Component {
                   (this.props.households.length == 0
                     ? {
                         value: 'no-households',
-                        label: `🏠 Add households from Profile`,
+                        label: `🏠 You don't have any households! Add one from Profile`,
                       }
                     : { value: 'all', label: `🏠 All` }),
                   ...this.props.households.map((household) => ({

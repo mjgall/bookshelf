@@ -56,12 +56,12 @@ export default class Profile extends React.Component {
         affectedHouseholdIndex: index,
       });
     } else {
-      // const emailResponse = await axios.post('/api/email', {
-      //   recipientAddress: this.state.inviteValues[index],
-      //   // recipientAddress: 'mike.gallagh@gmail.com',
-      //   subject: `🏠 You've been invited to join a household!`,
-      //   body: `<p>${this.props.user.first} (${this.props.user.email}) invited you to their household to share your books at bookshelf.mikegallagher.app.</p><a href="https://bookshelf.mikegallagher.app/profile">Accept here</a>`,
-      // });
+      const emailResponse = await axios.post('/api/email', {
+        recipientAddress: this.state.inviteValues[index],
+        // recipientAddress: 'mike.gallagh@gmail.com',
+        subject: `🏠 You've been invited to join a household!`,
+        body: `<p>${this.props.user.first} (${this.props.user.email}) invited you to their household to share your books at bookshelf.mikegallagher.app.</p><a href="https://bookshelf.mikegallagher.app/profile">Accept here</a>`,
+      });
 
       this.setState({
         members: [...this.state.members, response.data],
@@ -72,13 +72,13 @@ export default class Profile extends React.Component {
   };
 
   handleBookshelfInviteSend = async (invitedEmailAddress, index) => {
-    // const response = await axios.post('/api/email', {
-    //   recipientAddress: invitedEmailAddress,
-    //   // recipientAddress: 'mike.gallagh@gmail.com',
-    //   subject: `📚 You've been invited to join Bookshelf!`,
-    //   body: `<p>${this.props.user.full} (${this.props.user.email}) invited you to join bookshelf.mikegallagher.app</p><a href="https://bookshelf.mikegallagher.app">bookshelf.mikegallagher.app</a>`,
-    // });
-    const response = { data: { success: true } };
+    const response = await axios.post('/api/email', {
+      recipientAddress: invitedEmailAddress,
+      // recipientAddress: 'mike.gallagh@gmail.com',
+      subject: `📚 You've been invited to join Bookshelf!`,
+      body: `<p>${this.props.user.full} (${this.props.user.email}) invited you to join bookshelf.mikegallagher.app</p><a href="https://bookshelf.mikegallagher.app">bookshelf.mikegallagher.app</a>`,
+    });
+    // const response = { data: { success: true } };
     if (response.data.success) {
       this.setState({
         alertNoAction: true,
