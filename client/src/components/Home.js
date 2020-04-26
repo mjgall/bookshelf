@@ -121,6 +121,13 @@ class Home extends React.Component {
                         value: 'no-households',
                         label: `🏠 You don't have any households! Add one from Profile`,
                       }
+                    : this.props.households.length == 1
+                    ? this.props.households.map((household) => {
+                        return {
+                          value: household.household_id,
+                          label: `🏠 ${household.name}`,
+                        };
+                      })
                     : { value: 'all', label: `🏠 All` },
                   ...this.props.households.map((household) => ({
                     value: household.household_id,
