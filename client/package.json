@@ -10,6 +10,7 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "http-proxy-middleware": "^1.0.3",
+    "lodash": "^4.17.15",
     "match-sorter": "^4.0.2",
     "postcss-cli": "^7.1.0",
     "quagga": "^0.12.1",

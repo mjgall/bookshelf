@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useTable, useFilters, useSortBy, useGlobalFilter } from 'react-table';
 
 // import matchSorter from 'match-sorter';
@@ -85,7 +85,15 @@ function SelectColumnFilter({
 }
 
 // table component
-function Table({ columns, data, history, user, userOnly }) {
+function Table({
+  columns,
+  data,
+  history,
+  user,
+  userOnly,
+  ownerFilterValue,
+  householdSelect,
+}) {
   const filterTypes = React.useMemo(
     () => ({
       text: (rows, id, filterValue) => {
@@ -124,6 +132,7 @@ function Table({ columns, data, history, user, userOnly }) {
     preGlobalFilteredRows,
     setGlobalFilter,
     setFilter,
+    setHiddenColumns
   } = useTable(
     {
       columns,
@@ -138,9 +147,30 @@ function Table({ columns, data, history, user, userOnly }) {
     useFilters, // useFilters!
     useGlobalFilter, // useGlobalFilter!
     useSortBy
+  );
+
+  const updateOwnerFilter = (owner_value) => {
+    // if (householdSelect.value != 'all') {
+    //   // setFilter()
+    // }
+    if (householdSelect.value != 'none' && owner_value != 'all') {
+      console.log(owner_value);
+      setFilter('owner_name', owner_value);
+    }
+  };
+  console.log(state);
+
+  // const ownerValue = React.useRef('all');
+  React.useEffect(() => updateOwnerFilter(ownerFilterValue), [
+    ownerFilterValue,
+  ]);
+
+  React.useEffect(() => {
+    console.log(columns.filter(column => !column.isVisible));
+    setHiddenColumns(
+      columns.filter(column => !column.isVisible).map(column => column.accessor)
     );
-  
-  
+  }, [setHiddenColumns, columns]);
 
   return (
     <>
@@ -213,8 +243,8 @@ function BookTable(props) {
   const columns = React.useMemo(() => {
     if (props.householdSelect.value == 'none') {
       return [
-        { Header: 'Title', accessor: 'title', disableFilters: true },
-        { Header: 'Author', accessor: 'author', disableFilters: true },
+        { Header: 'Title', accessor: 'title', disableFilters: true, isVisible: true },
+        { Header: 'Author', accessor: 'author', disableFilters: true, isVisible: true },
         {
           Header: 'Cover',
           Cell: (props) => {
@@ -231,8 +261,8 @@ function BookTable(props) {
       ];
     } else {
       return [
-        { Header: 'Title', accessor: 'title', disableFilters: true },
-        { Header: 'Author', accessor: 'author', disableFilters: true },
+        { Header: 'Title', accessor: 'title', disableFilters: true, isVisible: true },
+        { Header: 'Author', accessor: 'author', disableFilters: true, isVisible: true },
         {
           Header: 'Cover',
           Cell: (props) => {
@@ -249,6 +279,7 @@ function BookTable(props) {
           Header: 'Owner',
           disableSortBy: true,
           accessor: 'owner_name',
+
           Filter: SelectColumnFilter,
           filter: 'equals',
         },
@@ -267,10 +298,11 @@ function BookTable(props) {
           ]?.member_first,
       };
     });
-  }, [props]);
+  }, [props.books]);
 
   return (
     <Table
+      ownerFilterValue={props.ownerFilterValue}
       history={props.history}
       columns={columns}
       data={data}
