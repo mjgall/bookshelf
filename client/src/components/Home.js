@@ -41,6 +41,8 @@ class Home extends React.Component {
       return books.filter((book) => book.user_id == this.props.user.id);
     } else if (this.state.householdSelect.value == 'all') {
       return books;
+    } else if (this.state.householdSelect.value == 'all' && this.state.ownerSelect.value == 'all') {
+      return books
     } else {
       const newBooks = books.filter((book) => {
         return (
@@ -66,7 +68,6 @@ class Home extends React.Component {
   };
 
   handleOwnerChange = (selected) => {
-    console.log(selected);
     this.setState({ ownerSelect: selected });
   };
 
@@ -105,15 +106,15 @@ class Home extends React.Component {
           <div className="max-w-screen-lg container my-4">
             <Scanner
               user={this.props.user}
-              className="max-w-screen-md container mx-auto mt-5"
+              className="max-w-screen-lg container mx-auto mt-5"
               addBookToGlobalState={this.props.addBookToGlobalState}></Scanner>
-            <div className="max-w-screen-md mx-auto mb-6">
+            <div className="max-w-screen-lg mx-auto mb-6 grid md:grid-cols-2 md:gap-2 grid-cols-1 row-gap-2">
               <Select
                 isOptionDisabled={(option) => option.value == 'no-households'}
                 placeholder="Household..."
                 blurInputOnSelect
                 isSearchable={false}
-                className="w-full"
+                className="w-full container"
                 options={[
                   { value: 'none', label: `⛔ None (Only your own books)` },
                   this.props.households.length == 0
@@ -142,7 +143,7 @@ class Home extends React.Component {
                   placeholder="Owner..."
                   blurInputOnSelect
                   isSearchable={false}
-                  className="w-full"
+                  className="w-full container"
                   options={this.state.owners}
                   value={this.state.ownerSelect}
                   onChange={this.handleOwnerChange}></Select>
