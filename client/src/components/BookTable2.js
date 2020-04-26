@@ -153,14 +153,14 @@ function Table({
     // if (householdSelect.value != 'all') {
     //   // setFilter()
     // }
-    if (householdSelect.value != 'none' && owner_value != 'all') {
+    if (householdSelect.value != 'none' && owner_value != 'All') {
       console.log(owner_value);
       setFilter('owner_name', owner_value);
     }
   };
   console.log(state);
 
-  // const ownerValue = React.useRef('all');
+
   React.useEffect(() => updateOwnerFilter(ownerFilterValue), [
     ownerFilterValue,
   ]);

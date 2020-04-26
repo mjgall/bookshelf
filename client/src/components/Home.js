@@ -128,7 +128,7 @@ class Home extends React.Component {
                           label: `🏠 ${household.name}`,
                         };
                       })
-                    : { value: 'all', label: `🏠 All` },
+                    : { value: 'all', label: `🏠 All households` },
                   ...this.props.households.map((household) => ({
                     value: household.household_id,
                     label: `🏠 ${household.name}`,
