@@ -41,7 +41,7 @@ class Home extends React.Component {
       return books.filter((book) => book.user_id == this.props.user.id);
     } else if (this.state.householdSelect.value == 'all') {
       return books;
-    } else if (this.state.householdSelect.value == 'all' && this.state.ownerSelect.value == 'all') {
+    } else if (this.state.householdSelect.value == 'all' && this.state.ownerSelect.value == 'All') {
       return books
     } else {
       const newBooks = books.filter((book) => {
