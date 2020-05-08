@@ -6,7 +6,7 @@ module.exports = (householdId, userId) => {
     FROM households_users 
     LEFT JOIN households_books ON households_users.user_id = households_books.user_id 
     WHERE households_users.household_id = ${householdId} AND households_books.household_id = ${householdId}`;
-    console.log(query)
+
     db.query(query, (err, results, fields) => {
       if (err) throw Error(err);
       resolve(results);

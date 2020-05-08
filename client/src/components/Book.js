@@ -1,122 +1,152 @@
 import React from 'react';
-import editable from './Editable';
-import axios from 'axios';
-
-const EditDiv = editable('div');
-const EditP = editable('p');
+import InlineEdit from '@atlaskit/inline-edit';
+import TextareaAutosize from 'react-textarea-autosize';
+import axios from 'axios'
 
 export default class Book extends React.Component {
   state = {
     currentBook: null,
+    editValue: '',
   };
 
   componentDidMount = () => {
+    const params = this.props.computedMatch.params;
+    let currentBook;
+
+    if (params.userBookId) {
+      const currentBooksArray = this.props?.books?.filter((book) => {
+        return book.user_book_id == params.userBookId;
+      });
+      currentBook = currentBooksArray[0];
+      this.setState({
+        bookType: 'personal',
+        currentBook: {
+          ...currentBook,
+          notes: currentBook.user_notes,
+        },
+      });
+    } else if (params.globalBookId) {
+      const currentBooksArray = this.props?.books?.filter((book) => {
+        return book.id == params.globalBookId;
+      });
+      currentBook = currentBooksArray[0];
+      this.setState({
+        bookType: 'household',
+        currentBook: {
+          ...currentBook,
+          notes: currentBook.household_notes,
+        },
+      });
+    }
+
     window.scroll(0, 0);
+  };
 
-    const currentBooksArray = this.props?.books?.filter((book) => {
-      return book.id == this.props.computedMatch.params.id;
-    });
+  handleTitleChange = async (value) => {
 
-    const currentBook = currentBooksArray[0];
+    const response = await axios.put('/api/books', {bookType: this.state.bookType, field: 'title', value })
 
     this.setState({
       currentBook: {
-        ...currentBook,
-        notes: currentBook.user_notes || currentBook.household_notes,
+        ...this.state.currentBook,
+        title: response.data.value,
       },
     });
   };
 
-  update = async (value, fieldName) => {
-    switch (fieldName) {
-      case 'title':
-        this.setState({
-          currentBook: { ...this.state.currentBook, title: value },
-        });
-        this.saveToDb(this.state);
-        break;
-      case 'author':
-        this.setState({
-          currentBook: { ...this.state.currentBook, author: [value] },
-        });
-        this.saveToDb(this.state);
-        break;
-      case 'notes':
-        this.setState({
-          currentBook: { ...this.state.currentBook, notes: value },
-        });
-        await this.saveToDb(this.state);
-        break;
-      case 'read':
-        this.setState({
-          currentBook: { ...this.state.currentBook, read: true },
-        });
-        await this.saveToDb(this.state);
-        break;
-      default:
-        break;
-    }
+  handleAuthorChange = (value) => {
+    this.setState({
+      currentBook: {
+        ...this.state.currentBook,
+        author: value,
+      },
+    });
   };
 
-  saveToDb = async (state) => {
-    await axios.put('/api/books', state.currentBook);
-    // const user = response.data;
-    this.props.updateBook(state.currentBook);
+  handleNotesChange = (value) => {
+    console.log(value);
+    this.setState({
+      currentBook: {
+        ...this.state.currentBook,
+        notes: value,
+      },
+    });
   };
 
   render = () => {
     return (
       <div className="container mx-auto mt-12">
-        <div className="px-6">
-          <div className="flex flex-wrap justify-center">
-            <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
-              <div className="">
-                <img
-                  className="w-1/2 mx-auto"
-                  src={this.state?.currentBook?.cover}
-                  alt="cover"></img>
-              </div>
+        <div className="md:flex">
+          <div className="md:w-2/5 border-gray-400 border rounded-md shadow-md p-4 md:mr-3">
+            <div className="mx-0">
+              <img
+                className="w-2/5 block ml-auto mr-auto"
+                src={this.state?.currentBook?.cover}></img>
             </div>
-            <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center"></div>
-            <div className="w-full lg:w-4/12 px-4 lg:order-1">
-              <div className="flex justify-center py-4 lg:pt-4 pt-8">
-                <div className="mr-4 p-3 text-center">
-                  <div className="`text-md text-gray-500 cursor-pointer">
-                    {this.state?.currentBook?.read ? (
-                      `You've read this book!`
-                    ) : (
-                      <div
-                        onClick={() => {
-                          this.update(true, 'read');
-                        }}
-                        className="bg-blue-500 rounded text-white text-center p-4">
-                        Mark as read!
-                      </div>
-                    )}
-                  </div>
+            <InlineEdit
+              readViewFitContainerWidth
+              defaultValue={this.state?.currentBook?.title}
+              label="Title"
+              editView={(fieldProps) => (
+                <input
+                  className="w-full"
+                  type="text"
+                  {...fieldProps}
+                  autoFocus
+                />
+              )}
+              readView={() => (
+                <div>
+                  {this.state?.currentBook?.title || 'Click to enter value'}
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className="text-center mt-12">
-            <div className="text-4xl font-semibold leading-normal mb-2 text-gray-800 mb-2">
-              {this.state?.currentBook?.title}
-            </div>
-
-            <div className="text-sm leading-normal mt-0 mb-2 text-gray-500 font-bold">
-              {this.state?.currentBook?.author}
-            </div>
-          </div>
-          <div className="mt-10 py-10 border-t border-gray-300 text-center">
-            <div className="flex flex-wrap justify-center">
-              <div className="w-full lg:w-9/12 px-4">
-                <div className="text-lg font-semibold">Notes:</div>
-                <div className="mb-4 text-lg leading-relaxed text-gray-800">
-                  {this.state?.currentBook?.user_notes ||
-                    this.state?.currentBook?.household_notes}
+              )}
+              onConfirm={this.handleTitleChange}
+            />
+            <InlineEdit
+              readViewFitContainerWidth
+              defaultValue={this.state?.currentBook?.author}
+              label="Author"
+              editView={(fieldProps) => (
+                <input
+                  className="w-full"
+                  type="text"
+                  {...fieldProps}
+                  autoFocus
+                />
+              )}
+              readView={() => (
+                <div>
+                  {this.state?.currentBook?.author || 'Click to enter value'}
                 </div>
-              </div>
-            </div>
+              )}
+              onConfirm={this.handleAuthorChange}
+            />
+          </div>
+          <div className="md:w-3/5">
+            <InlineEdit
+              defaultValue={this.state?.currentBook?.notes}
+              label={
+                this.state.bookType === 'household'
+                  ? 'Household Notes'
+                  : 'Personal Notes'
+              }
+              editView={(fieldProps, ref) => (
+                // @ts-ignore - textarea does not currently correctly pass through ref as a prop
+                <TextareaAutosize
+                  type="text"
+                  className="w-full"
+                  {...fieldProps}
+                />
+              )}
+              readView={() => (
+                <div className="multiline">
+                  {this.state?.currentBook?.notes || 'Click to enter value'}
+                </div>
+              )}
+              onConfirm={this.handleNotesChange}
+              autoFocus
+              readViewFitContainerWidth
+            />
           </div>
         </div>
       </div>

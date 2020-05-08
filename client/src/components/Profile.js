@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import prosperStackSurvey from '@prosperstack/survey';
 
 import {
   CheckSquare,
@@ -22,6 +23,15 @@ export default class Profile extends React.Component {
   };
 
   componentDidMount = async () => {
+    prosperStackSurvey({
+      el: '#prosperstack-survey',
+      surveyId: 'j8cwF_Q46H42h91H4a_iB',
+      stripeSubscriptionId: 'sub_HF2NLSFIU8Ibzh',
+      completed: () => {
+        console.log('Survey complete!');
+      },
+    });
+
     this.setState({
       households: this.props.households,
       members: this.props.members,
@@ -56,7 +66,6 @@ export default class Profile extends React.Component {
         affectedHouseholdIndex: index,
       });
     } else {
-
       //invite user to household
       const emailResponse = await axios.post('/api/email', {
         // recipientAddress: this.state.inviteValues[index],
@@ -382,7 +391,7 @@ export default class Profile extends React.Component {
                           <XSquare
                             size="2rem"
                             className="cursor-pointer text-red-600"
-                            onClick={ () =>
+                            onClick={() =>
                               this.deleteHousehold(
                                 membership.household_id,
                                 index
@@ -496,6 +505,7 @@ export default class Profile extends React.Component {
             </div>
           </div>
         </div>
+        <div id="prosperstack-survey"></div>
       </div>
     );
   };

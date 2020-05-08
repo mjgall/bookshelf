@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@atlaskit/inline-edit": "^10.0.31",
     "@fortawesome/fontawesome-free": "^5.12.1",
+    "@prosperstack/survey": "^0.9.1",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "autoprefixer": "^9.7.4",
@@ -22,10 +24,10 @@
     "react-scripts": "3.4.1",
     "react-select": "^3.1.0",
     "react-table": "^7.0.0",
+    "react-textarea-autosize": "^7.1.2",
     "styled-components": "^5.0.1",
     "styled-icons": "^10.2.1",
-    "tailwind": "^4.0.0",
-    "tailwindcss": "^1.2.0"
+    "tailwind": "^4.0.0"
   },
   "scripts": {
     "build:style": "tailwind build src/styles/index.css -o src/styles/tailwind.css",
@@ -53,6 +55,6 @@
     "@fullhuman/postcss-purgecss": "^2.1.2",
     "autoprefixer": "^9.7.4",
     "postcss-cli": "^7.1.0",
-    "tailwindcss": "^1.2.0"
+    "tailwindcss": "^1.4.6"
   }
 }

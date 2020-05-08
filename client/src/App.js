@@ -29,7 +29,6 @@ export default class App extends React.Component {
     loaded: false,
     scrollPosition: '0',
     windowWidth: null,
-    
   };
 
   updateBook = (book) => {
@@ -56,7 +55,7 @@ export default class App extends React.Component {
     const bootstrap = await axios.get('/api/bootstrap');
     const fresh = bootstrap.data;
 
-    const books = fresh.books.userBooks.concat(fresh.books.householdBooks)
+    const books = fresh.books.userBooks.concat(fresh.books.householdBooks);
 
     this.setState({
       user: fresh.currentUser,
@@ -125,22 +124,30 @@ export default class App extends React.Component {
                     books={this.state?.books}
                     members={this.state.householdMembers}></Home>
                 </Route>
-                <PrivateRoute path="/profile" user={ this.state.user } exact>
+                <PrivateRoute path="/profile" user={this.state.user} exact>
                   <Profile
-                    books = {this.state.books}
+                    books={this.state.books}
                     members={this.state.householdMembers}
                     households={this.state.households}
                     user={this.state.user}></Profile>
                 </PrivateRoute>
-                <PrivateRoute user={ this.state.user } exact path="/book/:id">
-                 
+                <PrivateRoute user={this.state.user} exact path="/book/:id">
+                  <Book
+                    updateBook={this.updateBook}
+                    books={this.state?.books}></Book>
+                </PrivateRoute>
+                <PrivateRoute user={this.state.user} exact path="/book/owned/:userBookId">
+                  <Book
+                    updateBook={this.updateBook}
+                    books={this.state?.books}></Book>
+                </PrivateRoute>
+                <PrivateRoute user={this.state.user} exact path="/book/household/:globalBookId">
                   <Book
                     updateBook={this.updateBook}
                     books={this.state?.books}></Book>
                 </PrivateRoute>
                 <Route path="*">
                   <Home
-                    
                     updateNavReferrer={this.updateNavReferrer}
                     loaded={this.state.loaded}
                     user={this.state.user}

@@ -2,6 +2,12 @@
   border: solid red 1px;
 } */
 
+
+.multiline
+{
+   white-space: pre-wrap;
+}
+
 .drawingBuffer {
   display: none;
 }

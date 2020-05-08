@@ -111,12 +111,8 @@ module.exports = (app) => {
   app.put('/api/books', async (req, res) => {
     const book = { ...req.body };
     console.log(book);
-    if (!book.id || !book.title || !book.author) {
-      res.send({ success: false, message: 'Missing fields' });
-    } else {
-      const response = await updateBook(book);
-      res.send({ success: true, book: response });
-    }
+    res.send(book)
+
   });
 
   //delete a household

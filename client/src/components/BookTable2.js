@@ -132,7 +132,7 @@ function Table({
     preGlobalFilteredRows,
     setGlobalFilter,
     setFilter,
-    setHiddenColumns
+    setHiddenColumns,
   } = useTable(
     {
       columns,
@@ -160,15 +160,16 @@ function Table({
   };
   console.log(state);
 
-
   React.useEffect(() => updateOwnerFilter(ownerFilterValue), [
     ownerFilterValue,
   ]);
 
   React.useEffect(() => {
-    console.log(columns.filter(column => !column.isVisible));
+    console.log(columns.filter((column) => !column.isVisible));
     setHiddenColumns(
-      columns.filter(column => !column.isVisible).map(column => column.accessor)
+      columns
+        .filter((column) => !column.isVisible)
+        .map((column) => column.accessor)
     );
   }, [setHiddenColumns, columns]);
 
@@ -222,7 +223,16 @@ function Table({
                 className={`hover:bg-gray-100 cursor-pointer ${
                   row.original.read ? 'bg-green-100' : null
                 }`}
-                onClick={() => history.push(`/book/${row.original.id}`)}>
+                onClick={() => {
+                  const bookRow = row.original;
+                  console.log(bookRow);
+                  console.log(user);
+                  if (bookRow.user_id == user.id) {
+                    history.push(`/book/owned/${row.original.user_book_id}`);
+                  } else {
+                    history.push(`/book/household/${row.original.id}`);
+                  }
+                }}>
                 {row.cells.map((cell) => {
                   return (
                     <td {...cell.getCellProps()} className="border px-4 py-2">
@@ -243,8 +253,18 @@ function BookTable(props) {
   const columns = React.useMemo(() => {
     if (props.householdSelect.value == 'none') {
       return [
-        { Header: 'Title', accessor: 'title', disableFilters: true, isVisible: true },
-        { Header: 'Author', accessor: 'author', disableFilters: true, isVisible: true },
+        {
+          Header: 'Title',
+          accessor: 'title',
+          disableFilters: true,
+          isVisible: true,
+        },
+        {
+          Header: 'Author',
+          accessor: 'author',
+          disableFilters: true,
+          isVisible: true,
+        },
         {
           Header: 'Cover',
           Cell: (props) => {
@@ -261,8 +281,18 @@ function BookTable(props) {
       ];
     } else {
       return [
-        { Header: 'Title', accessor: 'title', disableFilters: true, isVisible: true },
-        { Header: 'Author', accessor: 'author', disableFilters: true, isVisible: true },
+        {
+          Header: 'Title',
+          accessor: 'title',
+          disableFilters: true,
+          isVisible: true,
+        },
+        {
+          Header: 'Author',
+          accessor: 'author',
+          disableFilters: true,
+          isVisible: true,
+        },
         {
           Header: 'Cover',
           Cell: (props) => {
