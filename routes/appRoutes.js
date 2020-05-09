@@ -18,6 +18,8 @@ const removeHouseholdMember = require('../queries/removeHouseholdMember');
 const getUserBooks = require('../queries/getUserBooks');
 const getHouseholdBooks = require('../queries/getHouseholdBooks');
 const updateNotes = require('../queries/updateNotes');
+const getHouseholdNotes = require('../queries/getHouseholdNotes');
+const addBookToHouseholdsBooks = require('../queries/addBookToHouseholdsBooks');
 
 const sendEmail = require('../services/aws-ses');
 
@@ -80,7 +82,7 @@ module.exports = (app) => {
   app.post('/api/books', async (req, res) => {
     const { title, author, isbn10, isbn13, cover } = req.body;
 
-    const response = await addBook({
+    const userBookRow = await addBook({
       userId: req.user.id,
       title,
       author,
@@ -88,7 +90,19 @@ module.exports = (app) => {
       isbn13,
       cover,
     });
-    res.send(response);
+
+    //need to check if the user adding the book is a member of any households, if they are
+    //we need to also add the book to households_books
+
+    const households = await getHouseholds(req.user.id);
+    if (households.length > 0) {
+      const response = await addBookToHouseholdsBooks(
+        req.user.id,
+        userBookRow.global_id
+      );
+    }
+
+    res.send(userBookRow);
   });
 
   //get a users books
@@ -114,13 +128,23 @@ module.exports = (app) => {
 
     if (req.body.field === 'notes') {
       if (book.bookType === 'personal') {
-        const updatedBook = await updateNotes(book.field, book.value, book.bookType, null, book.userBookId)
-        res.send(updatedBook)
+        const updatedBook = await updateNotes(
+          book.field,
+          book.value,
+          book.bookType,
+          null,
+          book.userBookId
+        );
+        res.send(updatedBook);
       } else {
-        const updatedBook = await updateNotes(book.field, book.value, book.bookType, book.householdsBooksId)
-        res.send(updatedBook)
+        const updatedBook = await updateNotes(
+          book.field,
+          book.value,
+          book.bookType,
+          book.householdsBooksId
+        );
+        res.send(updatedBook);
       }
-      
     } else {
       if (book.bookType === 'personal') {
         const updatedBook = await updateBook(book.field, book.value, book.id);
@@ -163,6 +187,19 @@ module.exports = (app) => {
   app.get('/api/households', async (req, res) => {
     const households = await getHouseholds(req.user.id);
     res.send(households);
+  });
+
+  app.get('/api/notes/households/:globalBookId', async (req, res) => {
+    try {
+      const householdNotes = await getHouseholdNotes(
+        req.params.globalBookId,
+        1
+      );
+      res.send(householdNotes);
+    } catch (error) {
+      res.send({ error: true });
+      throw Error(error);
+    }
   });
 
   //send invitation
