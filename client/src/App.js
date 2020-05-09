@@ -31,11 +31,13 @@ export default class App extends React.Component {
     windowWidth: null,
   };
 
-  updateBook = (book) => {
+  updateBook = (field, value, id) => {
     const index = this.state.books.findIndex(
-      (existingBook) => existingBook.id === book.id
+      (existingBook) => existingBook.user_book_id == id
     );
     const newBooks = [...this.state.books];
+    const book = this.state.books[index]
+    book[field] = value
     newBooks.splice(index, 1, book);
     this.setState({ books: newBooks });
   };

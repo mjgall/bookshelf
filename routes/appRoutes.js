@@ -17,6 +17,7 @@ const addUserBooksToHousehold = require('../queries/addUserBooksToHousehold');
 const removeHouseholdMember = require('../queries/removeHouseholdMember');
 const getUserBooks = require('../queries/getUserBooks');
 const getHouseholdBooks = require('../queries/getHouseholdBooks');
+const updateNotes = require('../queries/updateNotes');
 
 const sendEmail = require('../services/aws-ses');
 
@@ -110,9 +111,25 @@ module.exports = (app) => {
   //update the information about a book
   app.put('/api/books', async (req, res) => {
     const book = { ...req.body };
-    console.log(book);
-    res.send(book)
 
+    if (req.body.field === 'notes') {
+      if (book.bookType === 'personal') {
+        const updatedBook = await updateNotes(book.field, book.value, book.bookType, null, book.userBookId)
+        res.send(updatedBook)
+      } else {
+        const updatedBook = await updateNotes(book.field, book.value, book.bookType, book.householdsBooksId)
+        res.send(updatedBook)
+      }
+      
+    } else {
+      if (book.bookType === 'personal') {
+        const updatedBook = await updateBook(book.field, book.value, book.id);
+        res.send(updatedBook);
+      } else {
+        console.log(book);
+        res.send(book);
+      }
+    }
   });
 
   //delete a household

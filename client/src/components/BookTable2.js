@@ -225,8 +225,6 @@ function Table({
                 }`}
                 onClick={() => {
                   const bookRow = row.original;
-                  console.log(bookRow);
-                  console.log(user);
                   if (bookRow.user_id == user.id) {
                     history.push(`/book/owned/${row.original.user_book_id}`);
                   } else {
