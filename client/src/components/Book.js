@@ -157,9 +157,36 @@ export default class Book extends React.Component {
     this.setState({ householdNotes: newNotes });
   };
 
-  handleMarkAsRead = () => {
-    console.log(this.state.currentBook.id)
-  }
+  handleMarkAsRead = async () => {
+    if (this.state.bookType === 'personal') {
+      const read = await axios
+        .put('/api/books', {
+          field: 'read',
+          value: !this.state.currentBook.read,
+          bookType: 'personal',
+          householdsBooksId: null,
+          userBookId: this.state.currentBook.user_book_id,
+        })
+        .then((response) => response.data);
+
+      this.props.updateBook(
+        'read',
+        !this.state.currentBook.read,
+        this.state.bookType === 'personal'
+          ? this.state.currentBook.user_book_id
+          : Number(this.state.currentBook.id)
+      );
+
+      this.setState({
+        currentBook: {
+          ...this.state.currentBook,
+          read: read.read,
+        },
+      });
+    } else {
+      console.log(this.state.currentBook.id)
+    }
+  };
 
   render = () => {
     return (
@@ -224,7 +251,9 @@ export default class Book extends React.Component {
                   Already read!
                 </div>
               ) : (
-                <div onClick={this.handleMarkAsRead} className="bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer">
+                <div
+                  onClick={this.handleMarkAsRead}
+                  className="bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer">
                   Mark as read
                 </div>
               )}

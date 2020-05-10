@@ -20,7 +20,7 @@ const sqlString = require('sqlstring');
 
 module.exports = (field, value, id) => {
   return new Promise((resolve, reject) => {
-    const query = `UPDATE user_books SET ${field} = ${sqlString.escape(
+    const query = `UPDATE user_books SET user_books.${field} = ${sqlString.escape(
       value
     )} WHERE id = ${id};`;
     console.log(query);

@@ -126,7 +126,19 @@ module.exports = (app) => {
   app.put('/api/books', async (req, res) => {
     const book = { ...req.body };
 
-    if (req.body.field === 'notes') {
+    if (req.body.field === 'read') {
+      if (book.bookType === 'personal') {
+   
+        const updatedBook = await updateBook(
+          book.field,
+          book.value,
+          book.userBookId
+        );
+        res.send(updatedBook);
+      } else {
+        //update the read column in users_globalbooks
+      }
+    } else if (req.body.field === 'notes') {
       if (book.bookType === 'personal') {
         const updatedBook = await updateNotes(
           book.field,
