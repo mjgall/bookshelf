@@ -157,62 +157,80 @@ export default class Book extends React.Component {
     this.setState({ householdNotes: newNotes });
   };
 
+  handleMarkAsRead = () => {
+    console.log(this.state.currentBook.id)
+  }
+
   render = () => {
     return (
       <div className="container mx-auto mt-12">
-        <div className="md:flex">
-          <div className="md:w-1/4 border-gray-400 border rounded-md shadow-md p-4 md:mr-3 mx-6">
-            <div className="mx-0">
-              <img
-                className="w-2/5 block ml-auto mr-auto"
-                src={this.state?.currentBook?.cover}></img>
+        <div
+          className="md:grid md:grid-cols-2"
+          style={{ gridTemplateColumns: `25% 75%` }}>
+          <div>
+            <div className="border-gray-400 border rounded-md shadow-md p-4 md:mr-3 mx-6">
+              <div className="mx-0">
+                <img
+                  className="w-2/5 block ml-auto mr-auto"
+                  src={this.state?.currentBook?.cover}></img>
+              </div>
+              {this.state.bookType === 'household' ? (
+                <div className="mt-2">{this.state?.currentBook?.title}</div>
+              ) : (
+                <InlineEdit
+                  readViewFitContainerWidth
+                  defaultValue={this.state?.currentBook?.title}
+                  editView={(fieldProps) => (
+                    <input
+                      className="w-full py-2 px-1"
+                      type="text"
+                      {...fieldProps}
+                      autoFocus
+                    />
+                  )}
+                  readView={() => (
+                    <div className="text-center">
+                      {this.state?.currentBook?.title || 'Click to enter value'}
+                    </div>
+                  )}
+                  onConfirm={this.handleTitleChange}
+                />
+              )}
+              {this.state.bookType === 'household' ? (
+                <div className="mt-2">{this.state?.currentBook?.author}</div>
+              ) : (
+                <InlineEdit
+                  readViewFitContainerWidth
+                  defaultValue={this.state?.currentBook?.author}
+                  editView={(fieldProps) => (
+                    <input
+                      className="w-full py-2 px-1"
+                      type="text"
+                      {...fieldProps}
+                      autoFocus
+                    />
+                  )}
+                  readView={() => (
+                    <div className="text-center">
+                      {this.state?.currentBook?.author ||
+                        'Click to enter value'}
+                    </div>
+                  )}
+                  onConfirm={this.handleAuthorChange}
+                />
+              )}
+              {this.state?.currentBook?.read ? (
+                <div className="bg-green-500  text-white my-1 mx-2 mt-6 py-2 px-3 rounded  text-center">
+                  Already read!
+                </div>
+              ) : (
+                <div onClick={this.handleMarkAsRead} className="bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer">
+                  Mark as read
+                </div>
+              )}
             </div>
-            {this.state.bookType === 'household' ? (
-              <div className="mt-2">{this.state?.currentBook?.title}</div>
-            ) : (
-              <InlineEdit
-                readViewFitContainerWidth
-                defaultValue={this.state?.currentBook?.title}
-                editView={(fieldProps) => (
-                  <input
-                    className="w-full py-2 px-1"
-                    type="text"
-                    {...fieldProps}
-                    autoFocus
-                  />
-                )}
-                readView={() => (
-                  <div className="text-center">
-                    {this.state?.currentBook?.title || 'Click to enter value'}
-                  </div>
-                )}
-                onConfirm={this.handleTitleChange}
-              />
-            )}
-            {this.state.bookType === 'household' ? (
-              <div className="mt-2">{this.state?.currentBook?.author}</div>
-            ) : (
-              <InlineEdit
-                readViewFitContainerWidth
-                defaultValue={this.state?.currentBook?.author}
-                editView={(fieldProps) => (
-                  <input
-                    className="w-full py-2 px-1"
-                    type="text"
-                    {...fieldProps}
-                    autoFocus
-                  />
-                )}
-                readView={() => (
-                  <div className="text-center">
-                    {this.state?.currentBook?.author || 'Click to enter value'}
-                  </div>
-                )}
-                onConfirm={this.handleAuthorChange}
-              />
-            )}
           </div>
-          <div className="md:w-3/4 md:mx-0 mx-6">
+          <div className="md:mx-0 mx-6">
             {this.state.bookType === 'household' ? null : (
               <InlineEdit
                 defaultValue={this.state?.currentBook?.notes}
