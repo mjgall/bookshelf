@@ -21,7 +21,7 @@ export default class Book extends React.Component {
       currentBook = currentBooksArray[0];
 
       const householdNotes = await axios
-        .get(`/api/notes/households/${currentBook.id}`)
+        .get(`/api/notes/households/${currentBook.id}/${currentBook.user_id}`)
         .then((response) => response.data);
 
       this.setState({
@@ -37,12 +37,18 @@ export default class Book extends React.Component {
         return book.id == params.globalBookId;
       });
       currentBook = currentBooksArray[0];
+
+      const householdNotes = await axios
+        .get(`/api/notes/households/${currentBook.id}/${currentBook.user_id}`)
+        .then((response) => response.data);
+
       this.setState({
         bookType: 'household',
         currentBook: {
           ...currentBook,
           notes: currentBook.household_notes,
         },
+        householdNotes,
       });
     }
 
@@ -155,7 +161,7 @@ export default class Book extends React.Component {
     return (
       <div className="container mx-auto mt-12">
         <div className="md:flex">
-          <div className="md:w-1/4 border-gray-400 border rounded-md shadow-md p-4 md:mr-3 mx-6" >
+          <div className="md:w-1/4 border-gray-400 border rounded-md shadow-md p-4 md:mr-3 mx-6">
             <div className="mx-0">
               <img
                 className="w-2/5 block ml-auto mr-auto"
@@ -207,30 +213,33 @@ export default class Book extends React.Component {
             )}
           </div>
           <div className="md:w-3/4 md:mx-0 mx-6">
-            <InlineEdit
-              defaultValue={this.state?.currentBook?.notes}
-              label={
-                this.state.bookType === 'household'
-                  ? 'Household Notes'
-                  : 'Personal Notes'
-              }
-              editView={(fieldProps, ref) => (
-                // @ts-ignore - textarea does not currently correctly pass through ref as a prop
-                <TextareaAutosize
-                  type="text"
-                  className="w-full"
-                  {...fieldProps}
-                />
-              )}
-              readView={() => (
-                <div className="multiline">
-                  {this.state?.currentBook?.notes || 'Click to enter value'}
-                </div>
-              )}
-              onConfirm={this.handleNotesChange}
-              autoFocus
-              readViewFitContainerWidth
-            />
+            {this.state.bookType === 'household' ? null : (
+              <InlineEdit
+                defaultValue={this.state?.currentBook?.notes}
+                label={
+                  this.state.bookType === 'household'
+                    ? 'Household Notes'
+                    : 'Personal Notes'
+                }
+                editView={(fieldProps, ref) => (
+                  // @ts-ignore - textarea does not currently correctly pass through ref as a prop
+                  <TextareaAutosize
+                    type="text"
+                    className="w-full"
+                    {...fieldProps}
+                  />
+                )}
+                readView={() => (
+                  <div className="multiline">
+                    {this.state?.currentBook?.notes || 'Click to enter value'}
+                  </div>
+                )}
+                onConfirm={this.handleNotesChange}
+                autoFocus
+                readViewFitContainerWidth
+              />
+            )}
+
             <div>
               <div className="text-lg mt-6">🏠 Households</div>
               {this.state?.householdNotes?.map((householdNotes) => {
@@ -240,7 +249,6 @@ export default class Book extends React.Component {
                     defaultValue={householdNotes.notes}
                     label={`Notes from ${householdNotes.household_name}`}
                     editView={(fieldProps, ref) => (
-                      // @ts-ignore - textarea does not currently correctly pass through ref as a prop
                       <TextareaAutosize
                         type="text"
                         className="w-full"

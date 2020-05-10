@@ -189,11 +189,11 @@ module.exports = (app) => {
     res.send(households);
   });
 
-  app.get('/api/notes/households/:globalBookId', async (req, res) => {
+  app.get('/api/notes/households/:globalBookId/:userId', async (req, res) => {
     try {
       const householdNotes = await getHouseholdNotes(
         req.params.globalBookId,
-        1
+        req.params.userId
       );
       res.send(householdNotes);
     } catch (error) {
