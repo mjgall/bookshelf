@@ -8,6 +8,25 @@ module.exports = (app) => {
       scope: ['profile', 'email'],
     })(req, res, next);
   });
+
+  app.get('/auth/google/redirect/book/owned/:id', (req, res, next) => {
+    req.session.redirect = 'book/owned' + '/' + req.params.id;
+    console.log(req);
+    passport.authenticate('google', {
+      scope: ['profile', 'email'],
+    })(req, res, next);
+  });
+
+  app.get('/auth/google/redirect/book/household/:id', (req, res, next) => {
+    req.session.redirect = 'book/household' + '/' + req.params.id;
+    console.log(req);
+    passport.authenticate('google', {
+      scope: ['profile', 'email'],
+    })(req, res, next);
+  });
+
+
+
   app.get('/auth/google/redirect/:referrer/:id', (req, res, next) => {
     req.session.redirect = req.params.referrer + '/' + req.params.id;
     console.log(req);
