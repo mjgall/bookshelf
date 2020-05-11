@@ -5,7 +5,6 @@ import axios from 'axios';
 
 export default class Book extends React.Component {
   state = {
-    currentBook: null,
     editValue: '',
   };
 
@@ -26,10 +25,8 @@ export default class Book extends React.Component {
 
       this.setState({
         bookType: 'personal',
-        currentBook: {
-          ...currentBook,
-          notes: currentBook.user_notes,
-        },
+        ...currentBook,
+        notes: currentBook.user_notes,
         householdNotes,
       });
     } else if (params.globalBookId) {
@@ -44,10 +41,10 @@ export default class Book extends React.Component {
 
       this.setState({
         bookType: 'household',
-        currentBook: {
-          ...currentBook,
-          notes: currentBook.household_notes,
-        },
+
+        ...currentBook,
+        notes: currentBook.household_notes,
+
         householdNotes,
       });
     }
@@ -62,23 +59,22 @@ export default class Book extends React.Component {
       value,
       id:
         this.state.bookType === 'personal'
-          ? this.state.currentBook.user_book_id
-          : Number(this.state.currentBook.id),
+          ? this.state.user_book_id
+          : Number(this.state.id),
     });
 
     this.props.updateBook(
       'title',
       value,
       this.state.bookType === 'personal'
-        ? this.state.currentBook.user_book_id
-        : Number(this.state.currentBook.id)
+        ? this.state.user_book_id
+        : Number(this.state.id)
     );
 
     this.setState({
-      currentBook: {
-        ...this.state.currentBook,
+ 
         title: response.data.title,
-      },
+
     });
   };
 
@@ -89,23 +85,23 @@ export default class Book extends React.Component {
       value,
       id:
         this.state.bookType === 'personal'
-          ? this.state.currentBook.user_book_id
-          : Number(this.state.currentBook.id),
+          ? this.state.user_book_id
+          : Number(this.state.id),
     });
 
     this.props.updateBook(
       'author',
       value,
       this.state.bookType === 'personal'
-        ? this.state.currentBook.user_book_id
-        : Number(this.state.currentBook.id)
+        ? this.state.user_book_id
+        : Number(this.state.id)
     );
 
     this.setState({
-      currentBook: {
-        ...this.state.currentBook,
+   
+      
         author: response.data.author,
-      },
+ 
     });
   };
 
@@ -116,7 +112,7 @@ export default class Book extends React.Component {
         value,
         bookType: this.state.bookType,
         householdsBooksId: null,
-        userBookId: this.state.currentBook.user_book_id,
+        userBookId: this.state.user_book_id,
       });
       console.log(response.data);
     } else {
@@ -124,17 +120,17 @@ export default class Book extends React.Component {
         field: 'notes',
         value,
         bookType: this.state.bookType,
-        householdsBooksId: this.state.currentBook.households_book_id,
+        householdsBooksId: this.state.households_book_id,
         userBookId: null,
       });
       console.log(response.data);
     }
 
     this.setState({
-      currentBook: {
-        ...this.state.currentBook,
+      
+    
         notes: value,
-      },
+      
     });
   };
 
@@ -162,32 +158,32 @@ export default class Book extends React.Component {
       const read = await axios
         .put('/api/books', {
           field: 'read',
-          value: !this.state.currentBook.read,
+          value: !this.state.read,
           bookType: 'personal',
           householdsBooksId: null,
-          userBookId: this.state.currentBook.user_book_id,
+          userBookId: this.state.user_book_id,
         })
         .then((response) => response.data);
 
       this.props.updateBook(
         'read',
-        !this.state.currentBook.read,
+        !this.state.read,
         this.state.bookType === 'personal'
-          ? this.state.currentBook.user_book_id
-          : Number(this.state.currentBook.id)
+          ? this.state.user_book_id
+          : Number(this.state.id)
       );
 
       this.setState({
-        currentBook: {
-          ...this.state.currentBook,
+    
+        
           read: read.read,
-        },
+       
       });
     } else {
       const householdAsRead = await axios
-        .post('/api/households/books', { bookId: this.state.currentBook.id })
+        .post('/api/households/books', { bookId: this.state.id })
         .then((response) => response.data);
-      
+
       console.log(householdAsRead);
     }
   };
@@ -203,14 +199,14 @@ export default class Book extends React.Component {
               <div className="mx-0">
                 <img
                   className="w-2/5 block ml-auto mr-auto"
-                  src={this.state?.currentBook?.cover}></img>
+                  src={this.state?.cover}></img>
               </div>
               {this.state.bookType === 'household' ? (
-                <div className="mt-2">{this.state?.currentBook?.title}</div>
+                <div className="mt-2">{this.state?.title}</div>
               ) : (
                 <InlineEdit
                   readViewFitContainerWidth
-                  defaultValue={this.state?.currentBook?.title}
+                  defaultValue={this.state?.title}
                   editView={(fieldProps) => (
                     <input
                       className="w-full py-2 px-1"
@@ -221,18 +217,18 @@ export default class Book extends React.Component {
                   )}
                   readView={() => (
                     <div className="text-center">
-                      {this.state?.currentBook?.title || 'Click to enter value'}
+                      {this.state?.title || 'Click to enter value'}
                     </div>
                   )}
                   onConfirm={this.handleTitleChange}
                 />
               )}
               {this.state.bookType === 'household' ? (
-                <div className="mt-2">{this.state?.currentBook?.author}</div>
+                <div className="mt-2">{this.state?.author}</div>
               ) : (
                 <InlineEdit
                   readViewFitContainerWidth
-                  defaultValue={this.state?.currentBook?.author}
+                  defaultValue={this.state?.author}
                   editView={(fieldProps) => (
                     <input
                       className="w-full py-2 px-1"
@@ -243,14 +239,14 @@ export default class Book extends React.Component {
                   )}
                   readView={() => (
                     <div className="text-center">
-                      {this.state?.currentBook?.author ||
+                      {this.state?.author ||
                         'Click to enter value'}
                     </div>
                   )}
                   onConfirm={this.handleAuthorChange}
                 />
               )}
-              {this.state?.currentBook?.read ? (
+              {this.state?.read ? (
                 <div className="bg-green-500  text-white my-1 mx-2 mt-6 py-2 px-3 rounded  text-center">
                   Already read!
                 </div>
@@ -266,7 +262,7 @@ export default class Book extends React.Component {
           <div className="md:mx-0 mx-6">
             {this.state.bookType === 'household' ? null : (
               <InlineEdit
-                defaultValue={this.state?.currentBook?.notes}
+                defaultValue={this.state?.notes}
                 label={
                   this.state.bookType === 'household'
                     ? 'Household Notes'
@@ -282,7 +278,7 @@ export default class Book extends React.Component {
                 )}
                 readView={() => (
                   <div className="multiline">
-                    {this.state?.currentBook?.notes || 'Click to enter value'}
+                    {this.state?.notes || 'Click to enter value'}
                   </div>
                 )}
                 onConfirm={this.handleNotesChange}
