@@ -5,7 +5,7 @@ import axios from 'axios';
 
 export default class Book extends React.Component {
   state = {
-    editValue: '',
+    isLoaded: false,
   };
 
   componentDidMount = async () => {
@@ -28,6 +28,7 @@ export default class Book extends React.Component {
         ...currentBook,
         notes: currentBook.user_notes,
         householdNotes,
+        isLoaded: true,
       });
     } else if (params.globalBookId) {
       const currentBooksArray = this.props?.books?.filter((book) => {
@@ -46,6 +47,7 @@ export default class Book extends React.Component {
         notes: currentBook.household_notes,
 
         householdNotes,
+        isLoaded: true,
       });
     }
 
@@ -72,9 +74,7 @@ export default class Book extends React.Component {
     );
 
     this.setState({
- 
-        title: response.data.title,
-
+      title: response.data.title,
     });
   };
 
@@ -98,10 +98,7 @@ export default class Book extends React.Component {
     );
 
     this.setState({
-   
-      
-        author: response.data.author,
- 
+      author: response.data.author,
     });
   };
 
@@ -127,10 +124,7 @@ export default class Book extends React.Component {
     }
 
     this.setState({
-      
-    
-        notes: value,
-      
+      notes: value,
     });
   };
 
@@ -174,10 +168,7 @@ export default class Book extends React.Component {
       );
 
       this.setState({
-    
-        
-          read: read.read,
-       
+        read: read.read,
       });
     } else {
       const householdAsRead = await axios
@@ -196,66 +187,71 @@ export default class Book extends React.Component {
           style={{ gridTemplateColumns: `25% 75%` }}>
           <div>
             <div className="border-gray-400 border rounded-md shadow-md p-4 md:mr-3 mx-6">
-              <div className="mx-0">
-                <img
-                  className="w-2/5 block ml-auto mr-auto"
-                  src={this.state?.cover}></img>
-              </div>
-              {this.state.bookType === 'household' ? (
-                <div className="mt-2">{this.state?.title}</div>
-              ) : (
-                <InlineEdit
-                  readViewFitContainerWidth
-                  defaultValue={this.state?.title}
-                  editView={(fieldProps) => (
-                    <input
-                      className="w-full py-2 px-1"
-                      type="text"
-                      {...fieldProps}
-                      autoFocus
+              {this.state.isLoaded ? (
+                <div id="book-details">
+                  <div className="mx-0">
+                    <img
+                      className="w-2/5 block ml-auto mr-auto"
+                      src={this.state?.cover}></img>
+                  </div>
+                  {this.state.bookType === 'household' ? (
+                    <div className="mt-2">{this.state?.title}</div>
+                  ) : (
+                    <InlineEdit
+                      readViewFitContainerWidth
+                      defaultValue={this.state?.title}
+                      editView={(fieldProps) => (
+                        <input
+                          className="w-full py-2 px-1"
+                          type="text"
+                          {...fieldProps}
+                          autoFocus
+                        />
+                      )}
+                      readView={() => (
+                        <div className="text-center">
+                          {this.state?.title || 'Click to enter value'}
+                        </div>
+                      )}
+                      onConfirm={this.handleTitleChange}
                     />
                   )}
-                  readView={() => (
-                    <div className="text-center">
-                      {this.state?.title || 'Click to enter value'}
-                    </div>
-                  )}
-                  onConfirm={this.handleTitleChange}
-                />
-              )}
-              {this.state.bookType === 'household' ? (
-                <div className="mt-2">{this.state?.author}</div>
-              ) : (
-                <InlineEdit
-                  readViewFitContainerWidth
-                  defaultValue={this.state?.author}
-                  editView={(fieldProps) => (
-                    <input
-                      className="w-full py-2 px-1"
-                      type="text"
-                      {...fieldProps}
-                      autoFocus
+                  {this.state.bookType === 'household' ? (
+                    <div className="mt-2">{this.state?.author}</div>
+                  ) : (
+                    <InlineEdit
+                      readViewFitContainerWidth
+                      defaultValue={this.state?.author}
+                      editView={(fieldProps) => (
+                        <input
+                          className="w-full py-2 px-1"
+                          type="text"
+                          {...fieldProps}
+                          autoFocus
+                        />
+                      )}
+                      readView={() => (
+                        <div className="text-center">
+                          {this.state?.author || 'Click to enter value'}
+                        </div>
+                      )}
+                      onConfirm={this.handleAuthorChange}
                     />
                   )}
-                  readView={() => (
-                    <div className="text-center">
-                      {this.state?.author ||
-                        'Click to enter value'}
+                  {this.state?.read ? (
+                    <div className="bg-green-500  text-white my-1 mx-2 mt-6 py-2 px-3 rounded  text-center">
+                      Already read!
+                    </div>
+                  ) : (
+                    <div
+                      onClick={this.handleMarkAsRead}
+                      className="bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer">
+                      Mark as read
                     </div>
                   )}
-                  onConfirm={this.handleAuthorChange}
-                />
-              )}
-              {this.state?.read ? (
-                <div className="bg-green-500  text-white my-1 mx-2 mt-6 py-2 px-3 rounded  text-center">
-                  Already read!
                 </div>
               ) : (
-                <div
-                  onClick={this.handleMarkAsRead}
-                  className="bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer">
-                  Mark as read
-                </div>
+                <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16 mx-auto"></div>
               )}
             </div>
           </div>
