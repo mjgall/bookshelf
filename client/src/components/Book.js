@@ -184,7 +184,11 @@ export default class Book extends React.Component {
         },
       });
     } else {
-      console.log(this.state.currentBook.id)
+      const householdAsRead = await axios
+        .post('/api/households/books', { bookId: this.state.currentBook.id })
+        .then((response) => response.data);
+      
+      console.log(householdAsRead);
     }
   };
 

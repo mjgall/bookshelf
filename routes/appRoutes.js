@@ -20,6 +20,8 @@ const getHouseholdBooks = require('../queries/getHouseholdBooks');
 const updateNotes = require('../queries/updateNotes');
 const getHouseholdNotes = require('../queries/getHouseholdNotes');
 const addBookToHouseholdsBooks = require('../queries/addBookToHouseholdsBooks');
+const updateUserGlobalBooks = require('../queries/updateUsersGlobalBooks');
+const markHouseholdBookAsRead = require('../queries/markHouseholdBookAsRead')
 
 const sendEmail = require('../services/aws-ses');
 
@@ -128,7 +130,6 @@ module.exports = (app) => {
 
     if (req.body.field === 'read') {
       if (book.bookType === 'personal') {
-   
         const updatedBook = await updateBook(
           book.field,
           book.value,
@@ -246,6 +247,7 @@ module.exports = (app) => {
   app.put('/api/invitations', async (req, res) => {
     if (req.body.accept) {
       //update households_users to invite_accepted = true, should return the id of the user accepting (accepted.user_id)
+
       const accepted = await acceptPendingHousehold(req.body.id);
 
       //add all of the users' books to the households_books table
@@ -268,6 +270,16 @@ module.exports = (app) => {
     } else {
       res.status(400).send('No status');
     }
+  });
+
+  app.post('/api/households/books', async (req, res) => {
+    const householdAsRead = await markHouseholdBookAsRead(
+      req.user.id,
+      req.body.bookId
+    );
+
+    console.log(householdAsRead)
+    res.send(householdAsRead)
   });
 
   app.post('/api/email', async (req, res) => {
