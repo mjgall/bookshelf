@@ -21,7 +21,10 @@ const updateNotes = require('../queries/updateNotes');
 const getHouseholdNotes = require('../queries/getHouseholdNotes');
 const addBookToHouseholdsBooks = require('../queries/addBookToHouseholdsBooks');
 const updateUserGlobalBooks = require('../queries/updateUsersGlobalBooks');
-const markHouseholdBookAsRead = require('../queries/markHouseholdBookAsRead')
+const markHouseholdBookAsRead = require('../queries/markHouseholdBookAsRead');
+const addPersonalNotesToHouseholdBook = require('../queries/addPersonalNotesToHouseholdBook');
+const updateHouseholdBookAsRead = require('../queries/updateHouseholdBookAsRead');
+const updatePersonalNotesOnHouseholdBook = require('../queries/updatePersonalNotesOnHouseholdBook');
 
 const sendEmail = require('../services/aws-ses');
 
@@ -273,13 +276,39 @@ module.exports = (app) => {
   });
 
   app.post('/api/households/books', async (req, res) => {
-    const householdAsRead = await markHouseholdBookAsRead(
-      req.user.id,
-      req.body.bookId
-    );
+    console.log(req.body);
+    if (req.body.action === 'read') {
+      if (req.body.usersGlobalBooksId) {
+        const updatedHouseholdBookAsRead = await updateHouseholdBookAsRead(
+          req.body.usersGlobalBooksId
+        );
+        res.send(updatedHouseholdBookAsRead);
+      } else {
+        const householdAsRead = await markHouseholdBookAsRead(
+          req.user.id,
+          req.body.bookId,
 
-    console.log(householdAsRead)
-    res.send(householdAsRead)
+        );
+        console.log(householdAsRead);
+        res.send(householdAsRead);
+      }
+    } else {
+      if (req.body.usersGlobalBooksId) {
+        const updatedNotes = await updatePersonalNotesOnHouseholdBook(
+          req.body.usersGlobalBooksId,
+          req.body.notes
+        );
+        res.send(updatedNotes);
+      } else {
+        const addNotes = await addPersonalNotesToHouseholdBook(
+          req.user.id,
+          req.body.bookId,
+          req.body.notes
+        );
+        console.log(addNotes);
+        res.send(addNotes);
+      }
+    }
   });
 
   app.post('/api/email', async (req, res) => {

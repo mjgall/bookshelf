@@ -31,10 +31,18 @@ export default class App extends React.Component {
     windowWidth: null,
   };
 
-  updateBook = (field, value, id) => {
-    const index = this.state.books.findIndex(
-      (existingBook) => existingBook.user_book_id == id
-    );
+  updateBook = (field, value, id, household) => {
+    let index
+    if (household) {
+      index = this.state.books.findIndex(
+        (existingBook) => existingBook.id == id
+      );
+    } else {
+      index = this.state.books.findIndex(
+        (existingBook) => existingBook.user_book_id == id
+      );
+    }
+  
     const newBooks = [...this.state.books];
     const book = this.state.books[index]
     book[field] = value

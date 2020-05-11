@@ -1,13 +1,13 @@
 const db = require('../config/db/mysql').pool;
 const sqlString = require('sqlstring');
 
-module.exports = (userId, globalBookId, notes) => {
+module.exports = (usersGlobalBookId, notes) => {
   return new Promise((resolve, reject) => {
-    const query = `REPLACE INTO users_globalbooks (user_id, global_book_id, users_globalbooks.read) VALUES (${userId}, ${globalBookId}, true);`;
-
+    const query = `UPDATE users_globalbooks SET users_globalbooks.notes = ${sqlString.escape(
+      notes
+    )} WHERE id = ${usersGlobalBookId};`;
     db.query(query, (err, results, fields) => {
       if (err) throw Error(err);
-
       resolve(results);
     });
   });

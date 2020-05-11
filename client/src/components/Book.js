@@ -172,11 +172,41 @@ export default class Book extends React.Component {
       });
     } else {
       const householdAsRead = await axios
-        .post('/api/households/books', { bookId: this.state.id })
+        .post('/api/households/books', {
+          bookId: this.state.id,
+          action: 'read',
+          usersGlobalBooksId: this.state.users_globalbooks_id,
+        })
         .then((response) => response.data);
 
-      console.log(householdAsRead);
+      this.props.updateBook(
+        'read',
+        !this.state.read,
+        this.state.bookType === 'personal'
+          ? this.state.user_book_id
+          : Number(this.state.id),
+        true
+      );
+
+      this.setState({
+        read: true,
+      });
     }
+  };
+
+  handlePersonalNotesChange = async (notes) => {
+    const addHouseholdNotes = await axios
+      .post('/api/households/books', {
+        bookId: this.state.id,
+        action: 'notes',
+        notes,
+        usersGlobalBooksId: this.state.users_globalbooks_id,
+      })
+      .then((response) => response.data);
+
+    this.setState({
+      personalNotes: notes,
+    });
   };
 
   render = () => {
@@ -256,7 +286,28 @@ export default class Book extends React.Component {
             </div>
           </div>
           <div className="md:mx-0 mx-6">
-            {this.state.bookType === 'household' ? null : (
+            {this.state.bookType === 'household' ? (
+              <InlineEdit
+                defaultValue={this.state?.personalNotes}
+                label="Personal Notes"
+                editView={(fieldProps, ref) => (
+                  // @ts-ignore - textarea does not currently correctly pass through ref as a prop
+                  <TextareaAutosize
+                    type="text"
+                    className="w-full"
+                    {...fieldProps}
+                  />
+                )}
+                readView={() => (
+                  <div className="multiline">
+                    {this.state?.personalNotes || 'Click to enter value'}
+                  </div>
+                )}
+                onConfirm={this.handlePersonalNotesChange}
+                autoFocus
+                readViewFitContainerWidth
+              />
+            ) : (
               <InlineEdit
                 defaultValue={this.state?.notes}
                 label={
