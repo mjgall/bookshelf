@@ -5,7 +5,7 @@ const Copy = (props) => {
   const [copySuccess, setCopySuccess] = useState('');
   const textAreaRef = useRef(null);
 
-  function copyToClipboard(e) {
+  const copyToClipboard = (e) => {
     textAreaRef.current.select();
     document.execCommand('copy');
     // This is just personal preference.
