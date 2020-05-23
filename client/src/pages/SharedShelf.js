@@ -1,0 +1,48 @@
+import React, { useEffect, useState, useContext } from 'react';
+import axios from 'axios';
+import { userContext } from '../userContext';
+import { Redirect, withRouter } from 'react-router-dom';
+import BookTable from '../components/BookTable2';
+
+const SharedShelf = (props) => {
+  const user = useContext(userContext);
+
+  const [books, setBooks] = useState([]);
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    const getBooks = async () => {
+      const books = await axios
+        .get(`/api/shelves/${props.match.params.shelfId}`)
+        .then((response) => response.data);
+      setBooks(books);
+    };
+
+    getBooks();
+    setLoaded(true)
+  }, []);
+
+  if (books.length > 0) {
+    return (
+      <div className='my-6'>
+        <div className='text-3xl text-center my-6'>{books[0].full}'s shared books</div>
+        <BookTable
+          sharedShelf={true}
+          // ownerFilterValue={this.state?.ownerSelect?.label}
+          // householdSelect={this.state.householdSelect}
+          // selfOnly={this.state.selfOnly}
+          householdSelect={{ value: 'none' }}
+          // members={this.props.members}
+          user={user}
+          history={props.history}
+          books={books || []}
+          // userOnly={this.state.selfOnly}
+        ></BookTable>
+      </div>
+    );
+  } else {
+    return null;
+  }
+};
+
+export default withRouter(SharedShelf);

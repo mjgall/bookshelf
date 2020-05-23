@@ -2,53 +2,62 @@ import React from 'react';
 import InlineEdit from '@atlaskit/inline-edit';
 import TextareaAutosize from 'react-textarea-autosize';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 
-export default class Book extends React.Component {
+class Book extends React.Component {
   state = {
     isLoaded: false,
   };
 
   componentDidMount = async () => {
-    const params = this.props.computedMatch.params;
+    console.log(this.props);
 
     let currentBook;
 
-    if (params.userBookId) {
-      const currentBooksArray = this.props?.books?.filter((book) => {
-        return book.user_book_id == params.userBookId;
-      });
-      currentBook = currentBooksArray[0];
-
-      const householdNotes = await axios
-        .get(`/api/notes/households/${currentBook.id}/${currentBook.user_id}`)
+    if (this.props.globalBook) {
+      const globalBook = await axios
+        .get(`/api/book/${this.props.match.params.id}`)
         .then((response) => response.data);
+      this.setState({ bookType: 'global', ...globalBook, isLoaded: true });
+    } else {
+      const params = this.props.computedMatch.params;
+      if (params.userBookId) {
+        const currentBooksArray = this.props?.books?.filter((book) => {
+          return book.user_book_id == params.userBookId;
+        });
+        currentBook = currentBooksArray[0];
 
-      this.setState({
-        bookType: 'personal',
-        ...currentBook,
-        notes: currentBook.user_notes,
-        householdNotes,
-        isLoaded: true,
-      });
-    } else if (params.globalBookId) {
-      const currentBooksArray = this.props?.books?.filter((book) => {
-        return book.id == params.globalBookId;
-      });
-      currentBook = currentBooksArray[0];
+        const householdNotes = await axios
+          .get(`/api/notes/households/${currentBook.id}/${currentBook.user_id}`)
+          .then((response) => response.data);
 
-      const householdNotes = await axios
-        .get(`/api/notes/households/${currentBook.id}/${currentBook.user_id}`)
-        .then((response) => response.data);
+        this.setState({
+          bookType: 'personal',
+          ...currentBook,
+          notes: currentBook.user_notes,
+          householdNotes,
+          isLoaded: true,
+        });
+      } else if (params.globalBookId) {
+        const currentBooksArray = this.props?.books?.filter((book) => {
+          return book.id == params.globalBookId;
+        });
+        currentBook = currentBooksArray[0];
 
-      this.setState({
-        bookType: 'household',
+        const householdNotes = await axios
+          .get(`/api/notes/households/${currentBook.id}/${currentBook.user_id}`)
+          .then((response) => response.data);
 
-        ...currentBook,
-        notes: currentBook.household_notes,
+        this.setState({
+          bookType: 'household',
 
-        householdNotes,
-        isLoaded: true,
-      });
+          ...currentBook,
+          notes: currentBook.household_notes,
+
+          householdNotes,
+          isLoaded: true,
+        });
+      }
     }
 
     window.scroll(0, 0);
@@ -170,7 +179,7 @@ export default class Book extends React.Component {
       this.setState({
         read: read.read,
       });
-    } else {
+    } else if (this.state.bookType === 'household') {
       const householdAsRead = await axios
         .post('/api/households/books', {
           bookId: this.state.id,
@@ -187,6 +196,18 @@ export default class Book extends React.Component {
           : Number(this.state.id),
         true
       );
+
+      this.setState({
+        read: true,
+      });
+    } else {
+      const householdAsRead = await axios
+        .post('/api/households/books', {
+          bookId: this.state.id,
+          action: 'read',
+          usersGlobalBooksId: this.state.users_globalbooks_id,
+        })
+        .then((response) => response.data);
 
       this.setState({
         read: true,
@@ -210,58 +231,59 @@ export default class Book extends React.Component {
   };
 
   render = () => {
+    console.log(this.state.bookType)
     return (
-      <div className="container mx-auto mt-12">
+      <div className='container mx-auto mt-12'>
         <div
-          className="md:grid md:grid-cols-2"
+          className='md:grid md:grid-cols-2'
           style={{ gridTemplateColumns: `25% 75%` }}>
           <div>
-            <div className="border-gray-400 border rounded-md shadow-md p-4 md:mr-3 mx-6">
+            <div className='border-gray-400 border rounded-md shadow-md p-4 md:mr-3 mx-6'>
               {this.state.isLoaded ? (
-                <div id="book-details">
-                  <div className="mx-0">
+                <div id='book-details'>
+                  <div className='mx-0'>
                     <img
-                      className="w-2/5 block ml-auto mr-auto"
+                      className='w-2/5 block ml-auto mr-auto'
                       src={this.state?.cover}></img>
                   </div>
-                  {this.state.bookType === 'household' ? (
-                    <div className="mt-2">{this.state?.title}</div>
+                  { this.state.bookType === 'household' || this.state.bookType === 'global' ? (
+                    <div className='mt-2'>{this.state?.title}</div>
                   ) : (
                     <InlineEdit
                       readViewFitContainerWidth
                       defaultValue={this.state?.title}
                       editView={(fieldProps) => (
                         <input
-                          className="w-full py-2 px-1"
-                          type="text"
+                          className='w-full py-2 px-1'
+                          type='text'
                           {...fieldProps}
                           autoFocus
                         />
                       )}
                       readView={() => (
-                        <div className="text-center">
+                        <div className='text-center'>
                           {this.state?.title || 'Click to enter value'}
                         </div>
                       )}
                       onConfirm={this.handleTitleChange}
                     />
                   )}
-                  {this.state.bookType === 'household' ? (
-                    <div className="mt-2">{this.state?.author}</div>
+                  {this.state.bookType === 'household' || this.state.bookType === 'global' ? (
+                    <div className='mt-2'>{this.state?.author}</div>
                   ) : (
                     <InlineEdit
                       readViewFitContainerWidth
                       defaultValue={this.state?.author}
                       editView={(fieldProps) => (
                         <input
-                          className="w-full py-2 px-1"
-                          type="text"
+                          className='w-full py-2 px-1'
+                          type='text'
                           {...fieldProps}
                           autoFocus
                         />
                       )}
                       readView={() => (
-                        <div className="text-center">
+                        <div className='text-center'>
                           {this.state?.author || 'Click to enter value'}
                         </div>
                       )}
@@ -269,37 +291,37 @@ export default class Book extends React.Component {
                     />
                   )}
                   {this.state?.read ? (
-                    <div className="bg-green-500  text-white my-1 mx-2 mt-6 py-2 px-3 rounded  text-center">
+                    <div className='bg-green-500  text-white my-1 mx-2 mt-6 py-2 px-3 rounded  text-center'>
                       Already read!
                     </div>
                   ) : (
                     <div
                       onClick={this.handleMarkAsRead}
-                      className="bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer">
+                      className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
                       Mark as read
                     </div>
                   )}
                 </div>
               ) : (
-                <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16 mx-auto"></div>
+                <div class='loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16 mx-auto'></div>
               )}
             </div>
           </div>
-          <div className="md:mx-0 mx-6">
-            {this.state.bookType === 'household' ? (
+          <div className='md:mx-0 mx-6'>
+            {this.state.bookType === 'household' || this.state.bookType === 'global' ? (
               <InlineEdit
                 defaultValue={this.state?.personalNotes}
-                label="Personal Notes"
+                label='Personal Notes'
                 editView={(fieldProps, ref) => (
                   // @ts-ignore - textarea does not currently correctly pass through ref as a prop
                   <TextareaAutosize
-                    type="text"
-                    className="w-full"
+                    type='text'
+                    className='w-full'
                     {...fieldProps}
                   />
                 )}
                 readView={() => (
-                  <div className="multiline">
+                  <div className='multiline'>
                     {this.state?.personalNotes || 'Click to enter value'}
                   </div>
                 )}
@@ -318,13 +340,13 @@ export default class Book extends React.Component {
                 editView={(fieldProps, ref) => (
                   // @ts-ignore - textarea does not currently correctly pass through ref as a prop
                   <TextareaAutosize
-                    type="text"
-                    className="w-full"
+                    type='text'
+                    className='w-full'
                     {...fieldProps}
                   />
                 )}
                 readView={() => (
-                  <div className="multiline">
+                  <div className='multiline'>
                     {this.state?.notes || 'Click to enter value'}
                   </div>
                 )}
@@ -333,39 +355,45 @@ export default class Book extends React.Component {
                 readViewFitContainerWidth
               />
             )}
-
-            <div>
-              <div className="text-lg mt-6">🏠 Households</div>
-              {this.state?.householdNotes?.map((householdNotes) => {
-                return (
-                  <InlineEdit
-                    keepEditViewOpenOnBlur={true}
-                    defaultValue={householdNotes.notes}
-                    label={`Notes from ${householdNotes.household_name}`}
-                    editView={(fieldProps, ref) => (
-                      <TextareaAutosize
-                        type="text"
-                        className="w-full"
-                        {...fieldProps}
-                      />
-                    )}
-                    readView={() => (
-                      <div className="multiline">
-                        {householdNotes.notes || 'Click to enter value'}
-                      </div>
-                    )}
-                    onConfirm={(value) =>
-                      this.handleHouseholdNotesChange(householdNotes.id, value)
-                    }
-                    autoFocus
-                    readViewFitContainerWidth
-                  />
-                );
-              })}
-            </div>
+            {this.props.globalBook ? null : (
+              <div>
+                <div className='text-lg mt-6'>🏠 Households</div>
+                {this.state?.householdNotes?.map((householdNotes) => {
+                  return (
+                    <InlineEdit
+                      keepEditViewOpenOnBlur={true}
+                      defaultValue={householdNotes.notes}
+                      label={`Notes from ${householdNotes.household_name}`}
+                      editView={(fieldProps, ref) => (
+                        <TextareaAutosize
+                          type='text'
+                          className='w-full'
+                          {...fieldProps}
+                        />
+                      )}
+                      readView={() => (
+                        <div className='multiline'>
+                          {householdNotes.notes || 'Click to enter value'}
+                        </div>
+                      )}
+                      onConfirm={(value) =>
+                        this.handleHouseholdNotesChange(
+                          householdNotes.id,
+                          value
+                        )
+                      }
+                      autoFocus
+                      readViewFitContainerWidth
+                    />
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
     );
   };
 }
+
+export default withRouter(Book);

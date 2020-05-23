@@ -12,9 +12,9 @@ function GlobalFilter({
   const count = preGlobalFilteredRows.length;
 
   return (
-    <div className="flex">
+    <div className='flex'>
       <input
-        className="px-3"
+        className='px-3'
         value={globalFilter || ''}
         onChange={(e) => {
           setGlobalFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
@@ -73,7 +73,7 @@ function SelectColumnFilter({
         onChange={(e) => {
           setFilter(e.target.value || undefined);
         }}>
-        <option value="">All</option>
+        <option value=''>All</option>
         {options.map((option, i) => (
           <option key={i} value={option}>
             {option}
@@ -91,6 +91,7 @@ function Table({
   history,
   user,
   userOnly,
+  sharedShelf,
   ownerFilterValue,
   householdSelect,
 }) {
@@ -177,14 +178,14 @@ function Table({
     <>
       <table
         {...getTableProps()}
-        className="max-w-screen-lg container shadow-md text-xs md:text-base">
+        className='max-w-screen-lg container shadow-md text-xs md:text-base'>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className="px-4 py-2 border">
+                  className='px-4 py-2 border'>
                   {column.render('Header')}
 
                   <span>
@@ -200,7 +201,7 @@ function Table({
               ))}
             </tr>
           ))}
-          <tr className="border leading-11">
+          <tr className='border leading-11'>
             <th
               colSpan={visibleColumns.length}
               style={{
@@ -220,20 +221,24 @@ function Table({
             return (
               <tr
                 {...row.getRowProps()}
-                className={`hover:bg-gray-100 cursor-pointer ${
-                  row.original.read ? 'bg-green-100' : null
-                }`}
+                className={`hover:bg-gray-100 ${
+                  user ? 'cursor-pointer' : ''
+                }  ${row.original.read ? 'bg-green-100' : ''}`}
                 onClick={() => {
                   const bookRow = row.original;
-                  if (bookRow.user_id == user.id) {
-                    history.push(`/book/owned/${row.original.user_book_id}`);
-                  } else {
-                    history.push(`/book/household/${row.original.id}`);
-                  }
+                  if (user) {
+                    if (bookRow.user_id == user.id) {
+                      history.push(`/book/owned/${row.original.user_book_id}`);
+                    } else if (sharedShelf) {
+                      history.push(`/book/${row.original.global_id}`);
+                    } else {
+                      history.push(`/book/household/${row.original.id}`);
+                    }
+                  } else return;
                 }}>
                 {row.cells.map((cell) => {
                   return (
-                    <td {...cell.getCellProps()} className="border px-4 py-2">
+                    <td {...cell.getCellProps()} className='border px-4 py-2'>
                       {cell.render('Cell')}{' '}
                     </td>
                   );
@@ -248,6 +253,7 @@ function Table({
 }
 
 function BookTable(props) {
+  console.log(props);
   const columns = React.useMemo(() => {
     if (props.householdSelect.value == 'none') {
       return [
@@ -268,11 +274,11 @@ function BookTable(props) {
           Cell: (props) => {
             return (
               <img
-                width="5rem"
-                loading="lazy"
-                className="w-20 container"
+                width='5rem'
+                loading='lazy'
+                className='w-12 container'
                 src={props.row.original.cover}
-                alt="cover"></img>
+                alt='cover'></img>
             );
           },
         },
@@ -296,10 +302,10 @@ function BookTable(props) {
           Cell: (props) => {
             return (
               <img
-                loading="lazy"
-                className="w-20 container"
+                loading='lazy'
+                className='w-12 container'
                 src={props.row.original.cover}
-                alt="cover"></img>
+                alt='cover'></img>
             );
           },
         },
@@ -320,16 +326,20 @@ function BookTable(props) {
       return {
         ...book,
         author: book?.author,
-        owner_name:
-          props.members[
-            props.members.findIndex((member) => member.user_id == book.user_id)
-          ]?.member_first,
+        owner_name: props.sharedShelf
+          ? null
+          : props.members[
+              props.members.findIndex(
+                (member) => member.user_id == book.user_id
+              )
+            ]?.member_first,
       };
     });
   }, [props.books]);
 
   return (
     <Table
+      sharedShelf={props.sharedShelf}
       ownerFilterValue={props.ownerFilterValue}
       history={props.history}
       columns={columns}

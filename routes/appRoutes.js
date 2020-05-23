@@ -1,4 +1,7 @@
 const axios = require('axios');
+
+const keys = require('./keys')
+
 const getBooks = require('../queries/getBooks');
 const addBook = require('../queries/addBook.js');
 const getAnalytics = require('../queries/getAnalytics');
@@ -25,6 +28,7 @@ const markHouseholdBookAsRead = require('../queries/markHouseholdBookAsRead');
 const addPersonalNotesToHouseholdBook = require('../queries/addPersonalNotesToHouseholdBook');
 const updateHouseholdBookAsRead = require('../queries/updateHouseholdBookAsRead');
 const updatePersonalNotesOnHouseholdBook = require('../queries/updatePersonalNotesOnHouseholdBook');
+const getBook = require('../queries/getBook');
 
 const sendEmail = require('../services/aws-ses');
 
@@ -65,7 +69,7 @@ module.exports = (app) => {
     const response = await axios.get(
       `https://api2.isbndb.com/book/${req.params.isbn}`,
       {
-        headers: { Authorization: '43911_8b18bf16825dc5f4f5c3bfe3b0cea146' },
+        headers: { Authorization: keys.ISBN_API_AUTH },
       }
     );
 
@@ -286,8 +290,7 @@ module.exports = (app) => {
       } else {
         const householdAsRead = await markHouseholdBookAsRead(
           req.user.id,
-          req.body.bookId,
-
+          req.body.bookId
         );
         console.log(householdAsRead);
         res.send(householdAsRead);
@@ -315,5 +318,17 @@ module.exports = (app) => {
     const { recipientAddress, subject, body } = req.body;
     const email = await sendEmail(recipientAddress, subject, body);
     res.send({ success: true, email });
+  });
+
+  app.get('/api/shelves/:shelfId', async (req, res) => {
+    const books = await getBooks(req.params.shelfId);
+    res.send(books);
+  });
+
+  app.get('/api/book/:bookId', async (req, res) => {
+  
+    const book = await getBook(req.params.bookId, req.user.id);
+    
+    res.send(book);
   });
 };

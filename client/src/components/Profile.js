@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import prosperStackSurvey from '@prosperstack/survey';
 
 import {
   CheckSquare,
@@ -8,6 +7,7 @@ import {
   PlusSquare,
   ChevronDownSquare,
 } from '@styled-icons/boxicons-solid';
+import ProfleInfoCard from './ProfileInfoCard';
 
 export default class Profile extends React.Component {
   state = {
@@ -23,15 +23,6 @@ export default class Profile extends React.Component {
   };
 
   componentDidMount = async () => {
-    prosperStackSurvey({
-      el: '#prosperstack-survey',
-      surveyId: 'j8cwF_Q46H42h91H4a_iB',
-      stripeSubscriptionId: 'sub_HF2NLSFIU8Ibzh',
-      completed: () => {
-        console.log('Survey complete!');
-      },
-    });
-
     this.setState({
       households: this.props.households,
       members: this.props.members,
@@ -88,7 +79,6 @@ export default class Profile extends React.Component {
       subject: `📚 You've been invited to join Bookshelf!`,
       body: `<p>${this.props.user.full} (${this.props.user.email}) invited you to join bookshelf.mikegallagher.app</p><a href="https://bookshelf.mikegallagher.app">bookshelf.mikegallagher.app</a>`,
     });
-    // const response = { data: { success: true } };
     if (response.data.success) {
       this.setState({
         alertNoAction: true,
@@ -155,19 +145,19 @@ export default class Profile extends React.Component {
       flash: true,
       flashMessage: status.accepted ? (
         <div
-          className="w-5/6 md:w-full container  shadow text-sm bg-green-100 border border-green-400 text-green-700 my-2 px-4 py-3 rounded relative"
-          role="alert">
-          <strong className="font-bold">🏠 </strong>
-          <span className="block sm:inline">Accepted!</span>
-          <span className="absolute top-0 bottom-0 right-0 px-4 py-2 "></span>
+          className='w-5/6 md:w-full container  shadow text-sm bg-green-100 border border-green-400 text-green-700 my-2 px-4 py-3 rounded relative'
+          role='alert'>
+          <strong className='font-bold'>🏠 </strong>
+          <span className='block sm:inline'>Accepted!</span>
+          <span className='absolute top-0 bottom-0 right-0 px-4 py-2 '></span>
         </div>
       ) : (
         <div
-          className="w-5/6 md:w-full container shadow text-sm bg-red-100 border border-red-400 text-red-700 my-2 px-4 py-3 rounded relative"
-          role="alert">
-          <strong className="font-bold">🏠 </strong>
-          <span className="block sm:inline">Declined!</span>
-          <span className="absolute top-0 bottom-0 right-0 px-4 py-2 "></span>
+          className='w-5/6 md:w-full container shadow text-sm bg-red-100 border border-red-400 text-red-700 my-2 px-4 py-3 rounded relative'
+          role='alert'>
+          <strong className='font-bold'>🏠 </strong>
+          <span className='block sm:inline'>Declined!</span>
+          <span className='absolute top-0 bottom-0 right-0 px-4 py-2 '></span>
         </div>
       ),
     });
@@ -211,8 +201,8 @@ export default class Profile extends React.Component {
 
     return member.user_id == this.props.user.id ? null : membership.is_owner ? (
       <XSquare
-        size="1.5em"
-        className="cursor-pointer text-red-600"
+        size='1.5em'
+        className='cursor-pointer text-red-600'
         onClick={() => {
           this.removeMember(membership.household_id, member.user_id, index);
         }}></XSquare>
@@ -221,72 +211,34 @@ export default class Profile extends React.Component {
 
   render = () => {
     return (
-      <div className="max-w-screen-lg container my-4 ">
+      <div className='max-w-screen-lg container my-4 '>
         <div
-          className="md:grid grid-cols-2"
+          className='md:grid grid-cols-2'
           style={{ gridTemplateColumns: '25% 70%', gridColumnGap: '5%' }}>
-          <div>
-            <div class="rounded-lg overflow-hidden shadow w-5/6 mx-auto md:mx-0 md:w-64 md:max-w-md my-3">
-              <div class="h-24 w-full bg-blue-400"></div>
-              <div class="flex justify-center -mt-16">
-                <img
-                  src={this.props.user.picture}
-                  class="rounded-full h-32 w-32 border-solid border-white border-2 -mt-3"></img>
-              </div>
-              <div class="text-center px-3 pb-6 pt-2">
-                <h3 class="text-black text-lg bold font-sans">
-                  {this.props.user.full}
-                </h3>
-                <p class="mt-1 text-sm font-sans font-light text-grey-dark">
-                  {this.props.user.email}
-                </p>
-              </div>
-              <div class="flex justify-center pb-3 text-grey-dark">
-                <div class="text-center mr-3 border-r pr-3">
-                  <h2>
-                    {
-                      this.props.books.filter(
-                        (book) => book.user_id == this.props.user.id
-                      ).length
-                    }
-                  </h2>
-                  <span>Books saved</span>
-                </div>
-                <div class="text-center">
-                  {/* <h2>
-                  {this.props.members.filter(
-                    (membership) =>
-                      membership.user_id == this.props.user.id &&
-                      membership.invite_accepted
-                  ).length}
-                </h2> */}
-                  <h2>{this.props.books.filter((book) => book.read).length}</h2>
-                  <span>Books read</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ProfleInfoCard
+            user={this.props.user}
+            books={this.props.books}></ProfleInfoCard>
           <div>
             {this.state.alertNoAction ? (
               <div
-                className="w-5/6 md:w-full container bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-                role="alert">
-                <span className="block sm:inline">
+                className='w-5/6 md:w-full container bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'
+                role='alert'>
+                <span className='block sm:inline'>
                   {this.state.alertMessage}
                 </span>
               </div>
             ) : null}
             {this.state.alert ? (
               <div
-                className="w-5/6 md:w-full container bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-                role="alert">
-                <span className="block sm:inline">
+                className='w-5/6 md:w-full container bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'
+                role='alert'>
+                <span className='block sm:inline'>
                   {this.state.alertMessage}
                 </span>
-                <span className="float-right">
+                <span className='float-right'>
                   <CheckSquare
-                    size="2em"
-                    className="cursor-pointer text-green-400"
+                    size='2em'
+                    className='cursor-pointer text-green-400'
                     onClick={() =>
                       this.handleBookshelfInviteSend(
                         this.state.inviteValues[
@@ -295,8 +247,8 @@ export default class Profile extends React.Component {
                       )
                     }></CheckSquare>
                   <XSquare
-                    size="2em"
-                    className="cursor-pointer text-red-400"
+                    size='2em'
+                    className='cursor-pointer text-red-400'
                     onClick={() => this.setState({ alert: false })}></XSquare>
                 </span>
               </div>
@@ -309,24 +261,24 @@ export default class Profile extends React.Component {
               ) {
                 return (
                   <div
-                    className="w-5/6 md:w-full container shadow text-sm bg-blue-100 border border-blue-400 text-blue-700 my-2 px-4 py-3 rounded md:flex justify-between"
-                    role="alert">
-                    <div className="text-center md:text-left">
-                      <strong className="font-bold">🏠 </strong>
+                    className='w-5/6 md:w-full container shadow text-sm bg-blue-100 border border-blue-400 text-blue-700 my-2 px-4 py-3 rounded md:flex justify-between'
+                    role='alert'>
+                    <div className='text-center md:text-left'>
+                      <strong className='font-bold'>🏠 </strong>
                       {member.inviter_full} ({member.inviter_email}) invited you
                       to their {member.household_name} household.
                     </div>
 
-                    <div className="md:mt-0 mt-2">
+                    <div className='md:mt-0 mt-2'>
                       <CheckSquare
-                        size="2em"
-                        className="w-1/2 cursor-pointer text-green-400"
+                        size='2em'
+                        className='w-1/2 cursor-pointer text-green-400'
                         onClick={() =>
                           this.acceptInvitation(member.id)
                         }></CheckSquare>
                       <XSquare
-                        size="2em"
-                        className="w-1/2 cursor-pointer text-red-400"
+                        size='2em'
+                        className='w-1/2 cursor-pointer text-red-400'
                         onClick={() =>
                           this.declineInvitation(member.id)
                         }></XSquare>
@@ -336,60 +288,60 @@ export default class Profile extends React.Component {
               }
             })}
             {this.state.flash ? <div>{this.state.flashMessage}</div> : null}
-            <div className="w-5/6 md:w-full container">
-              <div className="flex items-center w-full justify-between">
-                <div className="text-3xl font-bold">Households</div>
+            <div className='w-5/6 md:w-full container'>
+              <div className='flex items-center w-full justify-between'>
+                <div className='text-3xl font-bold'>Households</div>
                 {this.state.addHousehold ? (
                   <ChevronDownSquare
                     onClick={() => {
                       this.setState({ addHousehold: false });
                     }}
-                    size="2em"
-                    className="cursor-pointer text-green-400"></ChevronDownSquare>
+                    size='2em'
+                    className='cursor-pointer text-green-400'></ChevronDownSquare>
                 ) : (
                   <PlusSquare
                     onClick={() => {
                       this.setState({ addHousehold: true });
                     }}
-                    size="2em"
-                    className="cursor-pointer text-green-400"></PlusSquare>
+                    size='2em'
+                    className='cursor-pointer text-green-400'></PlusSquare>
                 )}
               </div>
               {this.state.addHousehold ? (
-                <form onSubmit={this.handleHouseholdSubmit} className="w-full">
-                  <div className="flex items-center border-b border-b-1 border-blue-500 ">
+                <form onSubmit={this.handleHouseholdSubmit} className='w-full'>
+                  <div className='flex items-center border-b border-b-1 border-blue-500 '>
                     <input
-                      className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none"
-                      type="text"
-                      placeholder="New household name"
+                      className='appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none'
+                      type='text'
+                      placeholder='New household name'
                       value={this.state.householdNameValue}
                       onChange={this.handleHouseholdNameChange}
-                      aria-label="Household Name"></input>
+                      aria-label='Household Name'></input>
                     <button
-                      className="bg-blue-500 hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
-                      type="submit">
+                      className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined'
+                      type='submit'>
                       Create
                     </button>
                   </div>
                 </form>
               ) : null}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 my-2 md:w-full w-5/6 container">
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-2 my-2 md:w-full w-5/6 container'>
               {this.state.members.map((membership, index) => {
                 if (
                   membership.invite_accepted &&
                   membership.user_id == this.props.user.id
                 ) {
                   return (
-                    <div className="border border-gray-400 shadow rounded-lg p-4">
-                      <div className="text-2xl font-bold mb-3 flex justify-between items-center">
-                        <span className="overflow-x-hidden">
+                    <div className='border border-gray-400 shadow rounded-lg p-4'>
+                      <div className='text-2xl font-bold mb-3 flex justify-between items-center'>
+                        <span className='overflow-x-hidden'>
                           {membership.household_name}
                         </span>
                         {membership.is_owner ? (
                           <XSquare
-                            size="2rem"
-                            className="cursor-pointer text-red-600"
+                            size='2rem'
+                            className='cursor-pointer text-red-600'
                             onClick={() =>
                               this.deleteHousehold(
                                 membership.household_id,
@@ -400,18 +352,18 @@ export default class Profile extends React.Component {
                       </div>
                       <form
                         onSubmit={(e) => e.preventDefault()}
-                        className="w-full max-w-md">
+                        className='w-full max-w-md'>
                         {membership.is_owner ? (
-                          <div className="flex items-center border-b border-b-2 border-blue-500 ">
+                          <div className='flex items-center border-b border-b-2 border-blue-500 '>
                             <input
-                              className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none"
-                              type="text"
-                              placeholder="User email to invite"
+                              className='appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none'
+                              type='text'
+                              placeholder='User email to invite'
                               value={this.state.inviteValues[index]}
                               onChange={(e) =>
                                 this.handleInviteChange(e, index)
                               }
-                              aria-label="Email"></input>
+                              aria-label='Email'></input>
                             <button
                               onClick={() =>
                                 this.handleInviteSubmit(
@@ -419,8 +371,8 @@ export default class Profile extends React.Component {
                                   index
                                 )
                               }
-                              className="bg-blue-500 hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
-                              type="submit">
+                              className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined'
+                              type='submit'>
                               Invite
                             </button>
                           </div>
@@ -433,17 +385,17 @@ export default class Profile extends React.Component {
                             member.invite_accepted
                           ) {
                             return (
-                              <div className="flex my-2 items-center ">
+                              <div className='flex my-2 items-center '>
                                 <img
-                                  className="h-12 w-12 rounded-full"
+                                  className='h-12 w-12 rounded-full'
                                   src={member.picture}
                                 />
-                                <div className="ml-5 overflow-x-hidden">
+                                <div className='ml-5 overflow-x-hidden'>
                                   {member.user_id == this.props.user.id
                                     ? 'You'
                                     : member.member_email || member.email}
                                 </div>
-                                <div className="ml-auto">
+                                <div className='ml-auto'>
                                   {this.canRemoveMember(
                                     member,
                                     membership,
@@ -479,15 +431,15 @@ export default class Profile extends React.Component {
                                 member.household_id == membership.household_id
                               )
                                 return (
-                                  <li className="flex my-2">
+                                  <li className='flex my-2'>
                                     <img
-                                      className="h-12 w-12 rounded-full"
+                                      className='h-12 w-12 rounded-full'
                                       src={
                                         member.picture ||
                                         this.state.invitedUserPhoto
                                       }
                                     />
-                                    <span className="ml-5 mt-3">
+                                    <span className='ml-5 mt-3'>
                                       {member.member_email ||
                                         this.state.invitedUserEmail}
                                     </span>
@@ -504,7 +456,6 @@ export default class Profile extends React.Component {
             </div>
           </div>
         </div>
-        <div id="prosperstack-survey"></div>
       </div>
     );
   };

@@ -5,7 +5,6 @@
   "dependencies": {
     "@atlaskit/inline-edit": "^10.0.31",
     "@fortawesome/fontawesome-free": "^5.12.1",
-    "@prosperstack/survey": "^0.9.1",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "autoprefixer": "^9.7.4",

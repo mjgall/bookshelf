@@ -16,10 +16,12 @@ import {
 import NavBar from './components/NavBar';
 import Home from './components/Home';
 import Book from './components/Book';
-import BookTable from './components/BookTable2';
 import Profile from './components/Profile';
-import MarketingHome from './components/MarketingHome';
+
+import SharedShelf from './pages/SharedShelf';
 import PrivateRoute from './components/PrivateRoute';
+
+import { userContext } from './userContext';
 
 export default class App extends React.Component {
   state = {
@@ -32,7 +34,7 @@ export default class App extends React.Component {
   };
 
   updateBook = (field, value, id, household) => {
-    let index
+    let index;
     if (household) {
       index = this.state.books.findIndex(
         (existingBook) => existingBook.id == id
@@ -42,10 +44,10 @@ export default class App extends React.Component {
         (existingBook) => existingBook.user_book_id == id
       );
     }
-  
+
     const newBooks = [...this.state.books];
-    const book = this.state.books[index]
-    book[field] = value
+    const book = this.state.books[index];
+    book[field] = value;
     newBooks.splice(index, 1, book);
     this.setState({ books: newBooks });
   };
@@ -112,7 +114,7 @@ export default class App extends React.Component {
     return (
       <>
         {this.state.loaded ? (
-          <>
+          <userContext.Provider value={this.state.user}>
             <Router>
               <NavBar
                 referrer={this.state.referrer}
@@ -123,7 +125,7 @@ export default class App extends React.Component {
                 members={this.state.householdMembers}
                 Profile></NavBar>
               <Switch>
-                <Route exact path="/">
+                <Route exact path='/'>
                   <Home
                     households={this.state.households}
                     clearReferrer={this.clearReferrer}
@@ -134,30 +136,43 @@ export default class App extends React.Component {
                     books={this.state?.books}
                     members={this.state.householdMembers}></Home>
                 </Route>
-                <PrivateRoute path="/profile" user={this.state.user} exact>
+                <PrivateRoute path='/profile' user={this.state.user} exact>
                   <Profile
                     books={this.state.books}
                     members={this.state.householdMembers}
                     households={this.state.households}
                     user={this.state.user}></Profile>
                 </PrivateRoute>
-                <PrivateRoute user={this.state.user} exact path="/book/:id">
+                <Route exact path='/book/:id'>
+                  <Book
+                    globalBook={true}
+                    updateBook={this.updateBook}
+                    books={this.state?.books}></Book>
+                </Route>
+                <PrivateRoute
+                  user={this.state.user}
+                  exact
+                  path='/book/owned/:userBookId'>
                   <Book
                     updateBook={this.updateBook}
                     books={this.state?.books}></Book>
                 </PrivateRoute>
-                <PrivateRoute user={this.state.user} exact path="/book/owned/:userBookId">
+                <PrivateRoute
+                  user={this.state.user}
+                  exact
+                  path='/book/household/:globalBookId'>
                   <Book
                     updateBook={this.updateBook}
                     books={this.state?.books}></Book>
                 </PrivateRoute>
-                <PrivateRoute user={this.state.user} exact path="/book/household/:globalBookId">
-                  <Book
-                    updateBook={this.updateBook}
-                    books={this.state?.books}></Book>
-                </PrivateRoute>
-                <Route path="*">
+                <Route path='/shelf/:shelfId'>
+                  <SharedShelf></SharedShelf>
+                </Route>
+                <Route path='/shelf/:shelfId/book/IbookId'></Route>
+                <Route path='/*'>
                   <Home
+                    households={this.state.households}
+                    clearReferrer={this.clearReferrer}
                     updateNavReferrer={this.updateNavReferrer}
                     loaded={this.state.loaded}
                     user={this.state.user}
@@ -167,7 +182,7 @@ export default class App extends React.Component {
                 </Route>
               </Switch>
             </Router>
-          </>
+          </userContext.Provider>
         ) : null}
       </>
     );
