@@ -1,4 +1,5 @@
 import React from 'react';
+import Copy from '../common/Copy'
 
 export default class ProfileInfoCard extends React.Component {
   render = () => {
@@ -42,6 +43,10 @@ export default class ProfileInfoCard extends React.Component {
               <span>Books read</span>
             </div>
           </div>
+          <div className="mb-3">
+          <div className="text-center">Your public shelf link:</div>
+            <Copy value={ `${window.location.protocol}//${window.location.host}/shelf/${this.props.user.id}` }></Copy>
+            </div>
         </div>
       </div>
     );
