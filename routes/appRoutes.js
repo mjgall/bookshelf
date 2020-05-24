@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const keys = require('./keys')
+const keys = require('../config/keys');
 
 const getBooks = require('../queries/getBooks');
 const addBook = require('../queries/addBook.js');
@@ -66,10 +66,11 @@ module.exports = (app) => {
   });
 
   app.get('/api/book/lookup/:isbn', async (req, res) => {
+
     const response = await axios.get(
       `https://api2.isbndb.com/book/${req.params.isbn}`,
       {
-        headers: { Authorization: keys.ISBN_API_AUTH },
+        headers: { Authorization: keys.ISBN_AUTH_API },
       }
     );
 
@@ -326,9 +327,8 @@ module.exports = (app) => {
   });
 
   app.get('/api/book/:bookId', async (req, res) => {
-  
     const book = await getBook(req.params.bookId, req.user.id);
-    
+
     res.send(book);
   });
 };
