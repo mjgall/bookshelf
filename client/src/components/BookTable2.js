@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useTable, useFilters, useSortBy, useGlobalFilter } from 'react-table';
+import { useTable, useFilters, useSortBy, useGlobalFilter, useBlockLayout } from 'react-table';
 
 // import matchSorter from 'match-sorter';
 
@@ -18,11 +18,12 @@ function GlobalFilter({
         value={globalFilter || ''}
         onChange={(e) => {
           setGlobalFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
-        }}
-        placeholder={`Search ${count} books...`}
+        } }
+        placeholder={ `Search ${count} books...`}
         style={{
-          height: '2rem',
+          height: '4rem',
           width: '100%',
+          fontSize: '1.5rem'
         }}
       />
     </div>
@@ -275,12 +276,16 @@ function BookTable(props) {
           accessor: 'title',
           disableFilters: true,
           isVisible: true,
+          // Cell: (props) => {
+          //   return <div style={{minWidth: '50%'}}>{props.row.original.title}</div>
+          // }
         },
         {
           Header: 'Author',
           accessor: 'author',
           disableFilters: true,
           isVisible: true,
+     
         },
         {
           Header: 'Cover',
