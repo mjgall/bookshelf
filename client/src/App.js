@@ -64,16 +64,15 @@ export default class App extends React.Component {
     // window.addEventListener('scroll', this.listenToScroll);
     // window.addEventListener('resize', this.listenToResize);
 
-    const bootstrap = await axios.get('/api/bootstrap');
-    const fresh = bootstrap.data;
+    const bootstrap = await axios.get('/api/bootstrap').then(response => response.data);
 
-    const books = fresh.books.userBooks.concat(fresh.books.householdBooks);
+    const books = bootstrap.books.userBooks.concat(bootstrap.books.householdBooks);
 
     this.setState({
-      user: fresh.currentUser,
+      user: bootstrap.currentUser,
       books: books || [],
-      householdMembers: fresh.householdMembers,
-      households: fresh.households,
+      householdMembers: bootstrap.householdMembers,
+      households: bootstrap.households,
       loaded: true,
     });
   };
