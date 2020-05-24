@@ -214,7 +214,8 @@ module.exports = (app) => {
     try {
       const householdNotes = await getHouseholdNotes(
         req.params.globalBookId,
-        req.params.userId
+        req.params.userId,
+        req.user.id
       );
       res.send(householdNotes);
     } catch (error) {
