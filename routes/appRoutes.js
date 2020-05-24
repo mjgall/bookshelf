@@ -110,6 +110,7 @@ module.exports = (app) => {
         req.user.id,
         userBookRow.global_id
       );
+      console.log(response)
     }
 
     res.send(userBookRow);
