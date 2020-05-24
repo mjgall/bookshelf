@@ -86,6 +86,7 @@ function SelectColumnFilter({
 
 // table component
 function Table({
+  relation,
   columns,
   data,
   history,
@@ -226,13 +227,25 @@ function Table({
                 }  ${row.original.read ? 'bg-green-100' : ''}`}
                 onClick={() => {
                   const bookRow = row.original;
-                  if (user) {
+                  if (user && !sharedShelf) {
                     if (bookRow.user_id == user.id) {
                       history.push(`/book/owned/${row.original.user_book_id}`);
-                    } else if (sharedShelf) {
-                      history.push(`/book/${row.original.global_id}`);
                     } else {
                       history.push(`/book/household/${row.original.id}`);
+                    }
+                  } else if (user && sharedShelf) {
+                    switch (relation) {
+                      case 'self':
+                        history.push(`/book/owned/${row.original.id}`);
+                        break;
+                      case 'household':
+                        history.push(`/book/household/${row.original.global_id}`);
+                        break;
+                      case 'none':
+                        history.push(`/book/${row.original.global_id}`);
+                        break;
+                      default:
+                        break;
                     }
                   } else return;
                 }}>
@@ -339,6 +352,7 @@ function BookTable(props) {
 
   return (
     <Table
+      relation={props.relation}
       sharedShelf={props.sharedShelf}
       ownerFilterValue={props.ownerFilterValue}
       history={props.history}

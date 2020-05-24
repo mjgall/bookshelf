@@ -145,6 +145,7 @@ export default class App extends React.Component {
                 </PrivateRoute>
                 <Route exact path='/book/:id'>
                   <Book
+                    user={this.state.user}
                     globalBook={true}
                     updateBook={this.updateBook}
                     books={this.state?.books}></Book>
@@ -166,7 +167,9 @@ export default class App extends React.Component {
                     books={this.state?.books}></Book>
                 </PrivateRoute>
                 <Route path='/shelf/:shelfId'>
-                  <SharedShelf></SharedShelf>
+                  <SharedShelf
+                  members={this.state.householdMembers}
+                  ></SharedShelf>
                 </Route>
                 <Route path='/shelf/:shelfId/book/IbookId'></Route>
                 <Route path='/*'>
