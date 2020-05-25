@@ -15,7 +15,6 @@ class Book extends React.Component {
   };
 
   componentDidMount = async () => {
-    console.log(this.props);
 
     let currentBook;
 
@@ -467,19 +466,18 @@ class Book extends React.Component {
           </div>
           <div className='md:mx-0 mx-6' id='actions-bar'>
             {this.state.bookType === 'personal' ? (
-              <Tip renderChildren content="Delete book">
+              <Tip renderChildren content='Delete book'>
                 <Tippy
                   interactive={true}
                   placement='left'
                   visible={this.state.confirmDelete}
                   onClickOutside={() => this.setState({ confirmDelete: false })}
                   render={(attrs) => {
-                    console.log(attrs);
                     return (
-                      <div className='flex border border-gray-200 shadow-md rounded-sm px-4 py-2 justify-between space-x-4 bg-white text-sm'>
+                      <div className='flex border border-gray-200 shadow-md rounded-sm px-4 py-2 justify-between bg-white text-sm'>
                         <div
                           style={{ zIndex: 9999999 }}
-                          className='w-full shadow-inner bg-green-500 text-white py-1 px-2 rounded text-center cursor-pointer'
+                          className='w-full shadow-inner bg-green-500 text-white py-1 px-2 rounded text-center mr-4 cursor-pointer'
                           onClick={this.deleteBook}>
                           Delete
                         </div>
