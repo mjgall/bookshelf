@@ -318,23 +318,25 @@ class Book extends React.Component {
                       Mark as read
                     </div>
                   )}
-                  { this.state?.private ? (
-                    <Tip renderChildren content="Click to make public.">
-                    <div
-                      className='bg-red-500 hover:bg-red-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'
-                      onClick={this.togglePrivate}>
-                        Private
-                    </div>
-                    </Tip>
-                  ) : (
-                      <Tip renderChildren content="Click to make private.">
-                    <div
-                      onClick={this.togglePrivate}
-                      className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
+                  {this.state.bookType === 'personal' ? (
+                    this.state?.private ? (
+                      <Tip renderChildren content='Click to make public.'>
+                        <div
+                          className='bg-red-500 hover:bg-red-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'
+                          onClick={this.togglePrivate}>
+                          Private
+                        </div>
+                      </Tip>
+                    ) : (
+                      <Tip renderChildren content='Click to make private.'>
+                        <div
+                          onClick={this.togglePrivate}
+                          className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
                           Public
-                    </div>
-                    </Tip>
-                  )}
+                        </div>
+                      </Tip>
+                    )
+                  ) : null}
                 </div>
               ) : (
                 <div class='loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16 mx-auto'></div>
