@@ -35,21 +35,30 @@ export default class App extends React.Component {
 
   updateBook = (field, value, id, household) => {
     let index;
-    if (household) {
-      index = this.state.books.findIndex(
-        (existingBook) => existingBook.id == id
-      );
-    } else {
-      index = this.state.books.findIndex(
-        (existingBook) => existingBook.user_book_id == id
-      );
-    }
 
-    const newBooks = [...this.state.books];
-    const book = this.state.books[index];
-    book[field] = value;
-    newBooks.splice(index, 1, book);
-    this.setState({ books: newBooks });
+    if (field === 'delete') {
+      const newBooks = this.state.books.filter((books) => {
+        return books.user_book_id != id;
+      });
+
+      this.setState({ books: newBooks });
+    } else {
+      if (household) {
+        index = this.state.books.findIndex(
+          (existingBook) => existingBook.id == id
+        );
+      } else {
+        index = this.state.books.findIndex(
+          (existingBook) => existingBook.user_book_id == id
+        );
+      }
+
+      const newBooks = [...this.state.books];
+      const book = this.state.books[index];
+      book[field] = value;
+      newBooks.splice(index, 1, book);
+      this.setState({ books: newBooks });
+    }
   };
 
   addBookToGlobalState = (book) => {
@@ -61,10 +70,13 @@ export default class App extends React.Component {
   };
 
   componentDidMount = async () => {
- 
-    const bootstrap = await axios.get('/api/bootstrap').then(response => response.data);
+    const bootstrap = await axios
+      .get('/api/bootstrap')
+      .then((response) => response.data);
 
-    const books = bootstrap.books.userBooks.concat(bootstrap.books.householdBooks);
+    const books = bootstrap.books.userBooks.concat(
+      bootstrap.books.householdBooks
+    );
 
     this.setState({
       user: bootstrap.currentUser,
@@ -165,8 +177,7 @@ export default class App extends React.Component {
                 </PrivateRoute>
                 <Route path='/shelf/:shelfId'>
                   <SharedShelf
-                  members={this.state.householdMembers}
-                  ></SharedShelf>
+                    members={this.state.householdMembers}></SharedShelf>
                 </Route>
                 <Route path='/shelf/:shelfId/book/IbookId'></Route>
                 <Route path='/*'>

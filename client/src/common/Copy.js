@@ -25,17 +25,18 @@ const Copy = (props) => {
         ref={textAreaRef}
         value={props.value}
       />
+
       {copySuccess ? (
-        <CheckCircle size='1.5em' color='green'></CheckCircle>
+        <Tip renderChildren content='Copied!'>
+          <CheckCircle size='1.5em' color='green'></CheckCircle>
+        </Tip>
       ) : (
-    
-          <Tip renderChildren content='Click to copy'>
-            <CopyIcon
-              className='cursor-pointer'
-              size='1.5em'
-              onClick={copyToClipboard}></CopyIcon>
-          </Tip>
-    
+        <Tip renderChildren content='Click to copy'>
+          <CopyIcon
+            className='cursor-pointer'
+            size='1.5em'
+            onClick={copyToClipboard}></CopyIcon>
+        </Tip>
       )}
     </div>
   );

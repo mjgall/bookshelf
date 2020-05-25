@@ -356,7 +356,7 @@ function BookTable(props) {
             ]?.member_first,
       };
     });
-  }, [props.books]);
+  }, [props, props.totalBooks]);
 
   return (
     <Table

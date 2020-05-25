@@ -169,7 +169,8 @@ class Home extends React.Component {
               householdSelect={this.state.householdSelect}
               members={this.props.members}
               user={this.props.user}
-              history={this.props.history}
+              history={ this.props.history }
+              totalBooks={this.state.books.length}
               books={this.filterBooks(this.state.books)}
               userOnly={this.state.selfOnly}></BookTable>
           </div>

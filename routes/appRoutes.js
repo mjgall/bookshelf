@@ -29,6 +29,7 @@ const addPersonalNotesToHouseholdBook = require('../queries/addPersonalNotesToHo
 const updateHouseholdBookAsRead = require('../queries/updateHouseholdBookAsRead');
 const updatePersonalNotesOnHouseholdBook = require('../queries/updatePersonalNotesOnHouseholdBook');
 const getBook = require('../queries/getBook');
+const deleteBook = require('../queries/deleteBook')
 
 const sendEmail = require('../services/aws-ses');
 
@@ -333,4 +334,9 @@ module.exports = (app) => {
 
     res.send(book);
   });
+
+  app.delete('/api/books/:userBookId', async (req, res) => {
+    const deletion = await deleteBook(req.params.userBookId)
+    res.send(deletion)
+  })
 };
