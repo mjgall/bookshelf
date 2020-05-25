@@ -231,7 +231,7 @@ class Book extends React.Component {
   };
 
   render = () => {
-    console.log(this.state.bookType)
+    console.log(this.state.bookType);
     return (
       <div className='container mx-auto mt-12'>
         <div
@@ -246,7 +246,8 @@ class Book extends React.Component {
                       className='w-2/5 block ml-auto mr-auto'
                       src={this.state?.cover}></img>
                   </div>
-                  { this.state.bookType === 'household' || this.state.bookType === 'global' ? (
+                  {this.state.bookType === 'household' ||
+                  this.state.bookType === 'global' ? (
                     <div className='mt-2'>{this.state?.title}</div>
                   ) : (
                     <InlineEdit
@@ -262,13 +263,15 @@ class Book extends React.Component {
                       )}
                       readView={() => (
                         <div className='text-center'>
-                          {this.state?.title || 'Click to enter value'}
+                          {this.state?.title ||
+                            'No notes, click to enter some!'}
                         </div>
                       )}
                       onConfirm={this.handleTitleChange}
                     />
                   )}
-                  {this.state.bookType === 'household' || this.state.bookType === 'global' ? (
+                  {this.state.bookType === 'household' ||
+                  this.state.bookType === 'global' ? (
                     <div className='mt-2'>{this.state?.author}</div>
                   ) : (
                     <InlineEdit
@@ -284,14 +287,14 @@ class Book extends React.Component {
                       )}
                       readView={() => (
                         <div className='text-center'>
-                          {this.state?.author || 'Click to enter value'}
+                          {this.state?.author || 'No author'}
                         </div>
                       )}
                       onConfirm={this.handleAuthorChange}
                     />
                   )}
                   {this.state?.read ? (
-                    <div className='bg-green-500  text-white my-1 mx-2 mt-6 py-2 px-3 rounded  text-center'>
+                    <div className='bg-green-500  text-white my-1 mx-2 mt-6 py-2 px-3 rounded text-center'>
                       Already read!
                     </div>
                   ) : (
@@ -308,7 +311,8 @@ class Book extends React.Component {
             </div>
           </div>
           <div className='md:mx-0 mx-6'>
-            {this.state.bookType === 'household' || this.state.bookType === 'global' ? (
+            {this.state.bookType === 'household' ||
+            this.state.bookType === 'global' ? (
               <InlineEdit
                 defaultValue={this.state?.personalNotes}
                 label='Personal Notes'
@@ -320,11 +324,21 @@ class Book extends React.Component {
                     {...fieldProps}
                   />
                 )}
-                readView={() => (
-                  <div className='multiline'>
-                    {this.state?.personalNotes || 'Click to enter value'}
-                  </div>
-                )}
+                readView={() => {
+                  if (this.state.personalNotes) {
+                    return (
+                      <div className='multiline'>
+                        {this.state?.personalNotes}
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div className='text-gray-500'>
+                        No notes yet - click to add some!
+                      </div>
+                    );
+                  }
+                }}
                 onConfirm={this.handlePersonalNotesChange}
                 autoFocus
                 readViewFitContainerWidth
@@ -347,7 +361,7 @@ class Book extends React.Component {
                 )}
                 readView={() => (
                   <div className='multiline'>
-                    {this.state?.notes || 'Click to enter value'}
+                    {this.state?.notes || 'No notes, click to enter some!'}
                   </div>
                 )}
                 onConfirm={this.handleNotesChange}
@@ -371,11 +385,19 @@ class Book extends React.Component {
                           {...fieldProps}
                         />
                       )}
-                      readView={() => (
-                        <div className='multiline'>
-                          {householdNotes.notes || 'Click to enter value'}
-                        </div>
-                      )}
+                      readView={() => {
+                        if (householdNotes.notes) {
+                          return (
+                            <div className='multiline'>{householdNotes.notes}</div>
+                          );
+                        } else {
+                          return (
+                            <div className='text-gray-500'>
+                              No notes yet - click to add some!
+                            </div>
+                          );
+                        }
+                      }}
                       onConfirm={(value) =>
                         this.handleHouseholdNotesChange(
                           householdNotes.id,
