@@ -7,6 +7,8 @@ import {
   PlusSquare,
   ChevronDownSquare,
 } from '@styled-icons/boxicons-solid';
+
+
 import ProfleInfoCard from './ProfileInfoCard';
 
 export default class Profile extends React.Component {

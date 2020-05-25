@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Copy as CopyIcon, CheckCircle } from '@styled-icons/boxicons-solid';
+import Tip from './Tip';
 
 const Copy = (props) => {
   const [copySuccess, setCopySuccess] = useState('');
@@ -13,7 +14,7 @@ const Copy = (props) => {
     e.target.focus();
     setCopySuccess('Copied!');
     setTimeout(() => setCopySuccess(''), 750);
-  }
+  };
 
   return (
     <div className='flex justify-center text-sm items-center'>
@@ -27,10 +28,14 @@ const Copy = (props) => {
       {copySuccess ? (
         <CheckCircle size='1.5em' color='green'></CheckCircle>
       ) : (
-        <CopyIcon
-          className='cursor-pointer'
-          size='1.5em'
-          onClick={copyToClipboard}></CopyIcon>
+    
+          <Tip renderChildren content='Click to copy'>
+            <CopyIcon
+              className='cursor-pointer'
+              size='1.5em'
+              onClick={copyToClipboard}></CopyIcon>
+          </Tip>
+    
       )}
     </div>
   );

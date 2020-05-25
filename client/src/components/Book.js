@@ -1,6 +1,7 @@
 import React from 'react';
 import InlineEdit from '@atlaskit/inline-edit';
 import TextareaAutosize from 'react-textarea-autosize';
+import Tip from '../common/Tip';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 
@@ -230,6 +231,19 @@ class Book extends React.Component {
     });
   };
 
+  togglePrivate = async () => {
+    const response = await axios
+      .put('/api/books', {
+        bookType: 'personal',
+        field: 'private',
+        value: !this.state.private,
+        id: this.state.user_book_id,
+      })
+      .then((response) => response.data);
+
+    this.setState({ private: response.private });
+  };
+
   render = () => {
     console.log(this.state.bookType);
     return (
@@ -303,6 +317,23 @@ class Book extends React.Component {
                       className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
                       Mark as read
                     </div>
+                  )}
+                  { this.state?.private ? (
+                    <Tip renderChildren content="Click to make public.">
+                    <div
+                      className='bg-red-500 hover:bg-red-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'
+                      onClick={this.togglePrivate}>
+                        Private
+                    </div>
+                    </Tip>
+                  ) : (
+                      <Tip renderChildren content="Click to make private.">
+                    <div
+                      onClick={this.togglePrivate}
+                      className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
+                          Public
+                    </div>
+                    </Tip>
                   )}
                 </div>
               ) : (
@@ -388,7 +419,9 @@ class Book extends React.Component {
                       readView={() => {
                         if (householdNotes.notes) {
                           return (
-                            <div className='multiline'>{householdNotes.notes}</div>
+                            <div className='multiline'>
+                              {householdNotes.notes}
+                            </div>
                           );
                         } else {
                           return (
