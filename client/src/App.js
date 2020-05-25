@@ -61,9 +61,7 @@ export default class App extends React.Component {
   };
 
   componentDidMount = async () => {
-    // window.addEventListener('scroll', this.listenToScroll);
-    // window.addEventListener('resize', this.listenToResize);
-
+ 
     const bootstrap = await axios.get('/api/bootstrap').then(response => response.data);
 
     const books = bootstrap.books.userBooks.concat(bootstrap.books.householdBooks);

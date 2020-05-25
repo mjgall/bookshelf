@@ -1,5 +1,11 @@
 import React, { useCallback } from 'react';
-import { useTable, useFilters, useSortBy, useGlobalFilter, useBlockLayout } from 'react-table';
+import {
+  useTable,
+  useFilters,
+  useSortBy,
+  useGlobalFilter,
+  useBlockLayout,
+} from 'react-table';
 
 // import matchSorter from 'match-sorter';
 
@@ -18,12 +24,12 @@ function GlobalFilter({
         value={globalFilter || ''}
         onChange={(e) => {
           setGlobalFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
-        } }
-        placeholder={ `Search ${count} books...`}
+        }}
+        placeholder={`Search ${count} books...`}
         style={{
           height: '4rem',
           width: '100%',
-          fontSize: '1.5rem'
+          fontSize: '1.5rem',
         }}
       />
     </div>
@@ -157,18 +163,15 @@ function Table({
     //   // setFilter()
     // }
     if (householdSelect.value != 'none' && owner_value != 'All') {
-      console.log(owner_value);
       setFilter('owner_name', owner_value);
     }
   };
-  console.log(state);
 
   React.useEffect(() => updateOwnerFilter(ownerFilterValue), [
     ownerFilterValue,
   ]);
 
   React.useEffect(() => {
-    console.log(columns.filter((column) => !column.isVisible));
     setHiddenColumns(
       columns
         .filter((column) => !column.isVisible)
@@ -240,7 +243,9 @@ function Table({
                         history.push(`/book/owned/${row.original.id}`);
                         break;
                       case 'household':
-                        history.push(`/book/household/${row.original.global_id}`);
+                        history.push(
+                          `/book/household/${row.original.global_id}`
+                        );
                         break;
                       case 'none':
                         history.push(`/book/${row.original.global_id}`);
@@ -267,7 +272,6 @@ function Table({
 }
 
 function BookTable(props) {
-  console.log(props);
   const columns = React.useMemo(() => {
     if (props.householdSelect.value == 'none') {
       return [
@@ -285,7 +289,6 @@ function BookTable(props) {
           accessor: 'author',
           disableFilters: true,
           isVisible: true,
-     
         },
         {
           Header: 'Cover',

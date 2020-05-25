@@ -18,6 +18,16 @@ class Home extends React.Component {
 
   componentDidMount = () => {
     this.getOwners(this.props.members);
+    const householdFilter = localStorage.getItem('householdFilter');
+    const ownerFilter = localStorage.getItem('ownerFilter');
+
+    if (householdFilter && ownerFilter) {
+      this.setState({
+        householdSelect: JSON.parse(householdFilter),
+        ownerSelect: JSON.parse(ownerFilter),
+      });
+    }
+    
   };
 
   selfOnly = (value) => {
@@ -41,8 +51,11 @@ class Home extends React.Component {
       return books.filter((book) => book.user_id == this.props.user.id);
     } else if (this.state.householdSelect.value == 'all') {
       return books;
-    } else if (this.state.householdSelect.value == 'all' && this.state.ownerSelect.value == 'All') {
-      return books
+    } else if (
+      this.state.householdSelect.value == 'all' &&
+      this.state.ownerSelect.value == 'All'
+    ) {
+      return books;
     } else {
       const newBooks = books.filter((book) => {
         return (
@@ -65,10 +78,13 @@ class Home extends React.Component {
   handleHouseholdChange = (selected) => {
     this.getOwners(this.props.members, selected.value);
     this.setState({ householdSelect: selected, ownerSelect: 'all' });
+    localStorage.setItem('householdFilter', JSON.stringify(selected));
+    localStorage.setItem('ownerFilter', null);
   };
 
   handleOwnerChange = (selected) => {
     this.setState({ ownerSelect: selected });
+    localStorage.setItem('ownerFilter', JSON.stringify(selected));
   };
 
   getOwners = (members, householdId = null) => {
@@ -96,25 +112,22 @@ class Home extends React.Component {
     }
   };
 
-  //1. We need to get all of the possible owners in a format where the name of the owner is available by the id
-  //2. We need to update the available options list every time the <Select> input changes ( in handleHouseholdChange() )
-
   render = () => {
     return (
       <>
         {this.props.user && this.props.loaded ? (
-          <div className="max-w-screen-lg container my-4">
+          <div className='max-w-screen-lg container my-4'>
             <Scanner
               user={this.props.user}
-              className="max-w-screen-lg container mx-auto mt-5"
+              className='max-w-screen-lg container mx-auto mt-5'
               addBookToGlobalState={this.props.addBookToGlobalState}></Scanner>
-            <div className="max-w-screen-lg mx-auto mb-6 grid md:grid-cols-2 md:gap-2 grid-cols-1 row-gap-2">
+            <div className='max-w-screen-lg mx-auto mb-6 grid md:grid-cols-2 md:gap-2 grid-cols-1 row-gap-2'>
               <Select
                 isOptionDisabled={(option) => option.value == 'no-households'}
-                placeholder="Household..."
+                placeholder='Household...'
                 blurInputOnSelect
                 isSearchable={false}
-                className="w-full container"
+                className='w-full container'
                 options={[
                   { value: 'none', label: `⛔ None (Only your own books)` },
                   this.props.households.length == 0
@@ -140,10 +153,10 @@ class Home extends React.Component {
               {this.state.householdSelect.value == 'none' ? null : (
                 <Select
                   isOptionDisabled={(option) => option.value == 'no-households'}
-                  placeholder="Owner..."
+                  placeholder='Owner...'
                   blurInputOnSelect
                   isSearchable={false}
-                  className="w-full container"
+                  className='w-full container'
                   options={this.state.owners}
                   value={this.state.ownerSelect}
                   onChange={this.handleOwnerChange}></Select>
