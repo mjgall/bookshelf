@@ -15,7 +15,6 @@ class Book extends React.Component {
   };
 
   componentDidMount = async () => {
-
     let currentBook;
 
     if (this.props.globalBook) {
@@ -337,7 +336,7 @@ class Book extends React.Component {
                   )}
                   {this.state.bookType === 'personal' ? (
                     this.state?.private ? (
-                      <Tip renderChildren content='Click to make public.'>
+                      <Tip renderChildren content='Click to make public.' placement='right'>
                         <div
                           className='bg-red-500 hover:bg-red-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'
                           onClick={this.togglePrivate}>
@@ -345,7 +344,7 @@ class Book extends React.Component {
                         </div>
                       </Tip>
                     ) : (
-                      <Tip renderChildren content='Click to make private.'>
+                      <Tip renderChildren content='Click to make private.' placement='right'>
                         <div
                           onClick={this.togglePrivate}
                           className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
@@ -466,7 +465,7 @@ class Book extends React.Component {
           </div>
           <div className='md:mx-0 mx-6' id='actions-bar'>
             {this.state.bookType === 'personal' ? (
-              <Tip renderChildren content='Delete book'>
+              <Tip placement="left" renderChildren content='Delete book'>
                 <Tippy
                   interactive={true}
                   placement='left'
@@ -474,15 +473,16 @@ class Book extends React.Component {
                   onClickOutside={() => this.setState({ confirmDelete: false })}
                   render={(attrs) => {
                     return (
-                      <div className='flex border border-gray-200 shadow-md rounded-sm px-4 py-2 justify-between bg-white text-sm'>
+                      <div
+                        className='flex  px-4 py-2 justify-between text-sm'
+                      >
                         <div
-                          style={{ zIndex: 9999999 }}
-                          className='w-full shadow-inner bg-green-500 text-white py-1 px-2 rounded text-center mr-4 cursor-pointer'
+                          className='w-full shadow-lg bg-green-500 text-white py-1 px-2 rounded text-center mr-3 cursor-pointer'
                           onClick={this.deleteBook}>
-                          Delete
+                          Confirm
                         </div>
                         <div
-                          className='w-full shadow-inner bg-red-500 text-white py-1 px-2 rounded text-center cursor-pointer'
+                          className='w-full shadow-lg bg-red-500 text-white py-1 px-2 rounded text-center cursor-pointer '
                           onClick={() =>
                             this.setState({ confirmDelete: false })
                           }>

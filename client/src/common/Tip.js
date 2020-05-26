@@ -4,9 +4,9 @@ import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import { HelpCircle } from '@styled-icons/boxicons-solid';
 
-const Tip = ({ children, content, size, renderChildren, className }) => {
+const Tip = ({ children, content, size, renderChildren, className, placement }) => {
   return (
-    <Tippy content={<span>{content}</span>}>
+    <Tippy content={<span>{content}</span>} placement={placement} >
       {renderChildren ? (
         { ...children }
       ) : (
