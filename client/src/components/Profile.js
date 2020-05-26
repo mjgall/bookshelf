@@ -8,8 +8,8 @@ import {
   ChevronDownSquare,
 } from '@styled-icons/boxicons-solid';
 
-
 import ProfleInfoCard from './ProfileInfoCard';
+import Confirm from '../common/Confirm';
 
 export default class Profile extends React.Component {
   state = {
@@ -202,12 +202,14 @@ export default class Profile extends React.Component {
     // }
 
     return member.user_id == this.props.user.id ? null : membership.is_owner ? (
-      <XSquare
-        size='1.5em'
-        className='cursor-pointer text-red-600'
-        onClick={() => {
-          this.removeMember(membership.household_id, member.user_id, index);
-        }}></XSquare>
+      <Confirm
+        position='left'
+        tipContent='Remove member'
+        onConfirm={() =>
+          this.removeMember(membership.household_id, member.user_id, index)
+        }>
+        <XSquare color='red' size='1.5rem' className='cursor-pointer'></XSquare>
+      </Confirm>
     ) : null;
   };
 
@@ -341,15 +343,20 @@ export default class Profile extends React.Component {
                           {membership.household_name}
                         </span>
                         {membership.is_owner ? (
-                          <XSquare
-                            size='2rem'
-                            className='cursor-pointer text-red-600'
-                            onClick={() =>
+                          <Confirm
+                            position='left'
+                            tipContent='Delete household'
+                            onConfirm={() =>
                               this.deleteHousehold(
                                 membership.household_id,
                                 index
                               )
-                            }></XSquare>
+                            }>
+                            <XSquare
+                              color='red'
+                              size='2rem'
+                              className='cursor-pointer'></XSquare>
+                          </Confirm>
                         ) : null}
                       </div>
                       <form

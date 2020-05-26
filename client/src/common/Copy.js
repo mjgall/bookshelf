@@ -27,11 +27,11 @@ const Copy = (props) => {
       />
 
       {copySuccess ? (
-        <Tip renderChildren content='Copied!'>
+        <Tip placement={props.placement} renderChildren content='Copied!'>
           <CheckCircle size='1.5em' color='green'></CheckCircle>
         </Tip>
       ) : (
-        <Tip renderChildren content='Click to copy'>
+        <Tip placement={props.placement} renderChildren content='Click to copy'>
           <CopyIcon
             className='cursor-pointer'
             size='1.5em'

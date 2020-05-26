@@ -46,10 +46,15 @@ export default class ProfileInfoCard extends React.Component {
           </div>
           <div className='mb-3'>
             <div className='flex items-center justify-center'>
-              <Tip className='mr-2' size='1rem' content='Any books marked as "Public" are visible for users and non-users of Bookshelf at this page.'></Tip>
+              <Tip
+                placement='top'
+                className='mr-2'
+                size='1rem'
+                content='Any books marked as "Public" are visible for users and non-users of Bookshelf at this page.'></Tip>
               <span>Your public shelf link:</span>
             </div>
             <Copy
+              placement='top'
               value={`${window.location.protocol}//${window.location.host}/shelf/${this.props.user.id}`}></Copy>
           </div>
         </div>
