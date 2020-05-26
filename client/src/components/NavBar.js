@@ -36,7 +36,7 @@ class NavBar extends React.Component {
           </div>
           <span className="hidden md:inline-block text-sm  text-white hover:text-white">
             {this.props.user
-              ? `${this.props?.user?.full} has ${
+              ? `You have ${
                   this.props.books.filter(
                     (book) => book.user_id == this.props.user.id
                   ).length

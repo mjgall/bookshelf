@@ -166,7 +166,6 @@ class Home extends React.Component {
               ownerFilterValue={this.state?.ownerSelect?.label}
               householdSelect={this.state.householdSelect}
               selfOnly={this.state.selfOnly}
-              householdSelect={this.state.householdSelect}
               members={this.props.members}
               user={this.props.user}
               history={this.props.history}

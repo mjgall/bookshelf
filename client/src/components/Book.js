@@ -476,10 +476,8 @@ class Book extends React.Component {
                 position='left'
                 tipContent='Delete book'
                 onConfirm={() => this.deleteBook()}>
-                <XSquare
-                  color='red'
-                  size='2rem'
-                  className='cursor-pointer'></XSquare>
+                <XSquare color='red' size='2rem'
+                ></XSquare>
               </Confirm>
             ) : null}
           </div>

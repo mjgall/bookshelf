@@ -155,7 +155,7 @@ export default class Profile extends React.Component {
         </div>
       ) : (
         <div
-          className='w-5/6 md:w-full container shadow text-sm bg-red-100 border border-red-400 text-red-700 my-2 px-4 py-3 rounded relative'
+          className='w-5/6 md:w-full container shadow text-sm bg-red-100 border border-red-600 text-red-700 my-2 px-4 py-3 rounded relative'
           role='alert'>
           <strong className='font-bold'>🏠 </strong>
           <span className='block sm:inline'>Declined!</span>
@@ -190,16 +190,6 @@ export default class Profile extends React.Component {
   };
 
   canRemoveMember = (member, membership, index) => {
-    // if (member.user_id == this.props.user.id && !membership.is_owner) {
-    //   return (
-    //     <XSquare
-    //       size="2rem"
-    //       className="cursor-pointer text-red-600"
-    //       onClick={() => {
-    //         this.removeMember(membership.household_id, member.user_id, index);
-    //       }}></XSquare>
-    //   );
-    // }
 
     return member.user_id == this.props.user.id ? null : membership.is_owner ? (
       <Confirm
@@ -208,7 +198,7 @@ export default class Profile extends React.Component {
         onConfirm={() =>
           this.removeMember(membership.household_id, member.user_id, index)
         }>
-        <XSquare color='red' size='1.5rem' className='cursor-pointer'></XSquare>
+        <XSquare className="text-red-600" size='1.5rem'></XSquare>
       </Confirm>
     ) : null;
   };
@@ -225,7 +215,7 @@ export default class Profile extends React.Component {
           <div>
             {this.state.alertNoAction ? (
               <div
-                className='w-5/6 md:w-full container bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'
+                className='w-5/6 md:w-full container bg-red-100 border border-red-600 text-red-700 px-4 py-3 rounded relative'
                 role='alert'>
                 <span className='block sm:inline'>
                   {this.state.alertMessage}
@@ -234,7 +224,7 @@ export default class Profile extends React.Component {
             ) : null}
             {this.state.alert ? (
               <div
-                className='w-5/6 md:w-full container bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative'
+                className='w-5/6 md:w-full container bg-red-100 border border-red-600 text-red-700 px-4 py-3 rounded relative'
                 role='alert'>
                 <span className='block sm:inline'>
                   {this.state.alertMessage}
@@ -252,7 +242,7 @@ export default class Profile extends React.Component {
                     }></CheckSquare>
                   <XSquare
                     size='2em'
-                    className='cursor-pointer text-red-400'
+                    color="red"
                     onClick={() => this.setState({ alert: false })}></XSquare>
                 </span>
               </div>
@@ -282,7 +272,7 @@ export default class Profile extends React.Component {
                         }></CheckSquare>
                       <XSquare
                         size='2em'
-                        className='w-1/2 cursor-pointer text-red-400'
+                        className='w-1/2 cursor-pointer text-red-600'
                         onClick={() =>
                           this.declineInvitation(member.id)
                         }></XSquare>
@@ -353,9 +343,9 @@ export default class Profile extends React.Component {
                               )
                             }>
                             <XSquare
-                              color='red'
+                          
                               size='2rem'
-                              className='cursor-pointer'></XSquare>
+                              className="text-red-600"></XSquare>
                           </Confirm>
                         ) : null}
                       </div>

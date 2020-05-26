@@ -356,7 +356,8 @@ function BookTable(props) {
             ]?.member_first,
       };
     });
-  }, [props, props.totalBooks]);
+  }, [props, props.totalBooks, props.householdSelect, props.ownerFilterValue
+  ]);
 
   return (
     <Table
