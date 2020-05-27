@@ -1,10 +1,9 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import {
   useTable,
   useFilters,
   useSortBy,
   useGlobalFilter,
-  useBlockLayout,
 } from 'react-table';
 
 // import matchSorter from 'match-sorter';
@@ -103,25 +102,7 @@ function Table({
   ownerFilterValue,
   householdSelect,
 }) {
-  const filterTypes = React.useMemo(
-    () => ({
-      text: (rows, id, filterValue) => {
-        return rows.filter((row) => {
-          const rowValue = row.values[id];
-          return rowValue !== undefined
-            ? String(rowValue)
-                .toLowerCase()
-                .startsWith(String(filterValue).toLowerCase())
-            : true;
-        });
-      },
-      check: (rows, id, filterValue) => {
-        console.log({ rows, id, filterValue });
-      },
-    }),
-    []
-  );
-
+  
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI

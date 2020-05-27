@@ -10,6 +10,7 @@ export default class ProfileInfoCard extends React.Component {
           <div class='h-24 w-full bg-blue-400'></div>
           <div class='flex justify-center -mt-16'>
             <img
+              alt="user photo"
               src={this.props.user.picture}
               class='rounded-full h-32 w-32 border-solid border-white border-2 -mt-3'></img>
           </div>

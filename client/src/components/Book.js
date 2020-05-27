@@ -7,9 +7,9 @@ import TextareaAutosize from 'react-textarea-autosize';
 import Tip from '../common/Tip';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
-import { XSquare, Lock, LockAlt, LockOpen } from '@styled-icons/boxicons-solid';
+import { XSquare, Lock, LockOpen } from '@styled-icons/boxicons-solid';
 
-import Tippy from '@tippyjs/react/headless';
+
 import Confirm from '../common/Confirm';
 
 class Book extends React.Component {
