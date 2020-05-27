@@ -7,7 +7,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import Tip from '../common/Tip';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
-import { XSquare } from '@styled-icons/boxicons-solid';
+import { XSquare, Lock, LockAlt, LockOpen } from '@styled-icons/boxicons-solid';
 
 import Tippy from '@tippyjs/react/headless';
 import Confirm from '../common/Confirm';
@@ -308,8 +308,7 @@ class Book extends React.Component {
                       defaultValue={this.state?.author}
                       editView={(fieldProps) => (
                         <Textfield {...fieldProps} autoFocus />
-                      ) }
-                        
+                      )}
                       readView={() => (
                         <div className='text-center'>
                           {this.state?.author || 'No author'}
@@ -338,7 +337,10 @@ class Book extends React.Component {
                         <div
                           className='bg-red-500 hover:bg-red-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'
                           onClick={this.togglePrivate}>
-                          Private
+                           <div className="flex justify-center">
+                            <Lock size='1.5rem'></Lock>
+                            <span className="ml-2">Private</span>
+                          </div>
                         </div>
                       </Tip>
                     ) : (
@@ -349,7 +351,10 @@ class Book extends React.Component {
                         <div
                           onClick={this.togglePrivate}
                           className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
-                          Public
+                          <div className="flex justify-center">
+                            <LockOpen size='1.5rem'></LockOpen>
+                            <span className="ml-2">Public</span>
+                          </div>
                         </div>
                       </Tip>
                     )
