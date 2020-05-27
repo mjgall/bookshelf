@@ -1,5 +1,8 @@
 import React from 'react';
 import InlineEdit from '@atlaskit/inline-edit';
+import TextArea from '@atlaskit/textarea';
+import Textfield from '@atlaskit/textfield';
+
 import TextareaAutosize from 'react-textarea-autosize';
 import Tip from '../common/Tip';
 import axios from 'axios';
@@ -285,12 +288,7 @@ class Book extends React.Component {
                       readViewFitContainerWidth
                       defaultValue={this.state?.title}
                       editView={(fieldProps) => (
-                        <input
-                          className='w-full py-2 px-1'
-                          type='text'
-                          {...fieldProps}
-                          autoFocus
-                        />
+                        <Textfield {...fieldProps} autoFocus />
                       )}
                       readView={() => (
                         <div className='text-center'>
@@ -309,13 +307,9 @@ class Book extends React.Component {
                       readViewFitContainerWidth
                       defaultValue={this.state?.author}
                       editView={(fieldProps) => (
-                        <input
-                          className='w-full py-2 px-1'
-                          type='text'
-                          {...fieldProps}
-                          autoFocus
-                        />
-                      )}
+                        <Textfield {...fieldProps} autoFocus />
+                      ) }
+                        
                       readView={() => (
                         <div className='text-center'>
                           {this.state?.author || 'No author'}
@@ -408,12 +402,7 @@ class Book extends React.Component {
                     : 'Personal Notes'
                 }
                 editView={(fieldProps, ref) => (
-                  // @ts-ignore - textarea does not currently correctly pass through ref as a prop
-                  <TextareaAutosize
-                    type='text'
-                    className='w-full'
-                    {...fieldProps}
-                  />
+                  <TextArea {...fieldProps} ref={ref}></TextArea>
                 )}
                 readView={() => (
                   <div className='multiline'>
@@ -435,11 +424,7 @@ class Book extends React.Component {
                       defaultValue={householdNotes.notes}
                       label={`Notes from ${householdNotes.household_name}`}
                       editView={(fieldProps, ref) => (
-                        <TextareaAutosize
-                          type='text'
-                          className='w-full'
-                          {...fieldProps}
-                        />
+                        <TextArea {...fieldProps} ref={ref}></TextArea>
                       )}
                       readView={() => {
                         if (householdNotes.notes) {
@@ -476,8 +461,7 @@ class Book extends React.Component {
                 position='left'
                 tipContent='Delete book'
                 onConfirm={() => this.deleteBook()}>
-                <XSquare color='red' size='2rem'
-                ></XSquare>
+                <XSquare color='red' size='2rem'></XSquare>
               </Confirm>
             ) : null}
           </div>
