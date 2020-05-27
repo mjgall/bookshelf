@@ -6,8 +6,6 @@ module.exports = (userId, globalBookId) => {
     INSERT INTO households_books (global_book_id, household_id, user_id) SELECT '${globalBookId}' AS global_book_id, household_id, '${userId}' AS user_id FROM households_users JOIN households ON households.id = households_users.household_id WHERE user_id = ${userId};
     `;
 
-    console.log(query)
-
     db.query(query, (err, results, fields) => {
       if (err) throw Error(err);
       resolve(results);

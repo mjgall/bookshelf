@@ -13,9 +13,6 @@ module.exports = (field, value, bookType, householdsBookId, userBookId) => {
         value
       )} WHERE id = ${userBookId};`;
     }
-
-    console.log(query);
-
     db.query(query, (err, results, fields) => {
       if (err) {
         reject(err);

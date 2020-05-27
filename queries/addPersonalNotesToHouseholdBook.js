@@ -7,8 +7,6 @@ module.exports = (userId, globalBookId, notes) => {
       notes
     )});`;
 
-    console.log(query)
-
     db.query(query, (err, results, fields) => {
       if (err) throw Error(err);
 
