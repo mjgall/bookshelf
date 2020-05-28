@@ -65,10 +65,6 @@ export default class App extends React.Component {
     this.setState({ books: [...this.state.books, book] });
   };
 
-  updateUser = (user) => {
-    this.setState({ user });
-  };
-
   componentDidMount = async () => {
     const bootstrap = await axios
       .get('/api/bootstrap')
@@ -87,30 +83,6 @@ export default class App extends React.Component {
     });
   };
 
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.listenToScroll);
-    window.removeEventListener('resize', this.listenToResize);
-  }
-
-  // listenToResize = (e) => {
-  //   this.setState({ windowWidth: e.srcElement.innerWidth });
-  // };
-
-  // listenToScroll = () => {
-  //   const winScroll =
-  //     document.body.scrollTop || document.documentElement.scrollTop;
-
-  //   const height =
-  //     document.documentElement.scrollHeight -
-  //     document.documentElement.clientHeight;
-
-  //   const scrolled = winScroll / height;
-
-  //   this.setState({
-  //     scrollPosition: scrolled * 100,
-  //   });
-  // };
-
   updateNavReferrer = (referrer) => {
     this.setState({ referrer });
   };
@@ -128,11 +100,7 @@ export default class App extends React.Component {
               <NavBar
                 referrer={this.state.referrer}
                 windowWidth={this.state.windowWidth}
-                scrollPosition={this.state.scrollPosition}
-                books={this.state?.books}
-                user={this.state.user}
-                members={this.state.householdMembers}
-                Profile></NavBar>
+                scrollPosition={this.state.scrollPosition}></NavBar>
               <Switch>
                 <Route exact path='/'>
                   <Home

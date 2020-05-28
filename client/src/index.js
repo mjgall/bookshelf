@@ -3,14 +3,13 @@ import ReactDOM from 'react-dom';
 // import './index.css';
 import './styles/tailwind.css';
 import App from './App';
+import ContextWrapper from './ContextWrapper';
 import * as serviceWorker from './serviceWorker';
-
 
 ReactDOM.render(
   <React.StrictMode>
-
-      <App />
-
+    <ContextWrapper></ContextWrapper>
+    {/* <App /> */}
   </React.StrictMode>,
   document.getElementById('root')
 );
