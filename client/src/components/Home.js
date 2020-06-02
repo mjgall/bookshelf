@@ -6,7 +6,6 @@ import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
 import Select from 'react-select';
 import _ from 'lodash';
-import Confirm from '../common/Confirm';
 
 class Home extends React.Component {
   state = {
@@ -30,19 +29,10 @@ class Home extends React.Component {
     }
   };
 
-  selfOnly = (value) => {
-    window.localStorage.setItem('selfOnly', value ? 'enabled' : 'disabled');
-    this.setState({ selfOnly: !this.state.selfOnly });
-  };
   updateNavReferrer = (i) => {
     this.props.updateNavReferrer(i);
   };
 
-  filterPersonalBooks = (books) => {
-    if (this.state.selfOnly) {
-      return books.filter((book) => book.user_id == this.props.user.id);
-    } else return books;
-  };
 
   filterHouseholdBooks = (books) => {
     if (this.state.householdSelect.value == null) {
@@ -64,14 +54,6 @@ class Home extends React.Component {
         );
       });
       return newBooks;
-    }
-  };
-
-  filterBooks = (books) => {
-    if (this.state.selfOnly) {
-      return this.filterPersonalBooks(books);
-    } else {
-      return this.filterHouseholdBooks(books);
     }
   };
 
@@ -170,7 +152,7 @@ class Home extends React.Component {
               user={this.props.user}
               history={this.props.history}
               totalBooks={this.state.books.length}
-              books={this.filterBooks(this.state.books)}
+              books={this.filterHouseholdBooks(this.state.books)}
               userOnly={this.state.selfOnly}></BookTable>
           </div>
         ) : this.props.loaded && !this.props.user ? (
