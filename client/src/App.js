@@ -51,7 +51,7 @@ const App = () => {
               <Profile></Profile>
             </PrivateRoute>
             <Route exact path='/book/:id'>
-              <Book globalBook={true}></Book>
+              <Book globalBook></Book>
             </Route>
             <PrivateRoute exact path='/book/owned/:userBookId'>
               <Book></Book>
