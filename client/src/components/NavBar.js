@@ -14,6 +14,8 @@ const NavBar = ({
 }) => {
   const global = React.useContext(Context);
 
+  scrollPosition = 1
+
   const goHome = () => {
     history.push('');
   };

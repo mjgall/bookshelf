@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Scanner from './Scanner';
-import BookTable from './BookTable2';
+import BookTable from './BookTable3';
 import MarketingHome from './MarketingHome';
 import { withRouter } from 'react-router-dom';
 import queryString from 'query-string';
@@ -64,9 +64,8 @@ const Home = (props) => {
   };
 
   const getOwners = (members, householdId = null) => {
-    console.log(members, householdId)
+    console.log(members, householdId);
     if (!householdId || householdId == 'all' || householdId == 'none') {
-     
       setOwners([
         { value: 'all', label: 'All' },
 
@@ -104,60 +103,21 @@ const Home = (props) => {
             user={global.currentUser}
             className='max-w-screen-lg container mx-auto mt-5'
             addBookToGlobalState={addBookToGlobalState}></Scanner>
-          <div className='max-w-screen-lg mx-auto mb-6 grid md:grid-cols-2 md:gap-2 grid-cols-1 row-gap-2'>
-            <Select
-              isOptionDisabled={(option) => option.value == 'no-households'}
-              placeholder='Household...'
-              blurInputOnSelect
-              isSearchable={false}
-              className='w-full container'
-              options={[
-                { value: 'none', label: `⛔ None (Only your own books)` },
-                global.households.length == 0
-                  ? {
-                      value: 'no-households',
-                      label: `🏠 You don't have any households! Add one from Profile`,
-                    }
-                  : global.households.length == 1
-                  ? global.households.map((household) => {
-                      return {
-                        value: household.household_id,
-                        label: `🏠 ${household.name}`,
-                      };
-                    })
-                  : { value: 'all', label: `🏠 All households` },
-                ...global.households.map((household) => ({
-                  value: household.household_id,
-                  label: `🏠 ${household.name}`,
-                })),
-              ]}
-              value={householdSelect}
-              onChange={handleHouseholdChange}></Select>
-            {householdSelect.value == 'none' ? null : (
-              <Select
-                isOptionDisabled={(option) => option.value == 'no-households'}
-                placeholder='Owner...'
-                blurInputOnSelect
-                isSearchable={false}
-                className='w-full container'
-                options={owners}
-                value={ownerSelect}
-                onChange={handleOwnerChange}></Select>
-            )}
-          </div>
+          
           <BookTable
+            filters={{ householdSelect, ownerSelect }}
             ownerFilterValue={ownerSelect?.label}
             householdSelect={householdSelect}
             members={global.householdMembers}
             user={global.currentUser}
             history={props.history}
-            books={filterHouseholdBooks(
-              global.books.userBooks.concat(global.books.householdBooks)
+            books={global.books.userBooks.concat(
+              global.books.householdBooks
             )}></BookTable>
         </div>
-      ) : global.currentUseruser ? (
+      ) : (
         <MarketingHome></MarketingHome>
-      ) : null}
+      )}
     </>
   );
 };

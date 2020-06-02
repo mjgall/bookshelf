@@ -7,7 +7,6 @@ const GlobalProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [global, setGlobal] = useState({});
 
-
   const fetchData = async () => {
     const data = await axios
       .get('/api/bootstrap')
@@ -17,17 +16,20 @@ const GlobalProvider = ({ children }) => {
   };
 
   useEffect(() => {
-
     fetchData();
   }, []);
 
-  return (
-    <Context.Provider value={{ loading, setGlobal, ...global }}>
-      {children}
-    </Context.Provider>
-  );
+  const cleanState = {
+    ...global,
+    loading,
+    householdBooks: global?.books?.householdBooks,
+    userBooks: global?.books?.userBooks,
+    setGlobal
+  };
+
+  return <Context.Provider value={cleanState}>{children}</Context.Provider>;
 };
 
-const GlobalConsumer = Context.Consumer
+const GlobalConsumer = Context.Consumer;
 
-export { GlobalProvider, GlobalConsumer, Context }
+export { GlobalProvider, GlobalConsumer, Context };
