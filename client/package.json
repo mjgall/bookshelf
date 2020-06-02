@@ -3,17 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@atlaskit/inline-edit": "^10.0.31",
+    "@atlaskit/inline-edit": "^10.0.32",
     "@atlaskit/textarea": "^2.2.9",
     "@atlaskit/textfield": "^3.1.11",
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "@tippyjs/react": "^4.0.2",
-    "autoprefixer": "^9.7.4",
     "axios": "^0.19.2",
-    "bootstrap": "^4.4.1",
-    "http-proxy-middleware": "^1.0.3",
+    "bootstrap": "^4.5.0",
+    "http-proxy-middleware": "^1.0.4",
     "lodash": "^4.17.15",
     "match-sorter": "^4.0.2",
     "postcss-cli": "^7.1.0",
@@ -25,9 +24,9 @@
     "react-modal": "^3.11.2",
     "react-scripts": "3.4.1",
     "react-select": "^3.1.0",
-    "react-table": "^7.0.0",
+    "react-table": "^7.1.0",
     "react-textarea-autosize": "^7.1.2",
-    "styled-components": "^5.0.1",
+    "styled-components": "^5.1.1",
     "styled-icons": "^10.2.1",
     "tailwind": "^4.0.0"
   },
@@ -55,7 +54,7 @@
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^2.1.2",
-    "autoprefixer": "^9.7.4",
+    "autoprefixer": "^9.8.0",
     "postcss-cli": "^7.1.0",
     "tailwindcss": "^1.4.6"
   }

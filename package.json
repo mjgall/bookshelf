@@ -13,25 +13,25 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.658.0",
+    "aws-sdk": "^2.687.0",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "cookie-session": "^1.4.0",
     "express": "^4.17.1",
     "express-sslify": "^1.2.0",
     "lodash": "^4.17.15",
-    "mongoose": "^5.9.5",
+    "mongoose": "^5.9.16",
     "mysql": "^2.18.1",
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
     "react-responsive": "^8.0.3",
-    "react-router-dom": "^5.1.2",
+    "react-router-dom": "^5.2.0",
     "react-tippy": "^1.4.0",
-    "sqlstring": "^2.3.1",
+    "sqlstring": "^2.3.2",
     "tailwind": "^4.0.0",
-    "tailwindcss": "^1.2.0"
+    "tailwindcss": "^1.4.6"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.4"
   }
 }
