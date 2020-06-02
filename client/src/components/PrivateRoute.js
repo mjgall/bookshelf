@@ -1,13 +1,16 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
+import { globalContext } from '../globalContext';
 import { Redirect, withRouter } from 'react-router-dom';
 
 const PrivateRoute = (props) => {
+  const global = useContext(globalContext);
+
   if (props.children.length) {
     throw Error('PrivateRoute must receive only on child component');
   } else {
     return (
       <>
-        {props.user ? (
+        {global.currentUser ? (
           // props.load
           React.createElement(() => {
             return {

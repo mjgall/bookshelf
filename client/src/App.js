@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // import './App.css';
@@ -21,149 +21,198 @@ import Profile from './components/Profile';
 import SharedShelf from './pages/SharedShelf';
 import PrivateRoute from './components/PrivateRoute';
 
-import { userContext } from './userContext';
+import { globalContext } from './globalContext';
 
-export default class App extends React.Component {
-  state = {
-    books: [],
-    manualISBN: '',
-    user: null,
-    loaded: false,
-    scrollPosition: '0',
-    windowWidth: null,
+const App = () => {
+  const global = useContext(globalContext);
+
+  const [referrer, setReferrer] = useState('');
+
+  const updateNavReferrer = (referrer) => {
+    setReferrer(referrer);
   };
 
-  updateBook = (field, value, id, household) => {
-    let index;
-
-    if (field === 'delete') {
-      const newBooks = this.state.books.filter((books) => {
-        return books.user_book_id != id;
-      });
-
-      this.setState({ books: newBooks });
-    } else {
-      if (household) {
-        index = this.state.books.findIndex(
-          (existingBook) => existingBook.id == id
-        );
-      } else {
-        index = this.state.books.findIndex(
-          (existingBook) => existingBook.user_book_id == id
-        );
-      }
-
-      const newBooks = [...this.state.books];
-      const book = this.state.books[index];
-      book[field] = value;
-      newBooks.splice(index, 1, book);
-      this.setState({ books: newBooks });
-    }
+  const clearReferrer = () => {
+    setReferrer(null);
   };
 
-  addBookToGlobalState = (book) => {
-    this.setState({ books: [...this.state.books, book] });
-  };
+  return (
+    <Router>
+      <NavBar referrer={referrer}></NavBar>
+      <Switch>
+        <Route exact path='/'>
+          <Home
+            clearReferrer={clearReferrer}
+            updateNavReferrer={updateNavReferrer}></Home>
+        </Route>
+        <PrivateRoute path='/profile' exact>
+          <Profile></Profile>
+        </PrivateRoute>
+        <Route exact path='/book/:id'>
+          <Book globalBook={true}></Book>
+        </Route>
+        <PrivateRoute exact path='/book/owned/:userBookId'>
+          <Book></Book>
+        </PrivateRoute>
+        <PrivateRoute exact path='/book/household/:globalBookId'>
+          <Book></Book>
+        </PrivateRoute>
+        <Route path='/shelf/:shelfId'>
+          <SharedShelf></SharedShelf>
+        </Route>
+        <Route path='/*'>
+          <Home
+            clearReferrer={clearReferrer}
+            updateNavReferrer={updateNavReferrer}></Home>
+        </Route>
+      </Switch>
+    </Router>
+  );
+};
 
-  componentDidMount = async () => {
-    const bootstrap = await axios
-      .get('/api/bootstrap')
-      .then((response) => response.data);
+// class AppClass extends React.Component {
+//   state = {
+//     books: [],
+//     manualISBN: '',
+//     user: null,
+//     loaded: false,
+//     scrollPosition: '0',
+//     windowWidth: null,
+//   };
 
-    const books = bootstrap.books.userBooks.concat(
-      bootstrap.books.householdBooks
-    );
+//   updateBook = (field, value, id, household) => {
+//     let index;
 
-    this.setState({
-      user: bootstrap.currentUser,
-      books: books || [],
-      householdMembers: bootstrap.householdMembers,
-      households: bootstrap.households,
-      loaded: true,
-    });
-  };
+//     if (field === 'delete') {
+//       const newBooks = this.state.books.filter((books) => {
+//         return books.user_book_id != id;
+//       });
 
-  updateNavReferrer = (referrer) => {
-    this.setState({ referrer });
-  };
+//       this.setState({ books: newBooks });
+//     } else {
+//       if (household) {
+//         index = this.state.books.findIndex(
+//           (existingBook) => existingBook.id == id
+//         );
+//       } else {
+//         index = this.state.books.findIndex(
+//           (existingBook) => existingBook.user_book_id == id
+//         );
+//       }
 
-  clearReferrer = () => {
-    this.setState({ referrer: null });
-  };
+//       const newBooks = [...this.state.books];
+//       const book = this.state.books[index];
+//       book[field] = value;
+//       newBooks.splice(index, 1, book);
+//       this.setState({ books: newBooks });
+//     }
+//   };
 
-  render = () => {
-    return (
-      <>
-        {this.state.loaded ? (
-          <userContext.Provider value={this.state.user}>
-            <Router>
-              <NavBar
-                referrer={this.state.referrer}
-                windowWidth={this.state.windowWidth}
-                scrollPosition={this.state.scrollPosition}></NavBar>
-              <Switch>
-                <Route exact path='/'>
-                  <Home
-                    households={this.state.households}
-                    clearReferrer={this.clearReferrer}
-                    updateNavReferrer={this.updateNavReferrer}
-                    loaded={this.state.loaded}
-                    user={this.state.user}
-                    addBookToGlobalState={this.addBookToGlobalState}
-                    books={this.state?.books}
-                    members={this.state.householdMembers}></Home>
-                </Route>
-                <PrivateRoute path='/profile' user={this.state.user} exact>
-                  <Profile
-                    books={this.state.books}
-                    members={this.state.householdMembers}
-                    households={this.state.households}
-                    user={this.state.user}></Profile>
-                </PrivateRoute>
-                <Route exact path='/book/:id'>
-                  <Book
-                    user={this.state.user}
-                    globalBook={true}
-                    updateBook={this.updateBook}
-                    books={this.state?.books}></Book>
-                </Route>
-                <PrivateRoute
-                  user={this.state.user}
-                  exact
-                  path='/book/owned/:userBookId'>
-                  <Book
-                    updateBook={this.updateBook}
-                    books={this.state?.books}></Book>
-                </PrivateRoute>
-                <PrivateRoute
-                  user={this.state.user}
-                  exact
-                  path='/book/household/:globalBookId'>
-                  <Book
-                    updateBook={this.updateBook}
-                    books={this.state?.books}></Book>
-                </PrivateRoute>
-                <Route path='/shelf/:shelfId'>
-                  <SharedShelf
-                    members={this.state.householdMembers}></SharedShelf>
-                </Route>
-                <Route path='/shelf/:shelfId/book/IbookId'></Route>
-                <Route path='/*'>
-                  <Home
-                    households={this.state.households}
-                    clearReferrer={this.clearReferrer}
-                    updateNavReferrer={this.updateNavReferrer}
-                    loaded={this.state.loaded}
-                    user={this.state.user}
-                    addBookToGlobalState={this.addBookToGlobalState}
-                    books={this.state?.books}
-                    members={this.state.householdMembers}></Home>
-                </Route>
-              </Switch>
-            </Router>
-          </userContext.Provider>
-        ) : null}
-      </>
-    );
-  };
-}
+//   addBookToGlobalState = (book) => {
+//     this.setState({ books: [...this.state.books, book] });
+//   };
+
+//   componentDidMount = async () => {
+//     const bootstrap = await axios
+//       .get('/api/bootstrap')
+//       .then((response) => response.data);
+
+//     const books = bootstrap.books.userBooks.concat(
+//       bootstrap.books.householdBooks
+//     );
+
+//     this.setState({
+//       user: bootstrap.currentUser,
+//       books: books || [],
+//       householdMembers: bootstrap.householdMembers,
+//       households: bootstrap.households,
+//       loaded: true,
+//     });
+//   };
+
+//   updateNavReferrer = (referrer) => {
+//     this.setState({ referrer });
+//   };
+
+//   clearReferrer = () => {
+//     this.setState({ referrer: null });
+//   };
+
+//   render = () => {
+//     return (
+//       <>
+//         {this.state.loaded ? (
+//           <userContext.Provider value={this.state.user}>
+//             <Router>
+//               <NavBar
+//                 referrer={this.state.referrer}
+//                 windowWidth={this.state.windowWidth}
+//                 scrollPosition={this.state.scrollPosition}></NavBar>
+//               <Switch>
+//                 <Route exact path='/'>
+//                   <Home
+//                     households={this.state.households}
+//                     clearReferrer={this.clearReferrer}
+//                     updateNavReferrer={this.updateNavReferrer}
+//                     loaded={this.state.loaded}
+//                     user={this.state.user}
+//                     addBookToGlobalState={this.addBookToGlobalState}
+//                     books={this.state?.books}
+//                     members={this.state.householdMembers}></Home>
+//                 </Route>
+//                 <PrivateRoute path='/profile' user={this.state.user} exact>
+//                   <Profile
+//                     books={this.state.books}
+//                     members={this.state.householdMembers}
+//                     households={this.state.households}
+//                     user={this.state.user}></Profile>
+//                 </PrivateRoute>
+//                 <Route exact path='/book/:id'>
+//                   <Book
+//                     user={this.state.user}
+//                     globalBook={true}
+//                     updateBook={this.updateBook}
+//                     books={this.state?.books}></Book>
+//                 </Route>
+//                 <PrivateRoute
+//                   user={this.state.user}
+//                   exact
+//                   path='/book/owned/:userBookId'>
+//                   <Book
+//                     updateBook={this.updateBook}
+//                     books={this.state?.books}></Book>
+//                 </PrivateRoute>
+//                 <PrivateRoute
+//                   user={this.state.user}
+//                   exact
+//                   path='/book/household/:globalBookId'>
+//                   <Book
+//                     updateBook={this.updateBook}
+//                     books={this.state?.books}></Book>
+//                 </PrivateRoute>
+//                 <Route path='/shelf/:shelfId'>
+//                   <SharedShelf
+//                     members={this.state.householdMembers}></SharedShelf>
+//                 </Route>
+//                 <Route path='/shelf/:shelfId/book/IbookId'></Route>
+//                 <Route path='/*'>
+//                   <Home
+//                     households={this.state.households}
+//                     clearReferrer={this.clearReferrer}
+//                     updateNavReferrer={this.updateNavReferrer}
+//                     loaded={this.state.loaded}
+//                     user={this.state.user}
+//                     addBookToGlobalState={this.addBookToGlobalState}
+//                     books={this.state?.books}
+//                     members={this.state.householdMembers}></Home>
+//                 </Route>
+//               </Switch>
+//             </Router>
+//           </userContext.Provider>
+//         ) : null}
+//       </>
+//     );
+//   };
+// }
+
+export default App;
