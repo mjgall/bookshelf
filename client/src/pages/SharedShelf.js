@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import { globalContext } from '../globalContext';
+import { Context } from '../globalContext';
 import { Redirect, withRouter } from 'react-router-dom';
 import BookTable from '../components/BookTable2';
 
 const SharedShelf = (props) => {
-  const user = useContext(globalContext).currentUser;
-  const members = useContext(globalContext).householdMembers
+  const user = useContext(Context).currentUser;
+  const members = useContext(Context).householdMembers
 
   const [books, setBooks] = useState([]);
   const [loaded, setLoaded] = useState(false);

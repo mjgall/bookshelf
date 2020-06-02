@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Scanner from './Scanner';
 import BookTable from './BookTable2';
 import MarketingHome from './MarketingHome';
@@ -8,35 +8,41 @@ import Select from 'react-select';
 import _ from 'lodash';
 import Confirm from '../common/Confirm';
 
-import { globalContext } from '../globalContext';
+import { Context } from '../globalContext';
 
 const Home = (props) => {
- 
-  const global = useContext(globalContext);
+  const [householdSelect, setHouseholdSelect] = useState({
+    value: 'none',
+    label: 'Select household...',
+  });
 
+  const [ownerSelect, setOwnerSelect] = useState('all');
+
+  const [owners, setOwners] = useState([]);
+
+  const global = useContext(Context);
+
+  useEffect(() => {
+    getOwners(global.householdMembers);
+  }, []);
 
   const updateNavReferrer = (i) => {
     props.updateNavReferrer(i);
   };
 
-  
-
   const filterHouseholdBooks = (books) => {
-    if (this.state.householdSelect.value == null) {
+    if (householdSelect.value == null) {
       return books;
-    } else if (this.state.householdSelect.value == 'none') {
-      return books.filter((book) => book.user_id == this.props.user.id);
-    } else if (this.state.householdSelect.value == 'all') {
+    } else if (householdSelect.value == 'none') {
+      return books.filter((book) => book.user_id == global.currentUser.id);
+    } else if (householdSelect.value == 'all') {
       return books;
-    } else if (
-      this.state.householdSelect.value == 'all' &&
-      this.state.ownerSelect.value == 'All'
-    ) {
+    } else if (householdSelect.value == 'all' && ownerSelect.value == 'All') {
       return books;
     } else {
       const newBooks = books.filter((book) => {
         return (
-          book.household_id == this.state.householdSelect.value ||
+          book.household_id == householdSelect.value ||
           book.household_id == null
         );
       });
@@ -44,49 +50,50 @@ const Home = (props) => {
     }
   };
 
-  const filterBooks = (books) => {
-    if (this.state.selfOnly) {
-      return this.filterPersonalBooks(books);
-    } else {
-      return this.filterHouseholdBooks(books);
-    }
-  };
-
   const handleHouseholdChange = (selected) => {
-    this.getOwners(this.props.members, selected.value);
-    this.setState({ householdSelect: selected, ownerSelect: 'all' });
+    getOwners(global.householdMembers, selected.value);
+    setHouseholdSelect(selected);
+    setOwnerSelect('all');
     localStorage.setItem('householdFilter', JSON.stringify(selected));
     localStorage.setItem('ownerFilter', null);
   };
 
   const handleOwnerChange = (selected) => {
-    this.setState({ ownerSelect: selected });
+    setOwnerSelect(selected);
     localStorage.setItem('ownerFilter', JSON.stringify(selected));
   };
 
   const getOwners = (members, householdId = null) => {
+    console.log(members, householdId)
     if (!householdId || householdId == 'all' || householdId == 'none') {
-      this.setState({
-        owners: [
-          { value: 'all', label: 'All' },
+     
+      setOwners([
+        { value: 'all', label: 'All' },
 
-          ..._.uniqBy(members, 'user_id').map((owner) => {
+        ..._.uniqBy(members, 'user_id').map((owner) => {
+          return { value: owner.user_id, label: owner.member_first };
+        }),
+      ]);
+    } else {
+      setOwners([
+        { value: 'all', label: 'All' },
+        ...[...new Set(members)]
+          .filter((owner) => owner.household_id == householdId)
+          .map((owner) => {
             return { value: owner.user_id, label: owner.member_first };
           }),
-        ],
-      });
-    } else {
-      this.setState({
-        owners: [
-          { value: 'all', label: 'All' },
-          ...[...new Set(members)]
-            .filter((owner) => owner.household_id == householdId)
-            .map((owner) => {
-              return { value: owner.user_id, label: owner.member_first };
-            }),
-        ],
-      });
+      ]);
     }
+  };
+
+  const addBookToGlobalState = (book) => {
+    global.setGlobal({
+      ...global,
+      books: {
+        ...global.books,
+        userBooks: { ...global.books.userBooks, book },
+      },
+    });
   };
 
   return (
@@ -96,7 +103,7 @@ const Home = (props) => {
           <Scanner
             user={global.currentUser}
             className='max-w-screen-lg container mx-auto mt-5'
-            addBookToGlobalState={this.props.addBookToGlobalState}></Scanner>
+            addBookToGlobalState={addBookToGlobalState}></Scanner>
           <div className='max-w-screen-lg mx-auto mb-6 grid md:grid-cols-2 md:gap-2 grid-cols-1 row-gap-2'>
             <Select
               isOptionDisabled={(option) => option.value == 'no-households'}
@@ -106,55 +113,50 @@ const Home = (props) => {
               className='w-full container'
               options={[
                 { value: 'none', label: `⛔ None (Only your own books)` },
-                this.props.households.length == 0
+                global.households.length == 0
                   ? {
                       value: 'no-households',
                       label: `🏠 You don't have any households! Add one from Profile`,
                     }
-                  : this.props.households.length == 1
-                  ? this.props.households.map((household) => {
+                  : global.households.length == 1
+                  ? global.households.map((household) => {
                       return {
                         value: household.household_id,
                         label: `🏠 ${household.name}`,
                       };
                     })
                   : { value: 'all', label: `🏠 All households` },
-                ...this.props.households.map((household) => ({
+                ...global.households.map((household) => ({
                   value: household.household_id,
                   label: `🏠 ${household.name}`,
                 })),
               ]}
-              value={this.state.householdSelect}
-              onChange={this.handleHouseholdChange}></Select>
-            {this.state.householdSelect.value == 'none' ? null : (
+              value={householdSelect}
+              onChange={handleHouseholdChange}></Select>
+            {householdSelect.value == 'none' ? null : (
               <Select
                 isOptionDisabled={(option) => option.value == 'no-households'}
                 placeholder='Owner...'
                 blurInputOnSelect
                 isSearchable={false}
                 className='w-full container'
-                options={this.state.owners}
-                value={this.state.ownerSelect}
-                onChange={this.handleOwnerChange}></Select>
+                options={owners}
+                value={ownerSelect}
+                onChange={handleOwnerChange}></Select>
             )}
           </div>
           <BookTable
-            ownerFilterValue={this.state?.ownerSelect?.label}
-            householdSelect={this.state.householdSelect}
-            selfOnly={this.state.selfOnly}
-            members={this.props.members}
-            user={this.props.user}
-            history={this.props.history}
-            totalBooks={this.state.books.length}
-            books={this.filterBooks(this.state.books)}
-            userOnly={this.state.selfOnly}></BookTable>
+            ownerFilterValue={ownerSelect?.label}
+            householdSelect={householdSelect}
+            members={global.householdMembers}
+            user={global.currentUser}
+            history={props.history}
+            books={filterHouseholdBooks(
+              global.books.userBooks.concat(global.books.householdBooks)
+            )}></BookTable>
         </div>
-      ) : this.props.loaded && !this.props.user ? (
-        <MarketingHome
-          updateNavReferrer={this.updateNavReferrer}
-          redirect={this.state.redirect}
-          referrer={this.props?.location?.state?.referrer}
-          clearReferrer={this.props.clearReferrer}></MarketingHome>
+      ) : global.currentUseruser ? (
+        <MarketingHome></MarketingHome>
       ) : null}
     </>
   );

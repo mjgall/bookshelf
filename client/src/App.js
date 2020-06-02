@@ -21,11 +21,11 @@ import Profile from './components/Profile';
 import SharedShelf from './pages/SharedShelf';
 import PrivateRoute from './components/PrivateRoute';
 
-import { globalContext } from './globalContext';
+import { Context } from './globalContext';
 
 const App = () => {
-  const global = useContext(globalContext);
-
+  const global = useContext(Context);
+  const { loading } = global;
   const [referrer, setReferrer] = useState('');
 
   const updateNavReferrer = (referrer) => {
@@ -38,34 +38,38 @@ const App = () => {
 
   return (
     <Router>
-      <NavBar referrer={referrer}></NavBar>
-      <Switch>
-        <Route exact path='/'>
-          <Home
-            clearReferrer={clearReferrer}
-            updateNavReferrer={updateNavReferrer}></Home>
-        </Route>
-        <PrivateRoute path='/profile' exact>
-          <Profile></Profile>
-        </PrivateRoute>
-        <Route exact path='/book/:id'>
-          <Book globalBook={true}></Book>
-        </Route>
-        <PrivateRoute exact path='/book/owned/:userBookId'>
-          <Book></Book>
-        </PrivateRoute>
-        <PrivateRoute exact path='/book/household/:globalBookId'>
-          <Book></Book>
-        </PrivateRoute>
-        <Route path='/shelf/:shelfId'>
-          <SharedShelf></SharedShelf>
-        </Route>
-        <Route path='/*'>
-          <Home
-            clearReferrer={clearReferrer}
-            updateNavReferrer={updateNavReferrer}></Home>
-        </Route>
-      </Switch>
+      {loading ? null : (
+        <>
+          <NavBar referrer={referrer}></NavBar>
+          <Switch>
+            <Route exact path='/'>
+              <Home
+                clearReferrer={clearReferrer}
+                updateNavReferrer={updateNavReferrer}></Home>
+            </Route>
+            <PrivateRoute path='/profile' exact>
+              <Profile></Profile>
+            </PrivateRoute>
+            <Route exact path='/book/:id'>
+              <Book globalBook={true}></Book>
+            </Route>
+            <PrivateRoute exact path='/book/owned/:userBookId'>
+              <Book></Book>
+            </PrivateRoute>
+            <PrivateRoute exact path='/book/household/:globalBookId'>
+              <Book></Book>
+            </PrivateRoute>
+            <Route path='/shelf/:shelfId'>
+              <SharedShelf></SharedShelf>
+            </Route>
+            <Route path='/*'>
+              <Home
+                clearReferrer={clearReferrer}
+                updateNavReferrer={updateNavReferrer}></Home>
+            </Route>
+          </Switch>
+        </>
+      )}
     </Router>
   );
 };

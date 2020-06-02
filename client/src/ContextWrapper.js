@@ -3,24 +3,24 @@ import { globalContext } from './globalContext';
 import axios from 'axios';
 import App from './App';
 
-const ContextWrapper = () => {
+const ContextWrapper = ({ children }) => {
   const [global, setGlobal] = useState({});
+  const [loaded, setLoaded] = useState(false);
+  const getGlobal = async () => {
+    const global = await axios.get('/api/bootstrap');
+
+    setGlobal(global.data);
+  };
+
+  console.log('hello');
 
   useEffect(() => {
-    const getGlobal = async () => {
-      const global = await axios
-        .get('/api/bootstrap')
-        .then((response) => response.data);
-
-      setGlobal(global);
-    };
-
     getGlobal();
   }, []);
 
   return (
-    <globalContext.Provider value={global}>
-      <App></App>
+    <globalContext.Provider value={{ ...global, setGlobal }}>
+      {children}
     </globalContext.Provider>
   );
 };

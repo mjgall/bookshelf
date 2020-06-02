@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import logo from '../images/logo.png';
 
-import { globalContext } from '../globalContext';
+import { Context } from '../globalContext';
 
 const NavBar = ({
   windowWidth,
@@ -12,7 +12,7 @@ const NavBar = ({
   clearReferrer,
   referrer,
 }) => {
-  const global = React.useContext(globalContext);
+  const global = React.useContext(Context);
 
   const goHome = () => {
     history.push('');

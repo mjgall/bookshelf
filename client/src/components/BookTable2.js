@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { globalContext } from '../globalContext';
+import { Context } from '../globalContext';
 import { useTable, useFilters, useSortBy, useGlobalFilter } from 'react-table';
 
 // import matchSorter from 'match-sorter';
@@ -248,7 +248,7 @@ function Table({
 }
 
 function BookTable(props) {
-  const global = useContext(globalContext);
+  const global = useContext(Context);
   const columns = React.useMemo(() => {
     if (props.householdSelect.value == 'none') {
       return [

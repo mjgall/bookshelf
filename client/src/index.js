@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useContext, createContext } from 'react';
 import ReactDOM from 'react-dom';
 // import './index.css';
 import './styles/tailwind.css';
 import App from './App';
-import ContextWrapper from './ContextWrapper';
+import { GlobalProvider, Context } from './globalContext';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <ContextWrapper></ContextWrapper>
-    {/* <App /> */}
-  </React.StrictMode>,
+  <GlobalProvider>
+    <App />
+  </GlobalProvider>,
+
   document.getElementById('root')
 );
 
