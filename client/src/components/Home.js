@@ -11,79 +11,7 @@ import Confirm from '../common/Confirm';
 import { Context } from '../globalContext';
 
 const Home = (props) => {
-  const [householdSelect, setHouseholdSelect] = useState({
-    value: 'none',
-    label: 'Select household...',
-  });
-
-  const [ownerSelect, setOwnerSelect] = useState('all');
-
-  const [owners, setOwners] = useState([]);
-
   const global = useContext(Context);
-
-  useEffect(() => {
-    getOwners(global.householdMembers);
-  }, []);
-
-  const updateNavReferrer = (i) => {
-    props.updateNavReferrer(i);
-  };
-
-  const filterHouseholdBooks = (books) => {
-    if (householdSelect.value == null) {
-      return books;
-    } else if (householdSelect.value == 'none') {
-      return books.filter((book) => book.user_id == global.currentUser.id);
-    } else if (householdSelect.value == 'all') {
-      return books;
-    } else if (householdSelect.value == 'all' && ownerSelect.value == 'All') {
-      return books;
-    } else {
-      const newBooks = books.filter((book) => {
-        return (
-          book.household_id == householdSelect.value ||
-          book.household_id == null
-        );
-      });
-      return newBooks;
-    }
-  };
-
-  const handleHouseholdChange = (selected) => {
-    getOwners(global.householdMembers, selected.value);
-    setHouseholdSelect(selected);
-    setOwnerSelect('all');
-    localStorage.setItem('householdFilter', JSON.stringify(selected));
-    localStorage.setItem('ownerFilter', null);
-  };
-
-  const handleOwnerChange = (selected) => {
-    setOwnerSelect(selected);
-    localStorage.setItem('ownerFilter', JSON.stringify(selected));
-  };
-
-  const getOwners = (members, householdId = null) => {
-    console.log(members, householdId);
-    if (!householdId || householdId == 'all' || householdId == 'none') {
-      setOwners([
-        { value: 'all', label: 'All' },
-
-        ..._.uniqBy(members, 'user_id').map((owner) => {
-          return { value: owner.user_id, label: owner.member_first };
-        }),
-      ]);
-    } else {
-      setOwners([
-        { value: 'all', label: 'All' },
-        ...[...new Set(members)]
-          .filter((owner) => owner.household_id == householdId)
-          .map((owner) => {
-            return { value: owner.user_id, label: owner.member_first };
-          }),
-      ]);
-    }
-  };
 
   const addBookToGlobalState = (book) => {
     global.setGlobal({
@@ -103,14 +31,8 @@ const Home = (props) => {
             user={global.currentUser}
             className='max-w-screen-lg container mx-auto mt-5'
             addBookToGlobalState={addBookToGlobalState}></Scanner>
-          
+
           <BookTable
-            filters={{ householdSelect, ownerSelect }}
-            ownerFilterValue={ownerSelect?.label}
-            householdSelect={householdSelect}
-            members={global.householdMembers}
-            user={global.currentUser}
-            history={props.history}
             books={global.books.userBooks.concat(
               global.books.householdBooks
             )}></BookTable>

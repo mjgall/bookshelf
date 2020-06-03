@@ -29,12 +29,11 @@ const addPersonalNotesToHouseholdBook = require('../queries/addPersonalNotesToHo
 const updateHouseholdBookAsRead = require('../queries/updateHouseholdBookAsRead');
 const updatePersonalNotesOnHouseholdBook = require('../queries/updatePersonalNotesOnHouseholdBook');
 const getBook = require('../queries/getBook');
-const deleteBook = require('../queries/deleteBook')
+const deleteBook = require('../queries/deleteBook');
 
 const sendEmail = require('../services/aws-ses');
 
 module.exports = (app) => {
-
   //lookup book information by isbn10
 
   app.get('/api/bootstrap', async (req, res) => {
@@ -68,7 +67,6 @@ module.exports = (app) => {
   });
 
   app.get('/api/book/lookup/:isbn', async (req, res) => {
-
     const response = await axios.get(
       `https://api2.isbndb.com/book/${req.params.isbn}`,
       {
@@ -106,15 +104,6 @@ module.exports = (app) => {
     //need to check if the user adding the book is a member of any households, if they are
     //we need to also add the book to households_books
 
-    const households = await getHouseholds(req.user.id);
-    if (households.length > 0) {
-      const response = await addBookToHouseholdsBooks(
-        req.user.id,
-        userBookRow.global_id
-      );
-      console.log(response)
-    }
-
     res.send(userBookRow);
   });
 
@@ -139,13 +128,11 @@ module.exports = (app) => {
   app.put('/api/books', async (req, res) => {
     const book = { ...req.body };
 
+    console.log(book);
+
     if (req.body.field === 'read') {
       if (book.bookType === 'personal') {
-        const updatedBook = await updateBook(
-          book.field,
-          book.value,
-          book.userBookId
-        );
+        const updatedBook = await updateBook(book.field, book.value, book.id);
         res.send(updatedBook);
       } else {
         //update the read column in users_globalbooks
@@ -157,7 +144,7 @@ module.exports = (app) => {
           book.value,
           book.bookType,
           null,
-          book.userBookId
+          book.id
         );
         res.send(updatedBook);
       } else {
@@ -165,7 +152,7 @@ module.exports = (app) => {
           book.field,
           book.value,
           book.bookType,
-          book.householdsBooksId
+          book.id
         );
         res.send(updatedBook);
       }
@@ -192,11 +179,6 @@ module.exports = (app) => {
     const { name, userId } = req.body;
     const newHousehold = await addHousehold(name, userId);
 
-    const booksAdded = await addUserBooksToHousehold(
-      userId,
-      newHousehold.household_id
-    );
-
     //sends new households_user data
     res.send(newHousehold);
   });
@@ -213,11 +195,11 @@ module.exports = (app) => {
     res.send(households);
   });
 
-  app.get('/api/notes/households/:globalBookId/:userId', async (req, res) => {
+  //get household notes on any book by global id
+  app.get('/api/notes/households/:globalBookId', async (req, res) => {
     try {
       const householdNotes = await getHouseholdNotes(
         req.params.globalBookId,
-        req.params.userId,
         req.user.id
       );
       res.send(householdNotes);
@@ -246,14 +228,11 @@ module.exports = (app) => {
     }
   });
 
+  //get current invites
   app.get('/api/invitations', async (req, res) => {
     const households = await getHouseholdInvitations(req.user.id);
     res.send(households);
   });
-
-  // app.post('/api/invitations', async (req, res) => {
-
-  // })
 
   //accept, decline, delete a membership
   app.put('/api/invitations', async (req, res) => {
@@ -262,13 +241,7 @@ module.exports = (app) => {
 
       const accepted = await acceptPendingHousehold(req.body.id);
 
-      //add all of the users' books to the households_books table
-      const booksAdded = await addUserBooksToHousehold(
-        accepted.user_id,
-        accepted.household_id
-      );
-
-      res.send(booksAdded);
+      res.send(accepted);
     } else if (req.body.decline) {
       const declined = await declinePendingHousehold(req.body.id);
       res.send(declined);
@@ -284,6 +257,7 @@ module.exports = (app) => {
     }
   });
 
+  //update the notes or read state on a global book
   app.post('/api/households/books', async (req, res) => {
     console.log(req.body);
     if (req.body.action === 'read') {
@@ -304,7 +278,7 @@ module.exports = (app) => {
       if (req.body.usersGlobalBooksId) {
         const updatedNotes = await updatePersonalNotesOnHouseholdBook(
           req.body.usersGlobalBooksId,
-          req.body.notes
+          req.body.value
         );
         res.send(updatedNotes);
       } else {
@@ -318,26 +292,32 @@ module.exports = (app) => {
       }
     }
   });
-
+  //send an email
+  //TODO put this somewhere else
   app.post('/api/email', async (req, res) => {
     const { recipientAddress, subject, body } = req.body;
     const email = await sendEmail(recipientAddress, subject, body);
     res.send({ success: true, email });
   });
 
+
+  //get a users public books
   app.get('/api/shelves/:shelfId', async (req, res) => {
     const books = await getBooks(req.params.shelfId);
     res.send(books);
   });
 
+  //get single book by globalId
   app.get('/api/book/:bookId', async (req, res) => {
     const book = await getBook(req.params.bookId, req.user.id);
-
     res.send(book);
   });
 
+  //delete book
   app.delete('/api/books/:userBookId', async (req, res) => {
-    const deletion = await deleteBook(req.params.userBookId)
-    res.send(deletion)
-  })
+    const deletion = await deleteBook(req.params.userBookId);
+    res.send(deletion);
+  });
+
+  
 };

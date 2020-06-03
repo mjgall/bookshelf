@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 const Context = React.createContext(null); // Create a context object
@@ -24,7 +24,8 @@ const GlobalProvider = ({ children }) => {
     loading,
     householdBooks: global?.books?.householdBooks,
     userBooks: global?.books?.userBooks,
-    setGlobal
+    allBooks: global?.books?.userBooks.concat(global?.books?.householdBooks),
+    setGlobal,
   };
 
   return <Context.Provider value={cleanState}>{children}</Context.Provider>;

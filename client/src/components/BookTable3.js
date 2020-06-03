@@ -51,7 +51,7 @@ const BookTable = (props) => {
 
   const [ownerSelect, setOwnerSelect] = useState({
     value: 'all',
-    label: 'All',
+    label: 'All members',
   });
 
   const [owners, setOwners] = useState([]);
@@ -116,8 +116,8 @@ const BookTable = (props) => {
           author: book?.author,
           owner_name: props.sharedShelf
             ? null
-            : props.members[
-                props.members.findIndex(
+            : global.householdMembers[
+                global.householdMembers.findIndex(
                   (member) => member.user_id == book.user_id
                 )
               ]?.member_first,
@@ -152,7 +152,7 @@ const BookTable = (props) => {
   const handleHouseholdChange = (selected) => {
     getOwners(global.householdMembers, selected.value);
     setHouseholdSelect(selected);
-    setOwnerSelect({ label: 'all', value: 'all' });
+    setOwnerSelect({ label: 'All members', value: 'all' });
     localStorage.setItem('householdFilter', JSON.stringify(selected));
     localStorage.setItem('ownerFilter', null);
   };
@@ -165,7 +165,7 @@ const BookTable = (props) => {
   const getOwners = (members, householdId = null) => {
     if (!householdId || householdId == 'all' || householdId == 'none') {
       setOwners([
-        { value: 'all', label: 'All' },
+        { value: 'all', label: 'All members' },
 
         ..._.uniqBy(members, 'user_id').map((owner) => {
           return { value: owner.user_id, label: owner.member_first };
@@ -173,7 +173,7 @@ const BookTable = (props) => {
       ]);
     } else {
       setOwners([
-        { value: 'all', label: 'All' },
+        { value: 'all', label: 'All members' },
         ...[...new Set(members)]
           .filter((owner) => owner.household_id == householdId)
           .map((owner) => {

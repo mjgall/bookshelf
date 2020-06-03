@@ -9,7 +9,6 @@ import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { XSquare, Lock, LockOpen } from '@styled-icons/boxicons-solid';
 
-
 import Confirm from '../common/Confirm';
 
 class Book extends React.Component {
@@ -223,7 +222,7 @@ class Book extends React.Component {
   };
 
   handlePersonalNotesChange = async (notes) => {
-    const addHouseholdNotes = await axios
+    axios
       .post('/api/households/books', {
         bookId: this.state.id,
         action: 'notes',
@@ -337,9 +336,9 @@ class Book extends React.Component {
                         <div
                           className='bg-red-500 hover:bg-red-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'
                           onClick={this.togglePrivate}>
-                           <div className="flex justify-center">
+                          <div className='flex justify-center'>
                             <Lock size='1.5rem'></Lock>
-                            <span className="ml-2">Private</span>
+                            <span className='ml-2'>Private</span>
                           </div>
                         </div>
                       </Tip>
@@ -351,9 +350,9 @@ class Book extends React.Component {
                         <div
                           onClick={this.togglePrivate}
                           className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
-                          <div className="flex justify-center">
+                          <div className='flex justify-center'>
                             <LockOpen size='1.5rem'></LockOpen>
-                            <span className="ml-2">Public</span>
+                            <span className='ml-2'>Public</span>
                           </div>
                         </div>
                       </Tip>

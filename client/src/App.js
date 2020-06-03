@@ -15,7 +15,7 @@ import {
 
 import NavBar from './components/NavBar';
 import Home from './components/Home';
-import Book from './components/Book';
+import Book from './components/Book2';
 import Profile from './components/Profile';
 
 import SharedShelf from './pages/SharedShelf';
@@ -51,13 +51,15 @@ const App = () => {
               <Profile></Profile>
             </PrivateRoute>
             <Route exact path='/book/:id'>
-              <Book globalBook></Book>
+              <Book bookType='global'></Book>
             </Route>
             <PrivateRoute exact path='/book/owned/:userBookId'>
-              <Book></Book>
+              <Book bookType='personal'></Book>
             </PrivateRoute>
             <PrivateRoute exact path='/book/household/:globalBookId'>
-              <Book></Book>
+              <Book
+                bookType='household'
+              ></Book>
             </PrivateRoute>
             <Route path='/shelf/:shelfId'>
               <SharedShelf></SharedShelf>
