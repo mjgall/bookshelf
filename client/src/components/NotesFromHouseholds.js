@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Context } from '../globalContext';
 import InlineEdit from '@atlaskit/inline-edit';
 import TextArea from '@atlaskit/textarea';
-import Textfield from '@atlaskit/textfield';
 
 const NotesFromHouseholds = (props) => {
   const global = useContext(Context);
@@ -23,19 +22,36 @@ const NotesFromHouseholds = (props) => {
     fetchHouseholdNotes(props.bookId);
   }, []);
 
-  const handleHouseholdNotesChange = (id, value) => {
-    
-  }
+  const handleHouseholdNotesChange = async (
+    globalBookId,
+    householdId,
+    value,
+    index
+  ) => {
+    console.log(globalBookId, householdId, value);
+    const updatedNotes = await axios
+      .post(`/api/households/books`, {
+        field: 'notes',
+        value,
+        globalBookId,
+        householdId,
+      })
+      .then((response) => response.data);
+    const updatedHouseholdNotes = [...householdNotes];
+    updatedHouseholdNotes[index].notes = value;
+
+    setHouseholdNotes(updatedHouseholdNotes);
+  };
 
   return (
     <>
       {loaded ? (
         <div>
-          {householdNotes.map((householdNote) => {
+          {householdNotes.map((householdNote, index) => {
             return (
               <InlineEdit
                 keepEditViewOpenOnBlur={true}
-                defaultValue={householdNotes.notes}
+                defaultValue={householdNote.notes}
                 label={`Notes from ${householdNote.household_name}`}
                 editView={(fieldProps, ref) => (
                   <TextArea {...fieldProps} ref={ref}></TextArea>
@@ -54,7 +70,12 @@ const NotesFromHouseholds = (props) => {
                   }
                 }}
                 onConfirm={(value) =>
-                  handleHouseholdNotesChange(householdNote.id, value)
+                  handleHouseholdNotesChange(
+                    props.bookId,
+                    householdNote.household_id,
+                    value,
+                    index
+                  )
                 }
                 autoFocus
                 readViewFitContainerWidth

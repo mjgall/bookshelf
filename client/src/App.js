@@ -15,7 +15,7 @@ import {
 
 import NavBar from './components/NavBar';
 import Home from './components/Home';
-import Book from './components/Book2';
+import Book from './components/Book';
 import Profile from './components/Profile';
 
 import SharedShelf from './pages/SharedShelf';

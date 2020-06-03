@@ -16,22 +16,14 @@ const addHousehold = require('../queries/addHousehold');
 const getHouseholdMembersByUserId = require('../queries/getHouseholdMembersByUserId');
 const declinePendingHousehold = require('../queries/declinePendingHousehold');
 const deleteHousehold = require('../queries/deleteHousehold');
-const addUserBooksToHousehold = require('../queries/addUserBooksToHousehold');
 const removeHouseholdMember = require('../queries/removeHouseholdMember');
 const getUserBooks = require('../queries/getUserBooks');
 const getHouseholdBooks = require('../queries/getHouseholdBooks');
-const updateNotes = require('../queries/updateNotes');
 const getHouseholdNotes = require('../queries/getHouseholdNotes');
-const addBookToHouseholdsBooks = require('../queries/addBookToHouseholdsBooks');
-const updateUserGlobalBooks = require('../queries/updateUsersGlobalBooks');
 const updateUsersGlobalBooks = require('../queries/updateUsersGlobalBooks');
-const updatePersonalNotesOnGlobalBook = require('../queries/updatePersonalNotesOnGlobalBook');
-const updateHouseholdBookAsRead = require('../queries/updateHouseholdBookAsRead');
-const updateGlobalBookAsRead = require('../queries/updateGlobalBookAsRead');
 const getBook = require('../queries/getBook');
 const deleteBook = require('../queries/deleteBook');
-const addGlobalBook = require('../queries/addGlobalBook');
-
+const updateHouseholdsBooks = require('../queries/updateHouseholdsBooks');
 const sendEmail = require('../services/aws-ses');
 
 module.exports = (app) => {
@@ -253,7 +245,15 @@ module.exports = (app) => {
   });
 
   //update the households_books information (notes)
-  app.post('/api/households/books', async (req, res) => {});
+  app.post('/api/households/books', async (req, res) => {
+    const updatedNotes = await updateHouseholdsBooks(
+      req.body.householdId,
+      req.body.globalBookId,
+      req.body.field,
+      req.body.value
+    );
+    res.send(updatedNotes);
+  });
 
   //send an email
   //TODO put this somewhere else
