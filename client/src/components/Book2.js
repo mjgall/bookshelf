@@ -69,10 +69,9 @@ const Book = (props) => {
     }
   }, []);
 
-  const updateBookField = async (field, value, householdNotesId) => {
+  const updateBookField = async (field, value) => {
     let options = { bookType: props.bookType, field, value, id: undefined };
-    console.log(field, value, householdNotesId);
-
+    
     switch (field) {
       case 'title':
       case 'author':
@@ -100,12 +99,13 @@ const Book = (props) => {
           props.bookType === 'household'
         ) {
           options.id = book.id;
+          options.usersGlobalBooksId = book.users_globalbooks_id
         }
         break;
       default:
         break;
     }
-
+    console.log(options)
     axios.put('/api/books', options).then((response) => {
       global.allBooks[book.index][field] = response.data[field];
       setBook({ ...book, [field]: response.data[field] });
@@ -122,17 +122,6 @@ const Book = (props) => {
         throw Error('Error deleting book');
       }
     });
-  };
-
-  const updateHouseholdNotes = (value, householdNotesId) => {
-    // if (options.householdsBooksId) {
-    //   const index = householdNotes.findIndex(
-    //     (householdNote) => householdNote.id == options.householdsBooksId
-    //   );
-    //   const newHouseholdNotes = [...householdNotes];
-    //   householdNotes[index].notes = value;
-    //   setHouseholdNotes(newHouseholdNotes);
-    // }
   };
 
   return (

@@ -24,12 +24,13 @@ const updateNotes = require('../queries/updateNotes');
 const getHouseholdNotes = require('../queries/getHouseholdNotes');
 const addBookToHouseholdsBooks = require('../queries/addBookToHouseholdsBooks');
 const updateUserGlobalBooks = require('../queries/updateUsersGlobalBooks');
-const markHouseholdBookAsRead = require('../queries/markHouseholdBookAsRead');
-const addPersonalNotesToHouseholdBook = require('../queries/addPersonalNotesToHouseholdBook');
+const updateUsersGlobalBooks = require('../queries/updateUsersGlobalBooks');
+const updatePersonalNotesOnGlobalBook = require('../queries/updatePersonalNotesOnGlobalBook');
 const updateHouseholdBookAsRead = require('../queries/updateHouseholdBookAsRead');
-const updatePersonalNotesOnHouseholdBook = require('../queries/updatePersonalNotesOnHouseholdBook');
+const updateGlobalBookAsRead = require('../queries/updateGlobalBookAsRead');
 const getBook = require('../queries/getBook');
 const deleteBook = require('../queries/deleteBook');
+const addGlobalBook = require('../queries/addGlobalBook');
 
 const sendEmail = require('../services/aws-ses');
 
@@ -128,40 +129,37 @@ module.exports = (app) => {
   app.put('/api/books', async (req, res) => {
     const book = { ...req.body };
 
-    console.log(book);
-
     if (req.body.field === 'read') {
       if (book.bookType === 'personal') {
         const updatedBook = await updateBook(book.field, book.value, book.id);
         res.send(updatedBook);
       } else {
-        //update the read column in users_globalbooks
+        const updatedBook = await updateUsersGlobalBooks(
+          req.user.id,
+          req.body.id,
+          req.body.field,
+          req.body.value
+        );
+        res.send(updatedBook);
       }
     } else if (req.body.field === 'notes') {
       if (book.bookType === 'personal') {
-        const updatedBook = await updateNotes(
-          book.field,
-          book.value,
-          book.bookType,
-          null,
-          book.id
-        );
+        const updatedBook = await updateBook(book.field, book.value, book.id);
         res.send(updatedBook);
       } else {
-        const updatedBook = await updateNotes(
-          book.field,
-          book.value,
-          book.bookType,
-          book.id
+        const addNotes = await updateUsersGlobalBooks(
+          req.user.id,
+          req.body.id,
+          req.body.field,
+          req.body.value
         );
-        res.send(updatedBook);
+        res.send(addNotes);
       }
     } else {
       if (book.bookType === 'personal') {
         const updatedBook = await updateBook(book.field, book.value, book.id);
         res.send(updatedBook);
       } else {
-        console.log(book);
         res.send(book);
       }
     }
@@ -178,8 +176,6 @@ module.exports = (app) => {
   app.post('/api/households', async (req, res) => {
     const { name, userId } = req.body;
     const newHousehold = await addHousehold(name, userId);
-
-    //sends new households_user data
     res.send(newHousehold);
   });
 
@@ -246,7 +242,6 @@ module.exports = (app) => {
       const declined = await declinePendingHousehold(req.body.id);
       res.send(declined);
     } else if (req.body.remove) {
-      console.log(req.body);
       const response = await removeHouseholdMember(
         req.body.householdId,
         req.body.userId
@@ -257,41 +252,9 @@ module.exports = (app) => {
     }
   });
 
-  //update the notes or read state on a global book
-  app.post('/api/households/books', async (req, res) => {
-    console.log(req.body);
-    if (req.body.action === 'read') {
-      if (req.body.usersGlobalBooksId) {
-        const updatedHouseholdBookAsRead = await updateHouseholdBookAsRead(
-          req.body.usersGlobalBooksId
-        );
-        res.send(updatedHouseholdBookAsRead);
-      } else {
-        const householdAsRead = await markHouseholdBookAsRead(
-          req.user.id,
-          req.body.bookId
-        );
-        console.log(householdAsRead);
-        res.send(householdAsRead);
-      }
-    } else {
-      if (req.body.usersGlobalBooksId) {
-        const updatedNotes = await updatePersonalNotesOnHouseholdBook(
-          req.body.usersGlobalBooksId,
-          req.body.value
-        );
-        res.send(updatedNotes);
-      } else {
-        const addNotes = await addPersonalNotesToHouseholdBook(
-          req.user.id,
-          req.body.bookId,
-          req.body.notes
-        );
-        console.log(addNotes);
-        res.send(addNotes);
-      }
-    }
-  });
+  //update the households_books information (notes)
+  app.post('/api/households/books', async (req, res) => {});
+
   //send an email
   //TODO put this somewhere else
   app.post('/api/email', async (req, res) => {
@@ -299,7 +262,6 @@ module.exports = (app) => {
     const email = await sendEmail(recipientAddress, subject, body);
     res.send({ success: true, email });
   });
-
 
   //get a users public books
   app.get('/api/shelves/:shelfId', async (req, res) => {
@@ -318,6 +280,4 @@ module.exports = (app) => {
     const deletion = await deleteBook(req.params.userBookId);
     res.send(deletion);
   });
-
-  
 };
