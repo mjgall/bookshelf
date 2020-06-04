@@ -45,16 +45,35 @@ const BookTable = (props) => {
   const global = useContext(Context);
   const [householdOptions, setHouseholdOptions] = useState([]);
 
-  const [householdSelect, setHouseholdSelect] = useState({
-    value: 'none',
-    label: 'Select household...',
-  });
+  const getSavedHouseholdSelect = () => {
+    const localSaved = JSON.parse(localStorage.getItem('householdFilter'));
+    if (localSaved) {
+      return localSaved;
+    } else {
+      return {
+        value: 'none',
+        label: 'Select household...',
+      };
+    }
+  };
 
-  const [ownerSelect, setOwnerSelect] = useState({
-    value: 'all',
-    label: 'All members',
-  });
+  const getSavedOwnerSelect = () => {
+    const localSaved = JSON.parse(localStorage.getItem('ownerFilter'));
+    if (localSaved) {
+      return localSaved;
+    } else {
+      return {
+        value: 'all',
+        label: 'All members',
+      };
+    }
+  };
 
+  const [householdSelect, setHouseholdSelect] = useState(
+    getSavedHouseholdSelect()
+  );
+
+  const [ownerSelect, setOwnerSelect] = useState(getSavedOwnerSelect());
   const [owners, setOwners] = useState([]);
 
   useEffect(() => {
@@ -255,7 +274,7 @@ const BookTable = (props) => {
             value={householdSelect}
             onChange={handleHouseholdChange}></Select>
         )}
-        {householdSelect.value === 'none' ? null : (
+        {householdSelect.value === 'none' || props.sharedShelf ? null : (
           <Select
             isOptionDisabled={(option) => option.value === 'no-households'}
             placeholder='Owner...'

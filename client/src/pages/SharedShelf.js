@@ -9,6 +9,7 @@ const SharedShelf = (props) => {
   const members = useContext(Context).householdMembers;
 
   const [books, setBooks] = useState([]);
+  const [loaded, setLoaed] = useState(false);
 
   useEffect(() => {
     const getBooks = async () => {
@@ -17,6 +18,7 @@ const SharedShelf = (props) => {
         .then((response) => response.data);
 
       setBooks(books);
+      setLoaed(true);
     };
 
     getBooks();
@@ -36,27 +38,30 @@ const SharedShelf = (props) => {
     } else return 'relation';
   };
 
-  if (books.length > 0) {
-    return (
-      <div className='my-6'>
-        <div className='text-3xl text-center my-6'>
-          {books[0].full}'s shared books
+  if (loaded) {
+    if (books.length > 0) {
+      return (
+        <div className='my-6'>
+          <div className='text-3xl text-center my-6'>
+            {books[0].full}'s shared books
+          </div>
+          <BookTable
+            relation={user ? findRelation() : null}
+            sharedShelf={true}
+            householdSelect={{ value: 'none' }}
+            user={user}
+            history={props.history}
+            books={books || []}></BookTable>
         </div>
-        <BookTable
-          relation={user ? findRelation() : null}
-          sharedShelf={true}
-          // ownerFilterValue={this.state?.ownerSelect?.label}
-          // householdSelect={this.state.householdSelect}
-          // selfOnly={this.state.selfOnly}
-          householdSelect={{ value: 'none' }}
-          // members={this.members}
-          user={user}
-          history={props.history}
-          books={books || []}
-          // userOnly={this.state.selfOnly}
-        ></BookTable>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className='w-1/2 mt-16 m-auto text-center'>
+          Either this user does not exist or they don't have any books on their
+          shared shelf!
+        </div>
+      );
+    }
   } else {
     return null;
   }
