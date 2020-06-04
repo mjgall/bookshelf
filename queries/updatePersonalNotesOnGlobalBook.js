@@ -6,9 +6,16 @@ module.exports = (usersGlobalBookId, notes) => {
     const query = `UPDATE users_globalbooks SET users_globalbooks.notes = ${sqlString.escape(
       notes
     )} WHERE id = ${usersGlobalBookId};`;
+
     db.query(query, (err, results, fields) => {
       if (err) throw Error(err);
-      resolve(results);
+      db.query(
+        `SELECT * FROM users_globalbooks WHERE id = ${usersGlobalBookId}`,
+        (err, results, fields) => {
+          if (err) throw Error(err);
+          resolve(results[0]);
+        }
+      );
     });
   });
 };

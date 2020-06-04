@@ -1,10 +1,6 @@
-import React from 'react';
-import {
-  useTable,
-  useFilters,
-  useSortBy,
-  useGlobalFilter,
-} from 'react-table';
+import React, { useContext } from 'react';
+import { Context } from '../globalContext';
+import { useTable, useFilters, useSortBy, useGlobalFilter } from 'react-table';
 
 // import matchSorter from 'match-sorter';
 
@@ -102,7 +98,6 @@ function Table({
   ownerFilterValue,
   householdSelect,
 }) {
-  
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -253,6 +248,7 @@ function Table({
 }
 
 function BookTable(props) {
+  const global = useContext(Context);
   const columns = React.useMemo(() => {
     if (props.householdSelect.value == 'none') {
       return [
@@ -337,8 +333,7 @@ function BookTable(props) {
             ]?.member_first,
       };
     });
-  }, [props, props.totalBooks, props.householdSelect, props.ownerFilterValue
-  ]);
+  }, [props, props.totalBooks, props.householdSelect, props.ownerFilterValue]);
 
   return (
     <Table
@@ -348,7 +343,7 @@ function BookTable(props) {
       history={props.history}
       columns={columns}
       data={data}
-      user={props.user}
+      user={global.currentUser}
       selfOnly={props.selfOnly}
       householdSelect={props.householdSelect}
     />

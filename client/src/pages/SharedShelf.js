@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
-import { globalContext } from '../globalContext';
+import { Context } from '../globalContext';
 import { Redirect, withRouter } from 'react-router-dom';
 import BookTable from '../components/BookTable2';
 
 const SharedShelf = (props) => {
-  const user = useContext(globalContext).currentUser;
+  const user = useContext(Context).currentUser;
+  const members = useContext(Context).householdMembers
 
   const [books, setBooks] = useState([]);
   const [loaded, setLoaded] = useState(false);
@@ -26,7 +27,7 @@ const SharedShelf = (props) => {
     if (user.id == props.match.params.shelfId) {
       return { relation: 'self' };
     } else if (
-      props.members.filter(
+      members.filter(
         (member) =>
           member.user_id == props.match.params.shelfId && member.invite_accepted
       ).length > 0
@@ -48,7 +49,7 @@ const SharedShelf = (props) => {
           // householdSelect={this.state.householdSelect}
           // selfOnly={this.state.selfOnly}
           householdSelect={{ value: 'none' }}
-          // members={this.props.members}
+          // members={this.members}
           user={user}
           history={props.history}
           books={books || []}
