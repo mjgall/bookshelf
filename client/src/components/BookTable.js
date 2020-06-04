@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useContext } from 'react';
+import React, { useMemo, useState, useContext, useEffect } from 'react';
 import {
   useTable,
   useSortBy,
@@ -43,6 +43,7 @@ const GlobalFilter = ({
 
 const BookTable = (props) => {
   const global = useContext(Context);
+  const [householdOptions, setHouseholdOptions] = useState([]);
 
   const [householdSelect, setHouseholdSelect] = useState({
     value: 'none',
@@ -55,6 +56,48 @@ const BookTable = (props) => {
   });
 
   const [owners, setOwners] = useState([]);
+
+  useEffect(() => {
+    const getHouseholdOptions = () => {
+      let options;
+      if (global.households.length < 1) {
+        options = [
+          { value: 'none', label: `⛔ None (Only your own books)` },
+          {
+            value: 'no-households',
+            label: `🏠 You don't have any households! Add one from Profile`,
+          },
+        ];
+      } else if (global.households.length === 1) {
+        options = global.households.map((household) => {
+          return {
+            value: household.household_id,
+            label: `🏠 ${household.name}`,
+          };
+        });
+        options.unshift({
+          value: 'none',
+          label: `⛔ None (Only your own books)`,
+        });
+      } else {
+        options = global.households.map((household) => {
+          return {
+            value: household.household_id,
+            label: `🏠 ${household.name}`,
+          };
+        });
+        options.unshift({ value: 'all', label: `🏠 All households` });
+        options.unshift({
+          value: 'none',
+          label: `⛔ None (Only your own books)`,
+        });
+      }
+
+      return options;
+    };
+
+    setHouseholdOptions(getHouseholdOptions());
+  }, [global.households]);
 
   const columns = useMemo(() => {
     return [
@@ -208,26 +251,7 @@ const BookTable = (props) => {
             blurInputOnSelect
             isSearchable={false}
             className='w-full container'
-            options={[
-              { value: 'none', label: `⛔ None (Only your own books)` },
-              global.households.length === 0
-                ? {
-                    value: 'no-households',
-                    label: `🏠 You don't have any households! Add one from Profile`,
-                  }
-                : global.households.length === 1
-                ? global.households.map((household) => {
-                    return {
-                      value: household.household_id,
-                      label: `🏠 ${household.name}`,
-                    };
-                  })
-                : { value: 'all', label: `🏠 All households` },
-              ...global.households.map((household) => ({
-                value: household.household_id,
-                label: `🏠 ${household.name}`,
-              })),
-            ]}
+            options={householdOptions}
             value={householdSelect}
             onChange={handleHouseholdChange}></Select>
         )}
@@ -289,8 +313,7 @@ const BookTable = (props) => {
                 className={`hover:bg-gray-100 ${
                   global.currentUser ? 'cursor-pointer' : ''
                 }  ${row.original.read ? 'bg-green-100' : ''}`}
-                onClick={ () => {
-                 
+                onClick={() => {
                   const bookRow = row.original;
                   if (global.currentUser && !props.sharedShelf) {
                     if (Number(bookRow.user_id) === global.currentUser.id) {
@@ -301,7 +324,6 @@ const BookTable = (props) => {
                       props.history.push(`/book/household/${row.original.id}`);
                     }
                   } else if (global.currentUser && props.sharedShelf) {
-                   
                     switch (props.relation) {
                       case 'self':
                         props.history.push(`/book/owned/${row.original.id}`);
