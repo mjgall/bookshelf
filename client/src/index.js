@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './styles/tailwind.css';
 import App from './App';
 import { GlobalProvider } from './globalContext';
 import * as serviceWorker from './serviceWorker';

@@ -15,6 +15,7 @@ const SharedShelf = (props) => {
       const books = await axios
         .get(`/api/shelves/${props.match.params.shelfId}`)
         .then((response) => response.data);
+
       setBooks(books);
     };
 
@@ -23,11 +24,11 @@ const SharedShelf = (props) => {
 
   const findRelation = () => {
     if (user.id === Number(props.match.params.shelfId)) {
-      return { relation: 'self' };
+      return 'self';
     } else if (
       members.filter(
         (member) =>
-          member.user_id === Number(props.match.params.shelfId) &&
+          Number(member.user_id) === Number(props.match.params.shelfId) &&
           member.invite_accepted
       ).length > 0
     ) {

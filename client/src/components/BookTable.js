@@ -91,7 +91,9 @@ const BookTable = (props) => {
       if (householdSelect.value == null) {
         return books;
       } else if (householdSelect.value === 'none') {
-        return books.filter((book) => Number(book.user_id) === global.currentUser.id);
+        return books.filter(
+          (book) => Number(book.user_id) === global.currentUser.id
+        );
       } else if (
         householdSelect.value === 'all' &&
         ownerSelect.value === 'all'
@@ -105,32 +107,33 @@ const BookTable = (props) => {
               book.household_id === null
             );
           } else {
-            console.log(book.user_id, Number(ownerSelect.value))
             return book.user_id === Number(ownerSelect.value);
           }
         });
         return newBooks;
       }
     };
-    console.log(householdSelect, ownerSelect)
-
-    return filterBooks(
-      props.books.map((book) => {
-        return {
-          ...book,
-          author: book?.author,
-          owner_name: props.sharedShelf
-            ? null
-            : global.householdMembers[
-                global.householdMembers.findIndex(
-                  (member) => Number(member.user_id) === book.user_id
-                )
-              ]?.member_first,
-        };
-      }),
-      householdSelect,
-      ownerSelect
-    );
+    if (props.sharedShelf) {
+      return props.books;
+    } else {
+      return filterBooks(
+        props.books.map((book) => {
+          return {
+            ...book,
+            author: book?.author,
+            owner_name: props.sharedShelf
+              ? null
+              : global.householdMembers[
+                  global.householdMembers.findIndex(
+                    (member) => Number(member.user_id) === book.user_id
+                  )
+                ]?.member_first,
+          };
+        }),
+        householdSelect,
+        ownerSelect
+      );
+    }
   }, [
     global.currentUser.id,
     props.sharedShelf,
@@ -198,34 +201,36 @@ const BookTable = (props) => {
   return (
     <>
       <div className='max-w-screen-lg mx-auto mb-6 grid md:grid-cols-2 md:gap-2 grid-cols-1 row-gap-2'>
-        <Select
-          isOptionDisabled={(option) => option.value === 'no-households'}
-          placeholder='Household...'
-          blurInputOnSelect
-          isSearchable={false}
-          className='w-full container'
-          options={[
-            { value: 'none', label: `⛔ None (Only your own books)` },
-            global.households.length === 0
-              ? {
-                  value: 'no-households',
-                  label: `🏠 You don't have any households! Add one from Profile`,
-                }
-              : global.households.length === 1
-              ? global.households.map((household) => {
-                  return {
-                    value: household.household_id,
-                    label: `🏠 ${household.name}`,
-                  };
-                })
-              : { value: 'all', label: `🏠 All households` },
-            ...global.households.map((household) => ({
-              value: household.household_id,
-              label: `🏠 ${household.name}`,
-            })),
-          ]}
-          value={householdSelect}
-          onChange={handleHouseholdChange}></Select>
+        {props.sharedShelf ? null : (
+          <Select
+            isOptionDisabled={(option) => option.value === 'no-households'}
+            placeholder='Household...'
+            blurInputOnSelect
+            isSearchable={false}
+            className='w-full container'
+            options={[
+              { value: 'none', label: `⛔ None (Only your own books)` },
+              global.households.length === 0
+                ? {
+                    value: 'no-households',
+                    label: `🏠 You don't have any households! Add one from Profile`,
+                  }
+                : global.households.length === 1
+                ? global.households.map((household) => {
+                    return {
+                      value: household.household_id,
+                      label: `🏠 ${household.name}`,
+                    };
+                  })
+                : { value: 'all', label: `🏠 All households` },
+              ...global.households.map((household) => ({
+                value: household.household_id,
+                label: `🏠 ${household.name}`,
+              })),
+            ]}
+            value={householdSelect}
+            onChange={handleHouseholdChange}></Select>
+        )}
         {householdSelect.value === 'none' ? null : (
           <Select
             isOptionDisabled={(option) => option.value === 'no-households'}
@@ -284,7 +289,8 @@ const BookTable = (props) => {
                 className={`hover:bg-gray-100 ${
                   global.currentUser ? 'cursor-pointer' : ''
                 }  ${row.original.read ? 'bg-green-100' : ''}`}
-                onClick={() => {
+                onClick={ () => {
+                 
                   const bookRow = row.original;
                   if (global.currentUser && !props.sharedShelf) {
                     if (Number(bookRow.user_id) === global.currentUser.id) {
@@ -295,6 +301,7 @@ const BookTable = (props) => {
                       props.history.push(`/book/household/${row.original.id}`);
                     }
                   } else if (global.currentUser && props.sharedShelf) {
+                   
                     switch (props.relation) {
                       case 'self':
                         props.history.push(`/book/owned/${row.original.id}`);

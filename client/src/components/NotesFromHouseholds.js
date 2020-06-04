@@ -47,11 +47,13 @@ const NotesFromHouseholds = (props) => {
           {householdNotes.map((householdNote, index) => {
             return (
               <InlineEdit
+              
+                key={index}
                 keepEditViewOpenOnBlur={true}
                 defaultValue={householdNote.notes}
                 label={`Notes from ${householdNote.household_name}`}
                 editView={(fieldProps, ref) => (
-                  <TextArea {...fieldProps} ref={ref}></TextArea>
+                  <TextArea {...fieldProps} ref={ref} value={householdNote.notes}></TextArea>
                 )}
                 readView={() => {
                   if (householdNote.notes) {

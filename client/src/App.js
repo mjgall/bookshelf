@@ -1,9 +1,7 @@
 import React, { useContext, useState } from 'react';
 
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import './App.css';
-import './styles/tailwind.css';
 import './App.css';
+import './styles/tailwind.css';
 import {
   BrowserRouter as Router,
   Switch,
