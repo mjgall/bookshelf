@@ -48,7 +48,12 @@ const App = () => {
                 updateNavReferrer={updateNavReferrer}></Home>
             </Route>
             <PrivateRoute path='/profile' exact>
-              <Profile></Profile>
+              <Profile
+              books={global.books}
+              members={global.householdMembers}
+              households={global.households}
+              user={global.currentUser}
+              ></Profile>
             </PrivateRoute>
             <Route exact path='/book/:id'>
               <Book bookType='global'></Book>

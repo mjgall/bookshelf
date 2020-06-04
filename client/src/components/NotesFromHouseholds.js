@@ -20,7 +20,7 @@ const NotesFromHouseholds = (props) => {
 
   useEffect(() => {
     fetchHouseholdNotes(props.bookId);
-  }, []);
+  }, [props.bookId]);
 
   const handleHouseholdNotesChange = async (
     globalBookId,
