@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState, useContext } from 'react';
+import React, { useMemo, useState, useContext } from 'react';
 import {
   useTable,
   useSortBy,
@@ -86,29 +86,34 @@ const BookTable = (props) => {
     ];
   }, []);
 
-  const filterBooks = (books, householdSelect, ownerSelect) => {
-    if (householdSelect.value == null) {
-      return books;
-    } else if (householdSelect.value == 'none') {
-      return books.filter((book) => book.user_id == global.currentUser.id);
-    } else if (householdSelect.value == 'all' && ownerSelect.value == 'all') {
-      return books;
-    } else {
-      const newBooks = books.filter((book) => {
-        if (ownerSelect.value == 'all') {
-          return (
-            book.household_id == householdSelect.value ||
-            book.household_id == null
-          );
-        } else {
-          return book.user_id == ownerSelect.value;
-        }
-      });
-      return newBooks;
-    }
-  };
-
   const data = useMemo(() => {
+    const filterBooks = (books, householdSelect, ownerSelect) => {
+      if (householdSelect.value == null) {
+        return books;
+      } else if (householdSelect.value === 'none') {
+        return books.filter((book) => Number(book.user_id) === global.currentUser.id);
+      } else if (
+        householdSelect.value === 'all' &&
+        ownerSelect.value === 'all'
+      ) {
+        return books;
+      } else {
+        const newBooks = books.filter((book) => {
+          if (ownerSelect.value === 'all') {
+            return (
+              Number(book.household_id) === Number(householdSelect.value) ||
+              book.household_id === null
+            );
+          } else {
+            console.log(book.user_id, Number(ownerSelect.value))
+            return book.user_id === Number(ownerSelect.value);
+          }
+        });
+        return newBooks;
+      }
+    };
+    console.log(householdSelect, ownerSelect)
+
     return filterBooks(
       props.books.map((book) => {
         return {
@@ -118,7 +123,7 @@ const BookTable = (props) => {
             ? null
             : global.householdMembers[
                 global.householdMembers.findIndex(
-                  (member) => member.user_id == book.user_id
+                  (member) => Number(member.user_id) === book.user_id
                 )
               ]?.member_first,
         };
@@ -126,7 +131,14 @@ const BookTable = (props) => {
       householdSelect,
       ownerSelect
     );
-  }, [householdSelect, ownerSelect, props.books]);
+  }, [
+    global.currentUser.id,
+    props.sharedShelf,
+    householdSelect,
+    ownerSelect,
+    props.books,
+    global.householdMembers,
+  ]);
 
   const {
     getTableProps,
@@ -163,7 +175,7 @@ const BookTable = (props) => {
   };
 
   const getOwners = (members, householdId = null) => {
-    if (!householdId || householdId == 'all' || householdId == 'none') {
+    if (!householdId || householdId === 'all' || householdId === 'none') {
       setOwners([
         { value: 'all', label: 'All members' },
 
@@ -175,7 +187,7 @@ const BookTable = (props) => {
       setOwners([
         { value: 'all', label: 'All members' },
         ...[...new Set(members)]
-          .filter((owner) => owner.household_id == householdId)
+          .filter((owner) => Number(owner.household_id) === Number(householdId))
           .map((owner) => {
             return { value: owner.user_id, label: owner.member_first };
           }),
@@ -187,19 +199,19 @@ const BookTable = (props) => {
     <>
       <div className='max-w-screen-lg mx-auto mb-6 grid md:grid-cols-2 md:gap-2 grid-cols-1 row-gap-2'>
         <Select
-          isOptionDisabled={(option) => option.value == 'no-households'}
+          isOptionDisabled={(option) => option.value === 'no-households'}
           placeholder='Household...'
           blurInputOnSelect
           isSearchable={false}
           className='w-full container'
           options={[
             { value: 'none', label: `⛔ None (Only your own books)` },
-            global.households.length == 0
+            global.households.length === 0
               ? {
                   value: 'no-households',
                   label: `🏠 You don't have any households! Add one from Profile`,
                 }
-              : global.households.length == 1
+              : global.households.length === 1
               ? global.households.map((household) => {
                   return {
                     value: household.household_id,
@@ -214,9 +226,9 @@ const BookTable = (props) => {
           ]}
           value={householdSelect}
           onChange={handleHouseholdChange}></Select>
-        {householdSelect.value == 'none' ? null : (
+        {householdSelect.value === 'none' ? null : (
           <Select
-            isOptionDisabled={(option) => option.value == 'no-households'}
+            isOptionDisabled={(option) => option.value === 'no-households'}
             placeholder='Owner...'
             blurInputOnSelect
             isSearchable={false}
@@ -275,7 +287,7 @@ const BookTable = (props) => {
                 onClick={() => {
                   const bookRow = row.original;
                   if (global.currentUser && !props.sharedShelf) {
-                    if (bookRow.user_id == global.currentUser.id) {
+                    if (Number(bookRow.user_id) === global.currentUser.id) {
                       props.history.push(
                         `/book/owned/${row.original.user_book_id}`
                       );

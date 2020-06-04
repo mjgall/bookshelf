@@ -1,9 +1,8 @@
-import React, { useContext, createContext } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-// import './index.css';
 import './styles/tailwind.css';
 import App from './App';
-import { GlobalProvider, Context } from './globalContext';
+import { GlobalProvider } from './globalContext';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(

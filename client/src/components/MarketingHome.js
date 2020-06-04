@@ -73,20 +73,20 @@ export default class MarketingHome extends React.Component {
           </div>
 
           <div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded-lg md:shadow-sm">
-            <img className=" shadow-lg rounded-lg" src={screenshot1}></img>
+            <img alt="screenshot of Bookshelf" className=" shadow-lg rounded-lg" src={screenshot1}></img>
             <div className="text-3xl pl-10">Scan books</div>
           </div>
           <div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded-lg md:shadow-sm">
             <div className="text-3xl pr-10">Search for books</div>
-            <img className="shadow-lg rounded-lg" src={screenshot2}></img>
+            <img alt="screenshot of Bookshelf" className="shadow-lg rounded-lg" src={screenshot2}></img>
           </div>
           <div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded-lg md:shadow-sm">
-            <img className="shadow-lg rounded-lg" src={screenshot3}></img>
+            <img alt="screenshot of Bookshelf" className="shadow-lg rounded-lg" src={screenshot3}></img>
             <div className="text-3xl pl-10">Log notes</div>
           </div>
           <div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded-lg md:shadow-sm">
             <div className="text-3xl pr-10">Create a household</div>
-            <img className="shadow-lg rounded-lg" src={screenshot4}></img>
+            <img alt="screenshot of Bookshelf" className="shadow-lg rounded-lg" src={screenshot4}></img>
           </div>
         </div>
       </div>

@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import Copy from '../common/Copy';
 import Tip from '../common/Tip';
 import { Context } from '../globalContext';
+
+
 const ProfileInfoCard = (props) => {
   const global = useContext(Context);
   return (
@@ -10,7 +12,7 @@ const ProfileInfoCard = (props) => {
         <div class='h-24 w-full bg-blue-400'></div>
         <div class='flex justify-center -mt-16'>
           <img
-            alt='user photo'
+            alt='user'
             src={global.currentUser.picture}
             class='rounded-full h-32 w-32 border-solid border-white border-2 -mt-3'></img>
         </div>
@@ -27,7 +29,7 @@ const ProfileInfoCard = (props) => {
             <h2>
               {
                 global.userBooks.filter(
-                  (book) => book.user_id == global.currentUser.id
+                  (book) => book.user_id === global.currentUser.id
                 ).length
               }
             </h2>

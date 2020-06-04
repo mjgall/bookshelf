@@ -1,15 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Context } from '../globalContext';
-import { Redirect, withRouter } from 'react-router-dom';
-import BookTable from '../components/BookTable2';
+import { withRouter } from 'react-router-dom';
+import BookTable from '../components/BookTable';
 
 const SharedShelf = (props) => {
   const user = useContext(Context).currentUser;
-  const members = useContext(Context).householdMembers
+  const members = useContext(Context).householdMembers;
 
   const [books, setBooks] = useState([]);
-  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const getBooks = async () => {
@@ -20,20 +19,20 @@ const SharedShelf = (props) => {
     };
 
     getBooks();
-    setLoaded(true);
-  }, []);
+  }, [props.match.params.shelfId]);
 
   const findRelation = () => {
-    if (user.id == props.match.params.shelfId) {
+    if (user.id === Number(props.match.params.shelfId)) {
       return { relation: 'self' };
     } else if (
       members.filter(
         (member) =>
-          member.user_id == props.match.params.shelfId && member.invite_accepted
+          member.user_id === Number(props.match.params.shelfId) &&
+          member.invite_accepted
       ).length > 0
     ) {
-      return { relation: 'household' };
-    } else return { relation: 'none' };
+      return 'household';
+    } else return 'relation';
   };
 
   if (books.length > 0) {
@@ -43,7 +42,7 @@ const SharedShelf = (props) => {
           {books[0].full}'s shared books
         </div>
         <BookTable
-          relation={user ? findRelation().relation : null}
+          relation={user ? findRelation() : null}
           sharedShelf={true}
           // ownerFilterValue={this.state?.ownerSelect?.label}
           // householdSelect={this.state.householdSelect}

@@ -13,9 +13,7 @@ import { Context } from '../globalContext';
 const Book = (props) => {
   const global = useContext(Context);
 
-  const [bookType, setBookType] = useState(undefined);
   const [book, setBook] = useState(undefined);
-  const [householdNotes, setHouseholdNotes] = useState(undefined);
   const [loaded, setLoaded] = useState(false);
 
   const fetchGlobalBook = async (id) => {
@@ -34,15 +32,14 @@ const Book = (props) => {
         break;
       case 'personal':
         const personalBook = global.allBooks.filter(
-          (book) => book.user_book_id == props.computedMatch.params.userBookId
+          (book) =>
+            book.user_book_id === Number(props.computedMatch.params.userBookId)
         )[0];
         const personalIndex = global.allBooks.findIndex((globalBook) => {
           if (props.bookType === 'personal') {
-            return globalBook.user_book_id == personalBook.user_book_id;
-          } else if (props.bookType === 'household') {
-            return globalBook.id == globalBook.id;
+            return globalBook.user_book_id === personalBook.user_book_id;
           } else {
-            return false;
+            return undefined;
           }
         });
         setBook({ ...personalBook, index: personalIndex });
@@ -50,15 +47,13 @@ const Book = (props) => {
         break;
       case 'household':
         const householdBook = global.allBooks.filter(
-          (book) => book.id == props.computedMatch.params.globalBookId
+          (book) => book.id === Number(props.computedMatch.params.globalBookId)
         )[0];
         const householdIndex = global.allBooks.findIndex((globalBook) => {
-          if (props.bookType === 'personal') {
-            return globalBook.user_book_id == personalBook.user_book_id;
-          } else if (props.bookType === 'household') {
-            return globalBook.id == globalBook.id;
+          if (props.bookType === 'household') {
+            return globalBook.id === householdBook.id;
           } else {
-            return false;
+            return undefined;
           }
         });
         setBook({ ...householdBook, index: householdIndex });
@@ -67,11 +62,17 @@ const Book = (props) => {
       default:
         break;
     }
-  }, []);
+  }, [
+    global.allBooks,
+    props.bookType,
+    props.computedMatch.params.globalBookId,
+    props.computedMatch.params.userBookId,
+    props.match.params.id,
+  ]);
 
   const updateBookField = async (field, value) => {
     let options = { bookType: props.bookType, field, value, id: undefined };
-    
+
     switch (field) {
       case 'title':
       case 'author':
@@ -99,13 +100,13 @@ const Book = (props) => {
           props.bookType === 'household'
         ) {
           options.id = book.id;
-          options.usersGlobalBooksId = book.users_globalbooks_id
+          options.usersGlobalBooksId = book.users_globalbooks_id;
         }
         break;
       default:
         break;
     }
-    console.log(options)
+    console.log(options);
     axios.put('/api/books', options).then((response) => {
       global.allBooks[book.index][field] = response.data[field];
       setBook({ ...book, [field]: response.data[field] });
@@ -135,6 +136,7 @@ const Book = (props) => {
               <div id='book-details'>
                 <div className='mx-0'>
                   <img
+                    alt='book cover'
                     className='w-2/5 block ml-auto mr-auto'
                     src={book.cover}></img>
                 </div>
@@ -268,7 +270,12 @@ const Book = (props) => {
             )}
             {props.globalBook ? null : (
               <div>
-                <div className='text-lg mt-6'>🏠 Notes from households</div>
+                <div className='text-lg mt-6'>
+                  <span role='img' aria-label='house'>
+                    🏠
+                  </span>
+                  Notes from households
+                </div>
                 <NotesFromHouseholds bookId={book.id}></NotesFromHouseholds>
               </div>
             )}

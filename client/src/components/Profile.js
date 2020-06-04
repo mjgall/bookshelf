@@ -25,6 +25,7 @@ export default class Profile extends React.Component {
   };
 
   componentDidMount = async () => {
+    console.log(this.props);
     this.setState({
       households: this.props.households,
       members: this.props.members,
@@ -37,7 +38,7 @@ export default class Profile extends React.Component {
   handleInviteChange = (e, index) => {
     this.setState({
       inviteValues: this.state.inviteValues.map((inviteValue, i) => {
-        if (i == index) {
+        if (i === index) {
           return e.target.value;
         } else {
           return inviteValue;
@@ -51,7 +52,7 @@ export default class Profile extends React.Component {
       invitedEmail: this.state.inviteValues[index],
       householdId,
     });
-    if (response.data.success == false) {
+    if (response.data.success === false) {
       this.setState({
         alert: true,
         alertMessage:
@@ -60,7 +61,7 @@ export default class Profile extends React.Component {
       });
     } else {
       //invite user to household
-      const emailResponse = await axios.post('/api/email', {
+      axios.post('/api/email', {
         recipientAddress: this.state.inviteValues[index],
         // recipientAddress: 'mike.gallagh@gmail.com',
         subject: `🏠 You've been invited to join a household!`,
@@ -136,7 +137,7 @@ export default class Profile extends React.Component {
 
   moveMembership = (status) => {
     const indexOfMembership = this.state.members.findIndex((membership) => {
-      return membership.id == status.id;
+      return membership.id === status.id;
     });
 
     const newMembers = [...this.state.members];
@@ -149,7 +150,11 @@ export default class Profile extends React.Component {
         <div
           className='w-5/6 md:w-full container  shadow text-sm bg-green-100 border border-green-400 text-green-700 my-2 px-4 py-3 rounded relative'
           role='alert'>
-          <strong className='font-bold'>🏠 </strong>
+          <strong className='font-bold'>
+            <span role='img' aria-label='house'>
+              🏠{' '}
+            </span>
+          </strong>
           <span className='block sm:inline'>Accepted!</span>
           <span className='absolute top-0 bottom-0 right-0 px-4 py-2 '></span>
         </div>
@@ -157,7 +162,11 @@ export default class Profile extends React.Component {
         <div
           className='w-5/6 md:w-full container shadow text-sm bg-red-100 border border-red-600 text-red-700 my-2 px-4 py-3 rounded relative'
           role='alert'>
-          <strong className='font-bold'>🏠 </strong>
+          <strong className='font-bold'>
+            <span role='img' aria-label='house'>
+              🏠{' '}
+            </span>{' '}
+          </strong>
           <span className='block sm:inline'>Declined!</span>
           <span className='absolute top-0 bottom-0 right-0 px-4 py-2 '></span>
         </div>
@@ -190,15 +199,19 @@ export default class Profile extends React.Component {
   };
 
   canRemoveMember = (member, membership, index) => {
-
-    return member.user_id == this.props.user.id ? null : membership.is_owner ? (
+    return Number(member.user_id) ===
+      this.props.user.id ? null : membership.is_owner ? (
       <Confirm
         position='left'
         tipContent='Remove member'
         onConfirm={() =>
-          this.removeMember(membership.household_id, member.user_id, index)
+          this.removeMember(
+            Number(membership.household_id),
+            Number(member.user_id),
+            index
+          )
         }>
-        <XSquare className="text-red-600" size='1.5rem'></XSquare>
+        <XSquare className='text-red-600' size='1.5rem'></XSquare>
       </Confirm>
     ) : null;
   };
@@ -230,20 +243,24 @@ export default class Profile extends React.Component {
                   {this.state.alertMessage}
                 </span>
                 <span className='float-right'>
-                  <CheckSquare
-                    size='2em'
-                    className='cursor-pointer text-green-400'
-                    onClick={() =>
-                      this.handleBookshelfInviteSend(
-                        this.state.inviteValues[
-                          this.state.affectedHouseholdIndex
-                        ]
-                      )
-                    }></CheckSquare>
-                  <XSquare
-                    size='2em'
-                    color="red"
-                    onClick={() => this.setState({ alert: false })}></XSquare>
+                  <span role='img' aria-label='confirm'>
+                    <CheckSquare
+                      size='2em'
+                      className='cursor-pointer text-green-400'
+                      onClick={() =>
+                        this.handleBookshelfInviteSend(
+                          this.state.inviteValues[
+                            this.state.affectedHouseholdIndex
+                          ]
+                        )
+                      }></CheckSquare>
+                  </span>
+                  <span role='img' aria-label='cancel'>
+                    <XSquare
+                      size='2em'
+                      color='red'
+                      onClick={() => this.setState({ alert: false })}></XSquare>
+                  </span>
                 </span>
               </div>
             ) : null}
@@ -251,14 +268,18 @@ export default class Profile extends React.Component {
               if (
                 !member.invite_declined &&
                 !member.invite_accepted &&
-                member.user_id == this.props.user.id
+                Number(member.user_id) === this.props.user.id
               ) {
                 return (
                   <div
                     className='w-5/6 md:w-full container shadow text-sm bg-blue-100 border border-blue-400 text-blue-700 my-2 px-4 py-3 rounded md:flex justify-between'
                     role='alert'>
                     <div className='text-center md:text-left'>
-                      <strong className='font-bold'>🏠 </strong>
+                      <strong className='font-bold'>
+                        <span role='img' aria-label='confirm'>
+                          🏠{' '}
+                        </span>
+                      </strong>
                       {member.inviter_full} ({member.inviter_email}) invited you
                       to their {member.household_name} household.
                     </div>
@@ -279,6 +300,8 @@ export default class Profile extends React.Component {
                     </div>
                   </div>
                 );
+              } else {
+                return null;
               }
             })}
             {this.state.flash ? <div>{this.state.flashMessage}</div> : null}
@@ -324,7 +347,7 @@ export default class Profile extends React.Component {
               {this.state.members.map((membership, index) => {
                 if (
                   membership.invite_accepted &&
-                  membership.user_id == this.props.user.id
+                  Number(membership.user_id) === this.props.user.id
                 ) {
                   return (
                     <div className='border border-gray-400 shadow rounded-lg p-4'>
@@ -338,14 +361,13 @@ export default class Profile extends React.Component {
                             tipContent='Delete household'
                             onConfirm={() =>
                               this.deleteHousehold(
-                                membership.household_id,
+                                Number(membership.household_id),
                                 index
                               )
                             }>
                             <XSquare
-                          
                               size='2rem'
-                              className="text-red-600"></XSquare>
+                              className='text-red-600'></XSquare>
                           </Confirm>
                         ) : null}
                       </div>
@@ -366,7 +388,7 @@ export default class Profile extends React.Component {
                             <button
                               onClick={() =>
                                 this.handleInviteSubmit(
-                                  membership.household_id,
+                                  Number(membership.household_id),
                                   index
                                 )
                               }
@@ -380,17 +402,19 @@ export default class Profile extends React.Component {
                       <div>
                         {this.state.members.map((member, index) => {
                           if (
-                            member.household_id == membership.household_id &&
+                            Number(member.household_id) ===
+                              Number(membership.household_id) &&
                             member.invite_accepted
                           ) {
                             return (
                               <div className='flex my-2 items-center '>
                                 <img
+                                  alt='user'
                                   className='h-12 w-12 rounded-full'
                                   src={member.picture}
                                 />
                                 <div className='ml-5 overflow-x-hidden'>
-                                  {member.user_id == this.props.user.id
+                                  {Number(member.user_id) === this.props.user.id
                                     ? 'You'
                                     : member.member_email || member.email}
                                 </div>
@@ -403,6 +427,8 @@ export default class Profile extends React.Component {
                                 </div>
                               </div>
                             );
+                          } else {
+                            return null;
                           }
                         })}
                       </div>
@@ -411,8 +437,9 @@ export default class Profile extends React.Component {
                           {this.state.members
                             .filter((member) => {
                               return (
-                                member.user_id != this.props.user.id &&
-                                member.household_id == membership.household_id
+                                Number(member.user_id) !== this.props.user.id &&
+                                Number(member.household_id) ===
+                                  Number(membership.household_id)
                               );
                             })
                             .some(
@@ -427,11 +454,13 @@ export default class Profile extends React.Component {
                               if (
                                 !member.invite_accepted &&
                                 !member.invite_declined &&
-                                member.household_id == membership.household_id
-                              )
+                                Number(member.household_id) ===
+                                  Number(membership.household_id)
+                              ) {
                                 return (
                                   <li className='flex my-2'>
                                     <img
+                                      alt='user'
                                       className='h-12 w-12 rounded-full'
                                       src={
                                         member.picture ||
@@ -444,12 +473,17 @@ export default class Profile extends React.Component {
                                     </span>
                                   </li>
                                 );
+                              } else {
+                                return null;
+                              }
                             })}
                           </ul>
                         </>
                       ) : null}
                     </div>
                   );
+                } else {
+                  return null;
                 }
               })}
             </div>

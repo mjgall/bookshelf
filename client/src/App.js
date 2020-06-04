@@ -4,13 +4,10 @@ import React, { useContext, useState } from 'react';
 // import './App.css';
 import './styles/tailwind.css';
 import './App.css';
-import axios from 'axios';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
-  withRouter,
 } from 'react-router-dom';
 
 import NavBar from './components/NavBar';

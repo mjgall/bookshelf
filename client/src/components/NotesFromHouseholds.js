@@ -1,12 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Context } from '../globalContext';
 import InlineEdit from '@atlaskit/inline-edit';
 import TextArea from '@atlaskit/textarea';
 
 const NotesFromHouseholds = (props) => {
-  const global = useContext(Context);
-
   const [loaded, setLoaded] = useState(false);
   const [householdNotes, setHouseholdNotes] = useState([]);
 
@@ -29,7 +26,7 @@ const NotesFromHouseholds = (props) => {
     index
   ) => {
     console.log(globalBookId, householdId, value);
-    const updatedNotes = await axios
+    axios
       .post(`/api/households/books`, {
         field: 'notes',
         value,
