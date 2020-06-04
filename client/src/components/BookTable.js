@@ -76,7 +76,31 @@ const BookTable = (props) => {
   const [ownerSelect, setOwnerSelect] = useState(getSavedOwnerSelect());
   const [owners, setOwners] = useState([]);
 
+  const getOwners = (members, householdId = null) => {
+    if (!householdId || householdId === 'all' || householdId === 'none') {
+      setOwners([
+        { value: 'all', label: 'All members' },
+
+        ..._.uniqBy(members, 'user_id').map((owner) => {
+          return { value: owner.user_id, label: owner.member_first };
+        }),
+      ]);
+    } else {
+      setOwners([
+        { value: 'all', label: 'All members' },
+        ...[...new Set(members)]
+          .filter(
+            (owner) => Number(owner.household_id) === Number(householdId)
+          )
+          .map((owner) => {
+            return { value: owner.user_id, label: owner.member_first };
+          }),
+      ]);
+    }
+  };
+
   useEffect(() => {
+    
     const getHouseholdOptions = () => {
       let options;
       if (global.households.length < 1) {
@@ -114,9 +138,9 @@ const BookTable = (props) => {
 
       return options;
     };
-
+    getOwners(global.householdMembers)
     setHouseholdOptions(getHouseholdOptions());
-  }, [global.households]);
+  }, [global.households, global.householdMembers]);
 
   const columns = useMemo(() => {
     return [
@@ -237,27 +261,6 @@ const BookTable = (props) => {
   const handleOwnerChange = (selected) => {
     setOwnerSelect(selected);
     localStorage.setItem('ownerFilter', JSON.stringify(selected));
-  };
-
-  const getOwners = (members, householdId = null) => {
-    if (!householdId || householdId === 'all' || householdId === 'none') {
-      setOwners([
-        { value: 'all', label: 'All members' },
-
-        ..._.uniqBy(members, 'user_id').map((owner) => {
-          return { value: owner.user_id, label: owner.member_first };
-        }),
-      ]);
-    } else {
-      setOwners([
-        { value: 'all', label: 'All members' },
-        ...[...new Set(members)]
-          .filter((owner) => Number(owner.household_id) === Number(householdId))
-          .map((owner) => {
-            return { value: owner.user_id, label: owner.member_first };
-          }),
-      ]);
-    }
   };
 
   return (
