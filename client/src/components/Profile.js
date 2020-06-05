@@ -10,7 +10,9 @@ import {
 
 import ProfleInfoCard from './ProfileInfoCard';
 import Confirm from '../common/Confirm';
+import Tip from '../common/Tip';
 
+//TODO convert to functional component
 export default class Profile extends React.Component {
   state = {
     inviteValues: [],
@@ -316,12 +318,14 @@ export default class Profile extends React.Component {
                     size='2em'
                     className='cursor-pointer text-green-400'></ChevronDownSquare>
                 ) : (
-                  <PlusSquare
-                    onClick={() => {
-                      this.setState({ addHousehold: true });
-                    }}
-                    size='2em'
-                    className='cursor-pointer text-green-400'></PlusSquare>
+                  <Tip renderChildren content='Add household' placement='left'>
+                    <PlusSquare
+                      onClick={() => {
+                        this.setState({ addHousehold: true });
+                      }}
+                      size='2em'
+                      className='cursor-pointer text-green-400'></PlusSquare>
+                  </Tip>
                 )}
               </div>
               {this.state.addHousehold ? (

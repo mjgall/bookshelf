@@ -22,7 +22,7 @@ const App = () => {
   const global = useContext(Context);
   const { loading } = global;
   const [referrer, setReferrer] = useState('');
-
+ 
   const updateNavReferrer = (referrer) => {
     setReferrer(referrer);
   };

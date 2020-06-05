@@ -8,6 +8,8 @@ import screenshot3 from '../images/screenshot3.png';
 import screenshot4 from '../images/screenshot4.png';
 import axios from 'axios';
 
+
+//TODO convert to functional component
 export default class MarketingHome extends React.Component {
   state = { analytics: null };
 

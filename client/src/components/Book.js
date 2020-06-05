@@ -3,7 +3,13 @@ import axios from 'axios';
 import InlineEdit from '@atlaskit/inline-edit';
 import TextArea from '@atlaskit/textarea';
 import Textfield from '@atlaskit/textfield';
-import { XSquare, Lock, LockOpen } from '@styled-icons/boxicons-solid';
+import {
+  XSquare,
+  Lock,
+  LockOpen,
+  Book as BookIcon,
+  BookOpen,
+} from '@styled-icons/boxicons-solid';
 import Tip from '../common/Tip';
 import Confirm from '../common/Confirm';
 import NotesFromHouseholds from './NotesFromHouseholds';
@@ -177,17 +183,30 @@ const Book = (props) => {
                   />
                 )}
                 {book.read ? (
-                  <div
-                    onClick={() => updateBookField('read', !book.read)}
-                    className='bg-green-500  text-white my-1 mx-2 mt-6 py-2 px-3 rounded text-center'>
-                    Already read!
-                  </div>
+                  <Tip renderChildren content='Mark as unread' placement='right'>
+                    <div
+                      onClick={() => updateBookField('read', !book.read)}
+                      className='bg-green-500 hover:bg-green-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
+                      <div className='flex justify-center'>
+                        <BookIcon size='1.5rem'></BookIcon>
+                        <span className='ml-2'>You've read this book</span>
+                      </div>
+                    </div>
+                  </Tip>
                 ) : (
-                  <div
-                    onClick={() => updateBookField('read', !book.read)}
-                    className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
-                    Mark as read
-                  </div>
+                  <Tip
+                    renderChildren
+                    content='Mark as read'
+                    placement='right'>
+                    <div
+                      onClick={() => updateBookField('read', !book.read)}
+                      className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
+                      <div className='flex justify-center'>
+                        <BookOpen size='1.5rem'></BookOpen>
+                        <span className='ml-2'>Not read yet</span>
+                      </div>
+                    </div>
+                  </Tip>
                 )}
                 {props.bookType === 'personal' ? (
                   book.private ? (

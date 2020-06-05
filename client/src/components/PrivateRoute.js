@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { Context } from '../globalContext';
 import { Redirect, withRouter } from 'react-router-dom';
 
+
+//TODO redo the redirect logic when a private route is hit by a not logged in user
 const PrivateRoute = (props) => {
   const global = useContext(Context);
 
