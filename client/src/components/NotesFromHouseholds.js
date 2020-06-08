@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import InlineEdit from '@atlaskit/inline-edit';
 import TextArea from '@atlaskit/textarea';
+import { Context } from '../globalContext';
 
 const NotesFromHouseholds = (props) => {
+  const global = useContext(Context);
   const [loaded, setLoaded] = useState(false);
   const [householdNotes, setHouseholdNotes] = useState([]);
 
@@ -39,21 +41,23 @@ const NotesFromHouseholds = (props) => {
 
     setHouseholdNotes(updatedHouseholdNotes);
   };
-
+  
   return (
     <>
-      {loaded ? (
+      {loaded && global.households.length > 0 ? (
         <div>
           {householdNotes.map((householdNote, index) => {
             return (
               <InlineEdit
-              
                 key={index}
                 keepEditViewOpenOnBlur={true}
                 defaultValue={householdNote.notes}
                 label={`Notes from ${householdNote.household_name}`}
                 editView={(fieldProps, ref) => (
-                  <TextArea {...fieldProps} ref={ref} value={householdNote.notes}></TextArea>
+                  <TextArea
+                    {...fieldProps}
+                    ref={ref}
+                    value={householdNote.notes}></TextArea>
                 )}
                 readView={() => {
                   if (householdNote.notes) {

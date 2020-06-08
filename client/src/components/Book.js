@@ -291,7 +291,7 @@ const Book = (props) => {
                 readViewFitContainerWidth
               />
             )}
-            {props.globalBook ? null : (
+            {props.bookType === 'global' ? null : (
               <div>
                 <div className='text-lg mt-6'>
                   <span role='img' aria-label='house'>
