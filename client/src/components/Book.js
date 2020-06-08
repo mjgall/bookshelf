@@ -13,13 +13,12 @@ import {
 import Tip from '../common/Tip';
 import Confirm from '../common/Confirm';
 import NotesFromHouseholds from './NotesFromHouseholds';
-import { withRouter, useParams, } from 'react-router-dom';
+import { withRouter, useParams } from 'react-router-dom';
 import { Context } from '../globalContext';
 
 const Book = (props) => {
   const global = useContext(Context);
-  const params = useParams()
-
+  const params = useParams();
 
   const [book, setBook] = useState(undefined);
   const [loaded, setLoaded] = useState(false);
@@ -27,22 +26,20 @@ const Book = (props) => {
   const fetchGlobalBook = useCallback(async (id) => {
     const globalBookDetails = await axios
       .get(`/api/book/${id}`)
-      .then((response) => response.data)
+      .then((response) => response.data);
     setBook(globalBookDetails);
     setLoaded(true);
-  }, []) 
-
+  }, []);
 
   useEffect(() => {
-    console.log(params)
+    console.log(params);
     switch (props.bookType) {
       case 'global':
         fetchGlobalBook(params.id);
         break;
       case 'personal':
         const personalBook = global.allBooks.filter(
-          (book) =>
-            book.user_book_id === Number(params.userBookId)
+          (book) => book.user_book_id === Number(params.userBookId)
         )[0];
         const personalIndex = global.allBooks.findIndex((globalBook) => {
           if (props.bookType === 'personal') {
@@ -116,9 +113,11 @@ const Book = (props) => {
       default:
         break;
     }
-    console.log(options);
+
     axios.put('/api/books', options).then((response) => {
-      global.allBooks[book.index][field] = response.data[field];
+      if (props.bookType !== 'global') {
+        global.allBooks[book.index][field] = response.data[field];
+      }
       setBook({ ...book, [field]: response.data[field] });
     });
   };
@@ -187,7 +186,10 @@ const Book = (props) => {
                   />
                 )}
                 {book.read ? (
-                  <Tip renderChildren content='Mark as unread' placement='right'>
+                  <Tip
+                    renderChildren
+                    content='Mark as unread'
+                    placement='right'>
                     <div
                       onClick={() => updateBookField('read', !book.read)}
                       className='bg-green-500 hover:bg-green-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
@@ -198,10 +200,7 @@ const Book = (props) => {
                     </div>
                   </Tip>
                 ) : (
-                  <Tip
-                    renderChildren
-                    content='Mark as read'
-                    placement='right'>
+                  <Tip renderChildren content='Mark as read' placement='right'>
                     <div
                       onClick={() => updateBookField('read', !book.read)}
                       className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
