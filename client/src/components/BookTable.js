@@ -89,9 +89,7 @@ const BookTable = (props) => {
       setOwners([
         { value: 'all', label: 'All members' },
         ...[...new Set(members)]
-          .filter(
-            (owner) => Number(owner.household_id) === Number(householdId)
-          )
+          .filter((owner) => Number(owner.household_id) === Number(householdId))
           .map((owner) => {
             return { value: owner.user_id, label: owner.member_first };
           }),
@@ -100,7 +98,6 @@ const BookTable = (props) => {
   };
 
   useEffect(() => {
-    
     const getHouseholdOptions = () => {
       let options;
       if (global.households.length < 1) {
@@ -138,7 +135,7 @@ const BookTable = (props) => {
 
       return options;
     };
-    getOwners(global.householdMembers)
+    getOwners(global.householdMembers);
     setHouseholdOptions(getHouseholdOptions());
   }, [global.households, global.householdMembers]);
 

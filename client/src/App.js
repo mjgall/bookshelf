@@ -2,11 +2,7 @@ import React, { useContext, useState } from 'react';
 
 import './App.css';
 import './styles/tailwind.css';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import NavBar from './components/NavBar';
 import Home from './components/Home';
@@ -22,7 +18,7 @@ const App = () => {
   const global = useContext(Context);
   const { loading } = global;
   const [referrer, setReferrer] = useState('');
- 
+
   const updateNavReferrer = (referrer) => {
     setReferrer(referrer);
   };
@@ -44,11 +40,10 @@ const App = () => {
             </Route>
             <PrivateRoute path='/profile' exact>
               <Profile
-              books={global.books}
-              members={global.householdMembers}
-              households={global.households}
-              user={global.currentUser}
-              ></Profile>
+                books={global.books}
+                members={global.householdMembers}
+                households={global.households}
+                user={global.currentUser}></Profile>
             </PrivateRoute>
             <Route exact path='/book/:id'>
               <Book bookType='global'></Book>
@@ -57,9 +52,7 @@ const App = () => {
               <Book bookType='personal'></Book>
             </PrivateRoute>
             <PrivateRoute exact path='/book/household/:globalBookId'>
-              <Book
-                bookType='household'
-              ></Book>
+              <Book bookType='household'></Book>
             </PrivateRoute>
             <Route path='/shelf/:shelfId'>
               <SharedShelf></SharedShelf>

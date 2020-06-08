@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { GlobalProvider } from './globalContext';
 import * as serviceWorker from './serviceWorker';
-
+import ErrorBoundary from './common/ErrorBoundary';
 ReactDOM.render(
-  <GlobalProvider>
-    <App />
-  </GlobalProvider>,
+  <ErrorBoundary>
+    <GlobalProvider>
+      <App />
+    </GlobalProvider>
+  </ErrorBoundary>,
 
   document.getElementById('root')
 );

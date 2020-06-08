@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import axios from 'axios';
 import InlineEdit from '@atlaskit/inline-edit';
 import TextArea from '@atlaskit/textarea';
@@ -13,33 +13,36 @@ import {
 import Tip from '../common/Tip';
 import Confirm from '../common/Confirm';
 import NotesFromHouseholds from './NotesFromHouseholds';
-import { withRouter } from 'react-router-dom';
+import { withRouter, useParams, } from 'react-router-dom';
 import { Context } from '../globalContext';
 
 const Book = (props) => {
   const global = useContext(Context);
+  const params = useParams()
+
 
   const [book, setBook] = useState(undefined);
   const [loaded, setLoaded] = useState(false);
 
-  const fetchGlobalBook = async (id) => {
+  const fetchGlobalBook = useCallback(async (id) => {
     const globalBookDetails = await axios
       .get(`/api/book/${id}`)
-      .then((response) => response.data);
-
+      .then((response) => response.data)
     setBook(globalBookDetails);
     setLoaded(true);
-  };
+  }, []) 
+
 
   useEffect(() => {
+    console.log(params)
     switch (props.bookType) {
       case 'global':
-        fetchGlobalBook(props.match.params.id);
+        fetchGlobalBook(params.id);
         break;
       case 'personal':
         const personalBook = global.allBooks.filter(
           (book) =>
-            book.user_book_id === Number(props.computedMatch.params.userBookId)
+            book.user_book_id === Number(params.userBookId)
         )[0];
         const personalIndex = global.allBooks.findIndex((globalBook) => {
           if (props.bookType === 'personal') {
@@ -53,7 +56,7 @@ const Book = (props) => {
         break;
       case 'household':
         const householdBook = global.allBooks.filter(
-          (book) => book.id === Number(props.computedMatch.params.globalBookId)
+          (book) => book.id === Number(params.globalBookId)
         )[0];
         const householdIndex = global.allBooks.findIndex((globalBook) => {
           if (props.bookType === 'household') {
@@ -69,11 +72,12 @@ const Book = (props) => {
         break;
     }
   }, [
+    fetchGlobalBook,
     global.allBooks,
     props.bookType,
-    props.computedMatch.params.globalBookId,
-    props.computedMatch.params.userBookId,
-    props.match.params.id,
+    params.globalBookId,
+    params.userBookId,
+    params.id,
   ]);
 
   const updateBookField = async (field, value) => {
@@ -315,4 +319,4 @@ const Book = (props) => {
   );
 };
 
-export default withRouter(Book);
+export default Book;

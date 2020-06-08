@@ -35,7 +35,7 @@ const SharedShelf = (props) => {
       ).length > 0
     ) {
       return 'household';
-    } else return 'relation';
+    } else return 'none';
   };
 
   if (loaded) {
