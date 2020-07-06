@@ -209,7 +209,7 @@ export default class Scanner extends React.Component {
   };
 
   addBook = async () => {
-    const response = await axios.post('/api/books', {
+    await axios.post('/api/books', {
       ...this.state.currentBook,
       cover: this.state.currentBook.image,
       author: this.state.currentBook.authors[0],

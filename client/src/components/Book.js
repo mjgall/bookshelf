@@ -13,7 +13,7 @@ import {
 import Tip from '../common/Tip';
 import Confirm from '../common/Confirm';
 import NotesFromHouseholds from './NotesFromHouseholds';
-import { withRouter, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Context } from '../globalContext';
 
 const Book = (props) => {
@@ -75,6 +75,7 @@ const Book = (props) => {
     params.globalBookId,
     params.userBookId,
     params.id,
+    params
   ]);
 
   const updateBookField = async (field, value) => {
@@ -123,15 +124,15 @@ const Book = (props) => {
   };
 
   const deleteBook = async () => {
-    axios.delete(`/api/books/${book.user_book_id}`).then((response) => {
-      if (response.data.affectedRows > 0) {
-        global.userBooks.splice(book.index, 1);
-        props.history.replace('/');
-      } else {
+    // axios.delete(`/api/books/${book.user_book_id}`).then((response) => {
+    //   if (response.data.affectedRows > 0) {
+    //     global.userBooks.splice(book.index, 1);
+    //     props.history.replace('/');
+    //   } else {
         props.history.replace('/');
         throw Error('Error deleting book');
-      }
-    });
+    //   }
+    // });
   };
 
   return (

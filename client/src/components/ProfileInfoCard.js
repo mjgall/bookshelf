@@ -37,7 +37,7 @@ const ProfileInfoCard = (props) => {
           </div>
           <div class='text-center'>
             <h2>{global.allBooks.filter((book) => book.read).length}</h2>
-            <span>Books bread</span>
+            <span>Books read</span>
           </div>
         </div>
         <div className='mb-3'>

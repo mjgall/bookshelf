@@ -218,12 +218,12 @@ const BookTable = (props) => {
       );
     }
   }, [
-    global?.currentUser?.id,
     props.sharedShelf,
     householdSelect,
     ownerSelect,
     props.books,
     global.householdMembers,
+    global.currentUser.id
   ]);
 
   const {
