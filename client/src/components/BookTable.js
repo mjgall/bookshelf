@@ -222,8 +222,7 @@ const BookTable = (props) => {
     householdSelect,
     ownerSelect,
     props.books,
-    global.householdMembers,
-    global.currentUser.id
+    global.householdMembers
   ]);
 
   const {
