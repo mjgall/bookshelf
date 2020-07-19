@@ -3,32 +3,32 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@atlaskit/inline-edit": "^10.0.32",
-    "@atlaskit/textarea": "^2.2.9",
-    "@atlaskit/textfield": "^3.1.11",
-    "@ericblade/quagga2": "^1.0.6",
-    "@fortawesome/fontawesome-free": "^5.12.1",
+    "@atlaskit/inline-edit": "^10.0.33",
+    "@atlaskit/textarea": "^2.2.10",
+    "@atlaskit/textfield": "^3.1.13",
+    "@ericblade/quagga2": "^1.2.1",
+    "@fortawesome/fontawesome-free": "^5.14.0",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
-    "@tippyjs/react": "^4.0.2",
+    "@tippyjs/react": "^4.1.0",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
-    "http-proxy-middleware": "^1.0.4",
-    "lodash": "^4.17.15",
-    "match-sorter": "^4.0.2",
+    "http-proxy-middleware": "^1.0.5",
+    "lodash": "^4.17.19",
+    "match-sorter": "^4.2.0",
     "postcss-cli": "^7.1.0",
     "quagga": "^0.12.1",
-    "query-string": "^6.12.1",
+    "query-string": "^6.13.1",
     "react": "^16.13.1",
-    "react-bootstrap": "^1.0.0-beta.17",
+    "react-bootstrap": "^1.2.2",
     "react-dom": "^16.13.1",
     "react-modal": "^3.11.2",
     "react-scripts": "3.4.1",
     "react-select": "^3.1.0",
-    "react-table": "^7.1.0",
+    "react-table": "^7.3.0",
     "react-textarea-autosize": "^7.1.2",
     "styled-components": "^5.1.1",
-    "styled-icons": "^10.2.1",
+    "styled-icons": "^10.10.0",
     "tailwind": "^4.0.0"
   },
   "scripts": {
@@ -54,9 +54,9 @@
     ]
   },
   "devDependencies": {
-    "@fullhuman/postcss-purgecss": "^2.1.2",
-    "autoprefixer": "^9.8.0",
+    "@fullhuman/postcss-purgecss": "^2.3.0",
+    "autoprefixer": "^9.8.5",
     "postcss-cli": "^7.1.0",
-    "tailwindcss": "^1.4.6"
+    "tailwindcss": "^1.5.1"
   }
 }
