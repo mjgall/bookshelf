@@ -15,6 +15,7 @@ import Confirm from '../common/Confirm';
 import NotesFromHouseholds from './NotesFromHouseholds';
 import { useParams } from 'react-router-dom';
 import { Context } from '../globalContext';
+import { withRouter } from 'react-router-dom'
 
 const Book = (props) => {
   const global = useContext(Context);
@@ -124,15 +125,15 @@ const Book = (props) => {
   };
 
   const deleteBook = async () => {
-    // axios.delete(`/api/books/${book.user_book_id}`).then((response) => {
-    //   if (response.data.affectedRows > 0) {
-    //     global.userBooks.splice(book.index, 1);
-    //     props.history.replace('/');
-    //   } else {
+    axios.delete(`/api/books/${book.user_book_id}`).then((response) => {
+      if (response.data.affectedRows > 0) {
+        global.userBooks.splice(book.index, 1);
+        props.history.replace('/');
+      } else {
         props.history.replace('/');
         throw Error('Error deleting book');
-    //   }
-    // });
+      }
+    });
   };
 
   return (
@@ -151,41 +152,41 @@ const Book = (props) => {
                     src={book.cover}></img>
                 </div>
                 {props.bookType === 'household' ||
-                props.bookType === 'global' ? (
-                  <div className='mt-2'>{book.title}</div>
-                ) : (
-                  <InlineEdit
-                    readViewFitContainerWidth
-                    defaultValue={book.title}
-                    editView={(fieldProps) => (
-                      <Textfield {...fieldProps} autoFocus />
-                    )}
-                    readView={() => (
-                      <div className='text-center'>
-                        {book.title || 'No notes, click to enter some!'}
-                      </div>
-                    )}
-                    onConfirm={(value) => updateBookField('title', value)}
-                  />
-                )}
+                  props.bookType === 'global' ? (
+                    <div className='mt-2'>{book.title}</div>
+                  ) : (
+                    <InlineEdit
+                      readViewFitContainerWidth
+                      defaultValue={book.title}
+                      editView={(fieldProps) => (
+                        <Textfield {...fieldProps} autoFocus />
+                      )}
+                      readView={() => (
+                        <div className='text-center'>
+                          {book.title || 'No notes, click to enter some!'}
+                        </div>
+                      )}
+                      onConfirm={(value) => updateBookField('title', value)}
+                    />
+                  )}
                 {props.bookType === 'household' ||
-                props.bookType === 'global' ? (
-                  <div className='mt-2'>{book.author}</div>
-                ) : (
-                  <InlineEdit
-                    readViewFitContainerWidth
-                    defaultValue={book.author}
-                    editView={(fieldProps) => (
-                      <Textfield {...fieldProps} autoFocus />
-                    )}
-                    readView={() => (
-                      <div className='text-center'>
-                        {book.author || 'No author'}
-                      </div>
-                    )}
-                    onConfirm={(value) => updateBookField('author', value)}
-                  />
-                )}
+                  props.bookType === 'global' ? (
+                    <div className='mt-2'>{book.author}</div>
+                  ) : (
+                    <InlineEdit
+                      readViewFitContainerWidth
+                      defaultValue={book.author}
+                      editView={(fieldProps) => (
+                        <Textfield {...fieldProps} autoFocus />
+                      )}
+                      readView={() => (
+                        <div className='text-center'>
+                          {book.author || 'No author'}
+                        </div>
+                      )}
+                      onConfirm={(value) => updateBookField('author', value)}
+                    />
+                  )}
                 {book.read ? (
                   <Tip
                     renderChildren
@@ -201,17 +202,17 @@ const Book = (props) => {
                     </div>
                   </Tip>
                 ) : (
-                  <Tip renderChildren content='Mark as read' placement='right'>
-                    <div
-                      onClick={() => updateBookField('read', !book.read)}
-                      className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
-                      <div className='flex justify-center'>
-                        <BookOpen size='1.5rem'></BookOpen>
-                        <span className='ml-2'>Not read yet</span>
+                    <Tip renderChildren content='Mark as read' placement='right'>
+                      <div
+                        onClick={() => updateBookField('read', !book.read)}
+                        className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
+                        <div className='flex justify-center'>
+                          <BookOpen size='1.5rem'></BookOpen>
+                          <span className='ml-2'>Not read yet</span>
+                        </div>
                       </div>
-                    </div>
-                  </Tip>
-                )}
+                    </Tip>
+                  )}
                 {props.bookType === 'personal' ? (
                   book.private ? (
                     <Tip
@@ -230,22 +231,22 @@ const Book = (props) => {
                       </div>
                     </Tip>
                   ) : (
-                    <Tip
-                      renderChildren
-                      content='Click to make private.'
-                      placement='right'>
-                      <div
-                        onClick={() =>
-                          updateBookField('private', !book.private)
-                        }
-                        className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
-                        <div className='flex justify-center'>
-                          <LockOpen size='1.5rem'></LockOpen>
-                          <span className='ml-2'>Public</span>
+                      <Tip
+                        renderChildren
+                        content='Click to make private.'
+                        placement='right'>
+                        <div
+                          onClick={() =>
+                            updateBookField('private', !book.private)
+                          }
+                          className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
+                          <div className='flex justify-center'>
+                            <LockOpen size='1.5rem'></LockOpen>
+                            <span className='ml-2'>Public</span>
+                          </div>
                         </div>
-                      </div>
-                    </Tip>
-                  )
+                      </Tip>
+                    )
                 ) : null}
               </div>
             </div>
@@ -275,22 +276,22 @@ const Book = (props) => {
                 readViewFitContainerWidth
               />
             ) : (
-              <InlineEdit
-                defaultValue={book.notes}
-                label={'Personal Notes'}
-                editView={(fieldProps, ref) => (
-                  <TextArea {...fieldProps} ref={ref}></TextArea>
-                )}
-                readView={() => (
-                  <div className='multiline'>
-                    {book.notes || 'No notes, click to enter some!'}
-                  </div>
-                )}
-                onConfirm={(value) => updateBookField('notes', value)}
-                autoFocus
-                readViewFitContainerWidth
-              />
-            )}
+                <InlineEdit
+                  defaultValue={book.notes}
+                  label={'Personal Notes'}
+                  editView={(fieldProps, ref) => (
+                    <TextArea {...fieldProps} ref={ref}></TextArea>
+                  )}
+                  readView={() => (
+                    <div className='multiline'>
+                      {book.notes || 'No notes, click to enter some!'}
+                    </div>
+                  )}
+                  onConfirm={(value) => updateBookField('notes', value)}
+                  autoFocus
+                  readViewFitContainerWidth
+                />
+              )}
             {props.bookType === 'global' ? null : (
               <div>
                 <div className='text-lg mt-6'>
@@ -319,4 +320,4 @@ const Book = (props) => {
   );
 };
 
-export default Book;
+export default withRouter(Book);
