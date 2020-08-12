@@ -23,7 +23,7 @@ module.exports = (userId) => {
     JOIN households_users AS hu ON hu.user_id = user_books.user_id
     JOIN households_users ON households_users.household_id = hu.household_id
     JOIN households ON households.id = hu.household_id
-    LEFT JOIN households_books ON global_books.id = households_books.global_book_id AND households.id = households_books.       household_id
+    LEFT JOIN households_books ON global_books.id = households_books.global_book_id AND households.id = households_books.household_id
     WHERE households_users.user_id = ${userId} AND hu.user_id != ${userId}
     ORDER BY global_books.id DESC
     `

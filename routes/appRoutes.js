@@ -190,6 +190,7 @@ module.exports = (app) => {
         req.params.globalBookId,
         req.user.id
       );
+      console.log(householdNotes)
       res.send(householdNotes);
     } catch (error) {
       res.send({ error: true });

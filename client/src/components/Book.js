@@ -33,7 +33,6 @@ const Book = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log(params);
     switch (props.bookType) {
       case 'global':
         fetchGlobalBook(params.id);
