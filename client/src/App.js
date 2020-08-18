@@ -8,6 +8,7 @@ import NavBar from './components/NavBar';
 import Home from './components/Home';
 import Book from './components/Book';
 import Profile from './components/Profile';
+import Cancellation from './components/Cancellation'
 
 import SharedShelf from './pages/SharedShelf';
 import PrivateRoute from './components/PrivateRoute';
@@ -56,6 +57,9 @@ const App = () => {
             </PrivateRoute>
             <Route path='/shelf/:shelfId'>
               <SharedShelf></SharedShelf>
+            </Route>
+            <Route path='/cancel'>
+              <Cancellation></Cancellation>
             </Route>
             <Route path='/*'>
               <Home
