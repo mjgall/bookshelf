@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { withRouter } from 'react-router-dom'
 
 import flow from '@prosperstack/flow';
 
-
 const Cancellation = (props) => {
+
+    window.__PROSPERSTACK_DEBUG_APP_HOST__='https://app.staging.prosperstack.com' ;
+    window.__PROSPERSTACK_DEBUG_API_HOST__='https://api.staging.prosperstack.com' ;
 
     const callProsperstack = () => {
         flow({
@@ -14,9 +16,9 @@ const Cancellation = (props) => {
                 paymentProviderId: 'sub_HrMJ3nNeVGMlV1',
             },
             onCompleted: (result) => {
-                console.log('Flow complete!');
+                console.log(result);
             },
-        });
+      });
     }
 
     return (
