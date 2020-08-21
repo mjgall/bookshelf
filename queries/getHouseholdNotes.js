@@ -17,6 +17,7 @@ module.exports = (globalBookId, userId) => {
     JOIN households_users ON households_users.household_id = hu.household_id
     JOIN households ON households_users.household_id = households.id
     LEFT JOIN households_books ON global_books.id = households_books.global_book_id
+    AND households_books.household_id = hu.household_id
     WHERE households_users.user_id = ${userId}
     AND global_books.id = ${globalBookId}
     AND households_users.invite_accepted = true
