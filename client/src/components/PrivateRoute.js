@@ -7,7 +7,6 @@ const PrivateRoute = (props) => {
   const global = useContext(Context);
   const params = useParams();
 
-  console.log(params);
   if (props.children.length) {
     throw Error('PrivateRoute must receive only on child component');
   } else {

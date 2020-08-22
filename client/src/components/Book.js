@@ -256,7 +256,7 @@ const Book = (props) => {
                 defaultValue={book.notes}
                 label='Personal Notes'
                 editView={(fieldProps, ref) => (
-                  // @ts-ignore - textarea does not currently correctly pass through ref as a prop
+                  // textarea does not currently correctly pass through ref as a prop
                   <TextArea type='text' className='w-full' {...fieldProps} />
                 )}
                 readView={() => {

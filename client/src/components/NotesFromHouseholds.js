@@ -41,7 +41,7 @@ const NotesFromHouseholds = (props) => {
 
     setHouseholdNotes(updatedHouseholdNotes);
   };
-  
+
   return (
     <>
       {loaded && global.households.length > 0 ? (
@@ -55,9 +55,7 @@ const NotesFromHouseholds = (props) => {
                 label={`Notes from ${householdNote.household_name}`}
                 editView={(fieldProps, ref) => (
                   <TextArea
-                    {...fieldProps}
-                    ref={ref}
-                    value={householdNote.notes}></TextArea>
+                    {...fieldProps}></TextArea>
                 )}
                 readView={() => {
                   if (householdNote.notes) {
