@@ -81,7 +81,7 @@ const BookTable = (props) => {
       setOwners([
         { value: 'all', label: 'All members' },
 
-        ..._.uniqBy(members, 'user_id').filter(owner => owner.invite_accepted).map((owner) => {
+        ..._.uniqBy(members, 'user_id').filter(owner => owner.invite_accepted && !owner.invite_declined).map((owner) => {
           return { value: owner.user_id, label: owner.member_first };
         }),
       ]);
@@ -109,12 +109,13 @@ const BookTable = (props) => {
           },
         ];
       } else if (global.households.length === 1) {
-        options = global.households.filter(household => household.invite_accepted).map((household) => {
+        options = global.households.filter(household => household.invite_accepted && !household.invite_declined).map((household) => {
           return {
             value: household.household_id,
             label: `🏠 ${household.name}`,
           };
         });
+
         options.unshift({
           value: 'none',
           label: `⛔ None (Only your own books)`,
@@ -134,6 +135,7 @@ const BookTable = (props) => {
       }
 
       return options;
+
     };
     getOwners(global.householdMembers);
     setHouseholdOptions(getHouseholdOptions());
