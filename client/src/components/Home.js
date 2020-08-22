@@ -11,12 +11,12 @@ const Home = (props) => {
 
   const addRedirect = toLocation => {
 
-    global.setGlobal({ ...global, redirect: toLocation })
   }
 
   useEffect(() => {
     if (props.location.state?.redirect) {
-      addRedirect(props.location.state.from)
+      // addRedirect(props.location.state.from)
+      global.setGlobal({ ...global, redirect: props.location.state.from })
     }
   }, []);
 

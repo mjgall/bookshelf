@@ -218,7 +218,7 @@ const BookTable = (props) => {
       );
     }
   }, [
-    global.currentUser.id,
+    global.currentUser?.id,
     props.sharedShelf,
     householdSelect,
     ownerSelect,
