@@ -237,6 +237,21 @@ export default class Profile extends React.Component {
 
   };
 
+  calcMemberRole = (member) => {
+    if (Number(member.user_id) === this.props.user.id && member.is_owner) {
+      return <div>You <span className="font-thin text-sm">(Owner)</span></div>
+    }
+    else if (Number(member.user_id) === this.props.user.id) {
+      return 'You'
+    }
+    else if (member.is_owner && Number(member.user_id) !== this.props.user.id) {
+      return <div>{member.member_email || member.email} <span className="font-thin text-sm">(Owner)</span></div>
+    }
+    else {
+      return member.member_email || member.email
+    }
+  }
+
   render = () => {
     return (
       <div className='max-w-screen-lg container my-4 '>
@@ -437,9 +452,8 @@ export default class Profile extends React.Component {
                                   src={member.picture}
                                 />
                                 <div className='ml-5 overflow-x-hidden'>
-                                  {Number(member.user_id) === this.props.user.id && member.is_owner
-                                    ? 'You (Owner)'
-                                    : Number(member.user_id) === this.props.user.id ? 'You' : member.member_email || member.email}
+                                  {this.calcMemberRole(member)}
+
                                 </div>
                                 <div className='ml-auto'>
                                   {this.canRemoveMember(
