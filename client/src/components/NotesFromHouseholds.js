@@ -27,7 +27,6 @@ const NotesFromHouseholds = (props) => {
     value,
     index
   ) => {
-    console.log(globalBookId, householdId, value);
     axios
       .post(`/api/households/books`, {
         field: 'notes',

@@ -8,7 +8,7 @@ module.exports = (userId, globalBookId, field, value) => {
     }) ON DUPLICATE KEY UPDATE users_globalbooks.${field} = ${
       field === 'notes' ? sqlString.escape(value) : value
     };`;
-    console.log(query)
+  
     db.query(query, (err, results, fields) => {
       if (err) throw Error(err);
       db.query(

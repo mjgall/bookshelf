@@ -27,7 +27,6 @@ export default class Profile extends React.Component {
   };
 
   componentDidMount = async () => {
-    console.log(this.props);
     this.setState({
       households: this.props.households,
       members: this.props.members,

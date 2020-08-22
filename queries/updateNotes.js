@@ -9,12 +9,12 @@ module.exports = (field, value, bookType, householdsBookId, userBookId) => {
         value
       )} WHERE id = ${householdsBookId};`;
     } else {
-      console.log('here')
+   
       query = `UPDATE user_books SET ${field} = ${sqlString.escape(
         value
       )} WHERE id = ${userBookId};`;
     }
-    console.log(query)
+
     db.query(query, (err, results, fields) => {
       if (err) {
         reject(err);
