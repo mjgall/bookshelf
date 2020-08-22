@@ -22,11 +22,6 @@ module.exports = (field, value, bookType, householdsBookId, userBookId) => {
         reject(err);
         throw Error(err);
       }
-      console.log('hello')
-      if (bookType === 'household') {
-
-        await sendEmail('mike@gllghr.io', 'Updated household notes', 'Someone updated the household notes on a book')
-      }
       db.query(
         bookType === 'personal'
           ? `SELECT * FROM user_books WHERE id = ${userBookId}`

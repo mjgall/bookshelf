@@ -32,7 +32,7 @@ const App = (props) => {
     <Router>
       {loading ? null : (
         <>
-          <NavBar referrer={referrer}></NavBar>
+          <NavBar windowWidth={1000} referrer={referrer}></NavBar>
           <Switch>
             <Route exact path='/'>
               <Home

@@ -261,7 +261,8 @@ module.exports = (app) => {
       req.body.householdId,
       req.body.globalBookId,
       req.body.field,
-      req.body.value
+      req.body.value,
+      req.user
     );
     res.send(updatedNotes);
   });
