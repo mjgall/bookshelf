@@ -4,7 +4,7 @@ const keys = require('../config/keys');
 const db = require('../config/db/mysql').pool;
 const getUserByGoogleId = require('../queries/getUser');
 const addUser = require('../queries/addUser');
-
+const sendEmail = require('../services/aws-ses');
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -62,6 +62,7 @@ passport.use(
       try {
         const user = await getUserByGoogleId(profile.id);
         if (user) {
+          sendEmail('mike@gllghr.io', '📖 Log in', `${user.full} logged into Bookshelf!`)
           done(null, user);
         } else if (!user) {
           try {
@@ -73,6 +74,7 @@ passport.use(
               full: profile._json.name,
               picture: profile._json.picture
             });
+            sendEmail('mike@gllghr.io', '📖 Log in', `${user.full} logged into Bookshelf!`)
             done(null, user);
           } catch (err) {
             throw err;
