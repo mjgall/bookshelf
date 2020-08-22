@@ -41,6 +41,7 @@ const NotesFromHouseholds = (props) => {
     setHouseholdNotes(updatedHouseholdNotes);
   };
 
+
   return (
     <>
       {loaded && global.households.length > 0 ? (

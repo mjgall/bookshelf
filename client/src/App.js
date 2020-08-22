@@ -46,9 +46,9 @@ const App = (props) => {
                 households={global.households}
                 user={global.currentUser}></Profile>
             </PrivateRoute>
-            <Route exact path='/book/:id'>
+            <PrivateRoute exact path='/book/:id'>
               <Book bookType='global'></Book>
-            </Route>
+            </PrivateRoute>
             <PrivateRoute exact path='/book/owned/:userBookId'>
               <Book bookType='personal'></Book>
             </PrivateRoute>

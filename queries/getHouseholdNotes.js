@@ -5,7 +5,7 @@ module.exports = (globalBookId, userId) => {
     // const query = `SELECT households_books.*, households.name AS household_name FROM households_books JOIN households ON households_books.household_id = households.id WHERE global_book_id = ${globalBookId} AND user_id = ${userId}`;
 
     const query = `
-    SELECT
+    SELECT DISTINCT
     households_books.id,
     global_books.id AS global_book_id,
     households.id AS household_id,

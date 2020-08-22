@@ -200,6 +200,7 @@ export default class Profile extends React.Component {
   };
 
   canRemoveMember = (member, membership, index) => {
+
     if (Number(member.user_id) === this.props.user.id && !member.is_owner) {
       return (
         <Confirm
@@ -436,9 +437,9 @@ export default class Profile extends React.Component {
                                   src={member.picture}
                                 />
                                 <div className='ml-5 overflow-x-hidden'>
-                                  {Number(member.user_id) === this.props.user.id
-                                    ? 'You'
-                                    : member.member_email || member.email}
+                                  {Number(member.user_id) === this.props.user.id && member.is_owner
+                                    ? 'You (Owner)'
+                                    : Number(member.user_id) === this.props.user.id ? 'You' : member.member_email || member.email}
                                 </div>
                                 <div className='ml-auto'>
                                   {this.canRemoveMember(
