@@ -8,7 +8,7 @@ import Input from '../styles/Input';
 
 import Modal from 'react-modal';
 
-//TODO convert to functional component
+//TODO convert to function component
 export default class Scanner extends React.Component {
   constructor() {
     super();

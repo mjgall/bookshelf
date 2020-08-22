@@ -25,6 +25,7 @@ const getBook = require('../queries/getBook');
 const deleteBook = require('../queries/deleteBook');
 const updateHouseholdsBooks = require('../queries/updateHouseholdsBooks');
 const sendEmail = require('../services/aws-ses');
+const leaveHousehold = require('../queries/leaveHousehold')
 
 module.exports = (app) => {
   //lookup book information by isbn10
@@ -234,10 +235,20 @@ module.exports = (app) => {
       const declined = await declinePendingHousehold(req.body.id);
       res.send(declined);
     } else if (req.body.remove) {
-      const response = await removeHouseholdMember(
-        req.body.householdId,
-        req.body.userId
-      );
+      let response;
+      if (req.body.userId === req.user.id) {
+        response = await leaveHousehold(
+          req.body.householdId,
+          req.body.userId
+        )
+      } else {
+        response = await removeHouseholdMember(
+          req.body.householdId,
+          req.body.userId
+        );
+      }
+
+
       res.send(response);
     } else {
       res.status(400).send('No status');

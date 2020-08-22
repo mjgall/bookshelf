@@ -12,7 +12,7 @@ import ProfleInfoCard from './ProfileInfoCard';
 import Confirm from '../common/Confirm';
 import Tip from '../common/Tip';
 
-//TODO convert to functional component
+//TODO convert to function component
 export default class Profile extends React.Component {
   state = {
     inviteValues: [],
@@ -160,18 +160,18 @@ export default class Profile extends React.Component {
           <span className='absolute top-0 bottom-0 right-0 px-4 py-2 '></span>
         </div>
       ) : (
-        <div
-          className='w-5/6 md:w-full container shadow text-sm bg-red-100 border border-red-600 text-red-700 my-2 px-4 py-3 rounded relative'
-          role='alert'>
-          <strong className='font-bold'>
-            <span role='img' aria-label='house'>
-              🏠{' '}
-            </span>{' '}
-          </strong>
-          <span className='block sm:inline'>Declined!</span>
-          <span className='absolute top-0 bottom-0 right-0 px-4 py-2 '></span>
-        </div>
-      ),
+          <div
+            className='w-5/6 md:w-full container shadow text-sm bg-red-100 border border-red-600 text-red-700 my-2 px-4 py-3 rounded relative'
+            role='alert'>
+            <strong className='font-bold'>
+              <span role='img' aria-label='house'>
+                🏠{' '}
+              </span>{' '}
+            </strong>
+            <span className='block sm:inline'>Declined!</span>
+            <span className='absolute top-0 bottom-0 right-0 px-4 py-2 '></span>
+          </div>
+        ),
     });
 
     setTimeout(() => this.setState({ flashMessage: false }), 1000);
@@ -200,21 +200,40 @@ export default class Profile extends React.Component {
   };
 
   canRemoveMember = (member, membership, index) => {
-    return Number(member.user_id) ===
-      this.props.user.id ? null : membership.is_owner ? (
-      <Confirm
-        position='left'
-        tipContent='Remove member'
-        onConfirm={() =>
-          this.removeMember(
-            Number(membership.household_id),
-            Number(member.user_id),
-            index
-          )
-        }>
-        <XSquare className='text-red-600' size='1.5rem'></XSquare>
-      </Confirm>
-    ) : null;
+    if (Number(member.user_id) === this.props.user.id && !member.is_owner) {
+      return (
+        <Confirm
+          position='left'
+          tipContent='Leave household'
+          onConfirm={() =>
+            this.removeMember(
+              Number(membership.household_id),
+              Number(member.user_id),
+              index
+            )
+          }>
+          <XSquare className='text-red-600' size='1.5rem'></XSquare>
+        </Confirm>
+      )
+    } else {
+      return Number(member.user_id) ===
+        this.props.user.id ? null : membership.is_owner ? (
+          <Confirm
+            position='left'
+            tipContent='Remove member'
+            onConfirm={() =>
+              this.removeMember(
+                Number(membership.household_id),
+                Number(member.user_id),
+                index
+              )
+            }>
+            <XSquare className='text-red-600' size='1.5rem'></XSquare>
+          </Confirm>
+        ) : null;
+    }
+
+
   };
 
   render = () => {
@@ -251,7 +270,7 @@ export default class Profile extends React.Component {
                       onClick={() =>
                         this.handleBookshelfInviteSend(
                           this.state.inviteValues[
-                            this.state.affectedHouseholdIndex
+                          this.state.affectedHouseholdIndex
                           ]
                         )
                       }></CheckSquare>
@@ -317,15 +336,15 @@ export default class Profile extends React.Component {
                     size='2em'
                     className='cursor-pointer text-green-400'></ChevronDownSquare>
                 ) : (
-                  <Tip renderChildren content='Add household' placement='left'>
-                    <PlusSquare
-                      onClick={() => {
-                        this.setState({ addHousehold: true });
-                      }}
-                      size='2em'
-                      className='cursor-pointer text-green-400'></PlusSquare>
-                  </Tip>
-                )}
+                    <Tip renderChildren content='Add household' placement='left'>
+                      <PlusSquare
+                        onClick={() => {
+                          this.setState({ addHousehold: true });
+                        }}
+                        size='2em'
+                        className='cursor-pointer text-green-400'></PlusSquare>
+                    </Tip>
+                  )}
               </div>
               {this.state.addHousehold ? (
                 <form onSubmit={this.handleHouseholdSubmit} className='w-full'>
@@ -406,7 +425,7 @@ export default class Profile extends React.Component {
                         {this.state.members.map((member, index) => {
                           if (
                             Number(member.household_id) ===
-                              Number(membership.household_id) &&
+                            Number(membership.household_id) &&
                             member.invite_accepted
                           ) {
                             return (
@@ -442,7 +461,7 @@ export default class Profile extends React.Component {
                               return (
                                 Number(member.user_id) !== this.props.user.id &&
                                 Number(member.household_id) ===
-                                  Number(membership.household_id)
+                                Number(membership.household_id)
                               );
                             })
                             .some(
@@ -450,15 +469,15 @@ export default class Profile extends React.Component {
                                 !members.invite_accepted &&
                                 !members.invite_declined
                             ) ? (
-                            <div>Awaiting Response</div>
-                          ) : null}
+                              <div>Awaiting Response</div>
+                            ) : null}
                           <ul>
                             {this.state.members.map((member) => {
                               if (
                                 !member.invite_accepted &&
                                 !member.invite_declined &&
                                 Number(member.household_id) ===
-                                  Number(membership.household_id)
+                                Number(membership.household_id)
                               ) {
                                 return (
                                   <li className='flex my-2'>
