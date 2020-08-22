@@ -13,12 +13,13 @@ const NavBar = ({
   referrer,
 }) => {
   const global = React.useContext(Context);
-
   scrollPosition = 1
 
   const goHome = () => {
     history.push('');
   };
+
+  console.log(global.redirect)
 
   const calcLogoSize = () => {
     if (
@@ -50,11 +51,11 @@ const NavBar = ({
         <span className='hidden md:inline-block text-sm  text-white hover:text-white'>
           {global.currentUser
             ? `You have ${
-                global.books.householdBooks
-                  .concat(global.books.userBooks)
-                  .filter((book) => book.user_id === global.currentUser.id)
-                  .length
-              } books!`
+            global.books.householdBooks
+              .concat(global.books.userBooks)
+              .filter((book) => book.user_id === global.currentUser.id)
+              .length
+            } books!`
             : null}
         </span>
       </div>
@@ -64,34 +65,34 @@ const NavBar = ({
           <a
             onClick={clearReferrer}
             href={
-              referrer ? `/auth/google/redirect${referrer}` : `/auth/google`
+              global.redirect ? `/auth/google/redirect${global.redirect}` : `/auth/google`
             }
             className='inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0 '>
             Login <span role="img" aria-label="books">📚</span>
           </a>
         ) : (
-          <>
-            <Link
-              to='/profile'
-              className='inline-block mx-1 text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0 hover:bg-white lg:mt-0 '>
-              {global.householdMembers.some((membership) => {
-                return (
-                  !membership.invite_declined &&
-                  !membership.invite_accepted &&
-                  membership.user_id === global.currentUser.id
-                );
-              }) && windowWidth > 380 ? (
-                <div className='mr-2 inline-block rounded-full bg-red-600 p-1 '></div>
-              ) : null}
-              <div className='inline-block'>Profile</div>
-            </Link>
-            <a
-              href='/api/logout'
-              className='inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0'>
-              Logout
+            <>
+              <Link
+                to='/profile'
+                className='inline-block mx-1 text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0 hover:bg-white lg:mt-0 '>
+                {global.householdMembers.some((membership) => {
+                  return (
+                    !membership.invite_declined &&
+                    !membership.invite_accepted &&
+                    membership.user_id === global.currentUser.id
+                  );
+                }) && windowWidth > 380 ? (
+                    <div className='mr-2 inline-block rounded-full bg-red-600 p-1 '></div>
+                  ) : null}
+                <div className='inline-block'>Profile</div>
+              </Link>
+              <a
+                href='/api/logout'
+                className='inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0'>
+                Logout
             </a>
-          </>
-        )}
+            </>
+          )}
       </div>
     </nav>
   );

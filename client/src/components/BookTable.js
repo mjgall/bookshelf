@@ -81,7 +81,7 @@ const BookTable = (props) => {
       setOwners([
         { value: 'all', label: 'All members' },
 
-        ..._.uniqBy(members, 'user_id').map((owner) => {
+        ..._.uniqBy(members, 'user_id').filter(owner => owner.invite_accepted).map((owner) => {
           return { value: owner.user_id, label: owner.member_first };
         }),
       ]);
@@ -109,7 +109,7 @@ const BookTable = (props) => {
           },
         ];
       } else if (global.households.length === 1) {
-        options = global.households.map((household) => {
+        options = global.households.filter(household => household.invite_accepted).map((household) => {
           return {
             value: household.household_id,
             label: `🏠 ${household.name}`,
@@ -207,10 +207,10 @@ const BookTable = (props) => {
             owner_name: props.sharedShelf
               ? null
               : global.householdMembers[
-                  global.householdMembers.findIndex(
-                    (member) => Number(member.user_id) === book.user_id
-                  )
-                ]?.member_first,
+                global.householdMembers.findIndex(
+                  (member) => Number(member.user_id) === book.user_id
+                )
+              ]?.member_first,
           };
         }),
         householdSelect,
@@ -331,7 +331,7 @@ const BookTable = (props) => {
                 {...row.getRowProps()}
                 className={`hover:bg-gray-100 ${
                   global.currentUser ? 'cursor-pointer' : ''
-                }  ${row.original.read ? 'bg-green-100' : ''}`}
+                  }  ${row.original.read ? 'bg-green-100' : ''}`}
                 onClick={() => {
                   const bookRow = row.original;
                   if (global.currentUser && !props.sharedShelf) {

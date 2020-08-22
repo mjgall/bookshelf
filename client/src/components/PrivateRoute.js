@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
 import { Context } from '../globalContext';
-import { Redirect, useParams, Route } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 
 //TODO redo the redirect logic when a private route is hit by a not logged in user
 const PrivateRoute = (props) => {
   const global = useContext(Context);
-  const params = useParams();
 
   if (props.children.length) {
     throw Error('PrivateRoute must receive only on child component');
@@ -22,13 +21,13 @@ const PrivateRoute = (props) => {
             })}
           </Route>
         ) : (
-          <Redirect
-            to={{
-              pathname: `/?redirect=${window.location.pathname}`,
-              state: { redirect: true },
-            }}
-          />
-        )}
+            <Redirect
+              to={{
+                pathname: `/?redirect=${window.location.pathname}`,
+                state: { redirect: true, from: window.location.pathname },
+              }}
+            />
+          )}
       </>
     );
   }

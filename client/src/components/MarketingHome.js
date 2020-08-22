@@ -20,7 +20,7 @@ export default class MarketingHome extends React.Component {
       this.props.updateNavReferrer(this.props.referrer);
     }
     if (this.props.redirect) {
-      this.props.updateNavReferrer(this.props.redirect);
+      // this.props.updateNavReferrer(this.props.redirect);
     }
   };
 
@@ -42,8 +42,8 @@ export default class MarketingHome extends React.Component {
                     {this.props.redirect === '/profile'
                       ? 'your profile!'
                       : this.props.redirect.indexOf('/book') > -1
-                      ? 'that book!'
-                      : 'Log in to be view that content!'}
+                        ? 'that book!'
+                        : 'Log in to be view that content!'}
                   </div>
                 </div>
               ) : null}

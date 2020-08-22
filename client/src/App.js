@@ -15,7 +15,7 @@ import PrivateRoute from './components/PrivateRoute';
 
 import { Context } from './globalContext';
 
-const App = () => {
+const App = (props) => {
   const global = useContext(Context);
   const { loading } = global;
   const [referrer, setReferrer] = useState('');
@@ -217,5 +217,6 @@ const App = () => {
 //     );
 //   };
 // }
+
 
 export default App;
