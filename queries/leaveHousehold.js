@@ -8,8 +8,6 @@ module.exports = (householdId, userId) => {
         WHERE household_id = ${householdId}
         AND user_id = ${userId}`;
 
-        console.log(query)
-
         db.query(query, (err, results, fields) => {
             if (err) throw Error(err);
             resolve(results);

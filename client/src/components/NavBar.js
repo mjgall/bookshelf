@@ -19,8 +19,6 @@ const NavBar = ({
     history.push('');
   };
 
-  console.log(global.redirect)
-
   const calcLogoSize = () => {
     if (
       windowWidth < 1025 ||

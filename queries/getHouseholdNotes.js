@@ -21,8 +21,9 @@ module.exports = (globalBookId, userId) => {
     WHERE households_users.user_id = ${userId}
     AND global_books.id = ${globalBookId}
     AND households_users.invite_accepted = true
+    AND households_users.invite_declined = false;
     `
-    
+
     db.query(query, (err, results, fields) => {
       if (err) {
         reject(err);

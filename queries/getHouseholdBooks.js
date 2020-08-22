@@ -27,9 +27,6 @@ module.exports = (userId) => {
     WHERE households_users.user_id = ${userId} AND hu.user_id != ${userId}
     ORDER BY global_books.id DESC
     `
-
-    console.log(query)
-
     db.query(query, (err, results, fields) => {
       if (err) {
         throw new Error(err);

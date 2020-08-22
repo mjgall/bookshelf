@@ -11,8 +11,6 @@ module.exports = (householdId, userId) => {
     AND households_books.household_id = ${householdId} 
     AND households_users.user_id = ${userId};`;
 
-    console.log(query)
-
     db.query(query, (err, results, fields) => {
       if (err) throw Error(err);
       resolve(results);
