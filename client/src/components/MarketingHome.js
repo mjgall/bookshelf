@@ -38,12 +38,12 @@ export default class MarketingHome extends React.Component {
               {this.props.redirect ? (
                 <div className="bg-green-400 text-white text-center rounded-lg border-gray-300 border p-3 shadow-lg mb-2">
                   <div className="ml-2 mr-6">
-                    Log in to view{' '}
+                    Log in to view
                     {this.props.redirect === '/profile'
                       ? 'your profile!'
                       : this.props.redirect.indexOf('/book') > -1
-                        ? 'that book!'
-                        : 'Log in to be view that content!'}
+                        ? ' that book!'
+                        : ' that content!'}
                   </div>
                 </div>
               ) : null}

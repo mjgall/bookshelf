@@ -58,9 +58,9 @@ const App = (props) => {
             <Route path='/shelf/:shelfId'>
               <SharedShelf></SharedShelf>
             </Route>
-            <Route path='/cancel'>
+            <PrivateRoute path='/cancel'>
               <Cancellation></Cancellation>
-            </Route>
+            </PrivateRoute>
             <Route path='/*'>
               <Home
                 clearReferrer={clearReferrer}
