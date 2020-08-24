@@ -40,7 +40,7 @@ export default class MarketingHome extends React.Component {
                   <div className="ml-2 mr-6">
                     Log in to view
                     {this.props.redirect === '/profile'
-                      ? 'your profile!'
+                      ? ' your profile!'
                       : this.props.redirect.indexOf('/book') > -1
                         ? ' that book!'
                         : ' that content!'}
