@@ -8,9 +8,12 @@ import {
   ChevronDownSquare,
 } from '@styled-icons/boxicons-solid';
 
-import ProfleInfoCard from './ProfileInfoCard';
+import ProfileInfoCard from './ProfileInfoCard';
+import Friends from './Friends'
+
 import Confirm from '../common/Confirm';
 import Tip from '../common/Tip';
+
 
 //TODO convert to function component
 export default class Profile extends React.Component {
@@ -258,9 +261,9 @@ export default class Profile extends React.Component {
         <div
           className='md:grid grid-cols-2'
           style={{ gridTemplateColumns: '25% 70%', gridColumnGap: '5%' }}>
-          <ProfleInfoCard
+          <ProfileInfoCard
             user={this.props.user}
-            books={this.props.books}></ProfleInfoCard>
+            books={this.props.books}></ProfileInfoCard>
           <div>
             {this.state.alertNoAction ? (
               <div
@@ -523,8 +526,11 @@ export default class Profile extends React.Component {
                   return null;
                 }
               })}
+
             </div>
           </div>
+          <div></div>
+          <Friends></Friends>
         </div>
       </div>
     );

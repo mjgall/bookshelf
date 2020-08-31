@@ -9,6 +9,7 @@
     "@ericblade/quagga2": "^1.2.1",
     "@fortawesome/fontawesome-free": "^5.14.0",
     "@prosperstack/flow": "^0.10.4",
+    "@styled-icons/boxicons-regular": "^10.18.0",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "@tippyjs/react": "^4.1.0",
