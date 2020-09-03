@@ -8,8 +8,8 @@ import {
   ChevronDownSquare,
 } from '@styled-icons/boxicons-solid';
 
-import ProfileInfoCard from './ProfileInfoCard';
-import Friends from './Friends'
+import ProfileInfoCard from '../components/ProfileInfoCard';
+import Friends from '../components/Friends'
 
 import Confirm from '../common/Confirm';
 import Tip from '../common/Tip';

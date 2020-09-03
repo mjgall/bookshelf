@@ -12,7 +12,7 @@ import {
 } from '@styled-icons/boxicons-solid';
 import Tip from '../common/Tip';
 import Confirm from '../common/Confirm';
-import NotesFromHouseholds from './NotesFromHouseholds';
+import NotesFromHouseholds from '../components/NotesFromHouseholds';
 import { useParams } from 'react-router-dom';
 import { Context } from '../globalContext';
 import { withRouter } from 'react-router-dom'

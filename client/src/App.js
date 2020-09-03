@@ -5,10 +5,10 @@ import './styles/tailwind.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import NavBar from './components/NavBar';
-import Home from './components/Home';
-import Book from './components/Book';
-import Profile from './components/Profile';
-import Cancellation from './components/Cancellation'
+import Home from './pages/Home';
+import Book from './pages/Book';
+import Profile from './pages/Profile';
+import Cancellation from './pages/Cancellation'
 
 import SharedShelf from './pages/SharedShelf';
 import PrivateRoute from './components/PrivateRoute';

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
-import Scanner from "./Scanner";
-import BookTable from "./BookTable";
+import Scanner from "../components/Scanner";
+import BookTable from "../components/BookTable";
 import MarketingHome from "./MarketingHome";
 import { withRouter } from "react-router-dom";
 
