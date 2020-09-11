@@ -29,6 +29,8 @@ const leaveHousehold = require("../queries/leaveHousehold");
 const addFriendship = require("../queries/addFriendship");
 const updateFriendship = require("../queries/updateFriendship");
 const getFriendships = require("../queries/getFriendships");
+const addActivity = require("../queries/addActivity");
+const getActivities = require("../queries/getActivities");
 
 module.exports = (app) => {
   //lookup book information by isbn10
@@ -146,6 +148,9 @@ module.exports = (app) => {
     if (req.body.field === "read") {
       if (book.bookType === "personal") {
         const updatedBook = await updateBook(book.field, book.value, book.id);
+        if (book.value) {
+          await addActivity(req.user.id, book.id, 2);
+        }
         res.send(updatedBook);
       } else {
         const updatedBook = await updateUsersGlobalBooks(
@@ -154,6 +159,9 @@ module.exports = (app) => {
           req.body.field,
           req.body.value
         );
+        if (book.value) {
+          await addActivity(req.user.id, book.id, 2);
+        }
         res.send(updatedBook);
       }
     } else if (req.body.field === "notes") {
@@ -332,9 +340,8 @@ module.exports = (app) => {
       const response = await addFriendship(connectingUser, req.body.userEmail);
       res.send(response);
     } catch (error) {
-      res.status(404).send({ reason: error })
+      res.status(404).send({ reason: error });
     }
-
   });
 
   app.put("/api/friends", async (req, res) => {
@@ -377,5 +384,23 @@ module.exports = (app) => {
       req.params.friendshipId
     );
     res.send(response);
+  });
+
+  app.post('/api/activities', async (req, res) => {
+    try {
+      const activity = await addActivity(req.user.id, req.body.objectId, req.body.action)
+      res.send(activity)
+    } catch (error) {
+      res.status(500).send(error)
+    }
+  })
+
+  app.get("/api/activities", async (req, res) => {
+    try {
+      const activities = await getActivities(req.user.id);
+      res.send(activities);
+    } catch (error) {
+      res.status(500).send(error);
+    }
   });
 };

@@ -1,24 +1,25 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState } from "react";
 
-import './App.css';
-import './styles/tailwind.css';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import "./App.css";
+import "./styles/tailwind.css";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import NavBar from './components/NavBar';
-import Home from './pages/Home';
-import Book from './pages/Book';
-import Profile from './pages/Profile';
-import Cancellation from './pages/Cancellation'
+import NavBar from "./components/NavBar";
+import Home from "./pages/Home";
+import Book from "./pages/Book";
+import Profile from "./pages/Profile";
+import Cancellation from "./pages/Cancellation";
+import Feed from './components/Feed'
 
-import SharedShelf from './pages/SharedShelf';
-import PrivateRoute from './components/PrivateRoute';
+import SharedShelf from "./pages/SharedShelf";
+import PrivateRoute from "./components/PrivateRoute";
 
-import { Context } from './globalContext';
+import { Context } from "./globalContext";
 
 const App = (props) => {
   const global = useContext(Context);
   const { loading } = global;
-  const [referrer, setReferrer] = useState('');
+  const [referrer, setReferrer] = useState("");
 
   const updateNavReferrer = (referrer) => {
     setReferrer(referrer);
@@ -34,37 +35,43 @@ const App = (props) => {
         <>
           <NavBar windowWidth={1000} referrer={referrer}></NavBar>
           <Switch>
-            <Route exact path='/'>
+            <Route exact path="/">
               <Home
                 clearReferrer={clearReferrer}
-                updateNavReferrer={updateNavReferrer}></Home>
+                updateNavReferrer={updateNavReferrer}
+              ></Home>
             </Route>
-            <PrivateRoute path='/profile' exact>
+            <PrivateRoute path="/profile" exact>
               <Profile
                 books={global.books}
                 members={global.householdMembers}
                 households={global.households}
-                user={global.currentUser}></Profile>
+                user={global.currentUser}
+              ></Profile>
             </PrivateRoute>
-            <PrivateRoute exact path='/book/:id'>
-              <Book bookType='global'></Book>
+            <PrivateRoute exact path="/book/:id">
+              <Book bookType="global"></Book>
             </PrivateRoute>
-            <PrivateRoute exact path='/book/owned/:userBookId'>
-              <Book bookType='personal'></Book>
+            <PrivateRoute exact path="/book/owned/:userBookId">
+              <Book bookType="personal"></Book>
             </PrivateRoute>
-            <PrivateRoute exact path='/book/household/:globalBookId'>
-              <Book bookType='household'></Book>
+            <PrivateRoute exact path="/book/household/:globalBookId">
+              <Book bookType="household"></Book>
             </PrivateRoute>
-            <Route path='/shelf/:shelfId'>
+            <Route path="/shelf/:shelfId">
               <SharedShelf></SharedShelf>
             </Route>
-            <PrivateRoute path='/cancel'>
+            <PrivateRoute path="/cancel">
               <Cancellation></Cancellation>
             </PrivateRoute>
-            <Route path='/*'>
+            <PrivateRoute path="/feed">
+              <Feed></Feed>
+            </PrivateRoute>
+            <Route path="/*">
               <Home
                 clearReferrer={clearReferrer}
-                updateNavReferrer={updateNavReferrer}></Home>
+                updateNavReferrer={updateNavReferrer}
+              ></Home>
             </Route>
           </Switch>
         </>
@@ -217,6 +224,5 @@ const App = (props) => {
 //     );
 //   };
 // }
-
 
 export default App;
