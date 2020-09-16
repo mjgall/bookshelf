@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
+
+import { Context } from "../globalContext";
 
 const Feed = (props) => {
     const feedItems = [
@@ -42,6 +44,8 @@ const Feed = (props) => {
 
     const [activities, setActivities] = useState([]);
 
+    const global = useContext(Context);
+
     useEffect(() => {
         const fetchActivities = async () => {
             const result = await axios.get("/api/activities");
@@ -69,7 +73,7 @@ const Feed = (props) => {
 
     return (
         <div className="border-gray-400 border m-4 p-8 rounded">
-            {activities.map((item) => {
+            {activities.reverse().map((item) => {
                 return (
                     <div className="border-gray-400 border m-2 px-6 py-2 rounded flex items-center">
                         <img
@@ -79,7 +83,7 @@ const Feed = (props) => {
                         ></img>
                         <div>
                             <div>
-                                {item.friend_full} {determineAction(item.action)}{" "}
+                                {item.user_id === global.currentUser.id ? 'You' : item.friend_full} {determineAction(item.action)}{" "}
                                 <Link
                                     className="border-gray-600 border-dotted border-b"
                                     to={`/book/${item.object_id}`}
@@ -88,7 +92,7 @@ const Feed = (props) => {
                                 </Link>
                             </div>
                             <div className="text-xs font-thin">
-                                {moment(item.timestamp).format("dddd, MMMM Do YYYY, h:mm:ss a")}
+                                {moment.unix(item.timestamp / 1000).subtract(2, 'hours').format("dddd, MMMM Do YYYY, h:mm:ss a")}
                             </div>
                         </div>
                     </div>

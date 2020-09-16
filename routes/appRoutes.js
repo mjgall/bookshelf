@@ -149,7 +149,7 @@ module.exports = (app) => {
       if (book.bookType === "personal") {
         const updatedBook = await updateBook(book.field, book.value, book.id);
         if (book.value) {
-          await addActivity(req.user.id, book.id, 2);
+          await addActivity(req.user.id, book.globalId, 2);
         }
         res.send(updatedBook);
       } else {

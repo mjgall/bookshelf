@@ -87,11 +87,13 @@ const Book = (props) => {
       case 'private':
         if (props.bookType === 'personal') {
           options.id = book.user_book_id;
+          options.globalId = book.id
         }
         break;
       case 'read':
         if (props.bookType === 'personal') {
           options.id = book.user_book_id;
+          options.globalId = book.id
         } else if (
           props.bookType === 'household' ||
           props.bookType === 'global'
@@ -103,6 +105,7 @@ const Book = (props) => {
         //updating personal notes
         if (props.bookType === 'personal') {
           options.id = book.user_book_id;
+          options.globalId = book.id
         } else if (
           props.bookType === 'global' ||
           props.bookType === 'household'
