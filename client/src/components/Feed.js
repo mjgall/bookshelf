@@ -92,7 +92,7 @@ const Feed = (props) => {
                                 </Link>
                             </div>
                             <div className="text-xs font-thin">
-                                {moment.unix(item.timestamp / 1000).subtract(2, 'hours').format("dddd, MMMM Do YYYY, h:mm:ss a")}
+                                {moment.unix(item.timestamp / 1000).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                             </div>
                         </div>
                     </div>
