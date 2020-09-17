@@ -6,41 +6,6 @@ import axios from "axios";
 import { Context } from "../globalContext";
 
 const Feed = (props) => {
-    const feedItems = [
-        {
-            user: "Michael Gallagher",
-            picture:
-                "https://lh3.googleusercontent.com/a-/AOh14GhV-6CvMLuMpqVwKpMzFEHqN8YhhdV7eHn7nFesAA",
-            cover: "https://images.isbndb.com/covers/44/93/9780399144493.jpg",
-            bookTitle: "Lindbergh",
-            globalBookId: 333,
-            bookType: "global",
-            action: "read",
-            timestamp: 1599495648787,
-        },
-        {
-            user: "Michael Gallagher",
-            picture:
-                "https://lh3.googleusercontent.com/a-/AOh14GhV-6CvMLuMpqVwKpMzFEHqN8YhhdV7eHn7nFesAA",
-            cover: "https://images.isbndb.com/covers/44/93/9780399144493.jpg",
-            bookTitle: "Lindbergh",
-            globalBookId: 333,
-            bookType: "personal",
-            action: "read",
-            timestamp: 1599495648787,
-        },
-        {
-            user: "Michael Gallagher",
-            picture:
-                "https://lh3.googleusercontent.com/a-/AOh14GhV-6CvMLuMpqVwKpMzFEHqN8YhhdV7eHn7nFesAA",
-            cover: "https://images.isbndb.com/covers/44/93/9780399144493.jpg",
-            bookTitle: "Lindbergh",
-            globalBookId: 333,
-            bookType: "personal",
-            action: "read",
-            timestamp: 1599495648787,
-        },
-    ];
 
     const [activities, setActivities] = useState([]);
 
