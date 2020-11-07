@@ -62,7 +62,7 @@ passport.use(
       try {
         const user = await getUserByGoogleId(profile.id);
         if (user) {
-          sendEmail('mike@gllghr.io', '📚 Log in', `${user.full} logged into Bookshelf!`)
+          // sendEmail('mike@gllghr.io', '📚 Log in', `${user.full} logged into Bookshelf!`)
           done(null, user);
         } else if (!user) {
           try {
@@ -74,7 +74,7 @@ passport.use(
               full: profile._json.name,
               picture: profile._json.picture
             });
-            sendEmail('mike@gllghr.io', '📚 Sign up!', `${user.full} signed up and logged into Bookshelf!`)
+            // sendEmail('mike@gllghr.io', '📚 Sign up!', `${user.full} signed up and logged into Bookshelf!`)
             done(null, user);
           } catch (err) {
             throw err;

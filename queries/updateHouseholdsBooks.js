@@ -10,7 +10,7 @@ module.exports = (householdId, globalBookId, field, value, user) => {
       };`;
     db.query(query, async (err, results, fields) => {
       if (err) throw Error(err);
-      await sendEmail('mike@gllghr.io', 'Updated household notes', `${user.full} updated the household notes on a book.`)
+      // await sendEmail('mike@gllghr.io', 'Updated household notes', `${user.full} updated the household notes on a book.`)
       db.query(
         `SELECT * FROM households_books WHERE id = ${results.insertId}`,
         (err, results, fields) => {
