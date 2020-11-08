@@ -72,7 +72,7 @@ const NavBar = ({
             <>
               <Link
                 to='/profile'
-                className='inline-block mx-1 text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0 hover:bg-white lg:mt-0 '>
+                className='inline-block mx-1 text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white lg:mt-0 hover:bg-white lg:mt-0 '>
                 {global.householdMembers.some((membership) => {
                   return (
                     !membership.invite_declined &&
@@ -86,7 +86,7 @@ const NavBar = ({
               </Link>
               <a
                 href='/api/logout'
-                className='inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0'>
+                className='inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white lg:mt-0'>
                 Logout
             </a>
             </>

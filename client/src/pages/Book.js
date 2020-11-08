@@ -276,17 +276,17 @@ const Book = (props) => {
                   editView={(fieldProps, ref) => (
                     <TextArea {...fieldProps} ref={ref}></TextArea>
                   )}
-                  readView={() => {
-                    if (book.notes) {
-                      return <div className='multiline'>{book.notes}</div>;
-                    } else {
-                      return (
-                        <div className='text-gray-500'>
-                          No notes yet - click to add some!
-                        </div>
-                      );
-                    }
-                  }}
+                readView={() => {
+                  if (book.notes) {
+                    return <div className='multiline'>{book.notes}</div>;
+                  } else {
+                    return (
+                      <div className='text-gray-500'>
+                        No notes yet - click to add some!
+                      </div>
+                    );
+                  }
+                }}
                   onConfirm={(value) => updateBookField('notes', value)}
                   autoFocus
                   readViewFitContainerWidth
