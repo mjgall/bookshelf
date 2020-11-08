@@ -37,8 +37,9 @@ const Feed = (props) => {
     }
 
     return (
-        <div className="border-gray-400 border m-4 p-8 rounded">
-            {activities.reverse().map((item) => {
+        <div>
+            <div className='text-2xl font-bold'>Friend Activity</div>
+            {activities.map((item) => {
                 return (
                     <div className="border-gray-400 border m-2 px-6 py-2 rounded flex items-center">
                         <img

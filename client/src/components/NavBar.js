@@ -53,7 +53,7 @@ const NavBar = ({
               .concat(global.books.userBooks)
               .filter((book) => book.user_id === global.currentUser.id)
               .length
-            } books!`
+            } books`
             : null}
         </span>
       </div>

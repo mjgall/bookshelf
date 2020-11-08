@@ -9,7 +9,7 @@ module.exports = (userId) => {
         JOIN activities ON users.id = activities.user_id
         JOIN global_books ON global_books.id = activities.object_id
         WHERE ( friendships.user_id_1 = ${userId}
-            OR friendships.user_id_2 = ${userId} )`;
+            OR friendships.user_id_2 = ${userId} ) ORDER BY activities.timestamp DESC`;
         db.query(query, (err, results, fields) => {
             if (err) {
                 reject(err);
