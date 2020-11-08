@@ -22,6 +22,7 @@ const Book = (props) => {
   const params = useParams();
 
   const [book, setBook] = useState(undefined);
+  const [type, setType] = useState('')
   const [loaded, setLoaded] = useState(false);
 
   const fetchGlobalBook = useCallback(async (id) => {
@@ -32,83 +33,74 @@ const Book = (props) => {
     setLoaded(true);
   }, []);
 
+
   useEffect(() => {
-    switch (props.bookType) {
-      case 'global':
-        fetchGlobalBook(params.id);
-        break;
-      case 'personal':
-        const personalBook = global.allBooks.filter(
-          (book) => book.user_book_id === Number(params.userBookId)
-        )[0];
-        const personalIndex = global.allBooks.findIndex((globalBook) => {
-          if (props.bookType === 'personal') {
-            return globalBook.user_book_id === personalBook.user_book_id;
-          } else {
-            return undefined;
-          }
-        });
-        setBook({ ...personalBook, index: personalIndex });
-        setLoaded(true);
-        break;
-      case 'household':
-        const householdBook = global.allBooks.filter(
-          (book) => book.id === Number(params.globalBookId)
-        )[0];
-        const householdIndex = global.allBooks.findIndex((globalBook) => {
-          if (props.bookType === 'household') {
-            return globalBook.id === householdBook.id;
-          } else {
-            return undefined;
-          }
-        });
-        setBook({ ...householdBook, index: householdIndex });
-        setLoaded(true);
-        break;
-      default:
-        break;
+    // switch (type) {
+    // case 'global':
+
+    const determineBookType = (id) => {
+      const index = global.allBooks.findIndex(book => {
+        return book.id == id
+      })
+
+      if (!global.allBooks[index]) {
+        return 'global'
+      } else if (global.allBooks[index].user_id == global.currentUser.id) {
+        return 'personal'
+      } else if (global.allBooks[index].household_id) {
+        return 'household'
+      }
     }
+
+    const bookType = determineBookType(params.id)
+
+    setType(bookType)
+
+    if (bookType === 'personal' || bookType === 'household') {
+      const index = global.allBooks.findIndex(book => {
+        return book.id == params.id
+      })
+      setBook({...global.allBooks[index], index: index})
+      setLoaded(true)
+    } else {
+      fetchGlobalBook(params.id);
+    }
+
   }, [
-    fetchGlobalBook,
-    global.allBooks,
-    props.bookType,
-    params.globalBookId,
-    params.userBookId,
-    params.id,
-    params
+    fetchGlobalBook, global, params
   ]);
 
   const updateBookField = async (field, value) => {
-    let options = { bookType: props.bookType, field, value, id: undefined };
+    let options = { bookType: type, field, value, id: undefined };
 
     switch (field) {
       case 'title':
       case 'author':
       case 'private':
-        if (props.bookType === 'personal') {
+        if (type === 'personal') {
           options.id = book.user_book_id;
           options.globalId = book.id
         }
         break;
       case 'read':
-        if (props.bookType === 'personal') {
+        if (type === 'personal') {
           options.id = book.user_book_id;
           options.globalId = book.id
         } else if (
-          props.bookType === 'household' ||
-          props.bookType === 'global'
+          type === 'household' ||
+          type === 'global'
         ) {
           options.id = book.id;
         }
         break;
       case 'notes':
         //updating personal notes
-        if (props.bookType === 'personal') {
+        if (type === 'personal') {
           options.id = book.user_book_id;
           options.globalId = book.id
         } else if (
-          props.bookType === 'global' ||
-          props.bookType === 'household'
+          type === 'global' ||
+          type === 'household'
         ) {
           options.id = book.id;
           options.usersGlobalBooksId = book.users_globalbooks_id;
@@ -119,7 +111,7 @@ const Book = (props) => {
     }
 
     axios.put('/api/books', options).then((response) => {
-      if (props.bookType !== 'global') {
+      if (type !== 'global') {
         global.allBooks[book.index][field] = response.data[field];
       }
       setBook({ ...book, [field]: response.data[field] });
@@ -153,8 +145,8 @@ const Book = (props) => {
                     className='w-2/5 block ml-auto mr-auto'
                     src={book.cover}></img>
                 </div>
-                {props.bookType === 'household' ||
-                  props.bookType === 'global' ? (
+                {type === 'household' ||
+                  type === 'global' ? (
                     <div className='mt-2'>{book.title}</div>
                   ) : (
                     <InlineEdit
@@ -171,8 +163,8 @@ const Book = (props) => {
                       onConfirm={(value) => updateBookField('title', value)}
                     />
                   )}
-                {props.bookType === 'household' ||
-                  props.bookType === 'global' ? (
+                {type === 'household' ||
+                  type === 'global' ? (
                     <div className='mt-2'>{book.author}</div>
                   ) : (
                     <InlineEdit
@@ -207,7 +199,7 @@ const Book = (props) => {
                     <Tip renderChildren content='Mark as read' placement='right'>
                       <div
                         onClick={() => updateBookField('read', !book.read)}
-                        className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
+                        className='bg-royalblue hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
                         <div className='flex justify-center'>
                           <BookOpen size='1.5rem'></BookOpen>
                           <span className='ml-2'>Not read yet</span>
@@ -215,7 +207,7 @@ const Book = (props) => {
                       </div>
                     </Tip>
                   )}
-                {props.bookType === 'personal' ? (
+                {type === 'personal' ? (
                   book.private ? (
                     <Tip
                       renderChildren
@@ -241,7 +233,7 @@ const Book = (props) => {
                           onClick={() =>
                             updateBookField('private', !book.private)
                           }
-                          className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
+                          className='bg-royalblue hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer'>
                           <div className='flex justify-center'>
                             <LockOpen size='1.5rem'></LockOpen>
                             <span className='ml-2'>Public</span>
@@ -254,7 +246,7 @@ const Book = (props) => {
             </div>
           </div>
           <div className='md:mx-0 mx-6'>
-            {props.bookType === 'household' || props.bookType === 'global' ? (
+            {type === 'household' || type === 'global' ? (
               <InlineEdit
                 defaultValue={book.notes}
                 label='Personal Notes'
@@ -284,17 +276,23 @@ const Book = (props) => {
                   editView={(fieldProps, ref) => (
                     <TextArea {...fieldProps} ref={ref}></TextArea>
                   )}
-                  readView={() => (
-                    <div className='multiline'>
-                      {book.notes || 'No notes, click to enter some!'}
-                    </div>
-                  )}
+                  readView={() => {
+                    if (book.notes) {
+                      return <div className='multiline'>{book.notes}</div>;
+                    } else {
+                      return (
+                        <div className='text-gray-500'>
+                          No notes yet - click to add some!
+                        </div>
+                      );
+                    }
+                  }}
                   onConfirm={(value) => updateBookField('notes', value)}
                   autoFocus
                   readViewFitContainerWidth
                 />
               )}
-            {props.bookType === 'global' ? null : (
+            {type === 'global' ? null : (
               <div>
                 <div className='text-lg mt-6'>
                   <span role='img' aria-label='house'>
@@ -307,7 +305,7 @@ const Book = (props) => {
             )}
           </div>
           <div className='md:mx-0 mx-6' id='actions-bar'>
-            {props.bookType === 'personal' ? (
+            {type === 'personal' ? (
               <Confirm
                 position='left'
                 tipContent='Delete book'

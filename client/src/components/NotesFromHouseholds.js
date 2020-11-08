@@ -65,7 +65,7 @@ const NotesFromHouseholds = (props) => {
                   } else {
                     return (
                       <div className='text-gray-500'>
-                        No notes yet - click to add some!
+                        No one in the {householdNote.household_name} household has left public notes.
                       </div>
                     );
                   }

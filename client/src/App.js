@@ -50,6 +50,9 @@ const App = (props) => {
               ></Profile>
             </PrivateRoute>
             <PrivateRoute exact path="/book/:id">
+              <Book></Book>
+            </PrivateRoute>
+            {/* <PrivateRoute exact path="/book/:id">
               <Book bookType="global"></Book>
             </PrivateRoute>
             <PrivateRoute exact path="/book/owned/:userBookId">
@@ -57,7 +60,7 @@ const App = (props) => {
             </PrivateRoute>
             <PrivateRoute exact path="/book/household/:globalBookId">
               <Book bookType="household"></Book>
-            </PrivateRoute>
+            </PrivateRoute> */}
             <Route path="/shelf/:shelfId">
               <SharedShelf></SharedShelf>
             </Route>

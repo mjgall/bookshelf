@@ -70,7 +70,7 @@ const Friends = (props) => {
 
             </div>
             {friendMenuOpen ? (<form onSubmit={sendInvite} className='w-full'>
-                <div className='flex items-center border-b border-b-1 border-blue-500 '>
+                <div className='flex items-center border-b border-b-1 border-royalblue '>
                     <input
                         name="email"
                         className='appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none'

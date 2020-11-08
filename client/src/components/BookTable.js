@@ -335,32 +335,38 @@ const BookTable = (props) => {
                   global.currentUser ? 'cursor-pointer' : ''
                   }  ${row.original.read ? 'bg-green-100' : ''}`}
                 onClick={() => {
-                  const bookRow = row.original;
-                  if (global.currentUser && !props.sharedShelf) {
-                    if (Number(bookRow.user_id) === global.currentUser.id) {
-                      props.history.push(
-                        `/book/owned/${row.original.user_book_id}`
-                      );
-                    } else {
-                      props.history.push(`/book/household/${row.original.id}`);
-                    }
-                  } else if (global.currentUser && props.sharedShelf) {
-                    switch (props.relation) {
-                      case 'self':
-                        props.history.push(`/book/owned/${row.original.id}`);
-                        break;
-                      case 'household':
-                        props.history.push(
-                          `/book/household/${row.original.global_id}`
-                        );
-                        break;
-                      case 'none':
-                        props.history.push(`/book/${row.original.global_id}`);
-                        break;
-                      default:
-                        break;
-                    }
-                  } else return;
+                  const book = row.original;
+                  console.log(book)
+                  if (props.sharedShelf) {
+                    props.history.push(`/book/${book.global_id}`);
+                  } else {
+                    props.history.push(`/book/${book.id}`);
+                  }             
+                  // if (global.currentUser && !props.sharedShelf) {
+                  //   if (Number(bookRow.user_id) === global.currentUser.id) {
+                  //     props.history.push(
+                  //       `/book/owned/${row.original.user_book_id}`
+                  //     );
+                  //   } else {
+                  //     props.history.push(`/book/household/${row.original.id}`);
+                  //   }
+                  // } else if (global.currentUser && props.sharedShelf) {
+                  //   switch (props.relation) {
+                  //     case 'self':
+                  //       props.history.push(`/book/owned/${row.original.id}`);
+                  //       break;
+                  //     case 'household':
+                  //       props.history.push(
+                  //         `/book/household/${row.original.global_id}`
+                  //       );
+                  //       break;
+                  //     case 'none':
+                  //       props.history.push(`/book/${row.original.global_id}`);
+                  //       break;
+                  //     default:
+                  //       break;
+                  //   }
+                  // } else return;
                 }}>
                 {row.cells.map((cell) => {
                   return (
