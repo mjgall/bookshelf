@@ -531,12 +531,12 @@ export default class Profile extends React.Component {
 
             </div>
           </div>
-          <div><Friends></Friends></div>
           <div>
-            
-            <Feed></Feed>
+            <Friends></Friends>
           </div>
-          
+          <div>
+            <Feed></Feed>
+          </div> 
         </div>
       </div>
     );
