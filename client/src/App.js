@@ -64,9 +64,9 @@ const App = (props) => {
             <Route path="/shelf/:shelfId">
               <SharedShelf></SharedShelf>
             </Route>
-            <PrivateRoute path="/cancel">
+            {/* <PrivateRoute path="/cancel">
               <Cancellation></Cancellation>
-            </PrivateRoute>
+            </PrivateRoute> */}
             {/* <PrivateRoute path="/feed">
               <Feed></Feed>
             </PrivateRoute> */}

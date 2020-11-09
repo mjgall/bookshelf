@@ -4,6 +4,8 @@ import BookTable from "../components/BookTable";
 import Feed from "../components/Feed"
 import Subnav from "../components/Subnav"
 import MarketingHome from "./MarketingHome";
+import Cancellation from "./Cancellation"
+import moment from "moment";
 import {
   withRouter, BrowserRouter as Router,
   Switch,
@@ -50,17 +52,24 @@ const Home = (props) => {
             <Switch>
               <Route path="/library">
                 <div>
-                <div className='text-2xl font-bold'>Your Library</div>
-                <Scanner
-                  user={global.currentUser}
-                  addBookToGlobalState={addBookToGlobalState}
-                ></Scanner>
-                <BookTable books={global.books.userBooks.concat(global.books.householdBooks)}>
-                </BookTable>
+                  <div className='text-2xl font-bold'>Your Library</div>
+                  <Scanner
+                    user={global.currentUser}
+                    addBookToGlobalState={addBookToGlobalState}
+                  ></Scanner>
+                  <BookTable books={global.books.userBooks.concat(global.books.householdBooks)}>
+                  </BookTable>
                 </div>
               </Route>
               <Route path="/feed">
                 <Feed></Feed>
+              </Route>
+              <Route path="/account">
+                <div>
+                  <div className='text-2xl font-bold'>Account</div>
+                  <div>Joined {moment(global.currentUser.create_date).format("MMMM Do YYYY - h:mm a")}</div>
+                  <Cancellation></Cancellation>
+                </div>
               </Route>
               <Route path="/*">
                 <Feed></Feed>

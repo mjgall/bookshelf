@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import axios from 'axios'
 import {
     CheckSquare,
@@ -11,8 +11,11 @@ import {
 } from '@styled-icons/boxicons-regular';
 import Tip from '../common/Tip';
 
+import { Context } from "../globalContext";
 
 const Friends = (props) => {
+
+    const global = useContext(Context);
 
     const [friends, setFriends] = useState([])
     const [friendMenuOpen, setFriendMenuOpen] = useState(false)
@@ -30,9 +33,22 @@ const Friends = (props) => {
             setValues({ ...values, email: '' })
             setFriendMenuOpen(!friendMenuOpen)
         } else {
-            console.log('Please include an actaul email')
+            console.log('Please include an actual email')
         }
 
+    }
+
+    const editInvite = async (friendshipId, action) => {
+        const response = await axios.put('/api/friends', {friendshipId, action })
+        const fetchFriends = async () => {
+            const result = await axios.get(
+                '/api/friends',
+            );
+
+            setFriends(result.data);
+        };
+
+        fetchFriends();
     }
 
     useEffect(() => {
@@ -89,8 +105,31 @@ const Friends = (props) => {
 
                 </div>
             </form>) : null}
-            <div>{friends.map((friend, index) => {
+            <div>
+                <div>Pending</div>
+                <div>{friends.filter(friendship => {
+                    return !friendship.accepted && !friendship.declined && friendship.user_id_2 === global.currentUser.id
+                }).map((friend, index) => {
+                    console.log(friend)
+                    return (
+                        <div key={index} className="flex items-center my-2">
+                            <img
+                                alt={friend.full}
+                                src={friend.picture}
+                                class='rounded-full h-12 w-12 mr-4'></img>
+                            <div>{friend.full}
+                            <div><CheckSquare size="2em" className='cursor-pointer text-green-400 w-full' onClick={() => editInvite(friend.friendship_id, "accept")}></CheckSquare></div>
+                            </div>
+                        </div>
+                    )
 
+                })}</div>
+            </div>
+            <div>
+                <div>Accepted</div>
+                <div>{friends.filter(friendship => {
+                return friendship.accepted
+            }).map((friend, index) => {
                 return (
                     <div key={index} className="flex items-center my-2">
                         <img
@@ -102,6 +141,8 @@ const Friends = (props) => {
                 )
 
             })}</div>
+            </div>
+            
         </div>
     )
 }
