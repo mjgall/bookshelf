@@ -291,7 +291,7 @@ const BookTable = (props) => {
 
       <table
         {...getTableProps()}
-        className='shadow-md text-xs md:text-base'>
+        className='shadow-md text-xs md:text-base w-full'>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>

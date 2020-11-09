@@ -49,7 +49,6 @@ const Home = (props) => {
             <Subnav currentPage={match.url}></Subnav>
             <Switch>
               <Route path="/library">
-              
                 <div>
                 <div className='text-2xl font-bold'>Your Library</div>
                 <Scanner

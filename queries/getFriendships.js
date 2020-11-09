@@ -18,8 +18,6 @@ module.exports = (userId, friendshipId) => {
             OR friendships.user_id_2 = ${userId} )
             `;
     }
-
-    console.log(query);
     return new Promise((resolve, reject) => {
         db.query(query, (err, results, fields) => {
             if (err) {
