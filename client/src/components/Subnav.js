@@ -16,14 +16,12 @@ const Subnav = (props) => {
             return "hover:bg-gray-400 text-center text-lg my-1"
         }
     }
-    
+
     return (
         <div>
             {links.map((link) => {
                 return (
-                    <div style={{ borderRadius: '4px' }} className={determineClass(props.currentPage, link.to)}>
-                        <Link className="px-2" to={link.to}>{link.text}</Link>
-                    </div>
+                    <Link style={{ borderRadius: '4px', display: 'block' }} className={`px-2 ${determineClass(props.currentPage, link.to)}`} to={link.to}>{link.text}</Link>
                 )
             })}
         </div>
