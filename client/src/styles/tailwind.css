@@ -706,6 +706,12 @@ video {
   background-color: rgba(247, 250, 252, var(--bg-opacity));
 }
 
+.hover\:bg-gray-400:hover {
+  --bg-opacity: 1;
+  background-color: #cbd5e0;
+  background-color: rgba(203, 213, 224, var(--bg-opacity));
+}
+
 .hover\:bg-red-700:hover {
   --bg-opacity: 1;
   background-color: #c53030;
@@ -972,10 +978,6 @@ video {
   margin: 0.5rem;
 }
 
-.m-4 {
-  margin: 1rem;
-}
-
 .m-auto {
   margin: auto;
 }
@@ -1078,10 +1080,6 @@ video {
   margin-bottom: 1rem;
 }
 
-.mt-5 {
-  margin-top: 1.25rem;
-}
-
 .ml-5 {
   margin-left: 1.25rem;
 }
@@ -1164,10 +1162,6 @@ video {
 
 .p-4 {
   padding: 1rem;
-}
-
-.p-8 {
-  padding: 2rem;
 }
 
 .py-1 {

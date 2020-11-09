@@ -263,8 +263,8 @@ const BookTable = (props) => {
   };
 
   return (
-    <>
-      <div className='max-w-screen-lg mx-auto mb-6 grid md:grid-cols-2 md:gap-2 grid-cols-1 row-gap-2'>
+    <div>
+      <div className='mb-6 grid md:grid-cols-2 md:gap-2 grid-cols-1 row-gap-2'>
         {props.sharedShelf ? null : (
           <Select
             isOptionDisabled={(option) => option.value === 'no-households'}
@@ -291,7 +291,7 @@ const BookTable = (props) => {
 
       <table
         {...getTableProps()}
-        className='max-w-screen-lg container shadow-md text-xs md:text-base'>
+        className='shadow-md text-xs md:text-base'>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -380,7 +380,7 @@ const BookTable = (props) => {
           })}
         </tbody>
       </table>
-    </>
+      </div>
   );
 };
 

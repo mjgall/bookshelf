@@ -535,7 +535,7 @@ export default class Profile extends React.Component {
             <Friends></Friends>
           </div>
           <div>
-            <Feed></Feed>
+            {/* <Feed></Feed> */}
           </div> 
         </div>
       </div>

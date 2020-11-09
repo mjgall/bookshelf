@@ -67,9 +67,9 @@ const App = (props) => {
             <PrivateRoute path="/cancel">
               <Cancellation></Cancellation>
             </PrivateRoute>
-            <PrivateRoute path="/feed">
+            {/* <PrivateRoute path="/feed">
               <Feed></Feed>
-            </PrivateRoute>
+            </PrivateRoute> */}
             <Route path="/*">
               <Home
                 clearReferrer={clearReferrer}
