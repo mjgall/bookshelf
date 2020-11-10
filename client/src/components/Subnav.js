@@ -18,7 +18,7 @@ const Subnav = (props) => {
     }
 
     return (
-        <div className="md:w-full w-screen">
+        <div className="md:w-full">
         <div className="w-1/2 md:w-full mx-auto ">
             {links.map((link) => {
                 return (
