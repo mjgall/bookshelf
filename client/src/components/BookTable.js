@@ -44,6 +44,7 @@ const GlobalFilter = ({
 const BookTable = (props) => {
   const global = useContext(Context);
   const [householdOptions, setHouseholdOptions] = useState([]);
+  const [viewPrivate, setViewPrivate] = useState(false)
 
   const getSavedHouseholdSelect = () => {
     const localSaved = JSON.parse(localStorage.getItem('householdFilter'));
@@ -171,9 +172,31 @@ const BookTable = (props) => {
     ];
   }, []);
 
+  const handleHouseholdChange = (selected) => {
+    console.log(selected)
+    getOwners(global.householdMembers, selected.value);
+    setHouseholdSelect(selected);
+    setOwnerSelect({ label: 'All members', value: 'all' });
+    localStorage.setItem('householdFilter', JSON.stringify(selected));
+    localStorage.setItem('ownerFilter', null);
+  };
+
+  const handleOwnerChange = (selected) => {
+    setOwnerSelect(selected);
+    localStorage.setItem('ownerFilter', JSON.stringify(selected));
+  };
+
+  const togglePrivate = () => {
+    handleHouseholdChange({ label: '⛔ None (Only your own books)', value: 'none' })
+    setViewPrivate(!viewPrivate)
+  }
+
   const data = useMemo(() => {
     const filterBooks = (books, householdSelect, ownerSelect) => {
-      if (householdSelect.value == null) {
+      if (viewPrivate) {
+        return books.filter(book => book.private === 1)
+      }
+      else if (householdSelect.value == null) {
         return books;
       } else if (householdSelect.value === 'none') {
         return books.filter(
@@ -198,6 +221,7 @@ const BookTable = (props) => {
         return newBooks;
       }
     };
+
     if (props.sharedShelf) {
       return props.books;
     } else {
@@ -225,7 +249,8 @@ const BookTable = (props) => {
     householdSelect,
     ownerSelect,
     props.books,
-    global.householdMembers
+    global.householdMembers,
+    viewPrivate,
   ]);
 
   const {
@@ -249,44 +274,54 @@ const BookTable = (props) => {
     useGlobalFilter,
     useSortBy
   );
-  const handleHouseholdChange = (selected) => {
-    getOwners(global.householdMembers, selected.value);
-    setHouseholdSelect(selected);
-    setOwnerSelect({ label: 'All members', value: 'all' });
-    localStorage.setItem('householdFilter', JSON.stringify(selected));
-    localStorage.setItem('ownerFilter', null);
-  };
 
-  const handleOwnerChange = (selected) => {
-    setOwnerSelect(selected);
-    localStorage.setItem('ownerFilter', JSON.stringify(selected));
-  };
 
   return (
     <div>
-      <div className='mb-6 grid md:grid-cols-2 md:gap-2 grid-cols-1 row-gap-2'>
+      <div className="md:flex md:items-center md:h-8 mb-2">
         {props.sharedShelf ? null : (
-          <Select
-            isOptionDisabled={(option) => option.value === 'no-households'}
-            placeholder='Household...'
-            blurInputOnSelect
-            isSearchable={false}
-            className='w-full container'
-            options={householdOptions}
-            value={householdSelect}
-            onChange={handleHouseholdChange}></Select>
+
+          <>
+            <div className="flex-none">
+              <div className="flex items-center">
+                <div>Private Only</div>
+                <input className="mx-2" type="checkbox" checked={viewPrivate} onChange={togglePrivate}></input>
+              </div>
+            </div>
+            {viewPrivate ? null :
+              <div className="flex w-full">
+                <div className="flex-1">
+                  <Select
+                    isOptionDisabled={(option) => option.value === 'no-households'}
+                    placeholder='Household...'
+                    blurInputOnSelect
+                    isSearchable={false}
+                    options={householdOptions}
+
+                    value={householdSelect}
+                    onChange={handleHouseholdChange}>
+                  </Select>
+                </div>
+                {householdSelect.value === 'none' || props.sharedShelf || viewPrivate ? null : (
+                  <div className="flex-1 ml-1">
+                    <Select
+                      isOptionDisabled={(option) => option.value === 'no-households'}
+                      placeholder='Owner...'
+                      blurInputOnSelect
+                      isSearchable={false}
+                      options={owners}
+
+                      value={ownerSelect}
+                      onChange={handleOwnerChange}></Select></div>
+                )}
+              </div>
+
+            }
+          </>
+
         )}
-        {householdSelect.value === 'none' || props.sharedShelf ? null : (
-          <Select
-            isOptionDisabled={(option) => option.value === 'no-households'}
-            placeholder='Owner...'
-            blurInputOnSelect
-            isSearchable={false}
-            className='w-full container'
-            options={owners}
-            value={ownerSelect}
-            onChange={handleOwnerChange}></Select>
-        )}
+
+
       </div>
 
       <table
@@ -331,8 +366,7 @@ const BookTable = (props) => {
             return (
               <tr
                 {...row.getRowProps()}
-                className={`hover:bg-gray-100 ${
-                  global.currentUser ? 'cursor-pointer' : ''
+                className={`hover:bg-gray-100 ${global.currentUser ? 'cursor-pointer' : ''
                   }  ${row.original.read ? 'bg-green-100' : ''}`}
                 onClick={() => {
                   const book = row.original;
@@ -341,7 +375,7 @@ const BookTable = (props) => {
                     props.history.push(`/book/${book.global_id}`);
                   } else {
                     props.history.push(`/book/${book.id}`);
-                  }             
+                  }
                   // if (global.currentUser && !props.sharedShelf) {
                   //   if (Number(bookRow.user_id) === global.currentUser.id) {
                   //     props.history.push(
@@ -380,7 +414,7 @@ const BookTable = (props) => {
           })}
         </tbody>
       </table>
-      </div>
+    </div>
   );
 };
 
