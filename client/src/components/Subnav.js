@@ -19,7 +19,7 @@ const Subnav = (props) => {
 
     return (
         <div className="md:w-full w-screen">
-        <div className="w-1/2 md:w-full mx-auto ">
+        <div className="w-3/4 md:w-full mx-auto ">
             {links.map((link) => {
                 return (
                     <Link style={{ borderRadius: '4px', display: 'block' }} className={`px-2 text-center text-lg my-1 ${determineClass(props.currentPage, link.to)}`} to={link.to}>{link.text}</Link>
