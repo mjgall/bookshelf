@@ -6,13 +6,9 @@ const Subnav = (props) => {
     const links = [{ to: '/feed', text: 'Feed' }, { to: '/library', text: 'Library' }, { to: '/account', text: 'Account'}]
 
     const determineClass = (currentPage, to) => {
-
-        if (currentPage === to) {
+        if (currentPage === to || (currentPage === "/" && to === "/feed")) {
             return "bg-royalblue text-white"
-        } else if (currentPage === "/" && to === "/feed") {
-            return "bg-royalblue text-white"
-        }
-        else {
+        } else {
             return "hover:bg-gray-400"
         }
     }
