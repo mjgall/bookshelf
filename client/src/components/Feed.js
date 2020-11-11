@@ -45,11 +45,11 @@ const Feed = (props) => {
                         <img
                             alt="user"
                             src={item.friend_picture}
-                            class="rounded-full h-12 w-12 border-solid border-white border-2 -mt-3"
+                            class="rounded-full h-12 w-12 border-solid border-white border-2 mr-2"
                         ></img>
                         <div>
                             <div>
-                                {item.user_id === global.currentUser.id ? 'You' : item.friend_full} {determineAction(item.action)}{" "}
+                                <span className="font-bold">{item.user_id === global.currentUser.id ? 'You' : item.friend_full}</span> {determineAction(item.action)}{" "}
                                 <Link
                                     className="border-gray-600 border-dotted border-b"
                                     to={`/book/${item.object_id}`}
