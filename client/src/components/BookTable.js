@@ -285,7 +285,7 @@ const BookTable = (props) => {
             <div className="flex-none">
               <div className="flex items-center">
                 <div>Private Only</div>
-                <input style={{height: "1.5rem", width: "1.5rem"}} className="mx-2" type="checkbox" checked={viewPrivate} onChange={togglePrivate}></input>
+                <input style={{height: "1.5rem", width: "1.5rem"}} className="mx-2 cursor-pointer" type="checkbox" checked={viewPrivate} onChange={togglePrivate}></input>
               </div>
             </div>
             {viewPrivate ? null :

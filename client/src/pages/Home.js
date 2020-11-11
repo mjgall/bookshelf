@@ -46,9 +46,11 @@ const Home = (props) => {
   return (
     <>
       {global.currentUser ? (
-        <div className="container my-4">
+        <div className="md:container my-4">
           <div className="md:grid" style={{ gridTemplateColumns: '10% 88%', gridColumnGap: '2%' }}>
+            <div className="top-stickyMobile sticky md:bg-transparent bg-white z-50">
             <Subnav currentPage={match.url}></Subnav>
+            </div>
             <Switch>
               <Route path="/library">
                 <div>

@@ -300,6 +300,8 @@ module.exports = {
       '4': '4rem',
       '5': '5rem',
       '6': '6rem',
+      'sticky': '5.4rem',
+      'stickyMobile': '50px',
       auto: 'auto'
     },
     letterSpacing: {

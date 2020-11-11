@@ -1286,6 +1286,10 @@ video {
   bottom: 0;
 }
 
+.top-stickyMobile {
+  top: 50px;
+}
+
 .shadow {
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
@@ -1553,6 +1557,10 @@ video {
     }
   }
 
+  .md\:bg-transparent {
+    background-color: transparent;
+  }
+
   .md\:rounded-lg {
     border-radius: 0.5rem;
   }
@@ -1610,6 +1618,15 @@ video {
   .md\:py-3 {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
+  }
+
+  .md\:sticky {
+    position: -webkit-sticky;
+    position: sticky;
+  }
+
+  .md\:top-sticky {
+    top: 5.4rem;
   }
 
   .md\:shadow-sm {
