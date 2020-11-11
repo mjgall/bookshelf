@@ -61,11 +61,13 @@ const Feed = (props) => {
                                 {moment.unix(item.timestamp / 1000).format("dddd, MMMM Do YYYY, h:mm:ss a")}
                             </div>
                         </div>
-                        <img
-                            alt="user"
-                            src={item.cover}
-                            class="h-16 border-solid border-white border-2 ml-auto"
-                        ></img>
+                        <Link className="ml-auto" to={`/book/${item.object_id}`}>
+                            <img
+                                alt="user"
+                                src={item.cover}
+                                class="h-16 border-solid border-white border-2"
+                            ></img>
+                        </Link>
                     </div>
                 );
             })}
