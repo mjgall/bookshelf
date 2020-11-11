@@ -293,6 +293,7 @@ module.exports = {
       screen: '100vh'
     }),
     inset: {
+      'safe0': '-1px',
       '0': '0',
       '1': '1rem',
       '2': '2rem',

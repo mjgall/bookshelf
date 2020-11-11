@@ -41,7 +41,7 @@ const Feed = (props) => {
             <div className='text-2xl font-bold'>Friend Activity</div>
             {activities.map((item) => {
                 return (
-                    <div className="border-gray-400 border m-2 px-6 py-2 rounded flex items-center">
+                    <div className="border-gray-400 border mt-2 mb-2 px-6 py-2 rounded flex items-center">
                         <img
                             alt="user"
                             src={item.friend_picture}

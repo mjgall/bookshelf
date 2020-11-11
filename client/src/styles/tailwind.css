@@ -1286,8 +1286,8 @@ video {
   bottom: 0;
 }
 
-.top-stickyMobile {
-  top: 50px;
+.top-safe0 {
+  top: -1px;
 }
 
 .shadow {
