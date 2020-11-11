@@ -18,7 +18,7 @@ SELECT DISTINCT activities.*, global_books.title, global_books.cover, users.id A
         JOIN global_books ON global_books.id = activities.object_id
         JOIN users_globalbooks ON users_globalbooks.user_id = activities.user_id AND users_globalbooks.global_book_id = activities.object_id
         JOIN user_books ON users_globalbooks.global_book_id = user_books.global_id
-        WHERE ( friendships.user_id_1 = ${userId} OR friendships.user_id_2 = ${userId} ) AND users.id != 1
+        WHERE ( friendships.user_id_1 = ${userId} OR friendships.user_id_2 = ${userId} ) AND users.id != ${userId}
 ORDER BY timestamp DESC`
         db.query(query, (err, results, fields) => {
             if (err) {
