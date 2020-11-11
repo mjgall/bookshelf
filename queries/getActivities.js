@@ -3,7 +3,7 @@ const sqlString = require("sqlstring");
 
 module.exports = (userId) => {
     return new Promise((resolve, reject) => {
-        const query = `SELECT DISTINCT activities.*, user_books.title, users.id AS friend_id, users.email AS friend_email, users.full AS friend_full, users.picture AS friend_picture FROM friendships 
+        const query = `SELECT DISTINCT activities.*, user_books.title, global_books.cover, users.id AS friend_id, users.email AS friend_email, users.full AS friend_full, users.picture AS friend_picture FROM friendships 
         JOIN users 
             ON ((friendships.user_id_1 = users.id OR friendships.user_id_2 = users.id) AND (friendships.accepted = TRUE AND friendships.declined != TRUE))
         JOIN activities ON users.id = activities.user_id
@@ -11,7 +11,7 @@ module.exports = (userId) => {
         JOIN user_books ON global_books.id = user_books.global_id AND user_books.user_id = users.id AND user_books.private = FALSE
         WHERE ( friendships.user_id_1 = ${userId} OR friendships.user_id_2 = ${userId} )
 UNION
-SELECT DISTINCT activities.*, global_books.title, users.id AS friend_id, users.email AS friend_email, users.full AS friend_full, users.picture AS friend_picture FROM friendships 
+SELECT DISTINCT activities.*, global_books.title, global_books.cover, users.id AS friend_id, users.email AS friend_email, users.full AS friend_full, users.picture AS friend_picture FROM friendships 
         JOIN users 
             ON ((friendships.user_id_1 = users.id OR friendships.user_id_2 = users.id) AND (friendships.accepted = TRUE AND friendships.declined != TRUE))
         JOIN activities ON users.id = activities.user_id
