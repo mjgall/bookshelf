@@ -45,7 +45,7 @@ const Feed = (props) => {
                         <img
                             alt="user"
                             src={item.friend_picture}
-                            class="rounded-full h-12 w-12 border-solid border-white border-2 mr-2"
+                            class="rounded-full h-12 w-12 mr-2"
                         ></img>
                         <div>
                             <div>
@@ -65,7 +65,7 @@ const Feed = (props) => {
                             <img
                                 alt="user"
                                 src={item.cover}
-                                class="h-16 border-solid border-white border-2"
+                                class="h-16"
                             ></img>
                         </Link>
                     </div>
