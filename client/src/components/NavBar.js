@@ -32,7 +32,7 @@ const NavBar = ({
   };
 
   return (
-    <nav className='z-50 flex shadow-lg items-center justify-between flex-wrap bg-blue-500 px-8 py-1 md:py-3 sticky top-0'>
+    <nav className='z-50 flex shadow-lg items-center justify-between flex-wrap bg-royalblue px-8 py-1 md:py-3 sticky top-safe0 md:top-0'>
       <div className='flex items-center'>
         <div
           className='flex items-center flex-shrink-0 text-white mr-6 cursor-pointer'
@@ -53,7 +53,7 @@ const NavBar = ({
               .concat(global.books.userBooks)
               .filter((book) => book.user_id === global.currentUser.id)
               .length
-            } books!`
+            } books`
             : null}
         </span>
       </div>
@@ -72,7 +72,7 @@ const NavBar = ({
             <>
               <Link
                 to='/profile'
-                className='inline-block mx-1 text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0 hover:bg-white lg:mt-0 '>
+                className='inline-block mx-1 text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white lg:mt-0 hover:bg-white lg:mt-0 '>
                 {global.householdMembers.some((membership) => {
                   return (
                     !membership.invite_declined &&
@@ -82,11 +82,11 @@ const NavBar = ({
                 }) && windowWidth > 380 ? (
                     <div className='mr-2 inline-block rounded-full bg-red-600 p-1 '></div>
                   ) : null}
-                <div className='inline-block'>Profile</div>
+                <div className='inline-block flex '>Profile</div>
               </Link>
               <a
                 href='/api/logout'
-                className='inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0'>
+                className='inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white lg:mt-0'>
                 Logout
             </a>
             </>

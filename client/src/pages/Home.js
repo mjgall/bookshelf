@@ -1,8 +1,19 @@
 import React, { useContext, useEffect } from "react";
 import Scanner from "../components/Scanner";
 import BookTable from "../components/BookTable";
+import Feed from "../components/Feed"
+import Subnav from "../components/Subnav"
 import MarketingHome from "./MarketingHome";
-import { withRouter } from "react-router-dom";
+import Cancellation from "./Cancellation"
+import moment from "moment";
+import {
+  withRouter, BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+  useParams
+} from "react-router-dom";
 
 import { Context } from "../globalContext";
 
@@ -30,19 +41,44 @@ const Home = (props) => {
     });
   };
 
+  let match = useRouteMatch();
+
   return (
     <>
       {global.currentUser ? (
-        <div className="max-w-screen-lg container my-4">
-          <Scanner
-            user={global.currentUser}
-            className="max-w-screen-lg container mx-auto mt-5"
-            addBookToGlobalState={addBookToGlobalState}
-          ></Scanner>
+        <div className="md:container my-4">
+          <div className="md:grid" style={{ gridTemplateColumns: '10% 88%', gridColumnGap: '2%' }}>
+            <div className="md:bg-transparent">
+            <Subnav currentPage={match.url}></Subnav>
+            </div>
+            <Switch>
+              <Route path="/library">
+                <div>
+                  <div className='text-2xl font-bold'>Your Library</div>
+                  <Scanner
+                    user={global.currentUser}
+                    addBookToGlobalState={addBookToGlobalState}
+                  ></Scanner>
+                  <BookTable books={global.books.userBooks.concat(global.books.householdBooks)}>
+                  </BookTable>
+                </div>
+              </Route>
+              <Route path="/feed">
+                <Feed></Feed>
+              </Route>
+              <Route path="/account">
+                <div>
+                  <div className='text-2xl font-bold'>Account</div>
+                  <div>Joined {moment(global.currentUser.create_date).format("MMMM Do YYYY - h:mm a")}</div>
+                  <Cancellation></Cancellation>
+                </div>
+              </Route>
+              <Route path="/*">
+                <Feed></Feed>
+              </Route>
+            </Switch>
+          </div>
 
-          <BookTable
-            books={global.books.userBooks.concat(global.books.householdBooks)}
-          ></BookTable>
         </div>
       ) : (
           <MarketingHome redirect={global.redirect}></MarketingHome>

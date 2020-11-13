@@ -11,6 +11,8 @@ import {
 import ProfileInfoCard from '../components/ProfileInfoCard';
 import Friends from '../components/Friends'
 
+import Feed from '../components/Feed'
+
 import Confirm from '../common/Confirm';
 import Tip from '../common/Tip';
 
@@ -311,7 +313,7 @@ export default class Profile extends React.Component {
               ) {
                 return (
                   <div
-                    className='w-5/6 md:w-full container shadow text-sm bg-blue-100 border border-blue-400 text-blue-700 my-2 px-4 py-3 rounded md:flex justify-between'
+                    className='w-5/6 md:w-full container shadow text-sm bg-blue-100 border border-royalblue text-blue-700 my-2 px-4 py-3 rounded md:flex justify-between'
                     role='alert'>
                     <div className='text-center md:text-left'>
                       <strong className='font-bold'>
@@ -367,7 +369,7 @@ export default class Profile extends React.Component {
               </div>
               {this.state.addHousehold ? (
                 <form onSubmit={this.handleHouseholdSubmit} className='w-full'>
-                  <div className='flex items-center border-b border-b-1 border-blue-500 '>
+                  <div className='flex items-center border-b border-b-1 border-royalblue '>
                     <input
                       className='appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none'
                       type='text'
@@ -376,7 +378,7 @@ export default class Profile extends React.Component {
                       onChange={this.handleHouseholdNameChange}
                       aria-label='Household Name'></input>
                     <button
-                      className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined'
+                      className='bg-royalblue hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined'
                       type='submit'>
                       Create
                     </button>
@@ -416,7 +418,7 @@ export default class Profile extends React.Component {
                         onSubmit={(e) => e.preventDefault()}
                         className='w-full max-w-md'>
                         {membership.is_owner ? (
-                          <div className='flex items-center border-b border-b-2 border-blue-500 '>
+                          <div className='flex items-center border-b border-b-2 border-royalblue '>
                             <input
                               className='appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none'
                               type='text'
@@ -433,7 +435,7 @@ export default class Profile extends React.Component {
                                   index
                                 )
                               }
-                              className='bg-blue-500 hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined'
+                              className='bg-royalblue hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined'
                               type='submit'>
                               Invite
                             </button>
@@ -529,8 +531,12 @@ export default class Profile extends React.Component {
 
             </div>
           </div>
-          <div></div>
-          <Friends></Friends>
+          <div>
+            <Friends></Friends>
+          </div>
+          <div>
+            {/* <Feed></Feed> */}
+          </div> 
         </div>
       </div>
     );

@@ -16,7 +16,7 @@ module.exports = userId => {
     ON inviters.id = households_users.inviter_id
     
     WHERE invite_declined = false AND household_id 
-    IN (SELECT household_id FROM households_users WHERE user_id = ${userId} )`;
+    IN (SELECT household_id FROM households_users WHERE user_id = ${userId} AND households_users.invite_declined = FALSE)`;
 
 
     db.query(query, (err, results, fields) => {

@@ -16,13 +16,14 @@ module.exports = {
     },
     screens: {
       sm: '640px',
-      md: '768px',
+      md: '896px',
       lg: '1024px',
       xl: '1280px'
     },
     colors: {
       transparent: 'transparent',
-
+      royalblue: '#002366',
+      saffron: '#eac435',
       black: '#000',
       white: '#fff',
       gray: {
@@ -292,7 +293,16 @@ module.exports = {
       screen: '100vh'
     }),
     inset: {
+      'safe0': '-1px',
       '0': '0',
+      '1': '1rem',
+      '2': '2rem',
+      '3': '3rem',
+      '4': '4rem',
+      '5': '5rem',
+      '6': '6rem',
+      'sticky': '5.4rem',
+      'stickyMobile': '50px',
       auto: 'auto'
     },
     letterSpacing: {

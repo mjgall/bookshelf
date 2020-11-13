@@ -339,6 +339,10 @@ module.exports = (app) => {
     try {
       const response = await addFriendship(connectingUser, req.body.userEmail);
       res.send(response);
+      if (response.id) {
+        const email = await sendEmail(req.body.userEmail, 'You have a new friend request on Bookshelf!', 'Go to Bookshelf to view your pending requests.',`Check your <a href="https://bookshelf.mikegallagher.app/profile">Profile</a> to view your pending requests!`)
+        console.log(email)
+      }
     } catch (error) {
       res.status(404).send({ reason: error });
     }

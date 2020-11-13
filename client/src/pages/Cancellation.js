@@ -39,7 +39,7 @@ const Cancellation = (props) => {
     }
 
     return (
-        <div className="container mx-auto">
+        <div>
 
 
             <div

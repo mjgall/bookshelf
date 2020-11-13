@@ -11,15 +11,13 @@ module.exports = (userId, friendshipId) => {
             `;
     } else {
         query = `
-        SELECT friendships.id AS friendship_id, friendships.accepted, friendships.declined, users.id AS user_id, users.email, users.full, users.picture FROM friendships 
+        SELECT friendships.id AS friendship_id, friendships.accepted, friendships.declined, friendships.user_id_2, users.id AS user_id, users.email, users.full, users.picture FROM friendships 
         JOIN users 
             ON (friendships.user_id_1 = users.id OR friendships.user_id_2 = users.id) AND users.id <> ${userId}
         WHERE ( friendships.user_id_1 = ${userId}
             OR friendships.user_id_2 = ${userId} )
             `;
     }
-
-    console.log(query);
     return new Promise((resolve, reject) => {
         db.query(query, (err, results, fields) => {
             if (err) {
