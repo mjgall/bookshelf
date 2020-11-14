@@ -82,16 +82,18 @@ const AddBook = () => {
 		setModalOpen(!modalOpen);
 	};
 
-	// const getBook = async (code) => {
-
-	// 	setOpenTab(3);
-	// };
-
 	const submitManual = async () => {
 		await axios.get(`/api/book/lookup/${enteredISBN}`).then((response) => {
 			global.setGlobal({ ...global, capturedBook: response.data });
 		});
+		setOpenTab(3);
 	};
+
+	useEffect(() => {
+		return () => {
+			global.setGlobal({ ...global, capturedBook: false });
+		};
+	}, []);
 
 	const handleManualISBN = (e) => {
 		setEnteredISBN(e.target.value);
@@ -101,6 +103,7 @@ const AddBook = () => {
 		content: {
 			width: "50vw",
 			minHeight: "30vh",
+			maxHeight: "80vh",
 			padding: 0,
 			top: "50%",
 			left: "50%",
@@ -175,7 +178,9 @@ const AddBook = () => {
 									data-toggle="tab"
 									role="tablist"
 								>
-									Enter Manually
+									{global.capturedBook
+										? "Edit and Save"
+										: "Enter Manually"}
 								</div>
 							</li>
 						</ul>
@@ -192,7 +197,9 @@ const AddBook = () => {
 											ref={scanTabRef}
 											className="w-1/2 m-auto"
 										>
-											<Scan></Scan>
+											<Scan
+												onFound={() => setOpenTab(3)}
+											></Scan>
 										</div>
 									</div>
 									<div
@@ -237,9 +244,7 @@ const AddBook = () => {
 													<DetailsTab></DetailsTab>
 												</div>
 											</div>
-										) : (
-											null
-										)}
+										) : null}
 									</div>
 								</div>
 							</div>

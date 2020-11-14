@@ -3,7 +3,7 @@ import QuaggaScanner from "./QuaggaScanner";
 import { Context } from "../globalContext";
 import Select from "react-select";
 import axios from "axios";
-const Scanner = () => {
+const Scanner = ({onFound}) => {
 	const [scanning, setScanning] = useState(false);
 	const [results, setResults] = useState([]);
 	const [canCapture, setCanCapture] = useState([]);
@@ -14,9 +14,10 @@ const Scanner = () => {
 	const global = useContext(Context);
 
 	const captureISBN = async (isbn) => {
-		axios.get(`/api/book/lookup/${isbn}`).then((response) => {
+		await axios.get(`/api/book/lookup/${isbn}`).then((response) => {
 			global.setGlobal({ ...global, capturedBook: response.data });
 		});
+		onFound()
 	};
 
 	const ableToCapture = () => {
