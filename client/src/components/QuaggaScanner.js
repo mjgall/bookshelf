@@ -103,7 +103,7 @@ const QuaggaScanner = ({
 			const err = getMedianOfCodeErrors(result.codeResult.decodedCodes);
 			// if Quagga is at least 75% certain that it read correctly, then accept the code
 			// AND
-			// if the same result was found 3 times in a row
+			// if the same result was found 3 times in a row -- Mike addition for better accuracy
 			if (err < 0.25) {
 				const code = result.codeResult.code;
 				const length = results.length;
