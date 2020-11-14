@@ -2,9 +2,11 @@ import React, { useContext, useEffect } from "react";
 import Scanner from "../components/Scanner";
 import BookTable from "../components/BookTable";
 import Feed from "../components/Feed"
+import AddBook from "../components/AddBook"
 import Subnav from "../components/Subnav"
 import MarketingHome from "./MarketingHome";
 import Cancellation from "./Cancellation"
+import Scanner2 from '../components/Scanner2'
 import moment from "moment";
 import {
   withRouter, BrowserRouter as Router,
@@ -16,6 +18,7 @@ import {
 } from "react-router-dom";
 
 import { Context } from "../globalContext";
+import Library from "../components/Library";
 
 const Home = (props) => {
   const global = useContext(Context);
@@ -53,15 +56,7 @@ const Home = (props) => {
             </div>
             <Switch>
               <Route path="/library">
-                <div>
-                  <div className='text-2xl font-bold'>Your Library</div>
-                  <Scanner
-                    user={global.currentUser}
-                    addBookToGlobalState={addBookToGlobalState}
-                  ></Scanner>
-                  <BookTable books={global.books.userBooks.concat(global.books.householdBooks)}>
-                  </BookTable>
-                </div>
+               <Library></Library>
               </Route>
               <Route path="/feed">
                 <Feed></Feed>
@@ -73,6 +68,7 @@ const Home = (props) => {
                   <Cancellation></Cancellation>
                 </div>
               </Route>
+              <Route path="/scanner"><AddBook></AddBook></Route>
               <Route path="/*">
                 <Feed></Feed>
               </Route>

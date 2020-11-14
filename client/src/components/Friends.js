@@ -116,7 +116,7 @@ const Friends = (props) => {
                             <img
                                 alt={friend.full}
                                 src={friend.picture}
-                                class='rounded-full h-12 w-12 mr-4'></img>
+                                className='rounded-full h-12 w-12 mr-4'></img>
                             <div>{friend.full}
                             <div><CheckSquare size="2em" className='cursor-pointer text-green-400 w-full' onClick={() => editInvite(friend.friendship_id, "accept")}></CheckSquare></div>
                             </div>
@@ -135,7 +135,7 @@ const Friends = (props) => {
                         <img
                             alt={friend.full}
                             src={friend.picture}
-                            class='rounded-full h-12 w-12 mr-4'></img>
+                            className='rounded-full h-12 w-12 mr-4'></img>
                         <div>{friend.full}</div>
                     </div>
                 )

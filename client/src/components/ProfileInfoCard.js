@@ -8,24 +8,24 @@ const ProfileInfoCard = (props) => {
   const global = useContext(Context);
   return (
     <div>
-      <div class='rounded-lg overflow-hidden shadow w-5/6 mx-auto md:mx-0 md:w-64 md:max-w-md my-3'>
-        <div class='h-24 w-full bg-royalblue'></div>
-        <div class='flex justify-center -mt-16'>
+      <div className='rounded-lg overflow-hidden shadow w-5/6 mx-auto md:mx-0 md:w-64 md:max-w-md my-3'>
+        <div className='h-24 w-full bg-royalblue'></div>
+        <div className='flex justify-center -mt-16'>
           <img
             alt='user'
             src={global.currentUser.picture}
-            class='rounded-full h-32 w-32 border-solid border-white border-2 -mt-3'></img>
+            className='rounded-full h-32 w-32 border-solid border-white border-2 -mt-3'></img>
         </div>
-        <div class='text-center px-3 pb-6 pt-2'>
-          <h3 class='text-black text-lg bold font-sans'>
+        <div className='text-center px-3 pb-6 pt-2'>
+          <h3 className='text-black text-lg bold font-sans'>
             {global.currentUser.full}
           </h3>
-          <p class='mt-1 text-sm font-sans font-light text-grey-dark'>
+          <p className='mt-1 text-sm font-sans font-light text-grey-dark'>
             {global.currentUser.email}
           </p>
         </div>
-        <div class='flex justify-center pb-3 text-grey-dark'>
-          <div class='text-center mr-3 border-r pr-3'>
+        <div className='flex justify-center pb-3 text-grey-dark'>
+          <div className='text-center mr-3 border-r pr-3'>
             <h2>
               {
                 global.userBooks.filter(
@@ -35,7 +35,7 @@ const ProfileInfoCard = (props) => {
             </h2>
             <span>Books saved</span>
           </div>
-          <div class='text-center'>
+          <div className='text-center'>
             <h2>{global.allBooks.filter((book) => book.read).length}</h2>
             <span>Books read</span>
           </div>

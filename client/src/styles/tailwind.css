@@ -902,6 +902,10 @@ video {
   flex: 1 1 0%;
 }
 
+.flex-auto {
+  flex: 1 1 auto;
+}
+
 .flex-none {
   flex: none;
 }
@@ -974,6 +978,10 @@ video {
   font-size: 1.875rem;
 }
 
+.leading-8 {
+  line-height: 2rem;
+}
+
 .leading-11 {
   line-height: 3rem;
 }
@@ -984,6 +992,14 @@ video {
 
 .leading-tight {
   line-height: 1.25;
+}
+
+.leading-normal {
+  line-height: 1.5;
+}
+
+.list-none {
+  list-style-type: none;
 }
 
 .m-auto {
@@ -1038,6 +1054,14 @@ video {
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
+}
+
+.mr-0 {
+  margin-right: 0;
+}
+
+.mb-0 {
+  margin-bottom: 0;
 }
 
 .mt-1 {
@@ -1104,6 +1128,10 @@ video {
   margin-right: 1.5rem;
 }
 
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
 .mt-8 {
   margin-top: 2rem;
 }
@@ -1132,12 +1160,20 @@ video {
   margin-top: -4rem;
 }
 
+.-mb-px {
+  margin-bottom: -1px;
+}
+
 .max-w-md {
   max-width: 28rem;
 }
 
 .max-w-screen-lg {
   max-width: 1024px;
+}
+
+.min-w-0 {
+  min-width: 0;
 }
 
 .outline-none {
@@ -1207,6 +1243,16 @@ video {
   padding-right: 1rem;
 }
 
+.py-5 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
+.px-5 {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
 .px-6 {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
@@ -1231,6 +1277,10 @@ video {
 
 .pb-3 {
   padding-bottom: 0.75rem;
+}
+
+.pb-4 {
+  padding-bottom: 1rem;
 }
 
 .pt-6 {
@@ -1402,6 +1452,10 @@ video {
   visibility: visible;
 }
 
+.break-words {
+  overflow-wrap: break-word;
+}
+
 .w-12 {
   width: 3rem;
 }
@@ -1422,8 +1476,16 @@ video {
   width: 75%;
 }
 
+.w-1\/5 {
+  width: 20%;
+}
+
 .w-2\/5 {
   width: 40%;
+}
+
+.w-4\/5 {
+  width: 80%;
 }
 
 .w-5\/6 {
@@ -1457,6 +1519,17 @@ video {
 
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.transform {
+  --transform-translate-x: 0;
+  --transform-translate-y: 0;
+  --transform-rotate: 0;
+  --transform-skew-x: 0;
+  --transform-skew-y: 0;
+  --transform-scale-x: 1;
+  --transform-scale-y: 1;
+  transform: translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
 }
 
 @keyframes spin {

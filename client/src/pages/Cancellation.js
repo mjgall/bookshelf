@@ -26,7 +26,11 @@ const Cancellation = (props) => {
                 paymentProviderId: subscriberId,
             },
             onCompleted: (result) => {
-                setCancellationStatus(result.status);
+                console.log(result)
+                if (result.status === 'saved' && result.offer.id === 'offr_vwXnBZyQiN10J6ii8YSjSPhU') {
+                    console.log('This customer should get access to the bonus feature!')
+                }
+                setCancellationStatus(JSON.stringify(result));
             },
         });
     };
@@ -53,7 +57,7 @@ const Cancellation = (props) => {
                 <label>
                     <input
                         type="checkbox"
-                        class="form-checkbox cursor-pointer"
+                        className="form-checkbox cursor-pointer"
                         onChange={updateTestMode}
                         checked={testMode}
                     ></input>

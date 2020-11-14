@@ -82,7 +82,7 @@ const Feed = (props) => {
 						<img
 							alt="user"
 							src={item.friend_picture}
-							class="rounded-full h-12 w-12 mr-2"
+							className="rounded-full h-12 w-12 mr-2"
 						></img>
 						<div>
 							<div>
@@ -109,7 +109,7 @@ const Feed = (props) => {
 							className="ml-auto"
 							to={`/book/${item.object_id}`}
 						>
-							<img alt="user" src={item.cover} class="h-16"></img>
+							<img alt="user" src={item.cover} className="h-16"></img>
 						</Link>
 					</div>
 				);
