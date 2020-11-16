@@ -190,7 +190,9 @@ export default class Scanner extends React.Component {
 
   // remove the scanner instance
   stopScanning() {
+    console.log(Quagga.stop)
     Quagga.stop();
+   
   }
 
   handleManualSubmit = (e) => {

@@ -28,7 +28,7 @@ const ProfileInfoCard = (props) => {
           <div className='text-center mr-3 border-r pr-3'>
             <h2>
               {
-                global.userBooks.filter(
+                global.books.userBooks.filter(
                   (book) => book.user_id === global.currentUser.id
                 ).length
               }

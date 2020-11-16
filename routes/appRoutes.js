@@ -65,11 +65,13 @@ module.exports = (app) => {
 
 			res.send({
 				currentUser,
+				allBooks: userBooks.concat(householdBooks),
 				books: {
 					userBooks,
 					householdBooks,
 				},
 				households,
+				householdBooks,
 				householdMembers,
 			});
 		}
@@ -77,26 +79,37 @@ module.exports = (app) => {
 
 	app.get("/api/book/lookup/:isbn", async (req, res) => {
 		const book = await getGlobalBookByISBN(req.params.isbn);
-    console.log(book)
+		console.log(book);
 		if (book) {
 			res.send(book);
 		} else {
-			const response = await axios.get(
-				`https://api2.isbndb.com/book/${req.params.isbn}`,
-				{
-					headers: {
-						Authorization: keys.ISBN_AUTH_API,
-					},
+			try {
+				const response = await axios.get(
+					`https://api2.isbndb.com/book/${req.params.isbn}`,
+					{
+						headers: {
+							Authorization: keys.ISBN_AUTH_API,
+						},
+					}
+				);
+				if (response.data.book) {
+					await saveGlobalBook({
+						...response.data.book,
+						author: response.data.book.authors[0],
+					});
+
+					res.send({
+						...response.data.book,
+					});
+				} else {
+					res.send({
+						error: true,
+						reason: "No book with that ISBN found, sorry.",
+					});
 				}
-      );
-      
-      console.log(response)
-
-			await saveGlobalBook({ ...response.data.book, author: response.data.book.authors[0] });
-
-			res.send({
-				...response.data.book,
-			});
+			} catch (error) {
+				console.log(error);
+			}
 		}
 	});
 
@@ -113,18 +126,17 @@ module.exports = (app) => {
 
 	//add a book
 	app.post("/api/books", async (req, res) => {
-
-    console.log(req.body)
+		console.log(req.body);
 		const { title, author, isbn10, isbn13, cover, id } = req.body;
 
 		const userBookRow = await addBook({
-      userId: req.user.id,
-      id,
+			userId: req.user.id,
+			id,
 			title,
 			author,
 			isbn10,
 			isbn13,
-			cover
+			cover,
 		});
 
 		//need to check if the user adding the book is a member of any households, if they are

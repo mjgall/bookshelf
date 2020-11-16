@@ -48,9 +48,9 @@
   white-space: pre-wrap;
 }
 
-.drawingBuffer {
+/* .drawingBuffer {
   display: none;
-}
+} */
 
 video {
   border-radius: 5px;

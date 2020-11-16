@@ -2,8 +2,8 @@ import React, { useLayoutEffect, useCallback } from "react";
 import Quagga from "@ericblade/quagga2";
 
 const defaultConstraints = {
-	width: 640,
-	height: 480,
+	width: "100%",
+	height: "100px",
 };
 
 const defaultLocatorSettings = {
@@ -96,7 +96,8 @@ const QuaggaScanner = ({
 		let enumerations = 0;
 		let results = [];
 
-		const errorCheck = (result) => {
+		const errorCheck = (result, stop) => {
+
 			if (!onDetected) {
 				return;
 			}
@@ -166,11 +167,14 @@ const QuaggaScanner = ({
 				}
 			}
 		);
+
 		Quagga.onDetected(errorCheck);
 		return () => {
-			Quagga.offDetected(errorCheck);
+			Quagga.stop()
+			Quagga.offDetected((result) => errorCheck(result, Quagga.stop()));
 			Quagga.offProcessed(handleProcessed);
-			Quagga.stop();
+			
+			
 		};
 	}, [
 		cameraId,

@@ -9,91 +9,43 @@ import Modal from "react-modal";
 import { Context } from "../globalContext";
 import Scan from "./Scanner2";
 import axios from "axios";
+import useWindowSize from "../hooks/useWindowSize";
+import DetailsTab from "./DetailsTab"
 
-const DetailsTab = (props) => {
-	const global = useContext(Context);
-
-	const reducer = (state, action) => {
-		const { field, value, book } = action;
-
-		switch (action.type) {
-			case "SET":
-				return { ...book };
-			case "UPDATE_FIELD":
-				return {
-					...state,
-					[field]: value,
-				};
-			default:
-				break;
-		}
-	};
-	const [state, dispatch] = useReducer(reducer, {});
-
-	const handleDetailsChange = (e, index) => {
-		dispatch({
-			type: "UPDATE_FIELD",
-			field: e.target.name,
-			value: e.target.value,
-		});
-	};
-
-	useEffect(() => {
-		dispatch({ type: "SET", book: { ...global.capturedBook } });
-	}, [global.capturedBook]);
-
-	const add = async () => {
-		console.log(state);
-		await axios.post("/api/books", {
-			...state,
-			author: state.id ? state.author : state.authors[0],
-		});
-	};
-
-	return (
-		<div>
-			{Object.entries(state).map(([key, value], index) => {
-				return (
-					<div>
-						<span className="w-1/5">{key}</span>
-						<input
-							onChange={(e) => handleDetailsChange(e, index)}
-							className="w-4/5"
-							name={key}
-							value={value}
-							key={index}
-						></input>
-					</div>
-				);
-			})}
-			<button onClick={add}>Add Book</button>
-		</div>
-	);
-};
 
 const AddBook = () => {
 	const scanTabRef = useRef(null);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [openTab, setOpenTab] = React.useState(1);
-	const [details, setDetails] = useState("");
 	const [enteredISBN, setEnteredISBN] = useState("");
+	const [reason, setReason] = useState("");
 	const global = useContext(Context);
 	const toggleModal = () => {
 		setModalOpen(!modalOpen);
 	};
+	const size = useWindowSize();
 
 	const submitManual = async () => {
-		await axios.get(`/api/book/lookup/${enteredISBN}`).then((response) => {
-			global.setGlobal({ ...global, capturedBook: response.data });
-		});
-		setOpenTab(3);
-	};
+		let isNumerical = /^\d+$/.test(enteredISBN);
 
-	useEffect(() => {
-		return () => {
-			global.setGlobal({ ...global, capturedBook: false });
-		};
-	}, []);
+		if (enteredISBN && isNumerical) {
+			axios.get(`/api/book/lookup/${enteredISBN}`).then((response) => {
+				if (!response.data.error) {
+					global.setGlobal({
+						...global,
+						capturedBook: response.data,
+					});
+					setOpenTab(3);
+				} else {
+					setReason(response.data.reason);
+				}
+			});
+		} else {
+			setReason("This is not a valid ISBN");
+		}
+
+		// if (response.data)
+	};
 
 	const handleManualISBN = (e) => {
 		setEnteredISBN(e.target.value);
@@ -101,7 +53,7 @@ const AddBook = () => {
 
 	const modalStyles = {
 		content: {
-			width: "50vw",
+			width: size.width > 500 ? "50vw" : "100%",
 			minHeight: "30vh",
 			maxHeight: "80vh",
 			padding: 0,
@@ -185,7 +137,7 @@ const AddBook = () => {
 							</li>
 						</ul>
 						<div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6">
-							<div className="px-4 py-5 flex-auto">
+							<div className="px-4 flex-auto">
 								<div className="tab-content tab-space">
 									<div
 										className={
@@ -195,9 +147,10 @@ const AddBook = () => {
 									>
 										<div
 											ref={scanTabRef}
-											className="w-1/2 m-auto"
+											className="md:w-3/4 m-auto h-8"
 										>
 											<Scan
+												currentTab={(openTab === 1) ? true : false}
 												onFound={() => setOpenTab(3)}
 											></Scan>
 										</div>
@@ -208,7 +161,13 @@ const AddBook = () => {
 										}
 										id="link2"
 									>
-										<div className="m-auto">
+										{reason ? (
+											<div className="w-1/2 m-auto text-center color-white bg-red-500 py-2 px-3 rounded-sm">
+												{reason}
+											</div>
+										) : null}
+
+										<div className="m-auto text-center">
 											<input
 												onChange={handleManualISBN}
 												value={enteredISBN}
@@ -229,21 +188,12 @@ const AddBook = () => {
 										id="link3"
 									>
 										{global.capturedBook ? (
-											<div className="grid grid-cols-2">
-												<img
-													alt="book cover"
-													className="w-2/5 block ml-auto mr-auto"
-													src={
-														global.capturedBook
-															.image ||
-														global.capturedBook
-															.cover
-													}
-												></img>
-												<div>
-													<DetailsTab></DetailsTab>
-												</div>
-											</div>
+										
+												
+													<DetailsTab closeModal={() => {
+														setModalOpen(false)
+													}}></DetailsTab>
+											
 										) : null}
 									</div>
 								</div>

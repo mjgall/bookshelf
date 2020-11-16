@@ -16,6 +16,7 @@ import NotesFromHouseholds from '../components/NotesFromHouseholds';
 import { useParams } from 'react-router-dom';
 import { Context } from '../globalContext';
 import { withRouter } from 'react-router-dom'
+import _ from 'lodash'
 
 const Book = (props) => {
   const global = useContext(Context);
@@ -37,7 +38,7 @@ const Book = (props) => {
   useEffect(() => {
     // switch (type) {
     // case 'global':
-
+    console.log(global)
     const determineBookType = (id) => {
       const index = global.allBooks.findIndex(book => {
         return book.id == id
@@ -121,7 +122,8 @@ const Book = (props) => {
   const deleteBook = async () => {
     axios.delete(`/api/books/${book.user_book_id}`).then((response) => {
       if (response.data.affectedRows > 0) {
-        global.userBooks.splice(book.index, 1);
+        const newUserBooks = global.books.userBooks.splice(book.index, 1);
+        global.setGlobal({...global, userBooks: newUserBooks})
         props.history.replace('/');
       } else {
         props.history.replace('/');

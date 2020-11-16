@@ -1718,6 +1718,10 @@ video {
     width: 16rem;
   }
 
+  .md\:w-3\/4 {
+    width: 75%;
+  }
+
   .md\:w-full {
     width: 100%;
   }
