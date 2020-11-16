@@ -1187,13 +1187,11 @@ video {
 }
 
 .outline-none {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
+  outline: 0;
 }
 
 .focus\:outline-none:focus {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
+  outline: 0;
 }
 
 .overflow-hidden {
@@ -1727,10 +1725,6 @@ video {
 
   .md\:w-64 {
     width: 16rem;
-  }
-
-  .md\:w-1\/2 {
-    width: 50%;
   }
 
   .md\:w-3\/4 {
