@@ -127,7 +127,7 @@ module.exports = (app) => {
 	//add a book
 	app.post("/api/books", async (req, res) => {
 		console.log(req.body);
-		const { title, author, isbn10, isbn13, cover, id } = req.body;
+		const { title, author, isbn10, isbn13, cover, id, manual } = req.body;
 
 		const userBookRow = await addBook({
 			userId: req.user.id,
@@ -137,6 +137,7 @@ module.exports = (app) => {
 			isbn10,
 			isbn13,
 			cover,
+			manual
 		});
 
 		//need to check if the user adding the book is a member of any households, if they are

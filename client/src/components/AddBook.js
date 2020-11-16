@@ -10,8 +10,8 @@ import { Context } from "../globalContext";
 import Scan from "./Scanner2";
 import axios from "axios";
 import useWindowSize from "../hooks/useWindowSize";
-import DetailsTab from "./DetailsTab"
-
+import DetailsTab from "./DetailsTab";
+import Button from "../common/Button";
 
 const AddBook = () => {
 	const scanTabRef = useRef(null);
@@ -27,18 +27,31 @@ const AddBook = () => {
 
 	const submitManual = async () => {
 		let isNumerical = /^\d+$/.test(enteredISBN);
+		const index = global.books.userBooks.findIndex((element) => {
+			console.log(element);
+
+			return (
+				element.isbn10 == enteredISBN || element.isbn13 == enteredISBN
+			);
+		});
 
 		if (enteredISBN && isNumerical) {
-			axios.get(`/api/book/lookup/${enteredISBN}`).then((response) => {
-				if (!response.data.error) {
-					global.setGlobal({
-						capturedBook: response.data,
+			if (index >= 0) {
+				setReason("This book has already been saved.");
+			} else {
+				axios
+					.get(`/api/book/lookup/${enteredISBN}`)
+					.then((response) => {
+						if (!response.data.error) {
+							global.setGlobal({
+								capturedBook: response.data,
+							});
+							setOpenTab(3);
+						} else {
+							setReason(response.data.reason);
+						}
 					});
-					setOpenTab(3);
-				} else {
-					setReason(response.data.reason);
-				}
-			});
+			}
 		} else {
 			setReason("This is not a valid ISBN");
 		}
@@ -53,6 +66,7 @@ const AddBook = () => {
 	const modalStyles = {
 		content: {
 			width: size.width > 500 ? "50vw" : "100%",
+			height: size.width > 500 ? "50vh" : "100%", 
 			minHeight: "30vh",
 			maxHeight: "80vh",
 			padding: 0,
@@ -67,7 +81,9 @@ const AddBook = () => {
 
 	return (
 		<>
-			<button onClick={toggleModal}>Add Book</button>
+			<Button color="green" onClick={toggleModal}>
+				Add Book
+			</Button>
 			<Modal
 				shouldCloseOnEsc
 				style={modalStyles}
@@ -149,7 +165,10 @@ const AddBook = () => {
 											className="md:w-3/4 m-auto h-8"
 										>
 											<Scan
-												currentTab={(openTab === 1) ? true : false}
+												currentTab={
+													openTab === 1 ? true : false
+												}
+												setReason={setReason}
 												onFound={() => setOpenTab(3)}
 											></Scan>
 										</div>
@@ -161,7 +180,7 @@ const AddBook = () => {
 										id="link2"
 									>
 										{reason ? (
-											<div className="w-1/2 m-auto text-center color-white bg-red-500 py-2 px-3 rounded-sm">
+											<div className="w-1/2 m-auto text-center text-white bg-red-700 py-2 px-3 rounded-sm">
 												{reason}
 											</div>
 										) : null}
@@ -186,14 +205,13 @@ const AddBook = () => {
 										}
 										id="link3"
 									>
-										{global.capturedBook ? (
-										
-												
-													<DetailsTab closeModal={() => {
-														setModalOpen(false)
-													}}></DetailsTab>
-											
-										) : null}
+								
+											<DetailsTab
+												closeModal={() => {
+													setModalOpen(false);
+												}}
+											></DetailsTab>
+									
 									</div>
 								</div>
 							</div>

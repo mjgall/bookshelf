@@ -6,35 +6,50 @@ import axios from "axios";
 
 const Scanner = ({ onFound, currentTab }) => {
 	const [scanning, setScanning] = useState(false);
-
+	const [reason, setReason] = useState("");
 	const [devices, setDevices] = useState([]);
 	const [camera, setCamera] = useState("");
 	const scannerRef = useRef(null);
 	const global = useContext(Context);
 
 	const captureISBN = async (isbn) => {
-		await axios.get(`/api/book/lookup/${isbn}`).then((response) => {
-			global.setGlobal({ ...global, capturedBook: response.data });
+		let isNumerical = /^\d+$/.test(isbn);
+		const index = global.books.userBooks.findIndex((element) => {
+			console.log(element);
+
+			return element.isbn10 == isbn || element.isbn13 == isbn;
 		});
-		onFound();
+
+		if (isbn && isNumerical) {
+			if (index >= 0) {
+				setReason("This book has already been saved.");
+			} else {
+				await axios.get(`/api/book/lookup/${isbn}`).then((response) => {
+					global.setGlobal({
+						...global,
+						capturedBook: response.data,
+					});
+				});
+				onFound();
+			}
+		}
+
+		
 	};
 
 	useEffect(() => {
-	if (!currentTab) {
-		return () => setScanning(false)
-	}
-	})
+		if (!currentTab) {
+			return () => setScanning(false);
+		}
+	});
 
 	return (
 		<>
 			<div className="text-center">
-				{devices.length > 1 ? (
-					<Select
-						options={devices}
-						onChange={(choice) => {
-							setCamera(choice.deviceId);
-						}}
-					></Select>
+				{reason ? (
+					<div className="w-1/2 m-auto text-center text-white bg-red-700 py-2 px-3 rounded-sm">
+						{reason}
+					</div>
 				) : null}
 
 				<button onClick={() => setScanning(!scanning)}>
@@ -58,9 +73,7 @@ const Scanner = ({ onFound, currentTab }) => {
 								style={{
 									position: "absolute",
 									top: "0px",
-						
 								}}
-						
 							/>
 							<QuaggaScanner
 								style={{ display: scanning ? "block" : "none" }}
@@ -68,9 +81,8 @@ const Scanner = ({ onFound, currentTab }) => {
 								scannerRef={scannerRef}
 								onDetected={(result) => {
 									captureISBN(Number(result));
-									setScanning(false)
+									setScanning(false);
 								}}
-
 							/>
 						</>
 					) : null}

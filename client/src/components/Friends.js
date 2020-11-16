@@ -33,7 +33,7 @@ const Friends = (props) => {
             setValues({ ...values, email: '' })
             setFriendMenuOpen(!friendMenuOpen)
         } else {
-            console.log('Please include an actual email')
+
         }
 
     }

@@ -23,8 +23,6 @@ const GlobalProvider = ({ children }) => {
   const setGlobal = useCallback(
    
     updates => {
-      console.log('updating', updates)
-      console.trace()
       setState({...global, ...updates})
     },
     [global, setState],

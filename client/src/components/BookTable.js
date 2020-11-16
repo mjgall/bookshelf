@@ -166,8 +166,7 @@ const BookTable = (props) => {
 		global.householdMembers,
 		props.books,
 		global.books.userBooks,
-  ]);
-  
+	]);
 
 	const columns = useMemo(() => {
 		return [
@@ -186,22 +185,25 @@ const BookTable = (props) => {
 			{
 				Header: "Cover",
 				Cell: (props) => {
-					return (
-						<img
-							width="5rem"
-							loading="lazy"
-							className="w-12 container"
-							src={props.row.original.cover}
-							alt="cover"
-						></img>
-					);
+					if (props.row.original.cover) {
+						return (
+							<img
+								width="5rem"
+								loading="lazy"
+								className="w-12 container"
+								src={props.row.original.cover}
+								alt="cover"
+							></img>
+						);
+					} else {
+						return null;
+					}
 				},
 			},
 		];
 	}, []);
 
 	const handleHouseholdChange = (selected) => {
-		console.log(selected);
 		getOwners(global.householdMembers, selected.value);
 		setHouseholdSelect(selected);
 		setOwnerSelect({ label: "All members", value: "all" });
@@ -420,7 +422,7 @@ const BookTable = (props) => {
 								}  ${row.original.read ? "bg-green-100" : ""}`}
 								onClick={() => {
 									const book = row.original;
-									console.log(book);
+
 									if (props.sharedShelf) {
 										props.history.push(
 											`/book/${book.global_id}`

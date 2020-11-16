@@ -1,6 +1,8 @@
 import React, { useEffect, useContext, useReducer } from "react";
-
+import InlineEdit from "@atlaskit/inline-edit";
+import Textfield from "@atlaskit/textfield";
 import { Context } from "../globalContext";
+import Button from "../common/Button";
 
 import axios from "axios";
 
@@ -24,12 +26,11 @@ const DetailsTab = ({ closeModal }) => {
 	};
 	const [state, dispatch] = useReducer(reducer, {});
 
-	const handleDetailsChange = (e, index) => {
-		console.log(e.target.name, e.target.value);
+	const handleDetailsChange = (value, field) => {
 		dispatch({
 			type: "UPDATE_FIELD",
-			field: e.target.name,
-			value: e.target.value,
+			value: value,
+			field: field,
 		});
 	};
 
@@ -38,16 +39,15 @@ const DetailsTab = ({ closeModal }) => {
 	}, [global.capturedBook]);
 
 	const add = async () => {
-		console.log(state);
 		const book = await axios
 			.post("/api/books", {
 				...state,
-				author: state.id ? state.author : state.authors[0],
+				author: state.id || !global.capturedBook ? state.author : state.authors[0],
+				manual: !global.capturedBook ? true : false
 			})
 			.then((response) => response.data);
-		const newArr = [...global.books.userBooks, book];
 
-		book.user_book_id = book.id
+		book.user_book_id = book.id;
 		book.id = book.global_id;
 
 		const newGlobal = {
@@ -58,10 +58,9 @@ const DetailsTab = ({ closeModal }) => {
 			},
 			allBooks: [...global.allBooks, book],
 			householdBooks: [...global.householdBooks, book],
-			capturedBook: false
+			capturedBook: false,
 		};
 
-		console.log(newGlobal);
 		global.setGlobal(newGlobal);
 		closeModal();
 	};
@@ -69,20 +68,22 @@ const DetailsTab = ({ closeModal }) => {
 	const fields = ["title", "author"];
 
 	return (
-		<div>
-			<div className="md:grid md:grid-cols-2">
+		<>
+			{global.capturedBook ? (
 				<div>
-					<img
-						alt="book cover"
-						className="w-2/5 block ml-auto mr-auto"
-						src={
-							global.capturedBook.image ||
-							global.capturedBook.cover
-						}
-					></img>
-				</div>
-				<div>
-					{/* {Object.entries(state).map(([key, value], index) => {
+					<div className="md:grid md:grid-cols-2">
+						<div>
+							<img
+								alt="book cover"
+								className="w-2/5 block ml-auto mr-auto"
+								src={
+									global.capturedBook.image ||
+									global.capturedBook.cover
+								}
+							></img>
+						</div>
+						<div>
+							{/* {Object.entries(state).map(([key, value], index) => {
 						return (
 							<div>
 								<span className="w-1/5">{key}</span>
@@ -99,29 +100,66 @@ const DetailsTab = ({ closeModal }) => {
 						);
 					})} */}
 
+							{fields.map((key, index) => {
+								return (
+									<div>
+										<InlineEdit
+											className="w-4/5 my-2"
+											readViewFitContainerWidth
+											defaultValue={state[key] || ""}
+											editView={(fieldProps) => (
+												<Textfield
+													{...fieldProps}
+													autoFocus
+												/>
+											)}
+											readView={() => (
+												<div>{state[key] || ""}</div>
+											)}
+											onConfirm={(value) =>
+												handleDetailsChange(value, key)
+											}
+										/>
+									</div>
+								);
+							})}
+						</div>
+					</div>
+					<div className="w-full md:w-1/2">
+						<Button color="blue" onClick={add}>
+							Add Book
+						</Button>
+					</div>
+				</div>
+			) : (
+				<>
 					{fields.map((key, index) => {
 						return (
 							<div>
-								<span className="w-1/5 mr-3">
-									{key.charAt(0).toUpperCase() + key.slice(1)}
-									:
-								</span>
-								<input
-									onChange={(e) =>
-										handleDetailsChange(e, index)
+								<InlineEdit
+									className="w-4/5 my-2"
+									readViewFitContainerWidth
+									defaultValue={state[key] || key}
+									editView={(fieldProps) => (
+										<Textfield {...fieldProps} autoFocus />
+									)}
+									readView={() => (
+										<div>{state[key] || key}</div>
+									)}
+									onConfirm={(value) =>
+										handleDetailsChange(value, key)
 									}
-									className="w-4/5"
-									name={key}
-									value={state[key] || ""}
-									key={index}
-								></input>
+								/>
+								<div className="w-full md:w-1/2"></div>
 							</div>
 						);
 					})}
-				</div>
-			</div>
-			<button onClick={add}>Add Book</button>
-		</div>
+					<Button color="blue" onClick={add}>
+						Add Book
+					</Button>
+				</>
+			)}
+		</>
 	);
 };
 

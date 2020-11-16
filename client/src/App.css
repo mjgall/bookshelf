@@ -48,9 +48,10 @@
   white-space: pre-wrap;
 }
 
-/* .drawingBuffer {
+.drawingBuffer {
   display: none;
-} */
+  /* max-height: 50px; */
+}
 
 video {
   border-radius: 5px;

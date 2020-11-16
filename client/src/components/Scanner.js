@@ -3,7 +3,7 @@ import Quagga from 'quagga';
 import axios from 'axios';
 // import Card from 'react-bootstrap/Card';
 
-import Button from '../styles/Button';
+import Button from '../common/Button';
 import Input from '../styles/Input';
 
 import Modal from 'react-modal';
