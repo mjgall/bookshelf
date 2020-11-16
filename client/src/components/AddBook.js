@@ -22,6 +22,7 @@ const AddBook = () => {
 	const global = useContext(Context);
 	const toggleModal = () => {
 		setModalOpen(!modalOpen);
+		global.setGlobal({capturedBook: false})
 	};
 	const size = useWindowSize();
 
@@ -81,7 +82,7 @@ const AddBook = () => {
 
 	return (
 		<>
-			<Button color="green" onClick={toggleModal}>
+			<Button className="md:w-1/6 w-full" color="green" onClick={toggleModal}>
 				Add Book
 			</Button>
 			<Modal

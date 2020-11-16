@@ -126,7 +126,6 @@ module.exports = (app) => {
 
 	//add a book
 	app.post("/api/books", async (req, res) => {
-		console.log(req.body);
 		const { title, author, isbn10, isbn13, cover, id, manual } = req.body;
 
 		const userBookRow = await addBook({
@@ -137,12 +136,13 @@ module.exports = (app) => {
 			isbn10,
 			isbn13,
 			cover,
-			manual
+			manual,
 		});
 
 		//need to check if the user adding the book is a member of any households, if they are
 		//we need to also add the book to households_books
 
+		await addActivity(req.user.id, id, 3);
 		res.send(userBookRow);
 	});
 
@@ -222,6 +222,7 @@ module.exports = (app) => {
 					book.value,
 					book.id
 				);
+				await addActivity(req.user.id, req.body.globalId, 1);
 				res.send(updatedBook);
 			} else {
 				res.send(book);
@@ -366,8 +367,10 @@ module.exports = (app) => {
 	});
 
 	//delete book
-	app.delete("/api/books/:userBookId", async (req, res) => {
-		const deletion = await deleteBook(req.params.userBookId);
+	app.delete("/api/books/:globalBookId/", async (req, res) => {
+		const deletion = await deleteBook(req.params.globalBookId);
+
+		await addActivity(req.user.id, req.params.globalBookId, 4);
 		res.send(deletion);
 	});
 

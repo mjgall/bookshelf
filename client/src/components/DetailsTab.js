@@ -42,8 +42,11 @@ const DetailsTab = ({ closeModal }) => {
 		const book = await axios
 			.post("/api/books", {
 				...state,
-				author: state.id || !global.capturedBook ? state.author : state.authors[0],
-				manual: !global.capturedBook ? true : false
+				author:
+					state.id || !global.capturedBook
+						? state.author
+						: state.authors[0],
+				manual: !global.capturedBook ? true : false,
 			})
 			.then((response) => response.data);
 
@@ -125,11 +128,10 @@ const DetailsTab = ({ closeModal }) => {
 							})}
 						</div>
 					</div>
-					<div className="w-full md:w-1/2">
-						<Button color="blue" onClick={add}>
-							Add Book
-						</Button>
-					</div>
+
+					<Button className="bg-royalblue" onClick={add}>
+						Add Book
+					</Button>
 				</div>
 			) : (
 				<>
@@ -139,22 +141,34 @@ const DetailsTab = ({ closeModal }) => {
 								<InlineEdit
 									className="w-4/5 my-2"
 									readViewFitContainerWidth
-									defaultValue={state[key] || key}
+									defaultValue={state[key] || ""}
 									editView={(fieldProps) => (
 										<Textfield {...fieldProps} autoFocus />
 									)}
-									readView={() => (
-										<div>{state[key] || key}</div>
-									)}
+									readView={() => {
+										if (!state[key]) {
+											return (
+												<div className="text-gray-500">
+													{key
+														.charAt(0)
+														.toUpperCase() +
+														key.slice(1)}
+												</div>
+											);
+										} else {
+											return (
+												<div>{state[key] || key}</div>
+											);
+										}
+									}}
 									onConfirm={(value) =>
 										handleDetailsChange(value, key)
 									}
 								/>
-								<div className="w-full md:w-1/2"></div>
 							</div>
 						);
 					})}
-					<Button color="blue" onClick={add}>
+					<Button color="royalblue" onClick={add}>
 						Add Book
 					</Button>
 				</>

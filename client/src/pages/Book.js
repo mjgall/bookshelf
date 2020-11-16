@@ -71,11 +71,12 @@ const Book = (props) => {
 
 	const updateBookField = async (field, value) => {
 		let options = { bookType: type, field, value, id: undefined };
-
+		console.log(book)
 		switch (field) {
 			case "title":
 			case "author":
 			case "private":
+			case "started":
 				if (type === "personal") {
 					options.id = book.user_book_id;
 					options.globalId = book.id;
@@ -112,7 +113,7 @@ const Book = (props) => {
 	};
 
 	const deleteBook = async () => {
-		axios.delete(`/api/books/${book.user_book_id}`).then((response) => {
+		axios.delete(`/api/books/${book.id}`).then((response) => {
 			if (response.data.affectedRows > 0) {
 				const newUserBooks = global.books.userBooks.splice(
 					book.index,
@@ -191,6 +192,53 @@ const Book = (props) => {
 											updateBookField("author", value)
 										}
 									/>
+								)}
+								{book.started ? (
+									<Tip
+										renderChildren
+										content="Started"
+										placement="right"
+									>
+										<div
+											onClick={() =>
+												updateBookField(
+													"started",
+													!book.started
+												)
+											}
+											className="bg-green-500 hover:bg-green-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
+										>
+											<div className="flex justify-center">
+												<BookIcon size="1.5rem"></BookIcon>
+												<span className="ml-2">
+													Started
+												</span>
+											</div>
+										</div>
+									</Tip>
+								) : (
+									<Tip
+										renderChildren
+										content="Unstarted"
+										placement="right"
+									>
+										<div
+											onClick={() =>
+												updateBookField(
+													"started",
+													!book.started
+												)
+											}
+											className="bg-royalblue hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
+										>
+											<div className="flex justify-center">
+												<BookOpen size="1.5rem"></BookOpen>
+												<span className="ml-2">
+													Unstarted
+												</span>
+											</div>
+										</div>
+									</Tip>
 								)}
 								{book.read ? (
 									<Tip

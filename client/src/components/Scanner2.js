@@ -33,8 +33,6 @@ const Scanner = ({ onFound, currentTab }) => {
 				onFound();
 			}
 		}
-
-		
 	};
 
 	useEffect(() => {
@@ -42,6 +40,11 @@ const Scanner = ({ onFound, currentTab }) => {
 			return () => setScanning(false);
 		}
 	});
+
+	const beginScanning = (value) => {
+		setReason("");
+		setScanning(!scanning);
+	};
 
 	return (
 		<>
@@ -52,7 +55,7 @@ const Scanner = ({ onFound, currentTab }) => {
 					</div>
 				) : null}
 
-				<button onClick={() => setScanning(!scanning)}>
+				<button onClick={beginScanning}>
 					{scanning ? "Stop" : "Start"}
 				</button>
 				<div
