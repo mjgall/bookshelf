@@ -22,7 +22,7 @@
     "express": "^4.17.1",
     "express-sslify": "^1.2.0",
     "lodash": "^4.17.20",
-    "mongoose": "^5.10.2",
+    "mongoose": "^5.10.10",
     "mysql": "^2.18.1",
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
@@ -30,10 +30,10 @@
     "react-router-dom": "^5.2.0",
     "react-tippy": "^1.4.0",
     "sqlstring": "^2.3.2",
-    "tailwind": "^4.0.0"
+    "tailwind": "^4.0.0",
+    "tailwindcss": "^1.9.6"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4",
-    "tailwindcss": "^1.7.6"
+    "nodemon": "^2.0.6"
   }
 }
