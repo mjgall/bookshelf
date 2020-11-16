@@ -2,9 +2,8 @@ const db = require("../config/db/mysql").pool;
 const sqlString = require("sqlstring");
 
 module.exports = (book) => {
+	const { userId, title, author, isbn, isbn13, image } = book;
 
-    const { userId, title, author, isbn, isbn13, image } = book;
-    
 	return new Promise((resolve, reject) => {
 		const query = `
         INSERT INTO global_books (title, author, isbn10, isbn13, cover) VALUES (${sqlString.escape(
@@ -17,7 +16,16 @@ module.exports = (book) => {
 			if (err) {
 				reject(err);
 			} else {
-				resolve(results);
+				db.query(
+					`SELECT * FROM global_books WHERE id = ${results.insertId}`,
+					(err, results, fields) => {
+						if (err) {
+							reject(err);
+						} else {
+							resolve(results[0]);
+						}
+					}
+				);
 			}
 		});
 	});

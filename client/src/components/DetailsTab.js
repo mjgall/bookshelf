@@ -49,10 +49,9 @@ const DetailsTab = ({ closeModal }) => {
 				manual: !global.capturedBook ? true : false,
 			})
 			.then((response) => response.data);
-
+		console.log(book)
 		book.user_book_id = book.id;
 		book.id = book.global_id;
-
 		const newGlobal = {
 			...global,
 			books: {

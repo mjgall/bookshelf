@@ -93,13 +93,13 @@ module.exports = (app) => {
 					}
 				);
 				if (response.data.book) {
-					await saveGlobalBook({
+					const globalBook = await saveGlobalBook({
 						...response.data.book,
 						author: response.data.book.authors[0],
 					});
 
 					res.send({
-						...response.data.book,
+						...globalBook,
 					});
 				} else {
 					res.send({
@@ -127,7 +127,7 @@ module.exports = (app) => {
 	//add a book
 	app.post("/api/books", async (req, res) => {
 		const { title, author, isbn10, isbn13, cover, id, manual } = req.body;
-
+		console.log(req.body);
 		const userBookRow = await addBook({
 			userId: req.user.id,
 			id,

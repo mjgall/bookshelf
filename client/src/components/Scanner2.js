@@ -24,7 +24,9 @@ const Scanner = ({ onFound, currentTab }) => {
 			if (index >= 0) {
 				setReason("This book has already been saved.");
 			} else {
+				
 				await axios.get(`/api/book/lookup/${isbn}`).then((response) => {
+					console.log(response.data)
 					global.setGlobal({
 						...global,
 						capturedBook: response.data,

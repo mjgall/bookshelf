@@ -51,7 +51,7 @@ module.exports = (book) => {
 			});
 		} else {
 			let statement = `INSERT INTO user_books (user_id, global_id, title, author, isbn10, isbn13, cover) VALUES (?); `;
-
+			
 			const item = [
 				userId,
 				id,
@@ -61,6 +61,7 @@ module.exports = (book) => {
 				isbn13 || null,
 				cover || null,
 			];
+			console.log(item)
 			db.query(statement, [item], (err, results, fields) => {
 				if (err) {
 					reject(err);
