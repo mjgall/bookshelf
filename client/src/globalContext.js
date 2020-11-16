@@ -25,7 +25,7 @@ const GlobalProvider = ({ children }) => {
     updates => {
       console.log('updating', updates)
       console.trace()
-      setState(updates)
+      setState({...global, ...updates})
     },
     [global, setState],
   )

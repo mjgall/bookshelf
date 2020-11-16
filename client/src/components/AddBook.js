@@ -32,7 +32,6 @@ const AddBook = () => {
 			axios.get(`/api/book/lookup/${enteredISBN}`).then((response) => {
 				if (!response.data.error) {
 					global.setGlobal({
-						...global,
 						capturedBook: response.data,
 					});
 					setOpenTab(3);

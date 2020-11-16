@@ -123,7 +123,7 @@ const Book = (props) => {
     axios.delete(`/api/books/${book.user_book_id}`).then((response) => {
       if (response.data.affectedRows > 0) {
         const newUserBooks = global.books.userBooks.splice(book.index, 1);
-        global.setGlobal({...global, userBooks: newUserBooks})
+        global.setGlobal({userBooks: newUserBooks})
         props.history.replace('/');
       } else {
         props.history.replace('/');
