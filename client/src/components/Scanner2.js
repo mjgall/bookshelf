@@ -70,25 +70,23 @@ const Scanner = ({ onFound, currentTab }) => {
 					{/* <video style={{ width: window.innerWidth, height: 480, border: '3px solid orange' }}/> */}
 
 					{scanning ? (
-						<>
-							<canvas
-								className="drawingBuffer"
-								style={{
-									position: "absolute",
-									top: "0px",
-								}}
-							/>
-							<QuaggaScanner
-								style={{ display: scanning ? "block" : "none" }}
-								scanning={scanning}
-								scannerRef={scannerRef}
-								onDetected={(result) => {
-									captureISBN(Number(result));
-									setScanning(false);
-								}}
-							/>
-						</>
+						<canvas
+							className="drawingBuffer"
+							style={{
+								position: "absolute",
+								top: "0px",
+							}}
+						/>
 					) : null}
+					<QuaggaScanner
+						style={{ display: scanning ? "block" : "none" }}
+						scanning={scanning}
+						scannerRef={scannerRef}
+						onDetected={(result) => {
+							captureISBN(Number(result));
+							setScanning(false);
+						}}
+					/>
 				</div>
 			</div>
 		</>

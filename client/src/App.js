@@ -11,10 +11,10 @@ import Profile from "./pages/Profile";
 import Cancellation from "./pages/Cancellation";
 import Feed from "./components/Feed";
 import Scanner from "./components/Scanner";
-import Scanner2 from "./components/Scanner2";
+// import Scanner2 from "./components/Scanner2";
 import SharedShelf from "./pages/SharedShelf";
 import PrivateRoute from "./components/PrivateRoute";
-
+import QuaggaScanner from "./components/QuaggaScanner";
 import { Context } from "./globalContext";
 
 const App = (props) => {
@@ -65,16 +65,20 @@ const App = (props) => {
 						<Route path="/shelf/:shelfId">
 							<SharedShelf></SharedShelf>
 						</Route>
-						<Route path="/scanners">
+						{/* <Route path="/scanners">
 							<Scanner></Scanner>
 							<Scanner2></Scanner2>
-						</Route>
+						</Route> */}
 						{/* <PrivateRoute path="/cancel">
               <Cancellation></Cancellation>
             </PrivateRoute> */}
 						{/* <PrivateRoute path="/feed">
               <Feed></Feed>
             </PrivateRoute> */}
+						<Route path="/scanner">
+							<QuaggaScanner></QuaggaScanner>
+							<Scanner></Scanner>
+						</Route>
 						<Route path="/*">
 							<Home
 								clearReferrer={clearReferrer}
