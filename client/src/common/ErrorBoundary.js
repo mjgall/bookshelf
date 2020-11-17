@@ -1,5 +1,7 @@
 import React from 'react'
 
+
+
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -14,7 +16,6 @@ class ErrorBoundary extends React.Component {
   componentDidCatch(error, errorInfo) {
     // You can also log the error to an error reporting service
     console.error(error)
-
   }
 
   render() {

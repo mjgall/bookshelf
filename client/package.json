@@ -17,6 +17,7 @@
     "bootstrap": "^4.5.3",
     "http-proxy-middleware": "^1.0.6",
     "lodash": "^4.17.20",
+    "logrocket": "^1.0.14",
     "match-sorter": "^4.2.0",
     "moment": "^2.29.1",
     "quagga": "^0.12.1",
@@ -35,7 +36,7 @@
   },
   "scripts": {
     "build:style": "tailwind build src/styles/index.css -o src/styles/tailwind.css",
-    "start": "NODE_ENV=production npm run build:style && PORT=3600 react-scripts start",
+    "start": "npm run build:style && PORT=3600 react-scripts start",
     "build": "npm run build:style && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

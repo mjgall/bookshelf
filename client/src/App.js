@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-
+import React, { useContext, useState, useEffect } from "react";
+import LogRocket from "logrocket";
 import "./App.css";
 import "./styles/tailwind.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -29,6 +29,21 @@ const App = (props) => {
 	const clearReferrer = () => {
 		setReferrer(null);
 	};
+
+	useEffect(() => {
+
+		if (
+			!loading &&
+			global.currentUser &&
+			process.env.NODE_ENV === "production"
+		) {
+			LogRocket.init("e6mxy2/bookshelf");
+			LogRocket.identify(global.currentUser.id, {
+				name: global.currentUser.full,
+				email: global.currentUser.email,
+			});
+		}
+	}, [global.currentUser, loading]);
 
 	return (
 		<Router>
