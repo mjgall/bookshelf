@@ -3,6 +3,7 @@ import QuaggaScanner from "./QuaggaScanner";
 import { Context } from "../globalContext";
 import Select from "react-select";
 import axios from "axios";
+import Button from "../common/Button";
 
 const Scanner = ({ onFound, currentTab }) => {
 	const [scanning, setScanning] = useState(false);
@@ -24,9 +25,8 @@ const Scanner = ({ onFound, currentTab }) => {
 			if (index >= 0) {
 				setReason("This book has already been saved.");
 			} else {
-				
 				await axios.get(`/api/book/lookup/${isbn}`).then((response) => {
-					console.log(response.data)
+					console.log(response.data);
 					global.setGlobal({
 						...global,
 						capturedBook: response.data,
@@ -56,10 +56,10 @@ const Scanner = ({ onFound, currentTab }) => {
 						{reason}
 					</div>
 				) : null}
+				<Button onClick={beginScanning}>
+					{scanning ? "Stop Camera" : "Start Camera"}
+				</Button>
 
-				<button onClick={beginScanning}>
-					{scanning ? "Stop" : "Start"}
-				</button>
 				<div
 					ref={scannerRef}
 					style={{

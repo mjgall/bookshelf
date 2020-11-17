@@ -314,7 +314,7 @@ const BookTable = (props) => {
 
 	return (
 		<div>
-			<div className="md:flex md:items-center md:h-8 mb-2">
+			<div className="flex items-center md:h-8 mb-2">
 				{props.sharedShelf ? null : (
 					<>
 						<div className="flex-none">

@@ -18,7 +18,7 @@ const Subnav = (props) => {
 
 	return (
 		<div className="md:w-full md:sticky md:top-sticky">
-			<div className="w-3/4 md:w-full mx-auto">
+			<div className="w-full mx-auto">
 				{links.map((link, index) => {
 					return (
 						<Link

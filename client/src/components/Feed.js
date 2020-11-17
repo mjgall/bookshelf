@@ -6,8 +6,6 @@ import axios from "axios";
 import { Context } from "../globalContext";
 
 const Feed = (props) => {
-
-
 	const getSavedSelfFilter = () => {
 		const local = JSON.parse(localStorage.getItem("hideSelf"));
 		if (local) {
@@ -62,20 +60,19 @@ const Feed = (props) => {
 
 	return (
 		<div>
-			<div className="flex items-center">
+			<div className="md:text-left text-center">
 				<div className="text-2xl font-bold">Friend Activity</div>
-				<div className="flex items-center ml-2">
-					<div>Hide self</div>
-					<input
-						style={{ height: "1.5rem", width: "1.5rem" }}
-						className="mx-2 cursor-pointer"
-						type="checkbox"
-						checked={hideSelf}
-						onChange={toggleHideSelf}
-					></input>
-				</div>
 			</div>
-
+			<div className="flex items-center ml-2">
+				<input
+					style={{ height: "1.5rem", width: "1.5rem" }}
+					className="mx-2 cursor-pointer"
+					type="checkbox"
+					checked={hideSelf}
+					onChange={toggleHideSelf}
+				></input>
+				<div>Hide self</div>
+			</div>
 			{data().map((item) => {
 				return (
 					<div className="border-gray-400 border mt-2 mb-2 px-6 py-2 rounded flex items-center">
@@ -109,7 +106,11 @@ const Feed = (props) => {
 							className="ml-auto"
 							to={`/book/${item.object_id}`}
 						>
-							<img alt="user" src={item.cover} className="h-16"></img>
+							<img
+								alt="user"
+								src={item.cover}
+								className="h-16"
+							></img>
 						</Link>
 					</div>
 				);

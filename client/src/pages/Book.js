@@ -71,7 +71,7 @@ const Book = (props) => {
 
 	const updateBookField = async (field, value) => {
 		let options = { bookType: type, field, value, id: undefined };
-		console.log(book)
+		console.log(book);
 		switch (field) {
 			case "title":
 			case "author":
@@ -193,53 +193,7 @@ const Book = (props) => {
 										}
 									/>
 								)}
-								{book.started ? (
-									<Tip
-										renderChildren
-										content="Started"
-										placement="right"
-									>
-										<div
-											onClick={() =>
-												updateBookField(
-													"started",
-													!book.started
-												)
-											}
-											className="bg-green-500 hover:bg-green-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
-										>
-											<div className="flex justify-center">
-												<BookIcon size="1.5rem"></BookIcon>
-												<span className="ml-2">
-													Started
-												</span>
-											</div>
-										</div>
-									</Tip>
-								) : (
-									<Tip
-										renderChildren
-										content="Unstarted"
-										placement="right"
-									>
-										<div
-											onClick={() =>
-												updateBookField(
-													"started",
-													!book.started
-												)
-											}
-											className="bg-royalblue hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
-										>
-											<div className="flex justify-center">
-												<BookOpen size="1.5rem"></BookOpen>
-												<span className="ml-2">
-													Unstarted
-												</span>
-											</div>
-										</div>
-									</Tip>
-								)}
+
 								{book.read ? (
 									<Tip
 										renderChildren
@@ -288,53 +242,102 @@ const Book = (props) => {
 									</Tip>
 								)}
 								{type === "personal" ? (
-									book.private ? (
-										<Tip
-											renderChildren
-											content="Click to make public."
-											placement="right"
-										>
-											<div
-												className="bg-red-500 hover:bg-red-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
-												onClick={() =>
-													updateBookField(
-														"private",
-														!book.private
-													)
-												}
+									<>
+										{book.started ? (
+											<Tip
+												renderChildren
+												content="Started"
+												placement="right"
 											>
-												<div className="flex justify-center">
-													<Lock size="1.5rem"></Lock>
-													<span className="ml-2">
-														Private
-													</span>
+												<div
+													onClick={() =>
+														updateBookField(
+															"started",
+															!book.started
+														)
+													}
+													className="bg-green-500 hover:bg-green-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
+												>
+													<div className="flex justify-center">
+														<BookIcon size="1.5rem"></BookIcon>
+														<span className="ml-2">
+															Started
+														</span>
+													</div>
 												</div>
-											</div>
-										</Tip>
-									) : (
-										<Tip
-											renderChildren
-											content="Click to make private."
-											placement="right"
-										>
-											<div
-												onClick={() =>
-													updateBookField(
-														"private",
-														!book.private
-													)
-												}
-												className="bg-royalblue hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
+											</Tip>
+										) : (
+											<Tip
+												renderChildren
+												content="Not started"
+												placement="right"
 											>
-												<div className="flex justify-center">
-													<LockOpen size="1.5rem"></LockOpen>
-													<span className="ml-2">
-														Public
-													</span>
+												<div
+													onClick={() =>
+														updateBookField(
+															"started",
+															!book.started
+														)
+													}
+													className="bg-royalblue hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
+												>
+													<div className="flex justify-center">
+														<BookOpen size="1.5rem"></BookOpen>
+														<span className="ml-2">
+															Not started
+														</span>
+													</div>
 												</div>
-											</div>
-										</Tip>
-									)
+											</Tip>
+										)}
+										{book.private ? (
+											<Tip
+												renderChildren
+												content="Click to make public."
+												placement="right"
+											>
+												<div
+													className="bg-red-500 hover:bg-red-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
+													onClick={() =>
+														updateBookField(
+															"private",
+															!book.private
+														)
+													}
+												>
+													<div className="flex justify-center">
+														<Lock size="1.5rem"></Lock>
+														<span className="ml-2">
+															Private
+														</span>
+													</div>
+												</div>
+											</Tip>
+										) : (
+											<Tip
+												renderChildren
+												content="Click to make private."
+												placement="right"
+											>
+												<div
+													onClick={() =>
+														updateBookField(
+															"private",
+															!book.private
+														)
+													}
+													className="bg-royalblue hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
+												>
+													<div className="flex justify-center">
+														<LockOpen size="1.5rem"></LockOpen>
+														<span className="ml-2">
+															Public
+														</span>
+													</div>
+												</div>
+											</Tip>
+										)}
+									</>
 								) : null}
 							</div>
 						</div>

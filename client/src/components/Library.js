@@ -18,8 +18,12 @@ const Library = () => {
 
 	return (
 		<div>
-			<div className="text-2xl font-bold">Your Library</div>
-			<AddBook></AddBook>
+			<div className="md:text-left text-center">
+				<div className="text-2xl font-bold">Your Library</div>
+			</div>
+			<div className="m-auto w-3/4">
+				<AddBook></AddBook>
+			</div>
 			<BookTable
 				books={global.books.userBooks.concat(
 					global.books.householdBooks

@@ -71,8 +71,11 @@ const Home = (props) => {
 							</Route>
 							<Route path="/account">
 								<div>
+									<div className="md:text-left text-center">
 									<div className="text-2xl font-bold">
 										Account
+									</div>
+
 									</div>
 									<div>
 										Joined{" "}
@@ -80,7 +83,6 @@ const Home = (props) => {
 											global.currentUser.create_date
 										).format("MMMM Do YYYY - h:mm a")}
 									</div>
-									<Cancellation></Cancellation>
 								</div>
 							</Route>
 					

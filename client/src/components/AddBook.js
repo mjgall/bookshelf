@@ -100,7 +100,7 @@ const AddBook = () => {
 							<li className="-mb-px mr-2 last:mr-0 flex-auto text-center cursor-pointer">
 								<div
 									className={
-										"text-xs font-bold px-5 py-3 block leading-normal " +
+										"text-sm px-5 py-3 block leading-normal " +
 										(openTab === 1
 											? "text-white bg-royalblue"
 											: "bg-white")
@@ -117,7 +117,7 @@ const AddBook = () => {
 							<li className="-mb-px mr-2 last:mr-0 flex-auto text-center cursor-pointer">
 								<div
 									className={
-										"text-xs font-bold px-5 py-3 block leading-normal " +
+										"text-sm px-5 py-3 block leading-normal " +
 										(openTab === 2
 											? "text-white bg-royalblue"
 											: "bg-white")
@@ -135,7 +135,7 @@ const AddBook = () => {
 							<li className="-mb-px mr-0  flex-auto text-center cursor-pointer">
 								<div
 									className={
-										"text-xs font-bold px-5 py-3 block leading-normal " +
+										"text-sm px-5 py-3 block leading-normal " +
 										(openTab === 3
 											? "text-white bg-royalblue"
 											: "bg-white")
