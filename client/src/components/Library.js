@@ -21,7 +21,7 @@ const Library = () => {
 			<div className="md:text-left text-center">
 				<div className="text-2xl font-bold">Your Library</div>
 			</div>
-			<div className="m-auto w-3/4">
+			<div className="md:m-0 m-auto w-3/4">
 				<AddBook></AddBook>
 			</div>
 			<BookTable

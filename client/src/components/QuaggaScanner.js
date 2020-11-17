@@ -302,7 +302,6 @@ const QuaggaScanner = ({ onDetected, scanning, scannerRef }) => {
 		};
 
 		if (!scanning) {
-			console.log("in the if");
 			Quagga.stop();
 		} else {
 			Quagga.init(
