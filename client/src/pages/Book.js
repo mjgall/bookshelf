@@ -116,11 +116,18 @@ const Book = (props) => {
 	const deleteBook = async () => {
 		axios.delete(`/api/books/${book.id}`).then((response) => {
 			if (response.data.affectedRows > 0) {
-				const newUserBooks = global.books.userBooks.splice(
-					book.index,
-					1
+				const index = global.books.userBooks.findIndex(
+					(userBook) => book.id == userBook.id
 				);
-				global.setGlobal({ userBooks: newUserBooks });
+
+				const newUserBooks = global.books.userBooks;
+
+				newUserBooks.splice(index, 1);
+
+
+				global.setGlobal({
+					books: { ...global.books, userBooks: newUserBooks },
+				});
 				props.history.replace("/");
 			} else {
 				props.history.replace("/");
@@ -437,19 +444,9 @@ const Book = (props) => {
 							<MoreMenu
 								options={[
 									{
-										action: () => console.log("delete"),
+										action: () => deleteBook(),
 										confirm: true,
 										text: "Delete",
-									},
-									{
-										action: () => console.log("test"),
-										confirm: true,
-										text: "Test",
-									},
-									{
-										action: () => console.log("immediate"),
-										confirm: false,
-										text: "No confirm",
 									},
 								]}
 							></MoreMenu>

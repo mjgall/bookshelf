@@ -21,7 +21,6 @@ const GlobalProvider = ({ children }) => {
 
   // here we only re-create setContext when its dependencies change ([global, setState])
   const setGlobal = useCallback(
-   
     updates => {
       setState({...global, ...updates})
     },
