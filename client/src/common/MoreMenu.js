@@ -17,14 +17,15 @@ const MoreMenu = (props) => {
 			render={(attrs) => (
 				<div
 					tabIndex="-1"
-					className="px-4 py-2 border border-solid rounded shadow-sm"
+					className="px-4 py-2 border border-solid rounded shadow-sm bg-white"
 					{...attrs}
 				>
-					{props.options.map((option) => {
+					{props.options.map((option, index) => {
 						return (
 							<div
+								key={index}
 								style={{ minWidth: "7rem" }}
-								className="cursor-pointer my-1"
+								className="cursor-pointer my-1 bg-white"
 							>
 								{option.confirm ? (
 									<MenuConfirm

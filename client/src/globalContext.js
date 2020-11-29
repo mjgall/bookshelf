@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, createContext } from 'react';
 import axios from 'axios';
 
-const Context = React.createContext(null); // Create a context object
+const Context = createContext(null); // Create a context object
 
 const GlobalProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);

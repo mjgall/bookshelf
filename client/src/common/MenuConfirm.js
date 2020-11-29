@@ -34,7 +34,7 @@ const HandleConfirm = ({ action, text, close }) => {
 					</div>
 				</div>
 			) : (
-				<div onClick={() => setConfirm(!confirm)}>{text}</div>
+				<div onClick={() => setConfirm(!confirm)}>{text}...</div>
 			)}
 		</>
 	);

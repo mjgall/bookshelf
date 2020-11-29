@@ -73,9 +73,9 @@ const Feed = (props) => {
 				></input>
 				<div>Hide self</div>
 			</div>
-			{data().map((item) => {
+			{data().map((item, index) => {
 				return (
-					<div className="border-gray-400 border mt-2 mb-2 px-6 py-2 rounded flex items-center">
+					<div className="border-gray-400 border mt-2 mb-2 px-6 py-2 rounded flex items-center" key={index}>
 						<img
 							alt="user"
 							src={item.friend_picture}
