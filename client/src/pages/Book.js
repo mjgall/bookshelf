@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import { Context } from "../globalContext";
 import { withRouter } from "react-router-dom";
 import _ from "lodash";
+import MoreMenu from "../common/MoreMenu";
 
 const Book = (props) => {
 	const global = useContext(Context);
@@ -426,13 +427,32 @@ const Book = (props) => {
 					</div>
 					<div className="md:mx-0 mx-6" id="actions-bar">
 						{type === "personal" ? (
-							<Confirm
-								position="left"
-								tipContent="Delete book"
-								onConfirm={() => deleteBook()}
-							>
-								<XSquare color="red" size="2rem"></XSquare>
-							</Confirm>
+							// <Confirm
+							// 	position="left"
+							// 	tipContent="Delete book"
+							// 	onConfirm={() => deleteBook()}
+							// >
+							// 	<XSquare color="red" size="2rem"></XSquare>
+							// </Confirm>
+							<MoreMenu
+								options={[
+									{
+										action: () => console.log("delete"),
+										confirm: true,
+										text: "Delete",
+									},
+									{
+										action: () => console.log("test"),
+										confirm: true,
+										text: "Test",
+									},
+									{
+										action: () => console.log("immediate"),
+										confirm: false,
+										text: "No confirm",
+									},
+								]}
+							></MoreMenu>
 						) : null}
 					</div>
 				</div>
