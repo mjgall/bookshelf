@@ -75,7 +75,10 @@ const Feed = (props) => {
 			</div>
 			{data().map((item, index) => {
 				return (
-					<div className="border-gray-400 border mt-2 mb-2 px-6 py-2 rounded flex items-center" key={index}>
+					<div
+						className="border-gray-400 border mt-2 mb-2 px-6 py-2 rounded flex items-center"
+						key={index}
+					>
 						<img
 							alt="user"
 							src={item.friend_picture}
@@ -106,11 +109,15 @@ const Feed = (props) => {
 							className="ml-auto"
 							to={`/book/${item.object_id}`}
 						>
-							<img
-								alt="user"
-								src={item.cover}
-								className="h-16"
-							></img>
+							{item.cover ? (
+								<img
+									alt="user"
+									src={item.cover}
+									className="h-16"
+								></img>
+							) : (
+								<div className="w-12 rounded h-16 border-gray-400 border"></div>
+							)}
 						</Link>
 					</div>
 				);
