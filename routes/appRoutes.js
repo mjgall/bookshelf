@@ -365,7 +365,8 @@ module.exports = (app) => {
 
 	//delete book
 	app.delete("/api/books/:globalBookId/", async (req, res) => {
-		const deletion = await deleteBook(req.params.globalBookId);
+		//you should only be able to delete a user_book from your own bookshelf. user.id needs to be checked when this comes in
+		const deletion = await deleteBook(req.params.globalBookId, req.user.id);
 
 		await addActivity(req.user.id, req.params.globalBookId, 4);
 		res.send(deletion);

@@ -123,8 +123,6 @@ const Book = (props) => {
 				const newUserBooks = global.books.userBooks;
 
 				newUserBooks.splice(index, 1);
-
-
 				global.setGlobal({
 					books: { ...global.books, userBooks: newUserBooks },
 				});
@@ -134,6 +132,21 @@ const Book = (props) => {
 				throw Error("Error deleting book");
 			}
 		});
+	};
+
+	const addToLibrary = async () => {
+		// const needed = {
+		// 	id,
+		// 	title,
+		// 	author,
+		// 	isbn10,
+		// 	isbn13,
+		// 	cover,
+		// 	manual,
+		// };
+		const response = await axios.post("/api/books", book);
+
+		console.log(response.data);
 	};
 
 	return (
@@ -434,19 +447,22 @@ const Book = (props) => {
 					</div>
 					<div className="md:mx-0 mx-6" id="actions-bar">
 						{type === "personal" ? (
-							// <Confirm
-							// 	position="left"
-							// 	tipContent="Delete book"
-							// 	onConfirm={() => deleteBook()}
-							// >
-							// 	<XSquare color="red" size="2rem"></XSquare>
-							// </Confirm>
 							<MoreMenu
 								options={[
 									{
 										action: () => deleteBook(),
 										confirm: true,
 										text: "Delete",
+									},
+								]}
+							></MoreMenu>
+						) : type === "global" ? (
+							<MoreMenu
+								options={[
+									{
+										action: addToLibrary,
+										confirm: true,
+										text: "Add to your shelf",
 									},
 								]}
 							></MoreMenu>
