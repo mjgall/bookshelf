@@ -6,6 +6,7 @@ import screenshot1 from '../images/screenshot1.png';
 import screenshot2 from '../images/screenshot2.png';
 import screenshot3 from '../images/screenshot3.png';
 import screenshot4 from '../images/screenshot4.png';
+import screenshot6 from '../images/screenshot6.png';
 import axios from 'axios';
 
 
@@ -83,7 +84,7 @@ export default class MarketingHome extends React.Component {
             <img alt="screenshot of Bookshelf" className="shadow-lg rounded-lg" src={screenshot2}></img>
           </div>
           <div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded-lg md:shadow-sm">
-            <img alt="screenshot of Bookshelf" className="shadow-lg rounded-lg" src={screenshot3}></img>
+            <img alt="screenshot of Bookshelf" className="shadow-lg rounded-lg" src={screenshot6}></img>
             <div className="text-3xl pl-10">Log notes</div>
           </div>
           <div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded-lg md:shadow-sm">

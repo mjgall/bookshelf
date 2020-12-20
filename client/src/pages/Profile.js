@@ -11,8 +11,6 @@ import {
 import ProfileInfoCard from '../components/ProfileInfoCard';
 import Friends from '../components/Friends'
 
-import Feed from '../components/Feed'
-
 import Confirm from '../common/Confirm';
 import Tip from '../common/Tip';
 
