@@ -7,6 +7,8 @@ import screenshot2 from '../images/screenshot2.png';
 import screenshot3 from '../images/screenshot3.png';
 import screenshot4 from '../images/screenshot4.png';
 import screenshot6 from '../images/screenshot6.png';
+import screenshot7 from '../images/screenshot7.png';
+import screenshot8 from '../images/screenshot8.png';
 import axios from 'axios';
 
 
@@ -74,14 +76,13 @@ export default class MarketingHome extends React.Component {
               </div>
             </div>
           </div>
-
           <div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded-lg md:shadow-sm">
             <img alt="screenshot of Bookshelf" className=" shadow-lg rounded-lg" src={screenshot1}></img>
             <div className="text-3xl pl-10">Scan books</div>
           </div>
           <div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded-lg md:shadow-sm">
             <div className="text-3xl pr-10">Search for books</div>
-            <img alt="screenshot of Bookshelf" className="shadow-lg rounded-lg" src={screenshot2}></img>
+            <img alt="screenshot of Bookshelf" className="shadow-lg rounded-lg" src={screenshot7}></img>
           </div>
           <div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded-lg md:shadow-sm">
             <img alt="screenshot of Bookshelf" className="shadow-lg rounded-lg" src={screenshot6}></img>
@@ -89,7 +90,7 @@ export default class MarketingHome extends React.Component {
           </div>
           <div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded-lg md:shadow-sm">
             <div className="text-3xl pr-10">Create a household</div>
-            <img alt="screenshot of Bookshelf" className="shadow-lg rounded-lg" src={screenshot4}></img>
+            <img alt="screenshot of Bookshelf" className="shadow-lg rounded-lg" src={screenshot8}></img>
           </div>
         </div>
       </div>
