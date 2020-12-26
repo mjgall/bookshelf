@@ -59,7 +59,7 @@ module.exports = (book) => {
 				author,
 				isbn10 || null,
 				isbn13 || null,
-				cover || null,
+				cover || null
 			];
 			console.log(item)
 			db.query(statement, [item], (err, results, fields) => {
