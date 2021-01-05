@@ -203,6 +203,7 @@ const BookTable = (props) => {
 				},
 			},{
 				Header: "Added",
+				isVisible: false,
 				Cell: (props) => {
 					console.log(props.row.original)
 					if (props.row.original.cover) {
