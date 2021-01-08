@@ -264,7 +264,7 @@ const Book = (props) => {
 								)}
 								{type === "personal" ? (
 									<>
-										{book.started ? (
+										{book.read ? null : book.started ? (
 											<Tip
 												renderChildren
 												content="Started"
