@@ -135,15 +135,7 @@ const Book = (props) => {
 	};
 
 	const addToLibrary = async () => {
-		// const needed = {
-		// 	id,
-		// 	title,
-		// 	author,
-		// 	isbn10,
-		// 	isbn13,
-		// 	cover,
-		// 	manual,
-		// };
+
 		const response = await axios.post("/api/books", book);
 
 		console.log(response.data);
@@ -337,7 +329,7 @@ const Book = (props) => {
 										) : (
 											<Tip
 												renderChildren
-												content="Click to make private."
+												content="Make private"
 												placement="right"
 											>
 												<div

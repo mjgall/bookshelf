@@ -140,7 +140,9 @@ module.exports = (app) => {
 		});
 
 		await addActivity(req.user.id, userBookRow.global_id, 3);
+		
 		res.send(userBookRow);
+
 	});
 
 	//get a users books

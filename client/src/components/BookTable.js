@@ -309,7 +309,7 @@ const BookTable = (props) => {
 		viewPrivate,
 		global.books.householdBooks,
 		global.books.userBooks,
-		global.currentUser.id,
+		global?.currentUser?.id,
 	]);
 
 	const {
