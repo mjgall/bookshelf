@@ -1,30 +1,16 @@
 import React, { useContext, useEffect } from "react";
-// import Scanner from "../components/Scanner";
-import BookTable from "../components/BookTable";
 import Feed from "../components/Feed";
-import AddBook from "../components/AddBook";
 import Subnav from "../components/Subnav";
 import MarketingHome from "./MarketingHome";
-import Cancellation from "./Cancellation";
 
 import moment from "moment";
-import {
-	withRouter,
-	BrowserRouter as Router,
-	Switch,
-	Route,
-	Link,
-	useRouteMatch,
-	useParams,
-} from "react-router-dom";
+import { withRouter, Switch, Route, useRouteMatch } from "react-router-dom";
 
 import { Context } from "../globalContext";
 import Library from "../components/Library";
 
 const Home = (props) => {
 	const global = useContext(Context);
-
-	const addRedirect = (toLocation) => {};
 
 	useEffect(() => {
 		if (props.location.state?.redirect) {
@@ -34,17 +20,7 @@ const Home = (props) => {
 				redirect: props.location.state.from,
 			});
 		}
-	}, []);
-
-	const addBookToGlobalState = (book) => {
-		global.setGlobal({
-			...global,
-			books: {
-				...global.books,
-				userBooks: { ...global.books.userBooks, book },
-			},
-		});
-	};
+	}, [global, props.location.state]);
 
 	let match = useRouteMatch();
 
@@ -72,10 +48,9 @@ const Home = (props) => {
 							<Route path="/account">
 								<div>
 									<div className="md:text-left text-center">
-									<div className="text-2xl font-bold">
-										Account
-									</div>
-
+										<div className="text-2xl font-bold">
+											Account
+										</div>
 									</div>
 									<div>
 										Joined{" "}
@@ -85,7 +60,7 @@ const Home = (props) => {
 									</div>
 								</div>
 							</Route>
-					
+
 							<Route path="/*">
 								<Feed></Feed>
 							</Route>

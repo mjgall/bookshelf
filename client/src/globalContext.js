@@ -37,15 +37,6 @@ const GlobalProvider = ({ children }) => {
     [global, setGlobal, loading],
   )
 
-  const cleanState = {
-    ...global,
-    loading,
-    householdBooks: global?.books?.householdBooks,
-    userBooks: global?.books?.userBooks,
-    allBooks: global?.books?.userBooks.concat(global?.books?.householdBooks),
-    setState,
-  };
-
   return <Context.Provider value={getContextValue()}>{children}</Context.Provider>;
 };
 

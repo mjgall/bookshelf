@@ -391,7 +391,7 @@ export default class Profile extends React.Component {
                   Number(membership.user_id) === this.props.user.id
                 ) {
                   return (
-                    <div className='border border-gray-400 shadow rounded-lg p-4'>
+                    <div key={index} className='border border-gray-400 shadow rounded-lg p-4'>
                       <div className='text-2xl font-bold mb-3 flex justify-between items-center'>
                         <span className='overflow-x-hidden'>
                           {membership.household_name}
@@ -448,7 +448,7 @@ export default class Profile extends React.Component {
                             member.invite_accepted
                           ) {
                             return (
-                              <div className='flex my-2 items-center '>
+                              <div key={index} className='flex my-2 items-center '>
                                 <img
                                   alt='user'
                                   className='h-12 w-12 rounded-full'

@@ -1,9 +1,7 @@
 import React, {
 	useState,
 	useRef,
-	useEffect,
 	useContext,
-	useReducer,
 } from "react";
 import Modal from "react-modal";
 import { Context } from "../globalContext";
@@ -32,7 +30,7 @@ const AddBook = () => {
 			console.log(element);
 
 			return (
-				element.isbn10 == enteredISBN || element.isbn13 == enteredISBN
+				element.isbn10 === enteredISBN || element.isbn13 === enteredISBN
 			);
 		});
 

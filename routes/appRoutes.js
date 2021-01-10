@@ -400,7 +400,7 @@ module.exports = (app) => {
 				console.log(email);
 			}
 		} catch (error) {
-			res.status(404).send({ reason: error });
+			res.send({ reason: error });
 		}
 	});
 

@@ -9,7 +9,6 @@ import Select from "react-select";
 import _ from "lodash";
 import { Context } from "../globalContext";
 import { withRouter } from "react-router-dom";
-import moment from "moment";
 
 const GlobalFilter = ({
 	preGlobalFilteredRows,
@@ -300,15 +299,13 @@ const BookTable = (props) => {
 				ownerSelect
 			);
 		}
-	}, [
+	}, [global.currentUser.id,
 		props.sharedShelf,
 		householdSelect,
 		ownerSelect,
 		props.books,
 		global.householdMembers,
 		viewPrivate,
-		global.books.householdBooks,
-		global.books.userBooks,
 		global?.currentUser?.id,
 	]);
 
