@@ -1,15 +1,12 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import QuaggaScanner from "./QuaggaScanner";
 import { Context } from "../globalContext";
-import Select from "react-select";
 import axios from "axios";
 import Button from "../common/Button";
 
 const Scanner = ({ onFound, currentTab }) => {
 	const [scanning, setScanning] = useState(false);
 	const [reason, setReason] = useState("");
-	const [devices, setDevices] = useState([]);
-	const [camera, setCamera] = useState("");
 	const scannerRef = useRef(null);
 	const global = useContext(Context);
 
@@ -18,7 +15,7 @@ const Scanner = ({ onFound, currentTab }) => {
 		const index = global.books.userBooks.findIndex((element) => {
 			console.log(element);
 
-			return element.isbn10 == isbn || element.isbn13 == isbn;
+			return element.isbn10 === isbn || element.isbn13 === isbn;
 		});
 
 		if (isbn && isNumerical) {

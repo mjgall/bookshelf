@@ -4,19 +4,16 @@ import InlineEdit from "@atlaskit/inline-edit";
 import TextArea from "@atlaskit/textarea";
 import Textfield from "@atlaskit/textfield";
 import {
-	XSquare,
 	Lock,
 	LockOpen,
 	Book as BookIcon,
 	BookOpen,
 } from "@styled-icons/boxicons-solid";
 import Tip from "../common/Tip";
-import Confirm from "../common/Confirm";
 import NotesFromHouseholds from "../components/NotesFromHouseholds";
 import { useParams } from "react-router-dom";
 import { Context } from "../globalContext";
 import { withRouter } from "react-router-dom";
-import _ from "lodash";
 import MoreMenu from "../common/MoreMenu";
 
 const Book = (props) => {

@@ -93,7 +93,7 @@ const QuaggaScanner = ({ onDetected, scanning, scannerRef }) => {
 					mostRecentFoundIndex = length - 1;
 				}
 
-				if (results[mostRecentFoundIndex] == code) {
+				if (results[mostRecentFoundIndex] === code) {
 					results = [...results, code];
 					enumerations++;
 				} else {

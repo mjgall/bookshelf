@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import {
 	CheckSquare,
-	XSquare,
 	PlusSquare,
 	ChevronDownSquare,
 } from "@styled-icons/boxicons-solid";
@@ -13,7 +12,7 @@ import { Context } from "../globalContext";
 
 const Friends = (props) => {
 	const global = useContext(Context);
-    const [message, setMessage] = useState('')
+	const [message, setMessage] = useState("");
 	const [friends, setFriends] = useState([]);
 	const [friendMenuOpen, setFriendMenuOpen] = useState(false);
 	const [values, setValues] = useState({
@@ -34,7 +33,7 @@ const Friends = (props) => {
 				userEmail: values.email,
 			});
 			if (response.error) {
-                setMessage("No user found.")
+				setMessage("No user found.");
 			}
 			setValues({ ...values, email: "" });
 			setFriendMenuOpen(!friendMenuOpen);
@@ -43,7 +42,7 @@ const Friends = (props) => {
 	};
 
 	const editInvite = async (friendshipId, action) => {
-		const response = await axios.put("/api/friends", {
+		await axios.put("/api/friends", {
 			friendshipId,
 			action,
 		});

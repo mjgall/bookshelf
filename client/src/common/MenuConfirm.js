@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import {
 	CheckSquare,
-	XSquare,
-	PlusSquare,
-	ChevronDownSquare,
+	XSquare
 } from "@styled-icons/boxicons-solid";
 
 const HandleConfirm = ({ action, text, close }) => {
