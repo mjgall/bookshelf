@@ -221,7 +221,17 @@ module.exports = (app) => {
 					book.value,
 					book.id
 				);
-				await addActivity(req.user.id, req.body.globalId, 1);
+				
+				switch (book.field) {
+					case 'started':
+						await addActivity(req.user.id, req.body.globalId, 1);
+						break;
+					case 'read':
+						await addActivity(req.user.id, req.body.globalId, 2); 
+					default:
+						break;
+				}
+				
 				res.send(updatedBook);
 			} else {
 				res.send(book);
