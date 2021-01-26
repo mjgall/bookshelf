@@ -33,6 +33,7 @@ const addActivity = require("../queries/addActivity");
 const getActivities = require("../queries/getActivities");
 const getGlobalBookByISBN = require("../queries/getGlobalBookByISBN");
 const saveGlobalBook = require("../queries/saveGlobalBook");
+const updateActivity = require("../queries/updateActivity");
 
 module.exports = (app) => {
 	//lookup book information by isbn10
@@ -140,9 +141,8 @@ module.exports = (app) => {
 		});
 
 		await addActivity(req.user.id, userBookRow.global_id, 3);
-		
-		res.send(userBookRow);
 
+		res.send(userBookRow);
 	});
 
 	//get a users books
@@ -221,17 +221,17 @@ module.exports = (app) => {
 					book.value,
 					book.id
 				);
-				
+
 				switch (book.field) {
-					case 'started':
+					case "started":
 						await addActivity(req.user.id, req.body.globalId, 1);
 						break;
-					case 'read':
-						await addActivity(req.user.id, req.body.globalId, 2); 
+					case "read":
+						await addActivity(req.user.id, req.body.globalId, 2);
 					default:
 						break;
 				}
-				
+
 				res.send(updatedBook);
 			} else {
 				res.send(book);
@@ -475,6 +475,21 @@ module.exports = (app) => {
 			res.send(activities);
 		} catch (error) {
 			res.status(500).send(error);
+		}
+	});
+
+	app.put("/api/activities", async (req, res) => {
+		console.log(req.body);
+		const { field, value, id, owner_id } = req.body;
+		if (owner_id !== req.user.id) {
+			res.send(401);
+		} else {
+			try {
+				const updatedRecord = await updateActivity(field, value, id);
+				res.send(updatedRecord);
+			} catch {
+				res.status(500).send(error);
+			}
 		}
 	});
 };

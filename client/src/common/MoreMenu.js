@@ -13,7 +13,7 @@ const MoreMenu = (props) => {
 			interactive
 			onClickOutside={() => setMenuOpen(false)}
 			// trigger="click"
-			placement="bottom-end"
+			placement={props.placement || "bottom-end"}
 			render={(attrs) => (
 				<div
 					tabIndex="-1"
@@ -54,7 +54,7 @@ const MoreMenu = (props) => {
 					setMenuOpen(!menuOpen);
 				}}
 				className="cursor-pointer"
-				size="2em"
+				size={props.size || "2em" }
 			></MoreVertical>
 		</Tippy>
 	);

@@ -436,7 +436,7 @@ const Book = (props) => {
 					</div>
 					<div className="md:mx-0 mx-6" id="actions-bar">
 						{type === "personal" ? (
-							<MoreMenu
+							<MoreMenu size="1.5em"
 								options={[
 									{
 										action: () => deleteBook(),

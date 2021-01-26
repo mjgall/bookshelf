@@ -4,6 +4,7 @@ import moment from "moment";
 import axios from "axios";
 
 import { Context } from "../globalContext";
+import MoreMenu from "../common/MoreMenu";
 
 const Feed = (props) => {
 	const getSavedSelfFilter = () => {
@@ -37,6 +38,20 @@ const Feed = (props) => {
 	const fetchActivities = async () => {
 		const result = await axios.get("/api/activities");
 		setActivities(result.data);
+	};
+
+	const updateActivity = async (id) => {
+		const result = await axios.put("/api/activities", {
+			field: "hidden",
+			value: true,
+			id,
+			owner_id: global.currentUser.id,
+		});
+		if (result) {
+			setActivities(
+				activities.filter((activity) => activity.id !== result.data.id)
+			);
+		}
 	};
 
 	useEffect(() => {
@@ -76,14 +91,34 @@ const Feed = (props) => {
 			{data().map((item, index) => {
 				return (
 					<div
-						className="border-gray-400 border mt-2 mb-2 px-6 py-2 rounded flex items-center"
+						className="border-gray-400 border mt-2 mb-2 pr-6 rounded flex items-center"
 						key={index}
 					>
-						<img
-							alt="user"
-							src={item.friend_picture}
-							className="rounded-full h-12 w-12 mr-2"
-						></img>
+						<div className="flex items-center">
+							{item.user_id === global.currentUser.id ? (
+								<div>
+									<MoreMenu
+										placement="left"
+										size="18px"
+										options={[
+											{
+												action: () =>
+													updateActivity(item.id),
+												confirm: true,
+												text: "Hide activity",
+											},
+										]}
+									></MoreMenu>
+								</div>
+							) : null}
+							<div className={item.user_id === global.currentUser.id ? "h-12 w-12 mr-2" : "h-12 w-12 mr-2 ml-4"}>
+								<img
+									alt="user"
+									src={item.friend_picture}
+									className="rounded-full h-12 w-12 mr-2"
+								></img>
+							</div>
+						</div>
 						<div>
 							<div>
 								<span className="font-bold">
@@ -99,26 +134,28 @@ const Feed = (props) => {
 									{item.title}
 								</Link>
 							</div>
+
 							<div className="text-xs font-thin">
 								{moment
 									.unix(item.timestamp / 1000)
 									.format("dddd, MMMM Do YYYY, h:mm:ss a")}
 							</div>
 						</div>
-						<Link
-							className="ml-auto"
-							to={`/book/${item.object_id}`}
-						>
-							{item.cover ? (
-								<img
-									alt="user"
-									src={item.cover}
-									className="h-16"
-								></img>
-							) : (
-								<div className="w-12 rounded h-16 border-gray-400 border"></div>
-							)}
-						</Link>
+						<div className="ml-auto flex items-center">
+							<div>
+								<Link to={`/book/${item.object_id}`}>
+									{item.cover ? (
+										<img
+											alt="user"
+											src={item.cover}
+											className="h-16"
+										></img>
+									) : (
+										<div className="w-12 rounded h-16 border-gray-400 border"></div>
+									)}
+								</Link>
+							</div>
+						</div>
 					</div>
 				);
 			})}
