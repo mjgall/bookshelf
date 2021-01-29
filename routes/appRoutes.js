@@ -34,6 +34,7 @@ const getActivities = require("../queries/getActivities");
 const getGlobalBookByISBN = require("../queries/getGlobalBookByISBN");
 const saveGlobalBook = require("../queries/saveGlobalBook");
 const updateActivity = require("../queries/updateActivity");
+const addLike = require("../queries/addLike");
 
 module.exports = (app) => {
 	//lookup book information by isbn10
@@ -479,7 +480,6 @@ module.exports = (app) => {
 	});
 
 	app.put("/api/activities", async (req, res) => {
-		console.log(req.body);
 		const { field, value, id, owner_id } = req.body;
 		if (owner_id !== req.user.id) {
 			res.send(401);
@@ -489,6 +489,16 @@ module.exports = (app) => {
 				res.send(updatedRecord);
 			} catch {
 				res.status(500).send(error);
+			}
+		}
+	});
+
+	app.post("/api/interactions", async (req, res) => {
+		const { type, activityId } = req.body;
+		if (type === "like") {
+			const newLike = await addLike(req.user.id, activityId);
+			if (newLike) {
+				res.send(newLike);
 			}
 		}
 	});

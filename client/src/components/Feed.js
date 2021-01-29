@@ -5,6 +5,8 @@ import axios from "axios";
 
 import { Context } from "../globalContext";
 import MoreMenu from "../common/MoreMenu";
+import { ThumbUp } from "@styled-icons/heroicons-outline";
+import { CommentAdd } from "@styled-icons/boxicons-regular";
 
 const Feed = (props) => {
 	const getSavedSelfFilter = () => {
@@ -73,6 +75,15 @@ const Feed = (props) => {
 		}
 	};
 
+	const handleLike = async (item) => {
+		console.log(item);
+		const result = await axios.post("/api/interactions", {
+			type: "like",
+			activityId: item.id,
+		});
+		console.log(result);
+	};
+
 	return (
 		<div>
 			<div className="md:text-left text-center">
@@ -111,7 +122,13 @@ const Feed = (props) => {
 									></MoreMenu>
 								</div>
 							) : null}
-							<div className={item.user_id === global.currentUser.id ? "h-12 w-12 mr-2" : "h-12 w-12 mr-2 ml-4"}>
+							<div
+								className={
+									item.user_id === global.currentUser.id
+										? "h-12 w-12 mr-2"
+										: "h-12 w-12 mr-2 ml-4"
+								}
+							>
 								<img
 									alt="user"
 									src={item.friend_picture}
@@ -139,6 +156,23 @@ const Feed = (props) => {
 								{moment
 									.unix(item.timestamp / 1000)
 									.format("dddd, MMMM Do YYYY, h:mm:ss a")}
+							</div>
+							<div className="flex text-xs my-1">
+								<div
+									className="mr-2 cursor-pointer"
+									onClick={() => handleLike(item)}
+								>
+									<ThumbUp
+										color="lightgray"
+										size="1.5em"
+									></ThumbUp>
+								</div>
+								<div className="ml-2 cursor-pointer">
+									<CommentAdd
+										color="lightgray"
+										size="1.5em"
+									></CommentAdd>
+								</div>
 							</div>
 						</div>
 						<div className="ml-auto flex items-center">
