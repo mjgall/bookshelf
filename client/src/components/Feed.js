@@ -79,37 +79,33 @@ const Feed = (props) => {
 
 	const updateLike = async (item) => {
 		if (item.liked) {
-			const result = await axios.post("/api/interactions", {
+			setActivities(
+				activities.map((activity) => {
+					if (activity.id === item.id) {
+						return { ...activity, liked: false };
+					} else {
+						return activity;
+					}
+				})
+			);
+			await axios.post("/api/interactions", {
 				type: "unlike",
 				activityId: item.id,
 			});
-			if (result) {
-				setActivities(
-					activities.map((activity) => {
-						if (activity.id === item.id) {
-							return { ...activity, liked: false };
-						} else {
-							return activity;
-						}
-					})
-				);
-			}
 		} else {
-			const result = await axios.post("/api/interactions", {
+			setActivities(
+				activities.map((activity) => {
+					if (activity.id === item.id) {
+						return { ...activity, liked: true };
+					} else {
+						return activity;
+					}
+				})
+			);
+			await axios.post("/api/interactions", {
 				type: "like",
 				activityId: item.id,
 			});
-			if (result) {
-				setActivities(
-					activities.map((activity) => {
-						if (activity.id === item.id) {
-							return { ...activity, liked: true };
-						} else {
-							return activity;
-						}
-					})
-				);
-			}
 		}
 	};
 
