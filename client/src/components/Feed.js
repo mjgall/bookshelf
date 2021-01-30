@@ -6,6 +6,7 @@ import axios from "axios";
 import { Context } from "../globalContext";
 import MoreMenu from "../common/MoreMenu";
 import { ThumbUp } from "@styled-icons/heroicons-outline";
+import { ThumbUp as ThumbUpSolid } from "@styled-icons/heroicons-solid";
 import { CommentAdd } from "@styled-icons/boxicons-regular";
 
 const Feed = (props) => {
@@ -75,13 +76,40 @@ const Feed = (props) => {
 		}
 	};
 
-	const handleLike = async (item) => {
-		console.log(item);
-		const result = await axios.post("/api/interactions", {
-			type: "like",
-			activityId: item.id,
-		});
-		console.log(result);
+	const updateLike = async (item) => {
+		if (item.liked) {
+			const result = await axios.post("/api/interactions", {
+				type: "unlike",
+				activityId: item.id,
+			});
+			if (result) {
+				setActivities(
+					activities.map((activity) => {
+						if (activity.id === item.id) {
+							return { ...activity, liked: false };
+						} else {
+							return activity;
+						}
+					})
+				);
+			}
+		} else {
+			const result = await axios.post("/api/interactions", {
+				type: "like",
+				activityId: item.id,
+			});
+			if (result) {
+				setActivities(
+					activities.map((activity) => {
+						if (activity.id === item.id) {
+							return { ...activity, liked: true };
+						} else {
+							return activity;
+						}
+					})
+				);
+			}
+		}
 	};
 
 	return (
@@ -160,12 +188,19 @@ const Feed = (props) => {
 							<div className="flex text-xs my-1">
 								<div
 									className="mr-2 cursor-pointer"
-									onClick={() => handleLike(item)}
+									onClick={() => updateLike(item)}
 								>
-									<ThumbUp
-										color="lightgray"
-										size="1.5em"
-									></ThumbUp>
+									{item.liked ? (
+										<ThumbUpSolid
+											color="royalblue"
+											size="1.5em"
+										></ThumbUpSolid>
+									) : (
+										<ThumbUp
+											color="lightgray"
+											size="1.5em"
+										></ThumbUp>
+									)}
 								</div>
 								<div className="ml-2 cursor-pointer">
 									<CommentAdd

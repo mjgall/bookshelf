@@ -34,7 +34,8 @@ const getActivities = require("../queries/getActivities");
 const getGlobalBookByISBN = require("../queries/getGlobalBookByISBN");
 const saveGlobalBook = require("../queries/saveGlobalBook");
 const updateActivity = require("../queries/updateActivity");
-const addLike = require("../queries/addLike");
+const addLike = require("../queries/updateLike");
+const updateLike = require("../queries/updateLike");
 
 module.exports = (app) => {
 	//lookup book information by isbn10
@@ -495,11 +496,25 @@ module.exports = (app) => {
 
 	app.post("/api/interactions", async (req, res) => {
 		const { type, activityId } = req.body;
+
+		switch (type) {
+			case "like":
+				const newLike = await updateLike(req.user.id, activityId);
+				if (newLike) {
+					res.send(newLike);
+				}
+				break;
+			case "unlike":
+				const removedLike = await updateLike(req.user.id, activityId, true);
+				if (removedLike) {
+					res.send(removedLike);
+				}
+				break;
+			default:
+				break;
+		}
+
 		if (type === "like") {
-			const newLike = await addLike(req.user.id, activityId);
-			if (newLike) {
-				res.send(newLike);
-			}
 		}
 	});
 };
