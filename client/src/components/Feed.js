@@ -8,6 +8,7 @@ import MoreMenu from "../common/MoreMenu";
 import { ThumbUp } from "@styled-icons/heroicons-outline";
 import { ThumbUp as ThumbUpSolid } from "@styled-icons/heroicons-solid";
 import { CommentAdd } from "@styled-icons/boxicons-regular";
+import Tip from "../common/Tip";
 
 const Feed = (props) => {
 	const getSavedSelfFilter = () => {
@@ -191,23 +192,35 @@ const Feed = (props) => {
 									onClick={() => updateLike(item)}
 								>
 									{item.liked ? (
-										<ThumbUpSolid
-											color="royalblue"
-											size="1.5em"
-										></ThumbUpSolid>
+										<Tip
+											content="Unlike"
+											renderChildren
+											placement="right"
+										>
+											<ThumbUpSolid
+												color="royalblue"
+												size="1.5em"
+											></ThumbUpSolid>
+										</Tip>
 									) : (
-										<ThumbUp
-											color="lightgray"
-											size="1.5em"
-										></ThumbUp>
+										<Tip
+											content="Like"
+											renderChildren
+											placement="right"
+										>
+											<ThumbUp
+												color="lightgray"
+												size="1.5em"
+											></ThumbUp>
+										</Tip>
 									)}
 								</div>
-								<div className="ml-2 cursor-pointer">
+								{/* <div className="ml-2 cursor-pointer">
 									<CommentAdd
 										color="lightgray"
 										size="1.5em"
 									></CommentAdd>
-								</div>
+								</div> */}
 							</div>
 						</div>
 						<div className="ml-auto flex items-center">
