@@ -494,6 +494,12 @@ module.exports = (app) => {
 		}
 	});
 
+	app.get("/api/activities/book/:globalId", (req, res) => {
+		const { globalId } = req.params;
+		//fetch all activities on this book by a) the user b) household members c) friends
+		res.send('Soon')
+	});
+
 	app.post("/api/interactions", async (req, res) => {
 		const { type, activityId } = req.body;
 
@@ -505,7 +511,11 @@ module.exports = (app) => {
 				}
 				break;
 			case "unlike":
-				const removedLike = await updateLike(req.user.id, activityId, true);
+				const removedLike = await updateLike(
+					req.user.id,
+					activityId,
+					true
+				);
 				if (removedLike) {
 					res.send(removedLike);
 				}

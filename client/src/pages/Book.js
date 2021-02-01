@@ -15,6 +15,7 @@ import { useParams } from "react-router-dom";
 import { Context } from "../globalContext";
 import { withRouter } from "react-router-dom";
 import MoreMenu from "../common/MoreMenu";
+import BookTimeline from "../components/BookTimeline";
 
 const Book = (props) => {
 	const global = useContext(Context);
@@ -132,7 +133,6 @@ const Book = (props) => {
 	};
 
 	const addToLibrary = async () => {
-
 		const response = await axios.post("/api/books", book);
 
 		console.log(response.data);
@@ -433,10 +433,12 @@ const Book = (props) => {
 								></NotesFromHouseholds>
 							</div>
 						)}
+						{/* <BookTimeline globalBookId={book.id}></BookTimeline> */}
 					</div>
 					<div className="md:mx-0 mx-6" id="actions-bar">
 						{type === "personal" ? (
-							<MoreMenu size="1.5em"
+							<MoreMenu
+								size="1.5em"
 								options={[
 									{
 										action: () => deleteBook(),

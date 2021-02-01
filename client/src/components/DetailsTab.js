@@ -39,6 +39,12 @@ const DetailsTab = ({ closeModal }) => {
 	}, [global.capturedBook]);
 
 	const add = async () => {
+
+		if (!state.author || !state.title) {
+			console.log("can't add a blank book")
+			return
+		}
+
 		const book = await axios
 			.post("/api/books", {
 				...state,
@@ -49,7 +55,7 @@ const DetailsTab = ({ closeModal }) => {
 				manual: !global.capturedBook ? true : false,
 			})
 			.then((response) => response.data);
-		console.log(book)
+
 		book.user_book_id = book.id;
 		book.id = book.global_id;
 		const newGlobal = {
@@ -85,26 +91,9 @@ const DetailsTab = ({ closeModal }) => {
 							></img>
 						</div>
 						<div>
-							{/* {Object.entries(state).map(([key, value], index) => {
-						return (
-							<div>
-								<span className="w-1/5">{key}</span>
-								<input
-									onChange={(e) =>
-										handleDetailsChange(e, index)
-									}
-									className="w-4/5"
-									name={key}
-									value={value}
-									key={index}
-								></input>
-							</div>
-						);
-					})} */}
-
 							{fields.map((key, index) => {
 								return (
-									<div>
+									<div key={index}>
 										<InlineEdit
 											className="w-4/5 my-2"
 											readViewFitContainerWidth
