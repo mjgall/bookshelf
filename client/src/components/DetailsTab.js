@@ -3,12 +3,12 @@ import InlineEdit from "@atlaskit/inline-edit";
 import Textfield from "@atlaskit/textfield";
 import { Context } from "../globalContext";
 import Button from "../common/Button";
-
+import { useToasts } from "react-toast-notifications";
 import axios from "axios";
 
 const DetailsTab = ({ closeModal }) => {
 	const global = useContext(Context);
-
+	const { addToast } = useToasts();
 	const reducer = (state, action) => {
 		const { field, value, book } = action;
 
@@ -39,10 +39,13 @@ const DetailsTab = ({ closeModal }) => {
 	}, [global.capturedBook]);
 
 	const add = async () => {
-
 		if (!state.author || !state.title) {
-			console.log("can't add a blank book")
-			return
+			console.log("can't add a blank book");
+			addToast("Can't add a blank book.", {
+				appearance: "error",
+				autoDismiss: true,
+			});
+			return;
 		}
 
 		const book = await axios

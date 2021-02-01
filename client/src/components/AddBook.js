@@ -11,6 +11,8 @@ import useWindowSize from "../hooks/useWindowSize";
 import DetailsTab from "./DetailsTab";
 import Button from "../common/Button";
 
+
+
 const AddBook = () => {
 	const scanTabRef = useRef(null);
 	const [modalOpen, setModalOpen] = useState(false);
