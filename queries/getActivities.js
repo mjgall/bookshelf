@@ -18,7 +18,7 @@ SELECT DISTINCT IF(likes.liked_by, TRUE, FALSE) AS liked, activities.*, global_b
         JOIN activities ON users.id = activities.user_id 
         JOIN global_books ON global_books.id = activities.object_id
         JOIN users_globalbooks ON users_globalbooks.user_id = activities.user_id AND users_globalbooks.global_book_id = activities.object_id
-        JOIN user_books ON users_globalbooks.global_book_id = user_books.global_id AND users.id != user_books.user_id
+        JOIN user_books ON users_globalbooks.global_book_id = user_books.global_id AND users.id != user_books.user_id AND user_books.private = FALSE
         LEFT JOIN likes ON activities.id = likes.activity_id
         WHERE ( friendships.user_id_1 = ${userId} OR friendships.user_id_2 = ${userId} ) AND activities.hidden = FALSE
 ORDER BY timestamp DESC`
