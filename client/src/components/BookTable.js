@@ -253,7 +253,7 @@ const BookTable = (props) => {
 				return books;
 			} else if (householdSelect.value === "none") {
 				return books.filter(
-					(book) => Number(book.user_id) === global.currentUser.id
+					(book) => Number(book.user_id) === props.user.id
 				);
 			} else if (
 				householdSelect.value === "all" &&
@@ -299,11 +299,9 @@ const BookTable = (props) => {
 				ownerSelect
 			);
 		}
-	}, [global.currentUser.id,
-		props.sharedShelf,
+	}, [props,
 		householdSelect,
 		ownerSelect,
-		props.books,
 		global.householdMembers,
 		viewPrivate
 	]);

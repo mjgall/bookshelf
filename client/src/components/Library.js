@@ -16,6 +16,7 @@ const Library = () => {
 				<AddBook></AddBook>
 			</div>
 			<BookTable
+				user={global.currentUser}
 				books={global.books.userBooks.concat(
 					global.books.householdBooks
 				)}
