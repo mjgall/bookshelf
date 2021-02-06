@@ -64,7 +64,7 @@ const Book = (props) => {
 		} else {
 			fetchGlobalBook(paramId);
 		}
-	}, [fetchGlobalBook, global, params]);
+	}, [fetchGlobalBook, global, paramId]);
 
 	const updateBookField = async (field, value) => {
 		let options = { bookType: type, field, value, id: undefined };
