@@ -13,8 +13,6 @@ const Scanner = ({ onFound, currentTab }) => {
 	const captureISBN = async (isbn) => {
 		let isNumerical = /^\d+$/.test(isbn);
 		const index = global.books.userBooks.findIndex((element) => {
-			console.log(element);
-
 			return element.isbn10 === isbn || element.isbn13 === isbn;
 		});
 

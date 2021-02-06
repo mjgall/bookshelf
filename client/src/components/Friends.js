@@ -124,7 +124,6 @@ const Friends = (props) => {
 							);
 						})
 						.map((friend, index) => {
-							console.log(friend);
 							return (
 								<div
 									key={index}

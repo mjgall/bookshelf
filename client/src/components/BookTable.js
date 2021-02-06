@@ -201,26 +201,6 @@ const BookTable = (props) => {
 					}
 				},
 			},
-			// {
-			// 	Header: "Added",
-			// 	isVisible: false,
-			// 	Cell: (props) => {
-			// 		console.log(props.row.original)
-			// 		if (props.row.original.cover) {
-			// 			return (
-			// 				<img
-			// 					width="5rem"
-			// 					loading="lazy"
-			// 					className="w-12 container"
-			// 					src={props.row.original.cover}
-			// 					alt="cover"
-			// 				></img>
-			// 			);
-			// 		} else {
-			// 			return null;
-			// 		}
-			// 	},
-			// },
 		];
 	}, []);
 

@@ -6,7 +6,7 @@ import MenuConfirm from "./MenuConfirm";
 
 const MoreMenu = (props) => {
 	const [menuOpen, setMenuOpen] = useState(false);
-
+	console.log(props.children);
 	return (
 		<Tippy
 			visible={menuOpen}
@@ -49,13 +49,30 @@ const MoreMenu = (props) => {
 				</div>
 			)}
 		>
-			<MoreVertical
-				onClick={() => {
-					setMenuOpen(!menuOpen);
-				}}
-				className="cursor-pointer"
-				size={props.size || "2em" }
-			></MoreVertical>
+			{props.type === "button" ? (
+				<div
+					onClick={() => {
+						setMenuOpen(!menuOpen);
+					}}
+					className="bg-royalblue hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
+				>
+					<div className="flex justify-center">
+						<MoreVertical size="1.5rem"></MoreVertical>
+						<span className="ml-2">Actions...</span>
+					</div>
+				</div>
+			) : (
+				<div
+					onClick={() => {
+						setMenuOpen(!menuOpen);
+					}}
+				>
+					<MoreVertical
+						className="cursor-pointer"
+						size={props.size || "2em"}
+					></MoreVertical>
+				</div>
+			)}
 		</Tippy>
 	);
 };

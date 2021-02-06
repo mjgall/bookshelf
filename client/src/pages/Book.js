@@ -19,7 +19,7 @@ import MoreMenu from "../common/MoreMenu";
 const Book = (props) => {
 	const global = useContext(Context);
 	const params = useParams();
-	const paramId = Number(params.id)
+	const paramId = Number(params.id);
 
 	const [book, setBook] = useState(undefined);
 	const [type, setType] = useState("");
@@ -34,7 +34,6 @@ const Book = (props) => {
 	}, []);
 
 	useEffect(() => {
-
 		const determineBookType = (id) => {
 			const index = global.allBooks.findIndex((book) => {
 				return book.id === id;
@@ -68,7 +67,6 @@ const Book = (props) => {
 
 	const updateBookField = async (field, value) => {
 		let options = { bookType: type, field, value, id: undefined };
-		console.log(book);
 		switch (field) {
 			case "title":
 			case "author":
@@ -347,6 +345,32 @@ const Book = (props) => {
 										)}
 									</>
 								) : null}
+								<div className="md:mx-0 md:hidden">
+									{type === "personal" ? (
+										<MoreMenu
+											placement="bottom"
+											type="button"
+											size="1.5em"
+											options={[
+												{
+													action: () => deleteBook(),
+													confirm: true,
+													text: "Delete",
+												},
+											]}
+										></MoreMenu>
+									) : type === "global" ? (
+										<MoreMenu
+											options={[
+												{
+													action: addToLibrary,
+													confirm: true,
+													text: "Add to your shelf",
+												},
+											]}
+										></MoreMenu>
+									) : null}
+								</div>
 							</div>
 						</div>
 					</div>
@@ -433,9 +457,10 @@ const Book = (props) => {
 						)}
 						{/* <BookTimeline globalBookId={book.id}></BookTimeline> */}
 					</div>
-					<div className="md:mx-0 mx-6" id="actions-bar">
+					<div className="md:mx-0 mx-6 hidden md:block">
 						{type === "personal" ? (
 							<MoreMenu
+								placement="left"
 								size="1.5em"
 								options={[
 									{

@@ -29,8 +29,6 @@ const AddBook = () => {
 	const submitManual = async () => {
 		let isNumerical = /^\d+$/.test(enteredISBN);
 		const index = global.books.userBooks.findIndex((element) => {
-			console.log(element);
-
 			return (
 				element.isbn10 === enteredISBN || element.isbn13 === enteredISBN
 			);
