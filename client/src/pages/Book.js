@@ -361,6 +361,8 @@ const Book = (props) => {
 										></MoreMenu>
 									) : type === "global" ? (
 										<MoreMenu
+											placement="bottom"
+											type="button"
 											options={[
 												{
 													action: addToLibrary,
