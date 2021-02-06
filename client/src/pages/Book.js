@@ -19,6 +19,7 @@ import MoreMenu from "../common/MoreMenu";
 const Book = (props) => {
 	const global = useContext(Context);
 	const params = useParams();
+	const paramId = Number(params.id)
 
 	const [book, setBook] = useState(undefined);
 	const [type, setType] = useState("");
@@ -33,8 +34,6 @@ const Book = (props) => {
 	}, []);
 
 	useEffect(() => {
-		// switch (type) {
-		// case 'global':
 
 		const determineBookType = (id) => {
 			const index = global.allBooks.findIndex((book) => {
@@ -52,18 +51,18 @@ const Book = (props) => {
 			}
 		};
 
-		const bookType = determineBookType(params.id);
+		const bookType = determineBookType(paramId);
 
 		setType(bookType);
 
 		if (bookType === "personal" || bookType === "household") {
 			const index = global.allBooks.findIndex((book) => {
-				return book.id === params.id;
+				return book.id === paramId;
 			});
 			setBook({ ...global.allBooks[index], index: index });
 			setLoaded(true);
 		} else {
-			fetchGlobalBook(params.id);
+			fetchGlobalBook(paramId);
 		}
 	}, [fetchGlobalBook, global, params]);
 
