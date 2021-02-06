@@ -43,7 +43,10 @@ const App = (props) => {
 	}, [global.currentUser, loading]);
 
 	return (
-		<ToastProvider transitionDuration="100" autoDismissTimeout="2000">
+		<ToastProvider
+			transitionDuration="100"
+			autoDismissTimeout="2000"
+		>
 			<Router>
 				{loading ? null : (
 					<>
@@ -66,28 +69,9 @@ const App = (props) => {
 							<PrivateRoute exact path="/book/:id">
 								<Book></Book>
 							</PrivateRoute>
-							{/* <PrivateRoute exact path="/book/:id">
-              <Book bookType="global"></Book>
-            </PrivateRoute>
-            <PrivateRoute exact path="/book/owned/:userBookId">
-              <Book bookType="personal"></Book>
-            </PrivateRoute>
-            <PrivateRoute exact path="/book/household/:globalBookId">
-              <Book bookType="household"></Book>
-            </PrivateRoute> */}
 							<Route path="/shelf/:shelfId">
 								<SharedShelf></SharedShelf>
 							</Route>
-							{/* <Route path="/scanners">
-							<Scanner></Scanner>
-							<Scanner2></Scanner2>
-						</Route> */}
-							{/* <PrivateRoute path="/cancel">
-              <Cancellation></Cancellation>
-            </PrivateRoute> */}
-							{/* <PrivateRoute path="/feed">
-              <Feed></Feed>
-            </PrivateRoute> */}
 							<Route path="/scanner">
 								<QuaggaScanner></QuaggaScanner>
 								<Scanner></Scanner>

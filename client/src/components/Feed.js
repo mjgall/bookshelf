@@ -7,7 +7,6 @@ import { Context } from "../globalContext";
 import MoreMenu from "../common/MoreMenu";
 import { ThumbUp } from "@styled-icons/heroicons-outline";
 import { ThumbUp as ThumbUpSolid } from "@styled-icons/heroicons-solid";
-import { CommentAdd } from "@styled-icons/boxicons-regular";
 import Tip from "../common/Tip";
 
 const Feed = (props) => {
@@ -43,6 +42,10 @@ const Feed = (props) => {
 		const result = await axios.get("/api/activities");
 		setActivities(result.data);
 	};
+
+	// const fetchLikes = async () => {
+		
+	// }
 
 	const updateActivity = async (id) => {
 		const result = await axios.put("/api/activities", {

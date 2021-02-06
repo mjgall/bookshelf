@@ -13,7 +13,7 @@ const BookTimeline = (props) => {
 
 	useEffect(() => {
 		fetchActivities();
-	}, []);
+	}, [fetchActivities]);
 
 	return <div>{activities}</div>;
 };

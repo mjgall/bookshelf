@@ -2,6 +2,8 @@ const axios = require("axios");
 
 const keys = require("../config/keys");
 
+const _ = require("lodash");
+
 const getBooks = require("../queries/getBooks");
 const addBook = require("../queries/addBook.js");
 const getAnalytics = require("../queries/getAnalytics");
@@ -36,6 +38,7 @@ const saveGlobalBook = require("../queries/saveGlobalBook");
 const updateActivity = require("../queries/updateActivity");
 const addLike = require("../queries/updateLike");
 const updateLike = require("../queries/updateLike");
+const getFriendLikes = require("../queries/getFriendLikes");
 
 module.exports = (app) => {
 	//lookup book information by isbn10
@@ -474,8 +477,12 @@ module.exports = (app) => {
 	app.get("/api/activities", async (req, res) => {
 		try {
 			const activities = await getActivities(req.user.id);
+			const likes = await getFriendLikes(req.user.id);
+
+	
 			res.send(activities);
 		} catch (error) {
+			console.log(error);
 			res.status(500).send(error);
 		}
 	});
@@ -497,7 +504,7 @@ module.exports = (app) => {
 	app.get("/api/activities/book/:globalId", (req, res) => {
 		const { globalId } = req.params;
 		//fetch all activities on this book by a) the user b) household members c) friends
-		res.send('Soon')
+		res.send("Soon");
 	});
 
 	app.post("/api/interactions", async (req, res) => {

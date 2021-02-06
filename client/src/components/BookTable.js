@@ -45,7 +45,7 @@ const BookTable = (props) => {
 	const global = useContext(Context);
 	const [householdOptions, setHouseholdOptions] = useState([]);
 	const [viewPrivate, setViewPrivate] = useState(false);
-	const [books, setBooks] = useState([]);
+	// const [books, setBooks] = useState([]);
 
 	const getSavedHouseholdSelect = () => {
 		const localSaved = JSON.parse(localStorage.getItem("householdFilter"));
@@ -158,7 +158,7 @@ const BookTable = (props) => {
 
 			return options;
 		};
-		setBooks(props.books);
+		// setBooks(props.books);
 		getOwners(global.householdMembers);
 		setHouseholdOptions(getHouseholdOptions());
 	}, [
@@ -305,8 +305,7 @@ const BookTable = (props) => {
 		ownerSelect,
 		props.books,
 		global.householdMembers,
-		viewPrivate,
-		global?.currentUser?.id,
+		viewPrivate
 	]);
 
 	const {

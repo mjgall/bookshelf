@@ -15,7 +15,6 @@ import { useParams } from "react-router-dom";
 import { Context } from "../globalContext";
 import { withRouter } from "react-router-dom";
 import MoreMenu from "../common/MoreMenu";
-import BookTimeline from "../components/BookTimeline";
 
 const Book = (props) => {
 	const global = useContext(Context);
@@ -39,13 +38,13 @@ const Book = (props) => {
 
 		const determineBookType = (id) => {
 			const index = global.allBooks.findIndex((book) => {
-				return book.id == id;
+				return book.id === id;
 			});
 
 			if (!global.allBooks[index]) {
 				return "global";
 			} else if (
-				global.allBooks[index].user_id == global.currentUser.id
+				global.allBooks[index].user_id === global.currentUser.id
 			) {
 				return "personal";
 			} else if (global.allBooks[index].household_id) {
@@ -59,7 +58,7 @@ const Book = (props) => {
 
 		if (bookType === "personal" || bookType === "household") {
 			const index = global.allBooks.findIndex((book) => {
-				return book.id == params.id;
+				return book.id === params.id;
 			});
 			setBook({ ...global.allBooks[index], index: index });
 			setLoaded(true);
@@ -115,7 +114,7 @@ const Book = (props) => {
 		axios.delete(`/api/books/${book.id}`).then((response) => {
 			if (response.data.affectedRows > 0) {
 				const index = global.books.userBooks.findIndex(
-					(userBook) => book.id == userBook.id
+					(userBook) => book.id === userBook.id
 				);
 
 				const newUserBooks = global.books.userBooks;
