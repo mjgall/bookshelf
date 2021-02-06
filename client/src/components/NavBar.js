@@ -1,99 +1,127 @@
-import React from 'react';
-import { withRouter, Link } from 'react-router-dom';
-import logo from '../images/logo.png';
+import React, { useEffect, useState } from "react";
+import { withRouter, Link } from "react-router-dom";
+import logo from "../images/logo.png";
 
-import { Context } from '../globalContext';
+import { Context } from "../globalContext";
 
 const NavBar = ({
-  windowWidth,
-  scrollPosition,
-  location,
-  history,
-  clearReferrer,
-  referrer,
+	windowWidth,
+	scrollPosition,
+	location,
+	history,
+	clearReferrer,
+	referrer,
 }) => {
-  const global = React.useContext(Context);
-  scrollPosition = 1
+	const global = React.useContext(Context);
 
-  const goHome = () => {
-    history.push('');
-  };
+	const [existingUser, setExistingUser] = useState();
 
-  const calcLogoSize = () => {
-    if (
-      windowWidth < 1025 ||
-      scrollPosition > 0 ||
-      location.pathname.indexOf('/book/') > -1
-    ) {
-      return '1.5rem';
-    } else {
-      return '3rem';
-    }
-  };
+	const checkExistingUser = () => {
+		if (localStorage.getItem("existingUser")) {
+			setExistingUser(true);
+		} else {
+			setExistingUser(false);
+		}
+	};
 
-  return (
-    <nav className='z-50 flex shadow-lg items-center justify-between flex-wrap bg-royalblue px-8 py-1 md:py-3 sticky top-safe0 md:top-0'>
-      <div className='flex items-center'>
-        <div
-          className='flex items-center flex-shrink-0 text-white mr-6 cursor-pointer'
-          onClick={goHome}>
-          <img
-            alt='Bookshelf logo'
-            className='mr-4'
-            src={logo}
-            style={{ width: calcLogoSize() }}></img>
-          <span className='font-semibold text-lg tracking-tight'>
-            Bookshelf
-          </span>
-        </div>
-        <span className='hidden md:inline-block text-sm  text-white hover:text-white'>
-          {global.currentUser
-            ? `You have ${
-            global.books.householdBooks
-              .concat(global.books.userBooks)
-              .filter((book) => book.user_id === global.currentUser.id)
-              .length
-            } books`
-            : null}
-        </span>
-      </div>
+	useEffect(() => {
+		checkExistingUser();
+	}, []);
 
-      <div>
-        {!global.currentUser ? (
-          <a
-            onClick={clearReferrer}
-            href={
-              global.redirect ? `/auth/google/redirect${global.redirect}` : `/auth/google`
-            }
-            className='inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0 '>
-            Login <span role="img" aria-label="books">📚</span>
-          </a>
-        ) : (
-            <>
-              <Link
-                to='/profile'
-                className='inline-block mx-1 text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white lg:mt-0 hover:bg-white lg:mt-0 '>
-                {global.householdMembers.some((membership) => {
-                  return (
-                    !membership.invite_declined &&
-                    !membership.invite_accepted &&
-                    membership.user_id === global.currentUser.id
-                  );
-                }) && windowWidth > 380 ? (
-                    <div className='mr-2 inline-block rounded-full bg-red-600 p-1 '></div>
-                  ) : null}
-                <div className='inline-block flex '>Profile</div>
-              </Link>
-              <a
-                href='/api/logout'
-                className='inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white lg:mt-0'>
-                Logout
-            </a>
-            </>
-          )}
-      </div>
-    </nav>
-  );
+	scrollPosition = 1;
+
+	const goHome = () => {
+		history.push("");
+	};
+
+	const calcLogoSize = () => {
+		if (
+			windowWidth < 1025 ||
+			scrollPosition > 0 ||
+			location.pathname.indexOf("/book/") > -1
+		) {
+			return "1.5rem";
+		} else {
+			return "3rem";
+		}
+	};
+
+	return (
+		<nav className="z-50 flex shadow-lg items-center justify-between flex-wrap bg-royalblue px-8 py-1 md:py-3 sticky top-safe0 md:top-0">
+			<div className="flex items-center">
+				<div
+					className="flex items-center flex-shrink-0 text-white mr-6 cursor-pointer"
+					onClick={goHome}
+				>
+					<img
+						alt="Bookshelf logo"
+						className="mr-4"
+						src={logo}
+						style={{ width: calcLogoSize() }}
+					></img>
+					<span className="font-semibold text-lg tracking-tight">
+						Bookshelf
+					</span>
+				</div>
+				<span className="hidden md:inline-block text-sm  text-white hover:text-white">
+					{global.currentUser
+						? `You have ${
+								global.books.householdBooks
+									.concat(global.books.userBooks)
+									.filter(
+										(book) =>
+											book.user_id ===
+											global.currentUser.id
+									).length
+						  } books`
+						: null}
+				</span>
+			</div>
+
+			<div>
+				{!global.currentUser ? (
+					<a
+						onClick={clearReferrer}
+						href={
+							global.redirect
+								? `/auth/google/redirect${global.redirect}`
+								: `/auth/google`
+						}
+						className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0 "
+					>
+						{existingUser ? "Log In" : "Sign Up"}{" "}
+						<span role="img" aria-label="books">
+							📚
+						</span>
+					</a>
+				) : (
+					<>
+						<Link
+							to="/profile"
+							className="inline-block mx-1 text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white lg:mt-0 "
+						>
+							{global.householdMembers.some((membership) => {
+								return (
+									!membership.invite_declined &&
+									!membership.invite_accepted &&
+									membership.user_id === global.currentUser.id
+								);
+							}) && windowWidth > 380 ? (
+								<div className="mr-2 inline-block rounded-full bg-red-600 p-1 "></div>
+							) : null}
+							<div className="flex ">Profile</div>
+						</Link>
+						<a
+							href="/api/logout"
+							className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white lg:mt-0"
+						>
+							Logout
+						</a>
+					</>
+				)}
+			</div>
+		</nav>
+	);
 };
 
 export default withRouter(NavBar);

@@ -19,6 +19,10 @@ const Home = (props) => {
 				redirect: props.location.state.from,
 			});
 		}
+
+		if (global.currentUser?.id) {
+			localStorage.setItem("existingUser", true);
+		}
 	}, [props, global]);
 
 	let match = useRouteMatch();
