@@ -40,7 +40,7 @@ const DetailsTab = ({ closeModal }) => {
 
 	const add = async () => {
 		if (!state.author || !state.title) {
-			console.log("can't add a blank book");
+
 			addToast("Can't add a blank book.", {
 				appearance: "error",
 				autoDismiss: true,

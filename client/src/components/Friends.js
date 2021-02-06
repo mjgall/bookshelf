@@ -9,6 +9,7 @@ import { MailSend } from "@styled-icons/boxicons-regular";
 import Tip from "../common/Tip";
 
 import { Context } from "../globalContext";
+import { Link } from "react-router-dom";
 
 const Friends = (props) => {
 	const global = useContext(Context);
@@ -172,7 +173,7 @@ const Friends = (props) => {
 										src={friend.picture}
 										className="rounded-full h-12 w-12 mr-4"
 									></img>
-									<div>{friend.full}</div>
+									<Link className="cursor-pointer" to={`/shelf/${global.currentUser.id === friend.user_id ? friend.user_id_2 : friend.user_id}`}><div>{friend.full}</div></Link>
 								</div>
 							);
 						})}
