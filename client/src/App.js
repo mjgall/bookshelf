@@ -8,10 +8,9 @@ import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
 import Book from "./pages/Book";
 import Profile from "./pages/Profile";
-import Scanner from "./components/Scanner";
+import Scanner from "./components/AddBook";
 import SharedShelf from "./pages/SharedShelf";
 import PrivateRoute from "./components/PrivateRoute";
-import QuaggaScanner from "./components/QuaggaScanner";
 import { Context } from "./globalContext";
 import { ToastProvider } from "react-toast-notifications";
 
@@ -72,7 +71,6 @@ const App = (props) => {
 								<SharedShelf></SharedShelf>
 							</Route>
 							<Route path="/scanner">
-								<QuaggaScanner></QuaggaScanner>
 								<Scanner></Scanner>
 							</Route>
 							<Route path="/*">

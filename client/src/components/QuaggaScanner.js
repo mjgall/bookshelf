@@ -77,10 +77,10 @@ const QuaggaScanner = ({ onDetected, scanning, scannerRef }) => {
 				return;
 			}
 			const err = getMedianOfCodeErrors(result.codeResult.decodedCodes);
-			// if Quagga is at least 75% certain that it read correctly, then accept the code
+			// if Quagga is at least 70% certain that it read correctly, then accept the code
 			// AND
 			// if the same result was found 3 times in a row -- Mike addition for better accuracy
-			if (err < 0.25) {
+			if (err < 0.30) {
 				const code = result.codeResult.code;
 				const length = results.length;
 
@@ -101,7 +101,7 @@ const QuaggaScanner = ({ onDetected, scanning, scannerRef }) => {
 					enumerations = 0;
 				}
 
-				if (enumerations > 2) {
+				if (enumerations > 1) {
 					console.log("Confident!");
 					results = [];
 					onDetected(result.codeResult.code);
