@@ -76,7 +76,7 @@ const DetailsTab = ({ closeModal }) => {
 		closeModal();
 	};
 
-	const fields = ["title", "author"];
+	const fields = ["title", "author", "binding", "publisher", "isbn"];
 
 	return (
 		<>
@@ -96,24 +96,29 @@ const DetailsTab = ({ closeModal }) => {
 						<div>
 							{fields.map((key, index) => {
 								return (
-									<div key={index}>
-										<InlineEdit
-											className="w-4/5 my-2"
-											readViewFitContainerWidth
-											defaultValue={state[key] || ""}
-											editView={(fieldProps) => (
-												<Textfield
-													{...fieldProps}
-													autoFocus
-												/>
-											)}
-											readView={() => (
-												<div>{state[key] || ""}</div>
-											)}
-											onConfirm={(value) =>
-												handleDetailsChange(value, key)
-											}
-										/>
+									<div className="flex">
+										<div className="mr-2">
+											{key}
+										</div>
+										<div key={index}>
+											<InlineEdit
+												className="w-4/5 my-2"
+												readViewFitContainerWidth
+												defaultValue={state[key] || ""}
+												editView={(fieldProps) => (
+													<Textfield
+														{...fieldProps}
+														autoFocus
+													/>
+												)}
+												readView={() => (
+													<div>{state[key] || ""}</div>
+												)}
+												onConfirm={(value) =>
+													handleDetailsChange(value, key)
+												}
+											/>
+										</div>
 									</div>
 								);
 							})}
@@ -125,45 +130,45 @@ const DetailsTab = ({ closeModal }) => {
 					</Button>
 				</div>
 			) : (
-				<>
-					{fields.map((key, index) => {
-						return (
-							<div>
-								<InlineEdit
-									className="w-4/5 my-2"
-									readViewFitContainerWidth
-									defaultValue={state[key] || ""}
-									editView={(fieldProps) => (
-										<Textfield {...fieldProps} autoFocus />
-									)}
-									readView={() => {
-										if (!state[key]) {
-											return (
-												<div className="text-gray-500">
-													{key
-														.charAt(0)
-														.toUpperCase() +
-														key.slice(1)}
-												</div>
-											);
-										} else {
-											return (
-												<div>{state[key] || key}</div>
-											);
+					<>
+						{fields.map((key, index) => {
+							return (
+								<div>
+									<InlineEdit
+										className="w-4/5 my-2"
+										readViewFitContainerWidth
+										defaultValue={state[key] || ""}
+										editView={(fieldProps) => (
+											<Textfield {...fieldProps} autoFocus />
+										)}
+										readView={() => {
+											if (!state[key]) {
+												return (
+													<div className="text-gray-500">
+														{key
+															.charAt(0)
+															.toUpperCase() +
+															key.slice(1)}
+													</div>
+												);
+											} else {
+												return (
+													<div>{state[key] || key}</div>
+												);
+											}
+										}}
+										onConfirm={(value) =>
+											handleDetailsChange(value, key)
 										}
-									}}
-									onConfirm={(value) =>
-										handleDetailsChange(value, key)
-									}
-								/>
-							</div>
-						);
-					})}
-					<Button color="royalblue" onClick={add}>
-						Add Book
+									/>
+								</div>
+							);
+						})}
+						<Button color="royalblue" onClick={add}>
+							Add Book
 					</Button>
-				</>
-			)}
+					</>
+				)}
 		</>
 	);
 };
