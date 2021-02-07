@@ -39,7 +39,7 @@ const updateActivity = require("../queries/updateActivity");
 const addLike = require("../queries/updateLike");
 const updateLike = require("../queries/updateLike");
 const getFriendLikes = require("../queries/getFriendLikes");
-const searchUsersByEmail = require("../queries/searchUsersByEmail");
+const searchUsers = require("../queries/searchUsers");
 
 module.exports = (app) => {
 	//lookup book information by isbn10
@@ -66,9 +66,7 @@ module.exports = (app) => {
 			);
 
 			const households = await getHouseholds(req.user.id);
-			const householdMembers = await getHouseholdMembersByUserId(
-				req.user.id
-			);
+			const householdMembers = await getHouseholdMembersByUserId(req.user.id);
 
 			res.send({
 				currentUser,
@@ -83,6 +81,56 @@ module.exports = (app) => {
 			});
 		}
 	});
+	app.get("/api/book/search/title/:term", async (req, res) => {
+
+		try {
+			const encoded = encodeURI(`https://api2.isbndb.com/books/${req.params.term}?page=1&pageSize=20&column=title&beta=1`);
+			const response = await axios.get(encoded, {
+				headers: {
+					Authorization: keys.ISBN_AUTH_API,
+				},
+			});
+
+			const results = response.data.books.filter(result => {
+				if (result.binding === "Audio Cd" || result.binding === "Audio CD" || result.binding === "ePub" || result.binding === "Audio Cassette") {
+					return null
+				} else {
+					return result
+				}
+			})
+
+
+			res.send({ total: response.data.total, books: results })
+		} catch (error) {
+			res.send(error);
+		}
+	});
+
+	app.get("/api/book/search/title/:term/author/:author", async (req, res) => {
+
+		try {
+			const encoded = encodeURI(`https://api2.isbndb.com/search/books?author=${req.params.author}&text=${req.params.term}`);
+			const response = await axios.get(encoded, {
+				headers: {
+					Authorization: keys.ISBN_AUTH_API,
+				},
+			});
+
+			const results = response.data.data.filter(result => {
+				if (result.binding === "Audio Cd" || result.binding === "Audio CD" || result.binding === "ePub" || result.binding === "Audio Cassette") {
+					return null
+				} else {
+					return result
+				}
+			})
+
+
+			res.send({ total: response.data.total, books: results })
+		} catch (error) {
+			res.send(error);
+		}
+	});
+
 
 	app.get("/api/book/lookup/:isbn", async (req, res) => {
 		const book = await getGlobalBookByISBN(req.params.isbn);
@@ -182,11 +230,7 @@ module.exports = (app) => {
 
 		if (req.body.field === "read") {
 			if (book.bookType === "personal") {
-				const updatedBook = await updateBook(
-					book.field,
-					book.value,
-					book.id
-				);
+				const updatedBook = await updateBook(book.field, book.value, book.id);
 				if (book.value) {
 					await addActivity(req.user.id, book.globalId, 2);
 				}
@@ -205,11 +249,7 @@ module.exports = (app) => {
 			}
 		} else if (req.body.field === "notes") {
 			if (book.bookType === "personal") {
-				const updatedBook = await updateBook(
-					book.field,
-					book.value,
-					book.id
-				);
+				const updatedBook = await updateBook(book.field, book.value, book.id);
 				res.send(updatedBook);
 			} else {
 				const addNotes = await updateUsersGlobalBooks(
@@ -222,11 +262,7 @@ module.exports = (app) => {
 			}
 		} else {
 			if (book.bookType === "personal") {
-				const updatedBook = await updateBook(
-					book.field,
-					book.value,
-					book.id
-				);
+				const updatedBook = await updateBook(book.field, book.value, book.id);
 
 				switch (book.field) {
 					case "started":
@@ -329,10 +365,7 @@ module.exports = (app) => {
 		} else if (req.body.remove) {
 			let response;
 			if (req.body.userId === req.user.id) {
-				response = await leaveHousehold(
-					req.body.householdId,
-					req.body.userId
-				);
+				response = await leaveHousehold(req.body.householdId, req.body.userId);
 			} else {
 				response = await removeHouseholdMember(
 					req.body.householdId,
@@ -401,10 +434,7 @@ module.exports = (app) => {
 		}
 
 		try {
-			const response = await addFriendship(
-				connectingUser,
-				req.body.userEmail
-			);
+			const response = await addFriendship(connectingUser, req.body.userEmail);
 			res.send(response);
 			if (response.id) {
 				const email = await sendEmail(
@@ -480,7 +510,6 @@ module.exports = (app) => {
 			const activities = await getActivities(req.user.id);
 			const likes = await getFriendLikes(req.user.id);
 
-
 			res.send(activities);
 		} catch (error) {
 			console.log(error);
@@ -519,11 +548,7 @@ module.exports = (app) => {
 				}
 				break;
 			case "unlike":
-				const removedLike = await updateLike(
-					req.user.id,
-					activityId,
-					true
-				);
+				const removedLike = await updateLike(req.user.id, activityId, true);
 				if (removedLike) {
 					res.send(removedLike);
 				}
@@ -537,7 +562,7 @@ module.exports = (app) => {
 	});
 
 	app.get("/api/users/search/:term", async (req, res) => {
-		const results = await searchUsersByEmail(req.params.term)
-		res.send(results)
-	})
+		const results = await searchUsers(req.params.term);
+		res.send(results);
+	});
 };

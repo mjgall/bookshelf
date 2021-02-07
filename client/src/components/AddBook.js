@@ -10,19 +10,22 @@ import axios from "axios";
 import useWindowSize from "../hooks/useWindowSize";
 import DetailsTab from "./DetailsTab";
 import Button from "../common/Button";
-
+import { useToasts } from "react-toast-notifications";
 
 
 const AddBook = () => {
+	const { addToast } = useToasts();
 	const scanTabRef = useRef(null);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [openTab, setOpenTab] = React.useState(1);
 	const [enteredISBN, setEnteredISBN] = useState("");
+	const [title, setTitle] = useState("");
+	const [author, setAuthor] = useState("");
 	const [reason, setReason] = useState("");
 	const global = useContext(Context);
 	const toggleModal = () => {
 		setModalOpen(!modalOpen);
-		global.setGlobal({capturedBook: false})
+		global.setGlobal({ capturedBook: false })
 	};
 	const size = useWindowSize();
 
@@ -58,14 +61,42 @@ const AddBook = () => {
 		// if (response.data)
 	};
 
+	const submitSearch = async () => {
+		try {
+			if ((!title && !author) || !title) {
+				addToast("Please include at least a title", {
+					appearance: "error",
+					autoDismiss: true,
+				});
+			} else if (title && !author) {
+				const response = await axios.get(encodeURI(`/api/book/search/title/${title}`))
+				console.log(response.data)
+			} else {
+				const response = await axios.get(encodeURI(`/api/book/search/title/${title}/author/${author}`))
+				console.log(response.data)
+			}
+
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
 	const handleManualISBN = (e) => {
 		setEnteredISBN(e.target.value);
+	};
+
+	const handleTitle = (e) => {
+		setTitle(e.target.value);
+	};
+
+	const handleAuthor = (e) => {
+		setAuthor(e.target.value);
 	};
 
 	const modalStyles = {
 		content: {
 			width: size.width > 500 ? "50vw" : "100%",
-			height: size.width > 500 ? "50vh" : "100%", 
+			height: size.width > 500 ? "50vh" : "100%",
 			minHeight: "30vh",
 			maxHeight: "80vh",
 			padding: 0,
@@ -186,6 +217,7 @@ const AddBook = () => {
 
 										<div className="m-auto text-center">
 											<input
+												placeholder="Search by ISBN"
 												onChange={handleManualISBN}
 												value={enteredISBN}
 												className="leading-8 w-1/2 m-auto rounded-md border border-gray-400"
@@ -197,6 +229,26 @@ const AddBook = () => {
 												Submit
 											</button>
 										</div>
+										<div className="m-auto text-center">
+											<input
+												placeholder="Title"
+												onChange={handleTitle}
+												value={title}
+												className="leading-8 w-1/2 m-auto rounded-md border border-gray-400"
+											/>
+											<input
+												placeholder="Author"
+												onChange={handleAuthor}
+												value={author}
+												className="leading-8 w-1/2 m-auto rounded-md border border-gray-400"
+											/>
+											<button
+												onClick={submitSearch}
+												className="bg-royalblue hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outline"
+											>
+												Search
+											</button>
+										</div>
 									</div>
 									<div
 										className={
@@ -204,13 +256,13 @@ const AddBook = () => {
 										}
 										id="link3"
 									>
-								
-											<DetailsTab
-												closeModal={() => {
-													setModalOpen(false);
-												}}
-											></DetailsTab>
-									
+
+										<DetailsTab
+											closeModal={() => {
+												setModalOpen(false);
+											}}
+										></DetailsTab>
+
 									</div>
 								</div>
 							</div>
