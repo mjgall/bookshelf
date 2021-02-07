@@ -156,3 +156,4 @@ npm-debug.log
 /*.env
 config/keys-dev.js
 TODO
+client/src/styles/tailwind.css
