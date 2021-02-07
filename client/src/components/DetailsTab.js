@@ -76,7 +76,7 @@ const DetailsTab = ({ closeModal }) => {
 		closeModal();
 	};
 
-	const fields = ["title", "author", "binding", "publisher", "isbn"];
+	const fields = [{ key: "title", display: "Title" }, { key: "author", display: "Author" }, { key: "binding", display: "Binding" }, { key: "publisher", display: "Publisher" }, { key: "isbn", display: "ISBN" }];
 
 	return (
 		<>
@@ -94,17 +94,17 @@ const DetailsTab = ({ closeModal }) => {
 							></img>
 						</div>
 						<div>
-							{fields.map((key, index) => {
+							{fields.map((object, index) => {
 								return (
-									<div className="flex">
-										<div className="mr-2">
-											{key}
+									<div>
+										<div className="mr-2 font-bold text-lg">
+											{object.display}
 										</div>
 										<div key={index}>
 											<InlineEdit
 												className="w-4/5 my-2"
 												readViewFitContainerWidth
-												defaultValue={state[key] || ""}
+												defaultValue={state[object.key] || ""}
 												editView={(fieldProps) => (
 													<Textfield
 														{...fieldProps}
@@ -112,10 +112,10 @@ const DetailsTab = ({ closeModal }) => {
 													/>
 												)}
 												readView={() => (
-													<div>{state[key] || ""}</div>
+													<div>{state[object.key] || ""}</div>
 												)}
 												onConfirm={(value) =>
-													handleDetailsChange(value, key)
+													handleDetailsChange(value, object.key)
 												}
 											/>
 										</div>
@@ -131,34 +131,34 @@ const DetailsTab = ({ closeModal }) => {
 				</div>
 			) : (
 					<>
-						{fields.map((key, index) => {
+						{fields.map((object, index) => {
 							return (
 								<div>
 									<InlineEdit
 										className="w-4/5 my-2"
 										readViewFitContainerWidth
-										defaultValue={state[key] || ""}
+										defaultValue={state[object.key] || ""}
 										editView={(fieldProps) => (
 											<Textfield {...fieldProps} autoFocus />
 										)}
 										readView={() => {
-											if (!state[key]) {
+											if (!state[object.key]) {
 												return (
 													<div className="text-gray-500">
-														{key
+														{object.key
 															.charAt(0)
 															.toUpperCase() +
-															key.slice(1)}
+															object.key.slice(1)}
 													</div>
 												);
 											} else {
 												return (
-													<div>{state[key] || key}</div>
+													<div>{state[object.key] || object.key}</div>
 												);
 											}
 										}}
 										onConfirm={(value) =>
-											handleDetailsChange(value, key)
+											handleDetailsChange(value, object.key)
 										}
 									/>
 								</div>

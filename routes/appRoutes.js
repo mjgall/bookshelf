@@ -181,6 +181,7 @@ module.exports = (app) => {
 
 	//add a book
 	app.post("/api/books", async (req, res) => {
+
 		const { title, author, isbn10, isbn13, cover, id, manual } = req.body;
 
 		const userBookRow = await addBook({
@@ -193,6 +194,8 @@ module.exports = (app) => {
 			cover,
 			manual,
 		});
+
+		console.log(userBookRow)
 
 		await addActivity(req.user.id, userBookRow.global_id, 3);
 
