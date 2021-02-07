@@ -39,6 +39,7 @@ const updateActivity = require("../queries/updateActivity");
 const addLike = require("../queries/updateLike");
 const updateLike = require("../queries/updateLike");
 const getFriendLikes = require("../queries/getFriendLikes");
+const searchUsersByEmail = require("../queries/searchUsersByEmail");
 
 module.exports = (app) => {
 	//lookup book information by isbn10
@@ -479,7 +480,7 @@ module.exports = (app) => {
 			const activities = await getActivities(req.user.id);
 			const likes = await getFriendLikes(req.user.id);
 
-	
+
 			res.send(activities);
 		} catch (error) {
 			console.log(error);
@@ -534,4 +535,9 @@ module.exports = (app) => {
 		if (type === "like") {
 		}
 	});
+
+	app.get("/api/users/search/:term", async (req, res) => {
+		const results = await searchUsersByEmail(req.params.term)
+		res.send(results)
+	})
 };
