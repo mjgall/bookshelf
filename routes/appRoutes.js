@@ -130,10 +130,10 @@ module.exports = (app) => {
 	});
 
 	app.post("/api/global_book", async (req, res) => {
-
+		console.log({ isbn10: req.body.isbn, isbn13: req.body.isbn13 })
 		try {
 
-			const book = await getGlobalBookByISBN(req.body.isbn || req.body.isbn)
+			const book = await getGlobalBookByISBN(req.body.isbn, req.body.isbn13)
 
 			if (book) {
 				res.send({ success: true, existed: true })
