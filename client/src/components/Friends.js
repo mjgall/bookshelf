@@ -12,6 +12,8 @@ import { Context } from "../globalContext";
 import { Link } from "react-router-dom";
 import { searchWithCancel } from "../utils";
 
+//live search credits to this article: https://www.digitalocean.com/community/tutorials/react-live-search-with-axios
+
 const Friends = (props) => {
 	const global = useContext(Context);
 	const [message, setMessage] = useState("");
