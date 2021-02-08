@@ -126,7 +126,7 @@ const Friends = (props) => {
 						{searchResults.map((result, index) => {
 							if (result.sent) {
 								return (
-									<div key={index} className="flex my-1 border-gray-500 rounded-sm px-2 border">
+									<div key={index} className="flex my-1 border-gray-500 rounded-sm px-2 border items-center">
 										<div>Invite sent!</div>
 										<div className="ml-auto mr-0">
 											<Tip renderChildren content="Sent!" placement="left">
@@ -140,7 +140,7 @@ const Friends = (props) => {
 								);
 							} else {
 								return (
-									<div key={index} className="flex my-1 border-gray-500 rounded-sm px-2 border">
+									<div key={index} className="flex my-1 border-gray-500 rounded-sm px-2 border items-center">
 										<div>{result.full}</div>
 										<div className="ml-auto mr-0">
 											<Tip renderChildren content="Send invite" placement="left">
