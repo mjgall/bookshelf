@@ -132,7 +132,11 @@ const DetailsTab = ({ closeModal }) => {
 				</div>
 			) : (
 					<>
-						{fields.map((object, index) => {
+						{fields.filter(field => {
+							if (field.key === "author" || field.key === "title") {
+								return field
+							}
+						}).map((object, index) => {
 							return (
 								<div>
 									<InlineEdit
