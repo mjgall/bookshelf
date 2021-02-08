@@ -10,11 +10,14 @@ import Tip from "../common/Tip";
 
 import { Context } from "../globalContext";
 import { Link } from "react-router-dom";
+import { searchWithCancel } from "../utils";
 
 const Friends = (props) => {
 	const global = useContext(Context);
 	const [message, setMessage] = useState("");
 	const [friends, setFriends] = useState([]);
+	const [searchResults, setSearchResults] = useState([]);
+	const [loading, setLoading] = useState(false);
 	const [friendMenuOpen, setFriendMenuOpen] = useState(false);
 	const [values, setValues] = useState({
 		email: "",
@@ -22,24 +25,39 @@ const Friends = (props) => {
 		unitCost: 0,
 	});
 
-	const handleValueChange = (e) => {
+	const search = async (val) => {
+		setLoading(true);
+		const res = await searchWithCancel(`/api/users/search/${val}`);
+		setSearchResults(res);
+		setLoading(false);
+	};
+
+	const handleValueChange = async (e) => {
 		const { name, value } = e.target;
+
+		if (value.length >= 2) {
+			search(value);
+		} else if (value.length < 2) {
+			setSearchResults([])
+		}
+
 		setValues({ ...values, [name]: value });
 	};
 
-	const sendInvite = async (e) => {
-		e.preventDefault();
-		if (values.email) {
-			const response = await axios.post("/api/friends", {
-				userEmail: values.email,
-			});
-			if (response.error) {
-				setMessage("No user found.");
-			}
-			setValues({ ...values, email: "" });
-			setFriendMenuOpen(!friendMenuOpen);
-		} else {
+	const sendInvite = async (friend, index) => {
+		const response = await axios.post("/api/friends", {
+			userEmail: friend.email,
+		});
+
+		if (response) {
+			const newResults = searchResults
+			newResults[index].sent = true
+			setSearchResults(newResults)
 		}
+
+		setValues({ ...values, email: "" });
+		setFriendMenuOpen(!friendMenuOpen);
+
 	};
 
 	const editInvite = async (friendshipId, action) => {
@@ -77,17 +95,17 @@ const Friends = (props) => {
 						className="cursor-pointer text-green-400"
 					></ChevronDownSquare>
 				) : (
-					<Tip renderChildren content="Add friend" placement="left">
-						<PlusSquare
-							onClick={() => setFriendMenuOpen(!friendMenuOpen)}
-							size="2em"
-							className="cursor-pointer text-green-400"
-						></PlusSquare>
-					</Tip>
-				)}
+						<Tip renderChildren content="Add friend" placement="left">
+							<PlusSquare
+								onClick={() => setFriendMenuOpen(!friendMenuOpen)}
+								size="2em"
+								className="cursor-pointer text-green-400"
+							></PlusSquare>
+						</Tip>
+					)}
 			</div>
 			{friendMenuOpen ? (
-				<form onSubmit={sendInvite} className="w-full">
+				<div className="w-full">
 					<div className="flex items-center border-b border-b-1 border-royalblue ">
 						{message ? <div>{message}</div> : null}
 						<input
@@ -99,20 +117,49 @@ const Friends = (props) => {
 							onChange={handleValueChange}
 							aria-label="Friend email"
 						></input>
-						<Tip
-							renderChildren
-							content="Send invite"
-							placement="left"
-						>
-							<MailSend
-								onClick={sendInvite}
-								size="2em"
-								className="cursor-pointer text-green-400"
-							></MailSend>
-						</Tip>
 					</div>
-				</form>
+				</div>
 			) : null}
+			{searchResults ? (
+				<div>
+					<ul>
+						{searchResults.map((result, index) => {
+							if (result.sent) {
+								return (
+									<div key={index} className="flex my-1 border-gray-500 rounded-sm px-2 border">
+										<div>Invite sent!</div>
+										<div className="ml-auto mr-0">
+											<Tip renderChildren content="Sent!" placement="left">
+												<MailSend
+													size="2em"
+													className="cursor-pointer text-gray-400"
+												></MailSend>
+											</Tip>
+										</div>
+									</div>
+								);
+							} else {
+								return (
+									<div key={index} className="flex my-1 border-gray-500 rounded-sm px-2 border">
+										<div>{result.full}</div>
+										<div className="ml-auto mr-0">
+											<Tip renderChildren content="Send invite" placement="left">
+												<MailSend
+													onClick={() => sendInvite(result, index)}
+													size="2em"
+													className="cursor-pointer text-green-400"
+												></MailSend>
+											</Tip>
+										</div>
+									</div>
+								);
+							}
+
+						})}
+					</ul>
+				</div>
+			) : null}
+
 			<div>
 				<div>Pending</div>
 				<div>
@@ -126,10 +173,7 @@ const Friends = (props) => {
 						})
 						.map((friend, index) => {
 							return (
-								<div
-									key={index}
-									className="flex items-center my-2"
-								>
+								<div key={index} className="flex items-center my-2">
 									<img
 										alt={friend.full}
 										src={friend.picture}
@@ -142,10 +186,7 @@ const Friends = (props) => {
 												size="2em"
 												className="cursor-pointer text-green-400 w-full"
 												onClick={() =>
-													editInvite(
-														friend.friendship_id,
-														"accept"
-													)
+													editInvite(friend.friendship_id, "accept")
 												}
 											></CheckSquare>
 										</div>
@@ -164,16 +205,21 @@ const Friends = (props) => {
 						})
 						.map((friend, index) => {
 							return (
-								<div
-									key={index}
-									className="flex items-center my-2"
-								>
+								<div key={index} className="flex items-center my-2">
 									<img
 										alt={friend.full}
 										src={friend.picture}
 										className="rounded-full h-12 w-12 mr-4"
 									></img>
-									<Link className="cursor-pointer" to={`/shelf/${global.currentUser.id === friend.user_id ? friend.user_id_2 : friend.user_id}`}><div>{friend.full}</div></Link>
+									<Link
+										className="cursor-pointer"
+										to={`/shelf/${global.currentUser.id === friend.user_id
+											? friend.user_id_2
+											: friend.user_id
+											}`}
+									>
+										<div>{friend.full}</div>
+									</Link>
 								</div>
 							);
 						})}
