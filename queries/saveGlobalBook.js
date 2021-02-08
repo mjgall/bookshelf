@@ -2,6 +2,7 @@ const db = require("../config/db/mysql").pool;
 const sqlString = require("sqlstring");
 
 module.exports = (book) => {
+	console.log("here")
 	const { userId, title, author, isbn, isbn13, image } = book;
 
 	return new Promise((resolve, reject) => {
@@ -12,6 +13,7 @@ module.exports = (book) => {
 			isbn
 		)}, ${sqlString.escape(isbn13)}, ${sqlString.escape(image)});
         `;
+		console.log(query)
 		db.query(query, (err, results, fields) => {
 			if (err) {
 				reject(err);

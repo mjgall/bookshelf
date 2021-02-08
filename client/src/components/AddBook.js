@@ -29,12 +29,12 @@ const AddBook = () => {
 	const titleCase = (s) => s.replace(/^_*(.)|_+(.)/g, (s, c, d) => c ? c.toUpperCase() : ' ' + d.toUpperCase())
 
 	const submitManual = async () => {
-		let isNumerical = /^\d+$/.test(enteredISBN);
+
 		const index = global.books.userBooks.findIndex((element) => {
 			return element.isbn10 === enteredISBN || element.isbn13 === enteredISBN;
 		});
 
-		if (enteredISBN && isNumerical) {
+		if (enteredISBN) {
 			if (index >= 0) {
 				setReason("This book has already been saved.");
 			} else {
@@ -94,9 +94,12 @@ const AddBook = () => {
 		setAuthor(e.target.value);
 	};
 
-	const selectSearch = (book) => {
+	const selectSearch = async (book) => {
+		const added = await axios.post("/api/global_book", { ...book })
+		console.log(added)
+
 		global.setGlobal({
-			capturedBook: book,
+			capturedBook: book
 		});
 		setOpenTab(3);
 	}

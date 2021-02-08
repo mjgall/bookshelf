@@ -42,8 +42,6 @@ const getFriendLikes = require("../queries/getFriendLikes");
 const searchUsers = require("../queries/searchUsers");
 
 module.exports = (app) => {
-	//lookup book information by isbn10
-
 	app.get("/api/bootstrap", async (req, res) => {
 		if (!req.user) {
 			res.send({
@@ -131,10 +129,31 @@ module.exports = (app) => {
 		}
 	});
 
+	app.post("/api/global_book", async (req, res) => {
+
+		try {
+
+			const book = await getGlobalBookByISBN(req.body.isbn || req.body.isbn)
+
+			if (book) {
+				res.send({ success: true, existed: true })
+			} else {
+				console.log(req.body)
+				const response = await saveGlobalBook({ ...req.body, isbn10: req.body.isbn, cover: req.body.image })
+				res.send({ success: true, existed: false })
+			}
+
+
+		} catch (error) {
+			res.send(error)
+		}
+
+	})
+
 
 	app.get("/api/book/lookup/:isbn", async (req, res) => {
 		const book = await getGlobalBookByISBN(req.params.isbn);
-		console.log(book);
+
 		if (book) {
 			res.send(book);
 		} else {
@@ -182,24 +201,27 @@ module.exports = (app) => {
 	//add a book
 	app.post("/api/books", async (req, res) => {
 
-		const { title, author, isbn10, isbn13, cover, id, manual } = req.body;
+		const { title, author, isbn10, isbn13, isbn, cover, image, id, manual, addGlobal } = req.body;
 
-		const userBookRow = await addBook({
-			userId: req.user.id,
-			id,
-			title,
-			author,
-			isbn10,
-			isbn13,
-			cover,
-			manual,
-		});
+		if (addGlobal) {
+			response = await addBook({ userId: req.user.id, title, author, isbn10: isbn, isbn13, cover: image, addGlobal: true })
+		} else {
+			response = await addBook({
+				userId: req.user.id,
+				id,
+				title,
+				author,
+				isbn10,
+				isbn13,
+				cover,
+				manual
+			});
 
-		console.log(userBookRow)
+		}
 
-		await addActivity(req.user.id, userBookRow.global_id, 3);
+		await addActivity(req.user.id, response.global_id, 3);
+		res.send(response)
 
-		res.send(userBookRow);
 	});
 
 	//get a users books

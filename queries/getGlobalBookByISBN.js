@@ -1,8 +1,6 @@
 const db = require('../config/db/mysql').pool;
 
 module.exports = (isbn) => {
-
-
   return new Promise((resolve, reject) => {
     const query = `SELECT * FROM global_books WHERE global_books.isbn10 = "${isbn}" OR global_books.isbn13 = "${isbn}";`;
 
@@ -16,7 +14,7 @@ module.exports = (isbn) => {
       } else {
         resolve(books[0]);
       }
-      
+
     });
   });
 };

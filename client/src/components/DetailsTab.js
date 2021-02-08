@@ -56,6 +56,7 @@ const DetailsTab = ({ closeModal }) => {
 						? state.author
 						: state.authors[0],
 				manual: !global.capturedBook ? true : false,
+				addGlobal: true
 			})
 			.then((response) => response.data);
 
