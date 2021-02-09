@@ -597,8 +597,33 @@ module.exports = (app) => {
 
 				return { ...activity, likes: likesAdded };
 			});
-			console.log(likes);
-			res.send(activitiesWithLike);
+			
+			const updatedActivities = activitiesWithLike.map(activity => {
+				let likeContent = {
+					color: 'lightgray',
+					likedByUser: false,
+					people: [],
+					string: ''
+				}
+	
+				if (activity.likes.length > 0) {
+	
+					if (activity.likes.some(like => like.liked_by === req.user.id)) {
+						likeContent.color = 'royalblue'
+						likeContent.likedByUser = true
+						likeContent.people = ['You', ...activity.likes.map(like => like.full).filter(person => person !== req.user.full)]
+					} else {
+						likeContent.people = activity.likes.map(like => like.full).filter(person => person !== req.user.full)
+					}
+	
+					likeContent.string = likeContent.people.join(', ')
+			
+				}
+	
+				return {...activity, likeContent}
+			})
+
+			res.send(updatedActivities);
 		} catch (error) {
 			console.log(error);
 			res.status(500).send(error);

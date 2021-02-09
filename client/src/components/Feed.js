@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
@@ -20,88 +20,21 @@ const Feed = (props) => {
 	};
 
 	const [activities, setActivities] = useState([]);
-	const [updatedActivities, setUpdatedActivities] = useState([])
 	const [hideSelf, setHideSelf] = useState(getSavedSelfFilter());
 	const global = useContext(Context);
 
 	const data = () => {
-		const updatedActivities = activities.map(activity => {
-			let likeContent = {
-				color: 'lightgray',
-				likedByUser: false,
-				people: [],
-				string: ''
-			}
-
-			if (activity.likes.length > 0) {
-
-				if (activity.likes.some(like => like.liked_by === global.currentUser.id)) {
-					likeContent.color = 'royalblue'
-					likeContent.likedByUser = true
-					likeContent.people = ['You', ...activity.likes.map(like => like.full).filter(person => person !== global.currentUser.full)]
-				} else {
-					likeContent.people = activity.likes.map(like => like.full).filter(person => person !== global.currentUser.full)
-				}
-
-				likeContent.string = likeContent.people.join(', ')
 		
-			}
-
-			return {...activity, likeContent}
-		})
-
 		if (hideSelf) {
-			return updatedActivities.filter((activity) => {
+			return activities.filter((activity) => {
 				return activity.user_id !== global.currentUser.id;
 			});
 		} else {
-			return updatedActivities;
+			return activities;
 		}
 	};
 
-	
 
-	const fetchUpdatedActivities = useCallback(() => {
-		const updatedActivities = activities.map(activity => {
-			let likeContent = {
-				color: 'lightgray',
-				likedByUser: false,
-				people: [],
-				string: ''
-			}
-
-			if (activity.likes.length > 0) {
-
-				if (activity.likes.some(like => like.liked_by === global.currentUser.id)) {
-					likeContent.color = 'royalblue'
-					likeContent.likedByUser = true
-					likeContent.people = ['You', ...activity.likes.map(like => like.full).filter(person => person !== global.currentUser.full)]
-				} else {
-					likeContent.people = activity.likes.map(like => like.full).filter(person => person !== global.currentUser.full)
-				}
-
-				likeContent.string = likeContent.people.join(', ')
-		
-			}
-
-			return {...activity, likeContent}
-		})
-
-		const filtered = () => {
-			if (hideSelf) {
-				return updatedActivities.filter((activity) => {
-					return activity.user_id !== global.currentUser.id;
-				});
-			} else {
-				return updatedActivities;
-			
-		}
-		}
-
-		setUpdatedActivities(filtered)
-
-	}, [activities, global.currentUser, hideSelf]
-) 
 	const toggleHideSelf = () => {
 		setHideSelf(!hideSelf);
 		localStorage.setItem("hideSelf", !hideSelf);
@@ -111,10 +44,6 @@ const Feed = (props) => {
 		const result = await axios.get("/api/activities");
 		setActivities(result.data);
 	};
-
-	// const fetchLikes = async () => {
-		
-	// }
 
 	const updateActivity = async (id) => {
 		const result = await axios.put("/api/activities", {
@@ -132,8 +61,7 @@ const Feed = (props) => {
 
 	useEffect(() => {
 		fetchActivities();
-		fetchUpdatedActivities();
-	}, [fetchUpdatedActivities]);
+	}, []);
 
 	const determineAction = (actionNumber) => {
 		switch (actionNumber) {
@@ -151,11 +79,17 @@ const Feed = (props) => {
 	};
 
 	const updateLike = async (item) => {
-		if (item.liked) {
+		if (item.likeContent.likedByUser) {
 			setActivities(
 				activities.map((activity) => {
 					if (activity.id === item.id) {
-						return { ...activity, likes: [...activity.likes, {activity_id: activity.id, liked_by: global.currentUser.id, full: global.currentUser.full}] };
+
+						let likeContent = {color: 'lightgray', likedByUser: false, people: activity.likeContent.people, string: activity.likeContent.string}
+
+						likeContent.people = likeContent.people.filter(person => person !== "You")
+						likeContent.string = likeContent.people.join(",")
+
+						return { ...activity, likeContent };
 					} else {
 						return activity;
 					}
@@ -166,10 +100,19 @@ const Feed = (props) => {
 				activityId: item.id,
 			});
 		} else {
+
 			setActivities(
 				activities.map((activity) => {
+
+					
+
 					if (activity.id === item.id) {
-						return { ...activity, liked: true };
+
+						let likeContent = {color: 'royalblue', likedByUser: true, people: activity.likeContent.people, string: activity.likeContent.string}
+
+						likeContent.people = ["You", ...likeContent.people]
+						likeContent.string = likeContent.people.join(', ')
+						return { ...activity, likeContent: likeContent };
 					} else {
 						return activity;
 					}
