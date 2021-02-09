@@ -603,7 +603,8 @@ module.exports = (app) => {
 					color: 'lightgray',
 					likedByUser: false,
 					people: [],
-					string: ''
+					string: '',
+					total: 0
 				}
 	
 				if (activity.likes.length > 0) {
@@ -612,12 +613,13 @@ module.exports = (app) => {
 						likeContent.color = 'royalblue'
 						likeContent.likedByUser = true
 						likeContent.people = ['You', ...activity.likes.map(like => like.full).filter(person => person !== req.user.full)]
+				
 					} else {
 						likeContent.people = activity.likes.map(like => like.full).filter(person => person !== req.user.full)
 					}
 	
 					likeContent.string = likeContent.people.join(', ')
-			
+					likeContent.total = likeContent.people.length
 				}
 	
 				return {...activity, likeContent}

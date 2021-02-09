@@ -23,8 +23,7 @@ const Feed = (props) => {
 	const [hideSelf, setHideSelf] = useState(getSavedSelfFilter());
 	const global = useContext(Context);
 
-	const data = () => {
-		
+	const filter = () => {
 		if (hideSelf) {
 			return activities.filter((activity) => {
 				return activity.user_id !== global.currentUser.id;
@@ -33,7 +32,6 @@ const Feed = (props) => {
 			return activities;
 		}
 	};
-
 
 	const toggleHideSelf = () => {
 		setHideSelf(!hideSelf);
@@ -83,11 +81,18 @@ const Feed = (props) => {
 			setActivities(
 				activities.map((activity) => {
 					if (activity.id === item.id) {
+						let likeContent = {
+							color: "lightgray",
+							likedByUser: false,
+							people: activity.likeContent.people,
+							string: activity.likeContent.string,
+						};
 
-						let likeContent = {color: 'lightgray', likedByUser: false, people: activity.likeContent.people, string: activity.likeContent.string}
-
-						likeContent.people = likeContent.people.filter(person => person !== "You")
-						likeContent.string = likeContent.people.join(",")
+						likeContent.people = likeContent.people.filter(
+							(person) => person !== "You"
+						);
+						likeContent.string = likeContent.people.join(",");
+						likeContent.total = likeContent.people.length;
 
 						return { ...activity, likeContent };
 					} else {
@@ -100,18 +105,19 @@ const Feed = (props) => {
 				activityId: item.id,
 			});
 		} else {
-
 			setActivities(
 				activities.map((activity) => {
-
-					
-
 					if (activity.id === item.id) {
+						let likeContent = {
+							color: "royalblue",
+							likedByUser: true,
+							people: activity.likeContent.people,
+							string: activity.likeContent.string,
+						};
 
-						let likeContent = {color: 'royalblue', likedByUser: true, people: activity.likeContent.people, string: activity.likeContent.string}
-
-						likeContent.people = ["You", ...likeContent.people]
-						likeContent.string = likeContent.people.join(', ')
+						likeContent.people = ["You", ...likeContent.people];
+						likeContent.string = likeContent.people.join(", ");
+						likeContent.total = likeContent.people.length;
 						return { ...activity, likeContent: likeContent };
 					} else {
 						return activity;
@@ -122,8 +128,6 @@ const Feed = (props) => {
 				type: "like",
 				activityId: item.id,
 			});
-
-
 		}
 	};
 
@@ -142,7 +146,7 @@ const Feed = (props) => {
 				></input>
 				<div>Hide self</div>
 			</div>
-			{data().map((item, index) => {
+			{filter().map((item, index) => {
 				return (
 					<div
 						className="border-gray-400 border mt-2 mb-2 pr-6 rounded flex items-center"
@@ -201,40 +205,44 @@ const Feed = (props) => {
 									.format("dddd, MMMM Do YYYY, h:mm:ss a")}
 							</div>
 							<div className="flex text-xs my-1">
-								<div
-									className="mr-2 cursor-pointer"
-									onClick={() => {updateLike(item)}}
-								>
-									{item.likeContent.people.length > 0 ? (
-										<Tip
-											content={item.likeContent.string ? item.likeContent.string : "Like"}
-											renderChildren
-											placement="right"
-										>
-											<ThumbUpSolid
-												color={item.likeContent.color}
-												size="1.5em"
-											></ThumbUpSolid>
-										</Tip>
-									) : (
-										<Tip
-											content="Like"
-											renderChildren
-											placement="right"
-										>
-											<ThumbUp
-												color="lightgray"
-												size="1.5em"
-											></ThumbUp>
-										</Tip>
-									)}
-								</div>
-								{/* <div className="ml-2 cursor-pointer">
-									<CommentAdd
-										color="lightgray"
-										size="1.5em"
-									></CommentAdd>
-								</div> */}
+									<div
+										className="mr-2 cursor-pointer"
+										onClick={() => {
+											updateLike(item);
+										}}
+									>
+										{item.likeContent.people.length > 0 ? (
+											<Tip
+												content={
+													item.likeContent.string
+														? item.likeContent
+																.string
+														: "Like"
+												}
+												renderChildren
+												placement="right"
+											>
+												<ThumbUpSolid
+													color={
+														item.likeContent.color
+													}
+													size="1.5em"
+												></ThumbUpSolid>
+											</Tip>
+										) : (
+											<Tip
+												content="Like"
+												renderChildren
+												placement="right"
+											>
+												<ThumbUp
+													color="lightgray"
+													size="1.5em"
+												></ThumbUp>
+											</Tip>
+										)}
+									</div>
+									<div>{item.likeContent.total}</div>
 							</div>
 						</div>
 						<div className="ml-auto flex items-center">
