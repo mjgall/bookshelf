@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
@@ -20,19 +20,88 @@ const Feed = (props) => {
 	};
 
 	const [activities, setActivities] = useState([]);
+	const [updatedActivities, setUpdatedActivities] = useState([])
 	const [hideSelf, setHideSelf] = useState(getSavedSelfFilter());
 	const global = useContext(Context);
 
 	const data = () => {
+		const updatedActivities = activities.map(activity => {
+			let likeContent = {
+				color: 'lightgray',
+				likedByUser: false,
+				people: [],
+				string: ''
+			}
+
+			if (activity.likes.length > 0) {
+
+				if (activity.likes.some(like => like.liked_by === global.currentUser.id)) {
+					likeContent.color = 'royalblue'
+					likeContent.likedByUser = true
+					likeContent.people = ['You', ...activity.likes.map(like => like.full).filter(person => person !== global.currentUser.full)]
+				} else {
+					likeContent.people = activity.likes.map(like => like.full).filter(person => person !== global.currentUser.full)
+				}
+
+				likeContent.string = likeContent.people.join(', ')
+		
+			}
+
+			return {...activity, likeContent}
+		})
+
 		if (hideSelf) {
-			return activities.filter((activity) => {
+			return updatedActivities.filter((activity) => {
 				return activity.user_id !== global.currentUser.id;
 			});
 		} else {
-			return activities;
+			return updatedActivities;
 		}
 	};
 
+	
+
+	const fetchUpdatedActivities = useCallback(() => {
+		const updatedActivities = activities.map(activity => {
+			let likeContent = {
+				color: 'lightgray',
+				likedByUser: false,
+				people: [],
+				string: ''
+			}
+
+			if (activity.likes.length > 0) {
+
+				if (activity.likes.some(like => like.liked_by === global.currentUser.id)) {
+					likeContent.color = 'royalblue'
+					likeContent.likedByUser = true
+					likeContent.people = ['You', ...activity.likes.map(like => like.full).filter(person => person !== global.currentUser.full)]
+				} else {
+					likeContent.people = activity.likes.map(like => like.full).filter(person => person !== global.currentUser.full)
+				}
+
+				likeContent.string = likeContent.people.join(', ')
+		
+			}
+
+			return {...activity, likeContent}
+		})
+
+		const filtered = () => {
+			if (hideSelf) {
+				return updatedActivities.filter((activity) => {
+					return activity.user_id !== global.currentUser.id;
+				});
+			} else {
+				return updatedActivities;
+			
+		}
+		}
+
+		setUpdatedActivities(filtered)
+
+	}, [activities, global.currentUser, hideSelf]
+) 
 	const toggleHideSelf = () => {
 		setHideSelf(!hideSelf);
 		localStorage.setItem("hideSelf", !hideSelf);
@@ -63,7 +132,8 @@ const Feed = (props) => {
 
 	useEffect(() => {
 		fetchActivities();
-	}, []);
+		fetchUpdatedActivities();
+	}, [fetchUpdatedActivities]);
 
 	const determineAction = (actionNumber) => {
 		switch (actionNumber) {
@@ -85,7 +155,7 @@ const Feed = (props) => {
 			setActivities(
 				activities.map((activity) => {
 					if (activity.id === item.id) {
-						return { ...activity, liked: false };
+						return { ...activity, likes: [...activity.likes, {activity_id: activity.id, liked_by: global.currentUser.id, full: global.currentUser.full}] };
 					} else {
 						return activity;
 					}
@@ -109,6 +179,8 @@ const Feed = (props) => {
 				type: "like",
 				activityId: item.id,
 			});
+
+
 		}
 	};
 
@@ -188,16 +260,16 @@ const Feed = (props) => {
 							<div className="flex text-xs my-1">
 								<div
 									className="mr-2 cursor-pointer"
-									onClick={() => updateLike(item)}
+									onClick={() => {updateLike(item)}}
 								>
-									{item.liked ? (
+									{item.likeContent.people.length > 0 ? (
 										<Tip
-											content="Unlike"
+											content={item.likeContent.string ? item.likeContent.string : "Like"}
 											renderChildren
 											placement="right"
 										>
 											<ThumbUpSolid
-												color="royalblue"
+												color={item.likeContent.color}
 												size="1.5em"
 											></ThumbUpSolid>
 										</Tip>

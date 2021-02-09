@@ -135,6 +135,8 @@ const DetailsTab = ({ closeModal }) => {
 						{fields.filter(field => {
 							if (field.key === "author" || field.key === "title") {
 								return field
+							} else {
+								return null
 							}
 						}).map((object, index) => {
 							return (

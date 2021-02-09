@@ -40,6 +40,7 @@ const addLike = require("../queries/updateLike");
 const updateLike = require("../queries/updateLike");
 const getFriendLikes = require("../queries/getFriendLikes");
 const searchUsers = require("../queries/searchUsers");
+const getLikes = require("../queries/getLikes");
 
 module.exports = (app) => {
 	app.get("/api/bootstrap", async (req, res) => {
@@ -64,7 +65,9 @@ module.exports = (app) => {
 			);
 
 			const households = await getHouseholds(req.user.id);
-			const householdMembers = await getHouseholdMembersByUserId(req.user.id);
+			const householdMembers = await getHouseholdMembersByUserId(
+				req.user.id
+			);
 
 			res.send({
 				currentUser,
@@ -80,76 +83,88 @@ module.exports = (app) => {
 		}
 	});
 	app.get("/api/book/search/title/:term", async (req, res) => {
-
 		try {
-			const encoded = encodeURI(`https://api2.isbndb.com/books/${req.params.term}?page=1&pageSize=20&column=title&beta=1`);
+			const encoded = encodeURI(
+				`https://api2.isbndb.com/books/${req.params.term}?page=1&pageSize=20&column=title&beta=1`
+			);
 			const response = await axios.get(encoded, {
 				headers: {
 					Authorization: keys.ISBN_AUTH_API,
 				},
 			});
 
-			const results = response.data.books.filter(result => {
-				if (result.binding === "Audio Cd" || result.binding === "Audio CD" || result.binding === "ePub" || result.binding === "Audio Cassette") {
-					return null
+			const results = response.data.books.filter((result) => {
+				if (
+					result.binding === "Audio Cd" ||
+					result.binding === "Audio CD" ||
+					result.binding === "ePub" ||
+					result.binding === "Audio Cassette"
+				) {
+					return null;
 				} else {
-					return result
+					return result;
 				}
-			})
+			});
 
-
-			res.send({ total: response.data.total, books: results })
+			res.send({ total: response.data.total, books: results });
 		} catch (error) {
 			res.send(error);
 		}
 	});
 
 	app.get("/api/book/search/title/:term/author/:author", async (req, res) => {
-
 		try {
-			const encoded = encodeURI(`https://api2.isbndb.com/search/books?author=${req.params.author}&text=${req.params.term}`);
+			const encoded = encodeURI(
+				`https://api2.isbndb.com/search/books?author=${req.params.author}&text=${req.params.term}`
+			);
 			const response = await axios.get(encoded, {
 				headers: {
 					Authorization: keys.ISBN_AUTH_API,
 				},
 			});
 
-			const results = response.data.data.filter(result => {
-				if (result.binding === "Audio Cd" || result.binding === "Audio CD" || result.binding === "ePub" || result.binding === "Audio Cassette") {
-					return null
+			const results = response.data.data.filter((result) => {
+				if (
+					result.binding === "Audio Cd" ||
+					result.binding === "Audio CD" ||
+					result.binding === "ePub" ||
+					result.binding === "Audio Cassette"
+				) {
+					return null;
 				} else {
-					return result
+					return result;
 				}
-			})
+			});
 
-
-			res.send({ total: response.data.total, books: results })
+			res.send({ total: response.data.total, books: results });
 		} catch (error) {
 			res.send(error);
 		}
 	});
 
 	app.post("/api/global_book", async (req, res) => {
-		console.log({ isbn10: req.body.isbn, isbn13: req.body.isbn13 })
+		console.log({ isbn10: req.body.isbn, isbn13: req.body.isbn13 });
 		try {
-
-			const book = await getGlobalBookByISBN(req.body.isbn, req.body.isbn13)
+			const book = await getGlobalBookByISBN(
+				req.body.isbn,
+				req.body.isbn13
+			);
 
 			if (book) {
-				res.send({ success: true, existed: true })
+				res.send({ success: true, existed: true });
 			} else {
-				console.log(req.body)
-				const response = await saveGlobalBook({ ...req.body, isbn10: req.body.isbn, cover: req.body.image })
-				res.send({ success: true, existed: false })
+				console.log(req.body);
+				const response = await saveGlobalBook({
+					...req.body,
+					isbn10: req.body.isbn,
+					cover: req.body.image,
+				});
+				res.send({ success: true, existed: false });
 			}
-
-
 		} catch (error) {
-			res.send(error)
+			res.send(error);
 		}
-
-	})
-
+	});
 
 	app.get("/api/book/lookup/:isbn", async (req, res) => {
 		const book = await getGlobalBookByISBN(req.params.isbn);
@@ -200,11 +215,29 @@ module.exports = (app) => {
 
 	//add a book
 	app.post("/api/books", async (req, res) => {
-
-		const { title, author, isbn10, isbn13, isbn, cover, image, id, manual, addGlobal } = req.body;
+		const {
+			title,
+			author,
+			isbn10,
+			isbn13,
+			isbn,
+			cover,
+			image,
+			id,
+			manual,
+			addGlobal,
+		} = req.body;
 
 		if (addGlobal) {
-			response = await addBook({ userId: req.user.id, title, author, isbn10: isbn, isbn13, cover: image, addGlobal: true })
+			response = await addBook({
+				userId: req.user.id,
+				title,
+				author,
+				isbn10: isbn,
+				isbn13,
+				cover: image,
+				addGlobal: true,
+			});
 		} else {
 			response = await addBook({
 				userId: req.user.id,
@@ -214,14 +247,12 @@ module.exports = (app) => {
 				isbn10,
 				isbn13,
 				cover,
-				manual
+				manual,
 			});
-
 		}
 
 		await addActivity(req.user.id, response.global_id, 3);
-		res.send(response)
-
+		res.send(response);
 	});
 
 	//get a users books
@@ -255,7 +286,11 @@ module.exports = (app) => {
 
 		if (req.body.field === "read") {
 			if (book.bookType === "personal") {
-				const updatedBook = await updateBook(book.field, book.value, book.id);
+				const updatedBook = await updateBook(
+					book.field,
+					book.value,
+					book.id
+				);
 				if (book.value) {
 					await addActivity(req.user.id, book.globalId, 2);
 				}
@@ -274,7 +309,11 @@ module.exports = (app) => {
 			}
 		} else if (req.body.field === "notes") {
 			if (book.bookType === "personal") {
-				const updatedBook = await updateBook(book.field, book.value, book.id);
+				const updatedBook = await updateBook(
+					book.field,
+					book.value,
+					book.id
+				);
 				res.send(updatedBook);
 			} else {
 				const addNotes = await updateUsersGlobalBooks(
@@ -287,7 +326,11 @@ module.exports = (app) => {
 			}
 		} else {
 			if (book.bookType === "personal") {
-				const updatedBook = await updateBook(book.field, book.value, book.id);
+				const updatedBook = await updateBook(
+					book.field,
+					book.value,
+					book.id
+				);
 
 				switch (book.field) {
 					case "started":
@@ -390,7 +433,10 @@ module.exports = (app) => {
 		} else if (req.body.remove) {
 			let response;
 			if (req.body.userId === req.user.id) {
-				response = await leaveHousehold(req.body.householdId, req.body.userId);
+				response = await leaveHousehold(
+					req.body.householdId,
+					req.body.userId
+				);
 			} else {
 				response = await removeHouseholdMember(
 					req.body.householdId,
@@ -459,7 +505,10 @@ module.exports = (app) => {
 		}
 
 		try {
-			const response = await addFriendship(connectingUser, req.body.userEmail);
+			const response = await addFriendship(
+				connectingUser,
+				req.body.userEmail
+			);
 			res.send(response);
 			if (response.id) {
 				const email = await sendEmail(
@@ -533,9 +582,23 @@ module.exports = (app) => {
 	app.get("/api/activities", async (req, res) => {
 		try {
 			const activities = await getActivities(req.user.id);
-			const likes = await getFriendLikes(req.user.id);
+			const likes = await getLikes(req.user.id);
+			const activitiesWithLike = activities.map((activity) => {
+				let likesAdded = [];
 
-			res.send(activities);
+				for (let index = 0; index < likes.length; index++) {
+					const like = likes[index];
+					
+					if (like.activity_id === activity.id) {
+						likesAdded = [...likesAdded, like];
+					}
+
+				}
+
+				return { ...activity, likes: likesAdded };
+			});
+			console.log(likes);
+			res.send(activitiesWithLike);
 		} catch (error) {
 			console.log(error);
 			res.status(500).send(error);
@@ -573,7 +636,11 @@ module.exports = (app) => {
 				}
 				break;
 			case "unlike":
-				const removedLike = await updateLike(req.user.id, activityId, true);
+				const removedLike = await updateLike(
+					req.user.id,
+					activityId,
+					true
+				);
 				if (removedLike) {
 					res.send(removedLike);
 				}

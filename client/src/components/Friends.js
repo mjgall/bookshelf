@@ -16,10 +16,9 @@ import { searchWithCancel } from "../utils";
 
 const Friends = (props) => {
 	const global = useContext(Context);
-	const [message, setMessage] = useState("");
 	const [friends, setFriends] = useState([]);
 	const [searchResults, setSearchResults] = useState([]);
-	const [loading, setLoading] = useState(false);
+
 	const [friendMenuOpen, setFriendMenuOpen] = useState(false);
 	const [values, setValues] = useState({
 		email: "",
@@ -28,10 +27,10 @@ const Friends = (props) => {
 	});
 
 	const search = async (val) => {
-		setLoading(true);
+	
 		const res = await searchWithCancel(`/api/users/search/${val}`);
 		setSearchResults(res);
-		setLoading(false);
+	
 	};
 
 	const handleValueChange = async (e) => {
@@ -109,12 +108,11 @@ const Friends = (props) => {
 			{friendMenuOpen ? (
 				<div className="w-full">
 					<div className="flex items-center border-b border-b-1 border-royalblue ">
-						{message ? <div>{message}</div> : null}
 						<input
 							name="email"
 							className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none"
 							type="text"
-							placeholder="Email"
+							placeholder="Type name to search"
 							value={values.email}
 							onChange={handleValueChange}
 							aria-label="Friend email"

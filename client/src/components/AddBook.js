@@ -95,7 +95,7 @@ const AddBook = () => {
 	};
 
 	const selectSearch = async (book) => {
-		const added = await axios.post("/api/global_book", { ...book })
+		await axios.post("/api/global_book", { ...book })
 
 		global.setGlobal({
 			capturedBook: book
