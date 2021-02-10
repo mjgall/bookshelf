@@ -120,9 +120,9 @@ const Book = (props) => {
 				global.setGlobal({
 					books: { ...global.books, userBooks: newUserBooks },
 				});
-				props.history.replace("/");
+				props.history.replace("/library");
 			} else {
-				props.history.replace("/");
+				props.history.replace("/library");
 				throw Error("Error deleting book");
 			}
 		});

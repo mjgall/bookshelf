@@ -272,6 +272,7 @@ const AddBook = () => {
 										id="link3"
 									>
 										<DetailsTab
+											setOpenTab={setOpenTab}
 											closeModal={() => {
 												setModalOpen(false);
 											}}

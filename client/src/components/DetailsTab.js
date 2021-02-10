@@ -6,7 +6,7 @@ import Button from "../common/Button";
 import { useToasts } from "react-toast-notifications";
 import axios from "axios";
 
-const DetailsTab = ({ closeModal }) => {
+const DetailsTab = ({ closeModal, setOpenTab }) => {
 	const global = useContext(Context);
 	const { addToast } = useToasts();
 	const reducer = (state, action) => {
@@ -77,6 +77,45 @@ const DetailsTab = ({ closeModal }) => {
 		closeModal();
 	};
 
+	const addAndAnother = async () => {
+		if (!state.author || !state.title) {
+
+			addToast("Can't add a blank book.", {
+				appearance: "error",
+				autoDismiss: true,
+			});
+			return;
+		}
+
+		const book = await axios
+			.post("/api/books", {
+				...state,
+				author:
+					state.id || !global.capturedBook
+						? state.author
+						: state.authors[0],
+				manual: !global.capturedBook ? true : false,
+				addGlobal: true
+			})
+			.then((response) => response.data);
+
+		book.user_book_id = book.id;
+		book.id = book.global_id;
+		const newGlobal = {
+			...global,
+			books: {
+				...global.books,
+				userBooks: [...global.books.userBooks, book],
+			},
+			allBooks: [...global.allBooks, book],
+			householdBooks: [...global.householdBooks, book],
+			capturedBook: false,
+		};
+
+		global.setGlobal(newGlobal);
+		setOpenTab(2)
+	}
+
 	const fields = [{ key: "title", display: "Title" }, { key: "author", display: "Author" }, { key: "binding", display: "Binding" }, { key: "publisher", display: "Publisher" }, { key: "isbn", display: "ISBN" }];
 
 	return (
@@ -126,8 +165,11 @@ const DetailsTab = ({ closeModal }) => {
 						</div>
 					</div>
 
-					<Button className="bg-royalblue" onClick={add}>
-						Add Book
+					<Button color="royalblue" onClick={add}>
+							Save
+					</Button>
+					<Button color="royalblue" onClick={addAndAnother}>
+							Save + Add Another
 					</Button>
 				</div>
 			) : (
@@ -172,7 +214,10 @@ const DetailsTab = ({ closeModal }) => {
 							);
 						})}
 						<Button color="royalblue" onClick={add}>
-							Add Book
+							Save
+					</Button>
+					<Button color="royalblue" onClick={addAndAnother}>
+							Save + Add Another
 					</Button>
 					</>
 				)}
