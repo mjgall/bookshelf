@@ -40,7 +40,6 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 
 	const add = async () => {
 		if (!state.author || !state.title) {
-
 			addToast("Can't add a blank book.", {
 				appearance: "error",
 				autoDismiss: true,
@@ -56,7 +55,7 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 						? state.author
 						: state.authors[0],
 				manual: !global.capturedBook ? true : false,
-				addGlobal: true
+				addGlobal: true,
 			})
 			.then((response) => response.data);
 
@@ -79,7 +78,6 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 
 	const addAndAnother = async () => {
 		if (!state.author || !state.title) {
-
 			addToast("Can't add a blank book.", {
 				appearance: "error",
 				autoDismiss: true,
@@ -95,7 +93,7 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 						? state.author
 						: state.authors[0],
 				manual: !global.capturedBook ? true : false,
-				addGlobal: true
+				addGlobal: true,
 			})
 			.then((response) => response.data);
 
@@ -113,10 +111,16 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 		};
 
 		global.setGlobal(newGlobal);
-		setOpenTab(2)
-	}
+		setOpenTab(2);
+	};
 
-	const fields = [{ key: "title", display: "Title" }, { key: "author", display: "Author" }, { key: "binding", display: "Binding" }, { key: "publisher", display: "Publisher" }, { key: "isbn", display: "ISBN" }];
+	const fields = [
+		{ key: "title", display: "Title" },
+		{ key: "author", display: "Author" },
+		{ key: "binding", display: "Binding" },
+		{ key: "publisher", display: "Publisher" },
+		{ key: "isbn", display: "ISBN" },
+	];
 
 	return (
 		<>
@@ -135,30 +139,43 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 						</div>
 						<div>
 							{fields.map((object, index) => {
+								console.log(object);
 								return (
 									<div>
 										<div className="mr-2 font-bold text-lg">
 											{object.display}
 										</div>
-										<div key={index}>
-											<InlineEdit
-												className="w-4/5 my-2"
-												readViewFitContainerWidth
-												defaultValue={state[object.key] || ""}
-												editView={(fieldProps) => (
-													<Textfield
-														{...fieldProps}
-														autoFocus
-													/>
-												)}
-												readView={() => (
-													<div>{state[object.key] || ""}</div>
-												)}
-												onConfirm={(value) =>
-													handleDetailsChange(value, object.key)
-												}
-											/>
-										</div>
+										{object.key ===
+											"binding" || object.key === "publisher" || object.key === "isbn" ? (
+												<div>{state[object.key] || ""}</div>
+											) : (
+												<InlineEdit
+													className="w-4/5 my-2"
+													readViewFitContainerWidth
+													defaultValue={
+														state[object.key] || ""
+													}
+													editView={(fieldProps) => (
+														<Textfield
+															{...fieldProps}
+															autoFocus
+														/>
+													)}
+													readView={() => (
+														<div>
+															{state[object.key] ||
+																""}
+														</div>
+													)}
+													onConfirm={(value) =>
+														handleDetailsChange(
+															value,
+															object.key
+														)
+													}
+												/>
+											)}
+										<div key={index}></div>
 									</div>
 								);
 							})}
@@ -166,57 +183,71 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 					</div>
 
 					<Button color="royalblue" onClick={add}>
-							Save
+						Save
 					</Button>
 					<Button color="royalblue" onClick={addAndAnother}>
-							Save + Add Another
+						Save + Add Another
 					</Button>
 				</div>
 			) : (
 					<>
-						{fields.filter(field => {
-							if (field.key === "author" || field.key === "title") {
-								return field
-							} else {
-								return null
-							}
-						}).map((object, index) => {
-							return (
-								<div>
-									<InlineEdit
-										className="w-4/5 my-2"
-										readViewFitContainerWidth
-										defaultValue={state[object.key] || ""}
-										editView={(fieldProps) => (
-											<Textfield {...fieldProps} autoFocus />
-										)}
-										readView={() => {
-											if (!state[object.key]) {
-												return (
-													<div className="text-gray-500">
-														{object.key
-															.charAt(0)
-															.toUpperCase() +
-															object.key.slice(1)}
-													</div>
-												);
-											} else {
-												return (
-													<div>{state[object.key] || object.key}</div>
-												);
+						{fields
+							.filter((field) => {
+								if (
+									field.key === "author" ||
+									field.key === "title"
+								) {
+									return field;
+								} else {
+									return null;
+								}
+							})
+							.map((object, index) => {
+								return (
+									<div>
+										<InlineEdit
+											className="w-4/5 my-2"
+											readViewFitContainerWidth
+											defaultValue={state[object.key] || ""}
+											editView={(fieldProps) => (
+												<Textfield
+													{...fieldProps}
+													autoFocus
+												/>
+											)}
+											readView={() => {
+												if (!state[object.key]) {
+													return (
+														<div className="text-gray-500">
+															{object.key
+																.charAt(0)
+																.toUpperCase() +
+																object.key.slice(1)}
+														</div>
+													);
+												} else {
+													return (
+														<div>
+															{state[object.key] ||
+																object.key}
+														</div>
+													);
+												}
+											}}
+											onConfirm={(value) =>
+												handleDetailsChange(
+													value,
+													object.key
+												)
 											}
-										}}
-										onConfirm={(value) =>
-											handleDetailsChange(value, object.key)
-										}
-									/>
-								</div>
-							);
-						})}
+										/>
+									</div>
+								);
+							})}
 						<Button color="royalblue" onClick={add}>
 							Save
 					</Button>
-					<Button color="royalblue" onClick={addAndAnother}>
+						<Button color="royalblue" onClick={addAndAnother}>
 							Save + Add Another
 					</Button>
 					</>
