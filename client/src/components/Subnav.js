@@ -9,7 +9,7 @@ const Subnav = (props) => {
 	];
 
 	const determineClass = (currentPage, to) => {
-		if (currentPage === to || (currentPage === "/" && to === "/feed")) {
+		if (currentPage === to || (currentPage === "/" && to === "/library")) {
 			return "bg-royalblue text-white";
 		} else {
 			return "hover:bg-gray-400";

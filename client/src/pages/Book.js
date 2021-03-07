@@ -15,6 +15,7 @@ import { useParams } from "react-router-dom";
 import { Context } from "../globalContext";
 import { withRouter } from "react-router-dom";
 import MoreMenu from "../common/MoreMenu";
+import BookFeed from "../components/BookFeed"
 
 const Book = (props) => {
 	const global = useContext(Context);
@@ -457,7 +458,7 @@ const Book = (props) => {
 								></NotesFromHouseholds>
 							</div>
 						)}
-						{/* <BookTimeline globalBookId={book.id}></BookTimeline> */}
+						<BookFeed bookId={book.id}></BookFeed>
 					</div>
 					<div className="md:mx-0 mx-6 hidden md:block">
 						{type === "personal" ? (

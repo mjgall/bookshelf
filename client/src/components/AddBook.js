@@ -214,7 +214,7 @@ const AddBook = () => {
 												placeholder="Search by ISBN"
 												onChange={handleManualISBN}
 												value={enteredISBN}
-												className="leading-8 w-1/2 m-auto rounded-md border border-gray-400"
+												className="leading-8 w-1/2 m-auto rounded-md border border-gray-400 px-2"
 											/>
 											<button
 												onClick={submitManual}
@@ -229,13 +229,13 @@ const AddBook = () => {
 													placeholder="Title"
 													onChange={handleTitle}
 													value={title}
-													className="leading-8 w-1/2 m-auto rounded-md border border-gray-400"
+													className="leading-8 w-1/2 m-auto rounded-md border border-gray-400 px-2"
 												/>
 												<input
 													placeholder="Author"
 													onChange={handleAuthor}
 													value={author}
-													className="leading-8 w-1/2 m-auto rounded-md border border-gray-400"
+													className="leading-8 w-1/2 m-auto rounded-md border border-gray-400 px-2"
 												/>
 												<button
 													onSubmit={submitSearch}

@@ -41,6 +41,7 @@ const updateLike = require("../queries/updateLike");
 const getFriendLikes = require("../queries/getFriendLikes");
 const searchUsers = require("../queries/searchUsers");
 const getLikes = require("../queries/getLikes");
+const getBookActivities = require("../queries/getBookActivities");
 
 module.exports = (app) => {
 	app.get("/api/bootstrap", async (req, res) => {
@@ -646,10 +647,11 @@ module.exports = (app) => {
 		}
 	});
 
-	app.get("/api/activities/book/:globalId", (req, res) => {
+	app.get("/api/activities/book/:globalId", async (req, res) => {
 		const { globalId } = req.params;
-		//fetch all activities on this book by a) the user b) household members c) friends
-		res.send("Soon");
+		const activities = await getBookActivities(req.user.id, globalId)
+
+		res.send(activities);
 	});
 
 	app.post("/api/interactions", async (req, res) => {

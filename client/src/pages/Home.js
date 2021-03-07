@@ -73,7 +73,7 @@ const Home = (props) => {
 								</div>
 							</Route>
 							<Route path="/*">
-								<Feed></Feed>
+								<Library></Library>
 							</Route>
 						</Switch>
 					</div>
