@@ -52,76 +52,81 @@ const BookFeed = (props) => {
 		}
 	};
 
-
-	return (
-		<div>
-			<div className="md:text-left text-center">
-				<div className="text-2xl font-bold">Friend Activity</div>
-			</div>
-			{activities.map((item, index) => {
-				return (
-					<div
-						className="border-gray-400 border mt-2 mb-2 pr-6 rounded flex items-center"
-						key={index}
-					>
-						<div className="flex items-center">
-							{item.user_id === global.currentUser.id ? (
-								<div>
-									<MoreMenu
-										placement="left"
-										size="18px"
-										options={[
-											{
-												action: () =>
-													updateActivity(item.id),
-												confirm: true,
-												text: "Hide activity",
-											},
-										]}
-									></MoreMenu>
-								</div>
-							) : null}
-							<div
-								className={
-									item.user_id === global.currentUser.id
-										? "h-12 w-12 mr-2"
-										: "h-12 w-12 mr-2 ml-4"
-								}
-							>
-								<img
-									alt="user"
-									src={item.friend_picture}
-									className="rounded-full h-12 w-12 mr-2"
-								></img>
-							</div>
-						</div>
-						<div>
-							<div>
-								<span className="font-bold">
-									{item.user_id === global.currentUser.id
-										? "You"
-										: item.friend_full}
-								</span>{" "}
-								{determineAction(item.action)}{" "}
-								<Link
-									className="border-gray-600 border-dotted border-b"
-									to={`/book/${item.object_id}`}
+	if (activities.length > 0) {
+		return (
+			<div>
+				<div className="md:text-left text-center mt-1">
+					<div className="text-2xl font-bold">Activity</div>
+				</div>	
+				{activities.map((item, index) => {
+					return (
+						<div
+							className="border-gray-400 border mt-2 mb-2 pr-6 rounded flex items-center"
+							key={index}
+						>
+							<div className="flex items-center">
+								{item.user_id === global.currentUser.id ? (
+									<div>
+										<MoreMenu
+											placement="left"
+											size="18px"
+											options={[
+												{
+													action: () =>
+														updateActivity(item.id),
+													confirm: true,
+													text: "Hide activity",
+												},
+											]}
+										></MoreMenu>
+									</div>
+								) : null}
+								<div
+									className={
+										item.user_id === global.currentUser.id
+											? "h-12 w-12 mr-2"
+											: "h-12 w-12 mr-2 ml-4"
+									}
 								>
-									{item.title}
-								</Link>
+									<img
+										alt="user"
+										src={item.friend_picture}
+										className="rounded-full h-12 w-12 mr-2"
+									></img>
+								</div>
 							</div>
-
-							<div className="text-xs font-thin">
-								{moment
-									.unix(item.timestamp / 1000)
-									.format("dddd, MMMM Do YYYY, h:mm:ss a")}
+							<div>
+								<div>
+									<span className="font-bold">
+										{item.user_id === global.currentUser.id
+											? "You"
+											: item.friend_full}
+									</span>{" "}
+									{determineAction(item.action)}{" "}
+									<Link
+										className="border-gray-600 border-dotted border-b"
+										to={`/book/${item.object_id}`}
+									>
+										{item.title}
+									</Link>
+								</div>
+	
+								<div className="text-xs font-thin">
+									{moment
+										.unix(item.timestamp / 1000)
+										.format("dddd, MMMM Do YYYY, h:mm:ss a")}
+								</div>
 							</div>
 						</div>
-					</div>
-				);
-			})}
-		</div>
-	);
+					);
+				})}
+			</div>
+		);
+	} else {
+		return null
+	}
+
+	
 };
 
 export default BookFeed;
