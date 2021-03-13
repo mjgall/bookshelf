@@ -96,7 +96,7 @@ const Transparent = (props) => {
 									<div>
 										<Tip
 											renderChildren
-											content="Transparent Login"
+											content={`Log in as ${user.first}`}
 											placement="left"
 										>
 											<LoginIcon
