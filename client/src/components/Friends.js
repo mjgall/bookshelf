@@ -27,10 +27,8 @@ const Friends = (props) => {
 	});
 
 	const search = async (val) => {
-	
 		const res = await searchWithCancel(`/api/users/search/${val}`);
 		setSearchResults(res);
-	
 	};
 
 	const handleValueChange = async (e) => {
@@ -39,7 +37,7 @@ const Friends = (props) => {
 		if (value.length >= 2) {
 			search(value);
 		} else if (value.length < 2) {
-			setSearchResults([])
+			setSearchResults([]);
 		}
 
 		setValues({ ...values, [name]: value });
@@ -51,14 +49,13 @@ const Friends = (props) => {
 		});
 
 		if (response) {
-			const newResults = searchResults
-			newResults[index].sent = true
-			setSearchResults(newResults)
+			const newResults = searchResults;
+			newResults[index].sent = true;
+			setSearchResults(newResults);
 		}
 
 		setValues({ ...values, email: "" });
 		setFriendMenuOpen(!friendMenuOpen);
-
 	};
 
 	const editInvite = async (friendshipId, action) => {
@@ -96,14 +93,14 @@ const Friends = (props) => {
 						className="cursor-pointer text-green-400"
 					></ChevronDownSquare>
 				) : (
-						<Tip renderChildren content="Add friend" placement="left">
-							<PlusSquare
-								onClick={() => setFriendMenuOpen(!friendMenuOpen)}
-								size="2em"
-								className="cursor-pointer text-green-400"
-							></PlusSquare>
-						</Tip>
-					)}
+					<Tip renderChildren content="Add friend" placement="left">
+						<PlusSquare
+							onClick={() => setFriendMenuOpen(!friendMenuOpen)}
+							size="2em"
+							className="cursor-pointer text-green-400"
+						></PlusSquare>
+					</Tip>
+				)}
 			</div>
 			{friendMenuOpen ? (
 				<div className="w-full">
@@ -126,10 +123,17 @@ const Friends = (props) => {
 						{searchResults.map((result, index) => {
 							if (result.sent) {
 								return (
-									<div key={index} className="flex my-1 border-gray-500 rounded-sm px-2 border items-center">
+									<div
+										key={index}
+										className="flex my-1 border-gray-500 rounded-sm px-2 border items-center"
+									>
 										<div>Invite sent!</div>
 										<div className="ml-auto mr-0">
-											<Tip renderChildren content="Sent!" placement="left">
+											<Tip
+												renderChildren
+												content="Sent!"
+												placement="left"
+											>
 												<MailSend
 													size="2em"
 													className="cursor-pointer text-gray-400"
@@ -140,12 +144,24 @@ const Friends = (props) => {
 								);
 							} else {
 								return (
-									<div key={index} className="flex my-1 border-gray-500 rounded-sm px-2 border items-center">
+									<div
+										key={index}
+										className="flex my-1 border-gray-500 rounded-sm px-2 border items-center"
+									>
 										<div>{result.full}</div>
 										<div className="ml-auto mr-0">
-											<Tip renderChildren content="Send invite" placement="left">
+											<Tip
+												renderChildren
+												content="Send invite"
+												placement="left"
+											>
 												<MailSend
-													onClick={() => sendInvite(result, index)}
+													onClick={() =>
+														sendInvite(
+															result,
+															index
+														)
+													}
 													size="2em"
 													className="cursor-pointer text-green-400"
 												></MailSend>
@@ -154,14 +170,13 @@ const Friends = (props) => {
 									</div>
 								);
 							}
-
 						})}
 					</ul>
 				</div>
 			) : null}
 
 			<div>
-				<div>Pending</div>
+				<div>Invites</div>
 				<div>
 					{friends
 						.filter((friendship) => {
@@ -173,23 +188,35 @@ const Friends = (props) => {
 						})
 						.map((friend, index) => {
 							return (
-								<div key={index} className="flex items-center my-2">
+								<div
+									key={index}
+									className="flex items-center my-2"
+								>
 									<img
 										alt={friend.full}
 										src={friend.picture}
 										className="rounded-full h-12 w-12 mr-4"
 									></img>
-									<div>
-										{friend.full}
+									<div className="flex items-center">
 										<div>
-											<CheckSquare
-												size="2em"
-												className="cursor-pointer text-green-400 w-full"
-												onClick={() =>
-													editInvite(friend.friendship_id, "accept")
-												}
-											></CheckSquare>
+											<Tip
+												content="Accept"
+												renderChildren
+												placement="right"
+											>
+												<CheckSquare
+													size="2em"
+													className="cursor-pointer text-green-400 w-full"
+													onClick={() =>
+														editInvite(
+															friend.friendship_id,
+															"accept"
+														)
+													}
+												></CheckSquare>
+											</Tip>
 										</div>
+										<div>{friend.full}</div>
 									</div>
 								</div>
 							);
@@ -205,7 +232,10 @@ const Friends = (props) => {
 						})
 						.map((friend, index) => {
 							return (
-								<div key={index} className="flex items-center my-2">
+								<div
+									key={index}
+									className="flex items-center my-2"
+								>
 									<img
 										alt={friend.full}
 										src={friend.picture}
@@ -213,10 +243,12 @@ const Friends = (props) => {
 									></img>
 									<Link
 										className="cursor-pointer"
-										to={`/shelf/${global.currentUser.id === friend.user_id
-											? friend.user_id_2
-											: friend.user_id
-											}`}
+										to={`/shelf/${
+											global.currentUser.id ===
+											friend.user_id
+												? friend.user_id_2
+												: friend.user_id
+										}`}
 									>
 										<div>{friend.full}</div>
 									</Link>
