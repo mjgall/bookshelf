@@ -56,21 +56,25 @@ module.exports = (app) => {
 
   //this should check for admin
   app.post('/auth/transparent', (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
-      if (err) {
-        return res.status(400).send({ error: 'Something went wrong.' });
-      }
-      if (!user) {
-        return res.status(200).send(info);
-      }
-
-      req.logIn(user, function(err) {
+    if (req.user.id !== 1) {
+      res.status(404).redirect("/")
+    } else {
+      passport.authenticate('local', (err, user, info) => {
         if (err) {
-          return next(err);
+          return res.status(400).send({ error: 'Something went wrong.' });
         }
-        return res.status(200).send(info);
-      });
-    })(req, res, next);
+        if (!user) {
+          return res.status(200).send(info);
+        }
+  
+        req.logIn(user, function(err) {
+          if (err) {
+            return next(err);
+          }
+          return res.status(200).send(info);
+        });
+      })(req, res, next);
+    }
   });
 
   app.get('/api/logout', (req, res) => {
