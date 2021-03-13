@@ -3,11 +3,11 @@ import Feed from "../components/Feed";
 import Subnav from "../components/Subnav";
 import MarketingHome from "./MarketingHome";
 
-import moment from "moment";
 import { withRouter, Switch, Route, useRouteMatch } from "react-router-dom";
 
 import { Context } from "../globalContext";
 import Library from "../components/Library";
+import Account from "./Account";
 
 const Home = (props) => {
 	const global = useContext(Context);
@@ -49,28 +49,7 @@ const Home = (props) => {
 								<Feed></Feed>
 							</Route>
 							<Route path="/account">
-								<div>
-									<div className="md:text-left text-center">
-										<div className="text-2xl font-bold">
-											Account
-										</div>
-									</div>
-									<div className="text-xl font bold underline mb-2">
-										<a
-											target="_blank"
-											rel="noopener noreferrer"
-											href="https://gllghr.io/blog/bookshelf-improvements/"
-										>
-											Improvements to be made (gllghr.io)
-										</a>
-									</div>
-									<div>
-										Joined{" "}
-										{moment(
-											global.currentUser.create_date
-										).format("MMMM Do YYYY - h:mm a")}
-									</div>
-								</div>
+								<Account></Account>
 							</Route>
 							<Route path="/*">
 								<Library></Library>

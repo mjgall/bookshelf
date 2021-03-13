@@ -56,8 +56,8 @@ module.exports = (app) => {
 
   //this should check for admin
   app.post('/auth/transparent', (req, res, next) => {
-    if (req.user.id !== 1) {
-      res.status(404).redirect("/")
+    if (!req.user.admin) {
+      res.status(404)
     } else {
       passport.authenticate('local', (err, user, info) => {
         if (err) {

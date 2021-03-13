@@ -42,6 +42,7 @@ const getFriendLikes = require("../queries/getFriendLikes");
 const searchUsers = require("../queries/searchUsers");
 const getLikes = require("../queries/getLikes");
 const getBookActivities = require("../queries/getBookActivities");
+const getUsers = require("../queries/getUsers");
 
 module.exports = (app) => {
 	app.get("/api/bootstrap", async (req, res) => {
@@ -687,4 +688,9 @@ module.exports = (app) => {
 		const results = await searchUsers(req.params.term);
 		res.send(results);
 	});
+
+	app.get("/api/users", async (req, res) => {
+		const users = await getUsers()
+		res.send(users)
+	}) 
 };

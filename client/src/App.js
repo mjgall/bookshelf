@@ -71,13 +71,13 @@ const App = (props) => {
 							<Route path="/shelf/:shelfId">
 								<SharedShelf></SharedShelf>
 							</Route>
+							<PrivateRoute path="/transparent">
+								<Transparent></Transparent>
+							</PrivateRoute>
 							<Route path="/scanner">
 								<Scanner></Scanner>
 							</Route>
-							<Route path="/transparent">
-								<Transparent></Transparent>
-								
-							</Route>
+							
 							<Route path="/*">
 								<Home
 									clearReferrer={clearReferrer}
