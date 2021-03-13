@@ -1,10 +1,14 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const LocalStrategy = require('passport-local').Strategy;
 const keys = require('../config/keys');
 const db = require('../config/db/mysql').pool;
 const getUserByGoogleId = require('../queries/getUser');
 const addUser = require('../queries/addUser');
 const sendEmail = require('../services/aws-ses');
+const getUserById = require('../queries/getUserById')
+
+
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
@@ -47,6 +51,50 @@ passport.deserializeUser((id, done) => {
     connection.release();
   });
 });
+
+passport.use(
+  new LocalStrategy(
+    { usernameField: 'email', password: 'password', passReqToCallback: true },
+    async (req, username, password, done) => {
+      try {
+        const user = await getUserById(req.body.id).catch(err => {
+          console.log(err);
+          throw Error(err);
+        });
+
+        if (user) {
+          done(false, user, {message: 'redirect', user: user})
+        }
+
+          // if (user && user.password) {
+          //   if (
+          //     await bcrypt.compare(password, user.password).catch(e => {
+          //       console.log(e);
+          //       throw Error(e);
+          //     })
+          //   ) {
+          //     done(false, user, { message: 'redirect' });
+          //   } else {
+          //     done(false, null, { message: 'Incorrect email and/or password.', req: req.body });
+          //   }
+          // } else if (!user) {
+          //   try {
+          //     done(false, null, { message: 'Incorrect email and/or password.', req: req.body });
+          //   } catch (error) {
+          //     throw error;
+          //   }
+          // } else {
+          //   //already exists from oauth login
+          //   done(false, null, { message: 'Existing Google account found.' });
+          // }
+      } catch (error) {
+        console.log(error);
+        throw Error(error);
+      }
+      //find if username (email) exists already. If it does, call done(null, user). If it does not, create new user, then call done(null, user).
+    }
+  )
+);
 
 passport.use(
   new GoogleStrategy(

@@ -27,14 +27,19 @@ const GlobalProvider = ({ children }) => {
     [global, setState],
   )
 
+  const setAuth = useCallback(() => {
+    fetchData()
+  }, [])
+
   // here context value is just returning an object, but only re-creating the object when its dependencies change ([global, setContext])
   const getContextValue = useCallback(
     () => ({
       ...global,
       loading,
       setGlobal,
+      setAuth
     }),
-    [global, setGlobal, loading],
+    [global, setGlobal, loading, setAuth],
   )
 
   return <Context.Provider value={getContextValue()}>{children}</Context.Provider>;

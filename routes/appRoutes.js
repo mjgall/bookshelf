@@ -581,6 +581,7 @@ module.exports = (app) => {
 	});
 
 	app.get("/api/activities", async (req, res) => {
+		//should maybe return these separately so we render activities sooner
 		try {
 			const activities = await getActivities(req.user.id);
 			const likes = await getLikes(req.user.id);

@@ -25,8 +25,6 @@ module.exports = (app) => {
     })(req, res, next);
   });
 
-
-
   app.get('/auth/google/redirect/:referrer/:id', (req, res, next) => {
     req.session.redirect = req.params.referrer + '/' + req.params.id;
 
@@ -56,10 +54,34 @@ module.exports = (app) => {
     }
   );
 
+  //this should check for admin
+  app.post('/auth/transparent', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+      if (err) {
+        return res.status(400).send({ error: 'Something went wrong.' });
+      }
+      if (!user) {
+        return res.status(200).send(info);
+      }
+
+      req.logIn(user, function(err) {
+        if (err) {
+          return next(err);
+        }
+        return res.status(200).send(info);
+      });
+    })(req, res, next);
+  });
+
   app.get('/api/logout', (req, res) => {
     req.session.redirect = null;
     req.logout();
     res.redirect('/');
+  });
+
+  app.get('/api/transparent_logout', (req, res) => {
+    req.session.redirect = null;
+    req.logout();
   });
 
   app.get('/api/current_user', (req, res) => {

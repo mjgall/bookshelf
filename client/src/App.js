@@ -13,6 +13,7 @@ import SharedShelf from "./pages/SharedShelf";
 import PrivateRoute from "./components/PrivateRoute";
 import { Context } from "./globalContext";
 import { ToastProvider } from "react-toast-notifications";
+import Transparent from "./components/Transparent"
 
 const App = (props) => {
 	const global = useContext(Context);
@@ -72,6 +73,10 @@ const App = (props) => {
 							</Route>
 							<Route path="/scanner">
 								<Scanner></Scanner>
+							</Route>
+							<Route path="/transparent">
+								<Transparent></Transparent>
+								
 							</Route>
 							<Route path="/*">
 								<Home
