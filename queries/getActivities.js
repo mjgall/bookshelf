@@ -32,17 +32,14 @@ SELECT DISTINCT activities.*, user_books.title, global_books.cover, users.id AS 
        
         WHERE ( friendships.user_id_1 = ${userId} OR friendships.user_id_2 = ${userId} ) AND activities.hidden = FALSE
 UNION
-SELECT DISTINCT activities.*
-, global_books.title, global_books.cover, users.id AS friend_id, users.email AS friend_email, users.full AS friend_full, users.picture AS friend_picture 
+SELECT DISTINCT activities.*, global_books.title, global_books.cover, users.id AS friend_id, users.email AS friend_email, users.full AS friend_full, users.picture AS friend_picture 
 FROM activities 
 JOIN users ON users.id = activities.user_id 
 JOIN global_books ON global_books.id = activities.object_id
 JOIN user_books ON global_books.id = user_books.global_id AND user_books.private = FALSE
         WHERE activities.user_id = ${userId} AND activities.hidden = FALSE
-
 ORDER BY timestamp DESC
 `
-console.log(query)
         db.query(query, (err, results, fields) => {
             if (err) {
                 reject(err);
