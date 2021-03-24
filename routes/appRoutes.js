@@ -43,6 +43,8 @@ const searchUsers = require("../queries/searchUsers");
 const getLikes = require("../queries/getLikes");
 const getBookActivities = require("../queries/getBookActivities");
 const getUsers = require("../queries/getUsers");
+const addLoan = require("../queries/addLoan.js");
+const getLoans = require("../queries/getLoans");
 
 module.exports = (app) => {
 	app.get("/api/bootstrap", async (req, res) => {
@@ -693,4 +695,16 @@ module.exports = (app) => {
 		const users = await getUsers()
 		res.send(users)
 	}) 
+
+	app.post("/api/loans", async (req, res) => {
+		const {bookId, lenderId, borrowerId} = req.body
+		const response = await addLoan(bookId, lenderId, borrowerId, Date.now() )
+		res.send(response)
+	})
+
+	app.get("/api/loans", async (req, res) => {
+		const response = await getLoans(req.user.id)
+		res.send(response)
+	})
+
 };

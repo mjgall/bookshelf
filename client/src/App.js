@@ -13,21 +13,21 @@ import SharedShelf from "./pages/SharedShelf";
 import PrivateRoute from "./components/PrivateRoute";
 import { Context } from "./globalContext";
 import { ToastProvider } from "react-toast-notifications";
-import Transparent from "./components/Transparent"
+import Transparent from "./components/Transparent";
+import GlobalModal from "./components/GlobalModal";
 
 const App = (props) => {
 	const global = useContext(Context);
 	const { loading } = global;
 	const [referrer, setReferrer] = useState("");
-	
+
 	const updateNavReferrer = (referrer) => {
 		setReferrer(referrer);
 	};
-	
+
 	const clearReferrer = () => {
 		setReferrer(null);
 	};
-	
 
 	useEffect(() => {
 		if (
@@ -41,7 +41,6 @@ const App = (props) => {
 				email: global.currentUser.email,
 			});
 		}
-
 	}, [global.currentUser, loading]);
 
 	return (
@@ -77,7 +76,7 @@ const App = (props) => {
 							<Route path="/scanner">
 								<Scanner></Scanner>
 							</Route>
-							
+
 							<Route path="/*">
 								<Home
 									clearReferrer={clearReferrer}
@@ -87,6 +86,7 @@ const App = (props) => {
 						</Switch>
 					</>
 				)}
+				<GlobalModal></GlobalModal>
 			</Router>
 		</ToastProvider>
 	);

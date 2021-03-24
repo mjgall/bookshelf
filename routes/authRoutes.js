@@ -53,11 +53,11 @@ module.exports = (app) => {
       }
     }
   );
-
-  //this should check for admin
+  
   app.post('/auth/transparent', (req, res, next) => {
+
     if (!req.user.admin) {
-      res.status(404)
+      res.sendStatus(401)
     } else {
       passport.authenticate('local', (err, user, info) => {
         if (err) {

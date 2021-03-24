@@ -60,7 +60,9 @@ const NavBar = ({
 						style={{ width: calcLogoSize() }}
 					></img>
 					<span className="font-semibold text-lg tracking-tight">
-						Bookshelf
+						{window.location.host === "bookshelf.mikegallagher.app"
+							? "Bookshelf"
+							: "Papyr"}
 					</span>
 				</div>
 				<span className="hidden md:inline-block text-sm  text-white hover:text-white">

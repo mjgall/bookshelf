@@ -15,7 +15,7 @@ import { useParams } from "react-router-dom";
 import { Context } from "../globalContext";
 import { withRouter } from "react-router-dom";
 import MoreMenu from "../common/MoreMenu";
-import BookFeed from "../components/BookFeed"
+import BookFeed from "../components/BookFeed";
 
 const Book = (props) => {
 	const global = useContext(Context);
@@ -358,6 +358,17 @@ const Book = (props) => {
 													confirm: true,
 													text: "Delete",
 												},
+												{
+													action: () =>
+														global.setGlobal({
+															modalOpen: true,
+															currentModal:
+																"loan",
+															bookId: book.id,
+														}),
+													confirm: false,
+													text: "Loan",
+												},
 											]}
 										></MoreMenu>
 									) : type === "global" ? (
@@ -470,6 +481,16 @@ const Book = (props) => {
 										action: () => deleteBook(),
 										confirm: true,
 										text: "Delete",
+									},
+									{
+										action: () =>
+											global.setGlobal({
+												modalOpen: true,
+												currentModal: "loan",
+												bookId: book.id,
+											}),
+										confirm: false,
+										text: "Loan",
 									},
 								]}
 							></MoreMenu>

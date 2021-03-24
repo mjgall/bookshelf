@@ -8,6 +8,7 @@ import { withRouter, Switch, Route, useRouteMatch } from "react-router-dom";
 import { Context } from "../globalContext";
 import Library from "../components/Library";
 import Account from "./Account";
+import Loans from "./Loans"
 
 const Home = (props) => {
 	const global = useContext(Context);
@@ -50,6 +51,9 @@ const Home = (props) => {
 							</Route>
 							<Route path="/account">
 								<Account></Account>
+							</Route>
+							<Route path="/loans">
+								<Loans></Loans>
 							</Route>
 							<Route path="/*">
 								<Library></Library>

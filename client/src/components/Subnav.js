@@ -5,7 +5,8 @@ const Subnav = (props) => {
 	const links = [
 		{ to: "/feed", text: "Feed" },
 		{ to: "/library", text: "Library" },
-        { to: "/account", text: "Account" }
+		{ to: "/account", text: "Account" },
+		{ to: "/loans", text: "Loans" },
 	];
 
 	const determineClass = (currentPage, to) => {
