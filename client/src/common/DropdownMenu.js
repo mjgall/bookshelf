@@ -67,7 +67,6 @@ const Dropdown = ({ color, path }) => {
 						>
 							{[
 								{ to: "/profile", text: "Profile" },
-
 								...links,
 							].map((link, index) => {
 								return (
@@ -93,6 +92,19 @@ const Dropdown = ({ color, path }) => {
 									</Link>
 								);
 							})}
+							<a
+								href="/api/logout"
+                                style={{
+                                    borderRadius: "4px",
+                                    display: "block",
+                                }}
+								className={`px-2 py-1 text-center text-lg my-1 ${determineClass(
+									path,
+									"/api/logout"
+								)}`}
+							>
+								Logout
+							</a>
 							{/* <a
 								href="#pablo"
 								className={
