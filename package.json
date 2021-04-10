@@ -28,9 +28,6 @@
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
-    "react-responsive": "^8.1.0",
-    "react-router-dom": "^5.2.0",
-    "react-tippy": "^1.4.0",
     "sqlstring": "^2.3.2",
     "tailwind": "^4.0.0",
     "tailwindcss": "^1.9.6"
