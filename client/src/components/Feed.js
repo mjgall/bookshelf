@@ -5,6 +5,7 @@ import axios from "axios";
 
 import { Context } from "../globalContext";
 import MoreMenu from "../common/MoreMenu";
+import Button from "../common/Button";
 import { ThumbUp } from "@styled-icons/heroicons-outline";
 import { ThumbUp as ThumbUpSolid } from "@styled-icons/heroicons-solid";
 import Tip from "../common/Tip";
@@ -20,6 +21,7 @@ const Feed = (props) => {
 	};
 
 	const [activities, setActivities] = useState([]);
+	const [currentPage, setCurrentPage] = useState(1);
 	const [hideSelf, setHideSelf] = useState(getSavedSelfFilter());
 	const global = useContext(Context);
 
@@ -39,8 +41,17 @@ const Feed = (props) => {
 	};
 
 	const fetchActivities = async () => {
-		const result = await axios.get("/api/activities");
+		const result = await axios.get(
+			`/api/activities?page=${currentPage}&limit=10`
+		);
 		setActivities(result.data);
+	};
+
+	const fetchNextPage = async () => {
+		const result = await axios.get(
+			`/api/activities?page=${currentPage + 1}&limit=10`
+		);
+		setActivities([...activities, ...result.data]);
 	};
 
 	const updateActivity = async (id) => {
@@ -205,44 +216,41 @@ const Feed = (props) => {
 									.format("dddd, MMMM Do YYYY, h:mm:ss a")}
 							</div>
 							<div className="flex text-xs my-1">
-									<div
-										className="mr-2 cursor-pointer"
-										onClick={() => {
-											updateLike(item);
-										}}
-									>
-										{item.likeContent.people.length > 0 ? (
-											<Tip
-												content={
-													item.likeContent.string
-														? item.likeContent
-																.string
-														: "Like"
-												}
-												renderChildren
-												placement="right"
-											>
-												<ThumbUpSolid
-													color={
-														item.likeContent.color
-													}
-													size="1.5em"
-												></ThumbUpSolid>
-											</Tip>
-										) : (
-											<Tip
-												content="Like"
-												renderChildren
-												placement="right"
-											>
-												<ThumbUp
-													color="lightgray"
-													size="1.5em"
-												></ThumbUp>
-											</Tip>
-										)}
-									</div>
-									<div>{item.likeContent.total}</div>
+								<div
+									className="mr-2 cursor-pointer"
+									onClick={() => {
+										updateLike(item);
+									}}
+								>
+									{item.likeContent?.people.length > 0 ? (
+										<Tip
+											content={
+												item.likeContent.string
+													? item.likeContent.string
+													: "Like"
+											}
+											renderChildren
+											placement="right"
+										>
+											<ThumbUpSolid
+												color={item.likeContent.color}
+												size="1.5em"
+											></ThumbUpSolid>
+										</Tip>
+									) : (
+										<Tip
+											content="Like"
+											renderChildren
+											placement="right"
+										>
+											<ThumbUp
+												color="lightgray"
+												size="1.5em"
+											></ThumbUp>
+										</Tip>
+									)}
+								</div>
+								<div>{item.likeContent?.total}</div>
 							</div>
 						</div>
 						<div className="ml-auto flex items-center">
@@ -263,6 +271,7 @@ const Feed = (props) => {
 					</div>
 				);
 			})}
+			<Button className="w-full" onClick={fetchNextPage}>More</Button>
 		</div>
 	);
 };

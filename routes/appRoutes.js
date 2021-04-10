@@ -45,6 +45,7 @@ const getBookActivities = require("../queries/getBookActivities");
 const getUsers = require("../queries/getUsers");
 const addLoan = require("../queries/addLoan.js");
 const getLoans = require("../queries/getLoans");
+const getActivitiesPaginated = require("../queries/getActivitiesPaginated");
 
 module.exports = (app) => {
 	app.get("/api/bootstrap", async (req, res) => {
@@ -586,7 +587,14 @@ module.exports = (app) => {
 	app.get("/api/activities", async (req, res) => {
 		//should maybe return these separately so we render activities sooner
 		try {
-			const activities = await getActivities(req.user.id);
+			let activities
+			if (req.query.page && req.query.limit) {
+				activities = await getActivitiesPaginated(req.user.id, req.query.page, req.query.limit)
+			} else {
+				activities = await getActivities(req.user.id);
+			}
+
+			// const activities = await getActivities(req.user.id);
 			const likes = await getLikes(req.user.id);
 			const activitiesWithLike = activities.map((activity) => {
 				let likesAdded = [];
