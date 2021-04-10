@@ -3,6 +3,7 @@ import { withRouter, Link } from "react-router-dom";
 import logo from "../images/logo.png";
 
 import { Context } from "../globalContext";
+import DropdownMenu from "../common/DropdownMenu";
 
 const NavBar = ({
 	windowWidth,
@@ -15,7 +16,7 @@ const NavBar = ({
 	const global = React.useContext(Context);
 
 	const [existingUser, setExistingUser] = useState();
-
+	const [menuOpen, setMenuOpen] = useState(false);
 	const checkExistingUser = () => {
 		if (localStorage.getItem("existingUser")) {
 			setExistingUser(true);
@@ -98,27 +99,41 @@ const NavBar = ({
 					</a>
 				) : (
 					<>
-						<Link
-							to="/profile"
-							className="inline-block mx-1 text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white lg:mt-0 "
-						>
-							{global.householdMembers.some((membership) => {
-								return (
-									!membership.invite_declined &&
-									!membership.invite_accepted &&
-									membership.user_id === global.currentUser.id
-								);
-							}) && windowWidth > 380 ? (
-								<div className="mr-2 inline-block rounded-full bg-red-600 p-1 "></div>
-							) : null}
-							<div className="flex ">Profile</div>
-						</Link>
-						<a
-							href="/api/logout"
-							className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white lg:mt-0"
-						>
-							Logout
-						</a>
+						<div className=" hidden lg:block">
+							<Link
+								to="/profile"
+								className="inline-block mx-1 text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white lg:mt-0 "
+							>
+								{global.householdMembers.some((membership) => {
+									return (
+										!membership.invite_declined &&
+										!membership.invite_accepted &&
+										membership.user_id ===
+											global.currentUser.id
+									);
+								}) && windowWidth > 380 ? (
+									<div className="mr-2 inline-block rounded-full bg-red-600 p-1 "></div>
+								) : null}
+								<div className="flex ">Profile</div>
+							</Link>
+							<a
+								href="/api/logout"
+								className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white lg:mt-0"
+							>
+								Logout
+							</a>
+						</div>
+						<div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
+							<div
+								className="text-white cursor-pointer text-xl leading-none px-1 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
+								type="button"
+								onClick={() => setMenuOpen(!menuOpen)}
+							>
+								<DropdownMenu>
+									
+								</DropdownMenu>
+							</div>
+						</div>
 					</>
 				)}
 			</div>

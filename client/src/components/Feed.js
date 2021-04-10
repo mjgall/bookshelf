@@ -40,18 +40,11 @@ const Feed = (props) => {
 		localStorage.setItem("hideSelf", !hideSelf);
 	};
 
-	const fetchActivities = async () => {
-		const result = await axios.get(
-			`/api/activities?page=${currentPage}&limit=10`
-		);
-		setActivities(result.data);
-	};
-
 	const fetchNextPage = async () => {
 		const result = await axios.get(
 			`/api/activities?page=${currentPage + 1}&limit=10`
 		);
-		setCurrentPage(currentPage + 1)
+		setCurrentPage(currentPage + 1);
 		setActivities([...activities, ...result.data]);
 	};
 
@@ -70,8 +63,14 @@ const Feed = (props) => {
 	};
 
 	useEffect(() => {
+		const fetchActivities = async () => {
+			const result = await axios.get(
+				`/api/activities?page=${currentPage}&limit=10`
+			);
+			setActivities(result.data);
+		};
 		fetchActivities();
-	}, []);
+	}, [currentPage]);
 
 	const determineAction = (actionNumber) => {
 		switch (actionNumber) {
@@ -272,7 +271,9 @@ const Feed = (props) => {
 					</div>
 				);
 			})}
-			<Button className="w-full" onClick={fetchNextPage}>More</Button>
+			<Button className="w-full" onClick={fetchNextPage}>
+				More
+			</Button>
 		</div>
 	);
 };

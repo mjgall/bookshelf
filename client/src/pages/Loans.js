@@ -1,8 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState, useContext } from "react";
-import { Context } from "../globalContext";
+import React, { useEffect, useState } from "react";
+
 const Loans = (props) => {
-	// const global = useContext(Context);
+
 	const [loans, setLoans] = useState([]);
 	const getLoans = async () => {
 		const loans = await axios
