@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { withRouter, Link } from "react-router-dom";
 import logo from "../images/logo.png";
-
 import { Context } from "../globalContext";
 import DropdownMenu from "../common/DropdownMenu";
 
@@ -126,10 +125,9 @@ const NavBar = ({
 						<div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
 							<div
 								className="text-white cursor-pointer text-xl leading-none px-1 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
-								type="button"
 								onClick={() => setMenuOpen(!menuOpen)}
 							>
-								<DropdownMenu>
+								<DropdownMenu path={location.pathname}>
 									
 								</DropdownMenu>
 							</div>

@@ -1,10 +1,10 @@
 import React from "react";
 import { createPopper } from "@popperjs/core";
 import { Menu as MenuIcon } from "@styled-icons/boxicons-regular";
-import { Link } from "react-router-dom";
-import links from "./pages"
+import { Link, withRouter } from "react-router-dom";
+import links from "./pages";
 
-const Dropdown = ({ color, children, icon }) => {
+const Dropdown = ({ color, path }) => {
 	// dropdown props
 	const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
 	const btnDropdownRef = React.createRef();
@@ -18,6 +18,15 @@ const Dropdown = ({ color, children, icon }) => {
 	const closeDropdownPopover = () => {
 		setDropdownPopoverShow(false);
 	};
+
+	const determineClass = (currentPage, to) => {
+		if (currentPage === to || (currentPage === "/" && to === "/library")) {
+			return "bg-royalblue text-white";
+		} else {
+			return "hover:bg-gray-400 text-black";
+		}
+	};
+
 	// bg colors
 	let bgColor;
 	color === "white"
@@ -30,7 +39,7 @@ const Dropdown = ({ color, children, icon }) => {
 					<div className="relative inline-flex align-middle w-full">
 						<div
 							className={
-								"text-white font-bold uppercase text-sm py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-50 "
+								"text-white font-bold uppercase text-sm rounded shadow hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-50 "
 							}
 							ref={btnDropdownRef}
 							onClick={() => {
@@ -52,26 +61,32 @@ const Dropdown = ({ color, children, icon }) => {
 								(color === "white"
 									? "bg-white "
 									: bgColor + " ") +
-								"w-full text-base z-50 float-left py-2 list-none text-left rounded shadow-lg mt-1"
+								"w-full text-base z-50 float-left list-none text-left rounded shadow-lg mt-1 bg-white"
 							}
 							style={{ minWidth: "12rem" }}
 						>
-							{links.map((link, index) => {
+							{[
+								{ to: "/profile", text: "Profile" },
+
+								...links,
+							].map((link, index) => {
 								return (
 									<Link
 										key={index}
 										// onClick={() => window.scrollTo(0, 0)}
-                                        onClick={() => {
-                                            dropdownPopoverShow
-                                                ? closeDropdownPopover()
-                                                : openDropdownPopover();
-                                        }}
+										onClick={() => {
+											dropdownPopoverShow
+												? closeDropdownPopover()
+												: openDropdownPopover();
+										}}
 										style={{
 											borderRadius: "4px",
 											display: "block",
-                                            color: "black"
 										}}
-										className={`px-2 text-center text-lg my-1`}
+										className={`px-2 py-1 text-center text-lg my-1 ${determineClass(
+											path,
+											link.to
+										)}`}
 										to={link.to}
 									>
 										{link.text}
@@ -114,7 +129,7 @@ const Dropdown = ({ color, children, icon }) => {
 							>
 								Something else here
 							</a> */}
-							<div className="h-0 my-2 border border-solid border-t-0 border-blueGray-800 opacity-25" />
+							{/* <div className="h-0 my-2 border border-solid border-t-0 border-blueGray-800 opacity-25" />
 							<a
 								href="#pablo"
 								className={
@@ -126,7 +141,7 @@ const Dropdown = ({ color, children, icon }) => {
 								onClick={(e) => e.preventDefault()}
 							>
 								Seprated link
-							</a>
+							</a> */}
 						</div>
 					</div>
 				</div>
@@ -135,10 +150,4 @@ const Dropdown = ({ color, children, icon }) => {
 	);
 };
 
-export default function DropdownRender() {
-	return (
-		<>
-			<Dropdown color="white" />
-		</>
-	);
-}
+export default withRouter(Dropdown);

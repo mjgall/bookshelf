@@ -14,6 +14,7 @@ import Loans from "./Loans"
 const Home = (props) => {
 	const global = useContext(Context);
 	const match = useRouteMatch();
+	
 	useEffect(() => {
 		if (props.location.state?.redirect) {
 			// addRedirect(props.location.state.from)

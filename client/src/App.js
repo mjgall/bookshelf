@@ -2,7 +2,12 @@ import React, { useContext, useState, useEffect } from "react";
 import LogRocket from "logrocket";
 import "./App.css";
 import "./styles/tailwind.css";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+	BrowserRouter as Router,
+	Switch,
+	Route,
+	// useRouteMatch,
+} from "react-router-dom";
 
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
@@ -20,6 +25,7 @@ const App = (props) => {
 	const global = useContext(Context);
 	const { loading } = global;
 	const [referrer, setReferrer] = useState("");
+	// const match = useRouteMatch();
 
 	const updateNavReferrer = (referrer) => {
 		setReferrer(referrer);
@@ -48,7 +54,11 @@ const App = (props) => {
 			<Router>
 				{loading ? null : (
 					<>
-						<NavBar windowWidth={1000} referrer={referrer}></NavBar>
+						<NavBar
+							// currentPage={match.url}
+							windowWidth={1000}
+							referrer={referrer}
+						></NavBar>
 						<Switch>
 							<Route exact path="/">
 								<Home
