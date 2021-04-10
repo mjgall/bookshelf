@@ -74,6 +74,7 @@ const Dropdown = ({ color, path }) => {
 										key={index}
 										// onClick={() => window.scrollTo(0, 0)}
 										onClick={() => {
+                                            window.scrollTo(0, 0)
 											dropdownPopoverShow
 												? closeDropdownPopover()
 												: openDropdownPopover();
