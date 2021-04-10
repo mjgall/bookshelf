@@ -51,6 +51,7 @@ const Feed = (props) => {
 		const result = await axios.get(
 			`/api/activities?page=${currentPage + 1}&limit=10`
 		);
+		setCurrentPage(currentPage + 1)
 		setActivities([...activities, ...result.data]);
 	};
 
