@@ -24,7 +24,7 @@ module.exports = (field, value, id) => {
     const query = `UPDATE user_books SET user_books.${field} = ${sqlString.escape(
       value
     )} WHERE id = ${id};`;
-    console.log(query)
+    
     db.query(query, (err, results, fields) => {
       if (err) {
         reject(err);

@@ -14,12 +14,11 @@ const LoanModal = (props) => {
 	}, []);
 
 	const loanTo = async (friendId) => {
-		const response = await axios.post("/api/loans", {
+		await axios.post("/api/loans", {
 			bookId: props.bookId,
 			lenderId: global.currentUser.id,
 			borrowerId: friendId,
 		});
-		console.log(response.data);
 	};
 
 	return (

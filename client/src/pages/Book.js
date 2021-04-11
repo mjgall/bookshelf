@@ -130,9 +130,7 @@ const Book = (props) => {
 	};
 
 	const addToLibrary = async () => {
-		const response = await axios.post("/api/books", book);
-
-		console.log(response.data);
+		await axios.post("/api/books", book);
 	};
 
 	return (

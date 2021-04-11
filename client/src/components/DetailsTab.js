@@ -139,7 +139,7 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 						</div>
 						<div>
 							{fields.map((object, index) => {
-								console.log(object);
+							
 								return (
 									<div>
 										<div className="mr-2 font-bold text-lg">

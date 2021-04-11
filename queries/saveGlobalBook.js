@@ -13,7 +13,7 @@ module.exports = (book) => {
 			isbn
 		)}, ${sqlString.escape(isbn13)}, ${sqlString.escape(image)});
         `;
-		console.log(query)
+		
 		db.query(query, (err, results, fields) => {
 			if (err) {
 				reject(err);

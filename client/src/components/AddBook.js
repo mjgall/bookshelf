@@ -68,14 +68,14 @@ const AddBook = () => {
 				const response = await axios.get(
 					encodeURI(`/api/book/search/title/${title}`)
 				);
-				console.log(response.data);
+				
 				setSearchResults(response.data.books)
 			} else {
 				const response = await axios.get(
 					encodeURI(`/api/book/search/title/${title}/author/${author}`)
 				);
 				setSearchResults(response.data.books)
-				console.log(response.data);
+			
 			}
 		} catch (error) {
 			console.error(error);

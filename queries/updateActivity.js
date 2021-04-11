@@ -4,7 +4,7 @@ const sqlString = require("sqlstring");
 module.exports = (field, value, id) => {
 	return new Promise((resolve, reject) => {
 		const query = `UPDATE activities SET activities.${field} = ${value} WHERE id = ${id};`;
-		console.log(query);
+	
 		db.query(query, (err, results, fields) => {
 			if (err) {
 				reject(err);
