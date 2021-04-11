@@ -44,8 +44,8 @@ const Feed = (props) => {
 		const result = await axios.get(
 			`/api/activities?page=${currentPage + 1}&limit=10`
 		);
-		setCurrentPage(currentPage + 1);
 		setActivities([...activities, ...result.data]);
+		setCurrentPage(currentPage + 1);
 	};
 
 	const updateActivity = async (id) => {
@@ -65,12 +65,12 @@ const Feed = (props) => {
 	useEffect(() => {
 		const fetchActivities = async () => {
 			const result = await axios.get(
-				`/api/activities?page=${currentPage}&limit=10`
+				`/api/activities?page=1&limit=10`
 			);
 			setActivities(result.data);
 		};
 		fetchActivities();
-	}, [currentPage]);
+	}, []);
 
 	const determineAction = (actionNumber) => {
 		switch (actionNumber) {

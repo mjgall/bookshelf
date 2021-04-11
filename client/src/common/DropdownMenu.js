@@ -9,6 +9,7 @@ const Dropdown = ({ color, path }) => {
 	const [dropdownPopoverShow, setDropdownPopoverShow] = React.useState(false);
 	const btnDropdownRef = React.createRef();
 	const popoverDropdownRef = React.createRef();
+
 	const openDropdownPopover = () => {
 		createPopper(btnDropdownRef.current, popoverDropdownRef.current, {
 			placement: "bottom-start",
@@ -63,7 +64,7 @@ const Dropdown = ({ color, path }) => {
 									: bgColor + " ") +
 								"w-full text-base z-50 float-left list-none text-left rounded shadow-lg mt-1 bg-white"
 							}
-							style={{ minWidth: "12rem" }}
+							style={{ minWidth: "12rem"}}
 						>
 							{[
 								{ to: "/profile", text: "Profile" },
