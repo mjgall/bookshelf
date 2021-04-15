@@ -209,7 +209,7 @@ const Feed = (props) => {
 									{item.title}
 								</Link>
 								{item.action === 5
-									? ` to ${item.interacted_user_name}`
+									? ` to ${item.interacted_user_id === global.currentUser.id ? `you` : item.interacted_user_name}`
 									: null}
 							</div>
 

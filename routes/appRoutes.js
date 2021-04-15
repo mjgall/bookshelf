@@ -676,7 +676,7 @@ module.exports = (app) => {
 
 	app.get("/api/activities/book/:globalId", async (req, res) => {
 		const { globalId } = req.params;
-		const activities = await getBookActivities(req.user.id, globalId)
+		const activities = await getBookActivities(req.user.id, globalId, req.query.page, req.query.limit)
 
 		res.send(activities);
 	});

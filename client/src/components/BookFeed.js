@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useContext} from "react";
-import axios from "axios"
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import moment from "moment";
 
@@ -8,22 +8,22 @@ import { Context } from "../globalContext";
 import MoreMenu from "../common/MoreMenu";
 
 const BookFeed = (props) => {
-    const global = useContext(Context);
+	const global = useContext(Context);
 
-    const [activities, setActivities] = useState([]);
+	const [activities, setActivities] = useState([]);
 
-	
 	useEffect(() => {
+		const fetchActivities = async () => {
+			const result = await axios.get(
+				`/api/activities/book/${props.bookId}`
+			);
+			setActivities(result.data);
+		};
 
-        const fetchActivities = async () => {
-            const result = await axios.get(`/api/activities/book/${props.bookId}`);
-            setActivities(result.data);
-        };
-    
 		fetchActivities();
 	}, [props]);
 
-    const updateActivity = async (id) => {
+	const updateActivity = async (id) => {
 		const result = await axios.put("/api/activities", {
 			field: "hidden",
 			value: true,
@@ -37,7 +37,7 @@ const BookFeed = (props) => {
 		}
 	};
 
-    const determineAction = (actionNumber) => {
+	const determineAction = (actionNumber) => {
 		switch (actionNumber) {
 			case 1:
 				return "started reading";
@@ -47,6 +47,8 @@ const BookFeed = (props) => {
 				return "added";
 			case 4:
 				return "removed";
+			case 5:
+				return "loaned";
 			default:
 				break;
 		}
@@ -57,7 +59,7 @@ const BookFeed = (props) => {
 			<div>
 				<div className="md:text-left text-center mt-1">
 					<div className="text-2xl font-bold">Activity</div>
-				</div>	
+				</div>
 				{activities.map((item, index) => {
 					return (
 						<div
@@ -109,12 +111,22 @@ const BookFeed = (props) => {
 									>
 										{item.title}
 									</Link>
+									{item.action === 5
+										? ` to ${
+												item.interacted_user_id ===
+												global.currentUser.id
+													? `you`
+													: item.interacted_user_name
+										  }`
+										: null}
 								</div>
-	
+
 								<div className="text-xs font-thin">
 									{moment
 										.unix(item.timestamp / 1000)
-										.format("dddd, MMMM Do YYYY, h:mm:ss a")}
+										.format(
+											"dddd, MMMM Do YYYY, h:mm:ss a"
+										)}
 								</div>
 							</div>
 						</div>
@@ -123,10 +135,8 @@ const BookFeed = (props) => {
 			</div>
 		);
 	} else {
-		return null
+		return null;
 	}
-
-	
 };
 
 export default BookFeed;
