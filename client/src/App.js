@@ -21,6 +21,7 @@ import { ToastProvider } from "react-toast-notifications";
 import Transparent from "./components/Transparent";
 import GlobalModal from "./components/GlobalModal";
 
+
 const App = (props) => {
 	const global = useContext(Context);
 	const { loading } = global;
@@ -83,6 +84,7 @@ const App = (props) => {
 							<PrivateRoute path="/transparent">
 								<Transparent></Transparent>
 							</PrivateRoute>
+							
 							<Route path="/scanner">
 								<Scanner></Scanner>
 							</Route>

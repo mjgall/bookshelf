@@ -64,9 +64,7 @@ const Feed = (props) => {
 
 	useEffect(() => {
 		const fetchActivities = async () => {
-			const result = await axios.get(
-				`/api/activities?page=1&limit=10`
-			);
+			const result = await axios.get(`/api/activities?page=1&limit=10`);
 			setActivities(result.data);
 		};
 		fetchActivities();
@@ -82,6 +80,8 @@ const Feed = (props) => {
 				return "added";
 			case 4:
 				return "removed";
+			case 5:
+				return "loaned";
 			default:
 				break;
 		}
@@ -208,6 +208,9 @@ const Feed = (props) => {
 								>
 									{item.title}
 								</Link>
+								{item.action === 5
+									? ` to ${item.interacted_user_name}`
+									: null}
 							</div>
 
 							<div className="text-xs font-thin">

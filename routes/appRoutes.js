@@ -46,6 +46,7 @@ const getUsers = require("../queries/getUsers");
 const addLoan = require("../queries/addLoan.js");
 const getLoans = require("../queries/getLoans");
 const getActivitiesPaginated = require("../queries/getActivitiesPaginated");
+const getConnections = require("../queries/getConnections")
 
 module.exports = (app) => {
 	app.get("/api/bootstrap", async (req, res) => {
@@ -572,6 +573,20 @@ module.exports = (app) => {
 	});
 
 	app.post("/api/activities", async (req, res) => {
+
+			// case 1:
+			// 	return "started reading";
+			// case 2:
+			// 	return "read";
+			// case 3:
+			// 	return "added";
+			// case 4:
+			// 	return "removed";
+			// case 5:
+			// 	return "loaned";
+			// default:
+			// 	break;
+
 		try {
 			const activity = await addActivity(
 				req.user.id,
@@ -707,12 +722,22 @@ module.exports = (app) => {
 	app.post("/api/loans", async (req, res) => {
 		const {bookId, lenderId, borrowerId} = req.body
 		const response = await addLoan(bookId, lenderId, borrowerId, Date.now() )
+		await addActivity(lenderId, bookId, 5, borrowerId)
 		res.send(response)
 	})
 
 	app.get("/api/loans", async (req, res) => {
 		const response = await getLoans(req.user.id)
 		res.send(response)
+	})
+
+	app.get("/api/connections", async (req, res) => {
+
+		const response = await getConnections(req?.user?.id || undefined)
+
+		const dupesRemoved = _.uniqBy(response, 'user_id');
+
+		res.send(dupesRemoved)
 	})
 
 };

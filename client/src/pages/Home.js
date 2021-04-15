@@ -9,7 +9,7 @@ import { Context } from "../globalContext";
 import Library from "../components/Library";
 import Account from "./Account";
 import Loans from "./Loans"
-
+import Cancellation from "./Cancellation";
 
 const Home = (props) => {
 	const global = useContext(Context);
@@ -57,9 +57,13 @@ const Home = (props) => {
 							<Route path="/loans">
 								<Loans></Loans>
 							</Route>
+							<Route path="/cancel">
+								<Cancellation></Cancellation>
+							</Route>
 							<Route path="/*">
 								<Library></Library>
 							</Route>
+							
 						</Switch>
 					</div>
 				</div>

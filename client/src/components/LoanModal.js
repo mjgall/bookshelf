@@ -3,14 +3,14 @@ import axios from "axios";
 import { Context } from "../globalContext";
 const LoanModal = (props) => {
 	const global = useContext(Context);
-	const [friends, setFriends] = useState([]);
-	const fetchFriends = async () => {
-		const result = await axios.get("/api/friends");
+	const [connections, setConnections] = useState([]);
+	const fetchConnections = async () => {
+		const result = await axios.get("/api/connections");
 
-		setFriends(result.data);
+		setConnections(result.data);
 	};
 	useEffect(() => {
-		fetchFriends();
+		fetchConnections();
 	}, []);
 
 	const loanTo = async (friendId) => {
@@ -25,33 +25,22 @@ const LoanModal = (props) => {
 		<>
 			<div className="flex flex-wrap py-6 px-8">
 				<div>
-					{friends
-						.filter((friendship) => {
-							return friendship.accepted;
-						})
-						.map((friend, index) => {
-							return (
-								<div
-									onClick={() =>
-										loanTo(
-											friend.user_id ===
-												global.currentUser.id
-												? friend.user_id_2
-												: friend.user_id
-										)
-									}
-									key={index}
-									className="flex items-center my-2"
-								>
-									<img
-										alt={friend.full}
-										src={friend.picture}
-										className="rounded-full h-12 w-12 mr-4"
-									></img>
-									<div>{friend.full}</div>
-								</div>
-							);
-						})}
+					{connections.map((connection, index) => {
+						return (
+							<div
+								onClick={() => loanTo(connection.user_id)}
+								key={index}
+								className="flex items-center my-2"
+							>
+								<img
+									alt={connection.full}
+									src={connection.picture}
+									className="rounded-full h-12 w-12 mr-4"
+								></img>
+								<div>{connection.full}</div>
+							</div>
+						);
+					})}
 				</div>
 			</div>
 		</>
