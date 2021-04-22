@@ -221,6 +221,7 @@ module.exports = (app) => {
 
 	//add a book
 	app.post("/api/books", async (req, res) => {
+
 		const {
 			title,
 			author,
@@ -241,7 +242,7 @@ module.exports = (app) => {
 				author,
 				isbn10: isbn,
 				isbn13,
-				cover: image,
+				cover: image || cover,
 				addGlobal: true,
 			});
 		} else {
