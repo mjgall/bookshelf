@@ -26,7 +26,7 @@ SELECT DISTINCT interacted_users.full AS interacted_user_name, activities.*, use
         JOIN activities ON users.id = activities.user_id
         LEFT JOIN users AS interacted_users ON activities.interacted_user_id = interacted_users.id
         JOIN global_books ON global_books.id = activities.object_id
-        JOIN user_books ON global_books.id = user_books.global_id AND user_books.user_id = users.id AND user_books.private = FALSE AND global_books.id = ${bookId}
+        JOIN user_books ON global_books.id = user_books.global_id AND user_books.user_id = users.id AND global_books.id = ${bookId}
        
         WHERE ( friendships.user_id_1 = ${userId} OR friendships.user_id_2 = ${userId} ) AND activities.hidden = FALSE
 UNION
@@ -35,7 +35,7 @@ FROM activities
 JOIN users ON users.id = activities.user_id
 LEFT JOIN users AS interacted_users ON activities.interacted_user_id = interacted_users.id
 JOIN global_books ON global_books.id = activities.object_id
-JOIN user_books ON global_books.id = user_books.global_id AND user_books.private = FALSE
+JOIN user_books ON global_books.id = user_books.global_id
         WHERE activities.user_id = ${userId} AND activities.hidden = FALSE AND global_books.id = ${bookId}
 ORDER BY timestamp DESC`;
 		//  LIMIT ${(count || 10) * page - (count || 10)},${

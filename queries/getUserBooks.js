@@ -21,7 +21,7 @@ module.exports = (userId) => {
     LEFT JOIN users_globalbooks ON users_globalbooks.global_book_id = user_books.global_id
     LEFT JOIN loans ON loans.global_id = user_books.global_id
     LEFT JOIN users ON users.id = user_books.borrower_id
-    WHERE user_books.user_id = 1
+    WHERE user_books.user_id = ${userId}
     GROUP BY user_books.id
     ORDER BY user_books.id DESC`
 
