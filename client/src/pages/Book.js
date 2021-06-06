@@ -11,7 +11,7 @@ import {
 } from "@styled-icons/boxicons-solid";
 import Tip from "../common/Tip";
 import NotesFromHouseholds from "../components/NotesFromHouseholds";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Context } from "../globalContext";
 import { withRouter } from "react-router-dom";
 import MoreMenu from "../common/MoreMenu";
@@ -387,6 +387,17 @@ const Book = (props) => {
 						</div>
 					</div>
 					<div className="md:mx-0 mx-6">
+						{book.on_loan ? (
+							<div className="bg-yellow-100 w-full h-12 rounded border-2 border-yellow-300 flex">
+								<div className="self-center text-center	w-full">
+									Loaned to 
+									<Link to={`/shelf/${book.borrower_id}`}>
+										{` ${book.full}`}
+									</Link>
+								</div>
+							</div>
+						) : null}
+
 						{type === "household" || type === "global" ? (
 							<InlineEdit
 								defaultValue={book.notes}
@@ -469,7 +480,7 @@ const Book = (props) => {
 						)}
 						<BookFeed bookId={book.id}></BookFeed>
 					</div>
-					<div className="md:mx-0 mx-6 hidden md:block">
+					<div className="md:mx-0 mx-6 hidden md:block md:ml-4">
 						{type === "personal" ? (
 							<MoreMenu
 								placement="left"
