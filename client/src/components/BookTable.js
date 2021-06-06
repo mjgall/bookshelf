@@ -45,6 +45,7 @@ const BookTable = (props) => {
 	const global = useContext(Context);
 	const [householdOptions, setHouseholdOptions] = useState([]);
 	const [viewPrivate, setViewPrivate] = useState(false);
+	const [viewRead, setViewRead] = useState(false);
 	// const [books, setBooks] = useState([]);
 
 	const getSavedHouseholdSelect = () => {
@@ -169,7 +170,6 @@ const BookTable = (props) => {
 	]);
 
 	const columns = useMemo(() => {
-
 		return [
 			{
 				Header: "Title",
@@ -225,21 +225,31 @@ const BookTable = (props) => {
 		setViewPrivate(!viewPrivate);
 	};
 
+	const toggleRead = () => {
+		handleHouseholdChange({
+			label: "⛔ None (Only your own books)",
+			value: "none",
+		});
+		setViewRead(!viewRead);
+	};
+
 	const data = useMemo(() => {
-		const filterBooks = (books, householdSelect, ownerSelect) => {
+		let filterBooks = (books, householdSelect, ownerSelect) => {
+			let filteredBooks;
+
 			if (viewPrivate) {
-				return books.filter((book) => book.private === 1);
+				filteredBooks = books.filter((book) => book.private === 1);
 			} else if (householdSelect.value == null) {
-				return books;
+				filterBooks = books;
 			} else if (householdSelect.value === "none") {
-				return books.filter(
+				filteredBooks = books.filter(
 					(book) => Number(book.user_id) === props.user.id
 				);
 			} else if (
 				householdSelect.value === "all" &&
 				ownerSelect.value === "all"
 			) {
-				return books;
+				return (filteredBooks = books);
 			} else {
 				const newBooks = books.filter((book) => {
 					if (ownerSelect.value === "all") {
@@ -252,8 +262,14 @@ const BookTable = (props) => {
 						return book.user_id === Number(ownerSelect.value);
 					}
 				});
-				return newBooks;
+				filteredBooks = newBooks;
 			}
+
+			if (viewRead) {
+				filteredBooks = filteredBooks.filter((book) => book.read === 1);
+			}
+
+			return filteredBooks;
 		};
 
 		if (props.sharedShelf) {
@@ -279,11 +295,13 @@ const BookTable = (props) => {
 				ownerSelect
 			);
 		}
-	}, [props,
+	}, [
+		props,
 		householdSelect,
 		ownerSelect,
 		global.householdMembers,
-		viewPrivate
+		viewPrivate,
+		viewRead
 	]);
 
 	const {
@@ -314,18 +332,33 @@ const BookTable = (props) => {
 				{props.sharedShelf ? null : (
 					<>
 						<div className="flex-none">
-							<div className="flex items-center">
-								<div>Private Only</div>
-								<input
-									style={{
-										height: "1.5rem",
-										width: "1.5rem",
-									}}
-									className="mx-2 cursor-pointer"
-									type="checkbox"
-									checked={viewPrivate}
-									onChange={togglePrivate}
-								></input>
+							<div className="flex">
+								<div className="flex items-center">
+									<div>Private Only</div>
+									<input
+										style={{
+											height: "1.5rem",
+											width: "1.5rem",
+										}}
+										className="mx-2 cursor-pointer"
+										type="checkbox"
+										checked={viewPrivate}
+										onChange={togglePrivate}
+									></input>
+								</div>
+								<div className="flex items-center">
+									<div>Read</div>
+									<input
+										style={{
+											height: "1.5rem",
+											width: "1.5rem",
+										}}
+										className="mx-2 cursor-pointer"
+										type="checkbox"
+										checked={viewRead}
+										onChange={toggleRead}
+									></input>
+								</div>
 							</div>
 						</div>
 						{viewPrivate ? null : (

@@ -38,6 +38,16 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 		dispatch({ type: "SET", book: { ...global.capturedBook } });
 	}, [global.capturedBook]);
 
+	const checkIfUserBookExists = (searchedIsbn) => {
+		//if the book already exists in users book, do not add it and give an option to go to that book page or close
+
+		const foundBook = global.books.userBooks.find(
+			({ isbn10 }) => isbn10 === searchedIsbn
+		);
+		console.log(foundBook);
+		return foundBook || false;
+	};
+
 	const add = async () => {
 		if (!state.author || !state.title) {
 			addToast("Can't add a blank book.", {
@@ -45,35 +55,39 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 				autoDismiss: true,
 			});
 			return;
+		} else if (checkIfUserBookExists()) {
+			console.log("already exists!");
+			return;
+		} else {
+			const book = await axios
+
+				.post("/api/books", {
+					...state,
+					author:
+						state.id || !global.capturedBook
+							? state.author
+							: state.authors[0],
+					manual: global.capturedBook ? false : true,
+					addGlobal: true,
+				})
+				.then((response) => response.data);
+
+			book.user_book_id = book.id;
+			book.id = book.global_id;
+			const newGlobal = {
+				...global,
+				books: {
+					...global.books,
+					userBooks: [...global.books.userBooks, book],
+				},
+				allBooks: [...global.allBooks, book],
+				householdBooks: [...global.householdBooks, book],
+				capturedBook: false,
+			};
+
+			global.setGlobal(newGlobal);
+			closeModal();
 		}
-
-		const book = await axios
-			.post("/api/books", {
-				...state,
-				author:
-					state.id || !global.capturedBook
-						? state.author
-						: state.authors[0],
-				manual: !global.capturedBook ? true : false,
-				addGlobal: true,
-			})
-			.then((response) => response.data);
-
-		book.user_book_id = book.id;
-		book.id = book.global_id;
-		const newGlobal = {
-			...global,
-			books: {
-				...global.books,
-				userBooks: [...global.books.userBooks, book],
-			},
-			allBooks: [...global.allBooks, book],
-			householdBooks: [...global.householdBooks, book],
-			capturedBook: false,
-		};
-
-		global.setGlobal(newGlobal);
-		closeModal();
 	};
 
 	const addAndAnother = async () => {
@@ -139,42 +153,42 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 						</div>
 						<div>
 							{fields.map((object, index) => {
-							
 								return (
 									<div>
 										<div className="mr-2 font-bold text-lg">
 											{object.display}
 										</div>
-										{object.key ===
-											"binding" || object.key === "publisher" || object.key === "isbn" ? (
-												<div>{state[object.key] || ""}</div>
-											) : (
-												<InlineEdit
-													className="w-4/5 my-2"
-													readViewFitContainerWidth
-													defaultValue={
-														state[object.key] || ""
-													}
-													editView={(fieldProps) => (
-														<Textfield
-															{...fieldProps}
-															autoFocus
-														/>
-													)}
-													readView={() => (
-														<div>
-															{state[object.key] ||
-																""}
-														</div>
-													)}
-													onConfirm={(value) =>
-														handleDetailsChange(
-															value,
-															object.key
-														)
-													}
-												/>
-											)}
+										{object.key === "binding" ||
+										object.key === "publisher" ||
+										object.key === "isbn" ? (
+											<div>{state[object.key] || ""}</div>
+										) : (
+											<InlineEdit
+												className="w-4/5 my-2"
+												readViewFitContainerWidth
+												defaultValue={
+													state[object.key] || ""
+												}
+												editView={(fieldProps) => (
+													<Textfield
+														{...fieldProps}
+														autoFocus
+													/>
+												)}
+												readView={() => (
+													<div>
+														{state[object.key] ||
+															""}
+													</div>
+												)}
+												onConfirm={(value) =>
+													handleDetailsChange(
+														value,
+														object.key
+													)
+												}
+											/>
+										)}
 										<div key={index}></div>
 									</div>
 								);
@@ -190,68 +204,68 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 					</Button>
 				</div>
 			) : (
-					<>
-						{fields
-							.filter((field) => {
-								if (
-									field.key === "author" ||
-									field.key === "title"
-								) {
-									return field;
-								} else {
-									return null;
-								}
-							})
-							.map((object, index) => {
-								return (
-									<div>
-										<InlineEdit
-											className="w-4/5 my-2"
-											readViewFitContainerWidth
-											defaultValue={state[object.key] || ""}
-											editView={(fieldProps) => (
-												<Textfield
-													{...fieldProps}
-													autoFocus
-												/>
-											)}
-											readView={() => {
-												if (!state[object.key]) {
-													return (
-														<div className="text-gray-500">
-															{object.key
-																.charAt(0)
-																.toUpperCase() +
-																object.key.slice(1)}
-														</div>
-													);
-												} else {
-													return (
-														<div>
-															{state[object.key] ||
-																object.key}
-														</div>
-													);
-												}
-											}}
-											onConfirm={(value) =>
-												handleDetailsChange(
-													value,
-													object.key
-												)
+				<>
+					{fields
+						.filter((field) => {
+							if (
+								field.key === "author" ||
+								field.key === "title"
+							) {
+								return field;
+							} else {
+								return null;
+							}
+						})
+						.map((object, index) => {
+							return (
+								<div>
+									<InlineEdit
+										className="w-4/5 my-2"
+										readViewFitContainerWidth
+										defaultValue={state[object.key] || ""}
+										editView={(fieldProps) => (
+											<Textfield
+												{...fieldProps}
+												autoFocus
+											/>
+										)}
+										readView={() => {
+											if (!state[object.key]) {
+												return (
+													<div className="text-gray-500">
+														{object.key
+															.charAt(0)
+															.toUpperCase() +
+															object.key.slice(1)}
+													</div>
+												);
+											} else {
+												return (
+													<div>
+														{state[object.key] ||
+															object.key}
+													</div>
+												);
 											}
-										/>
-									</div>
-								);
-							})}
-						<Button color="royalblue" onClick={add}>
-							Save
+										}}
+										onConfirm={(value) =>
+											handleDetailsChange(
+												value,
+												object.key
+											)
+										}
+									/>
+								</div>
+							);
+						})}
+					<Button color="royalblue" onClick={add}>
+						Save
 					</Button>
-						<Button color="royalblue" onClick={addAndAnother}>
-							Save + Add Another
+					<Button color="royalblue" onClick={addAndAnother}>
+						Save + Add Another
 					</Button>
-					</>
-				)}
+				</>
+			)}
 		</>
 	);
 };
