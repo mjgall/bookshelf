@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import { Context } from "../globalContext";
 
+import MoreMenu from "../common/MoreMenu";
+
 const LoanBox = ({ book, user, loan, index }) => {
 	return (
 		<div
@@ -11,7 +13,28 @@ const LoanBox = ({ book, user, loan, index }) => {
 			key={index}
 		>
 			<div className="flex items-center">
-				<div className="h-12 w-12 mr-2 ml-4">
+				{loan.end_date ? null : (
+					<div>
+						<MoreMenu
+							placement="left"
+							size="18px"
+							options={[
+								{
+									action: () =>
+										axios.put("/api/loans", {
+											action: "end",
+											id: loan.id,
+											user_books_id: loan.user_books_id,
+										}),
+									confirm: true,
+									text: "End loan",
+								},
+							]}
+						></MoreMenu>
+					</div>
+				)}
+
+				<div className={loan.end_date ? "h-12 w-12 mr-2 ml-4" : "h-12 w-12 mr-2"}>
 					<img
 						alt="user"
 						src={user.user_picture}
@@ -34,41 +57,21 @@ const LoanBox = ({ book, user, loan, index }) => {
 					{loan.type === "lend" ? " to " : " from "}
 					<span>{user.user_name}</span>
 				</div>
-				<div className="text-xs font-thin">
+				<span className="text-xs font-thin">
 					{moment
 						.unix(loan.start_date / 1000)
 						.format("dddd, MMMM Do YYYY, h:mm:ss a")}
-				</div>
-				<div className="flex text-xs my-1">
-					{/* <div
-					className="mr-2 cursor-pointer"
-					onClick={() => {
-						updateLike(item);
-					}}
-				>
-					{item.likeContent?.people.length > 0 ? (
-						<Tip
-							content={
-								item.likeContent.string
-									? item.likeContent.string
-									: "Like"
-							}
-							renderChildren
-							placement="right"
-						>
-							<ThumbUpSolid
-								color={item.likeContent.color}
-								size="1.5em"
-							></ThumbUpSolid>
-						</Tip>
-					) : (
-						<Tip content="Like" renderChildren placement="right">
-							<ThumbUp color="lightgray" size="1.5em"></ThumbUp>
-						</Tip>
-					)}
-				</div>
-				<div>{item.likeContent?.total}</div> */}
-				</div>
+
+					{loan.end_date ? (
+						<span>
+							<span className="mr-2 ml-2">to</span>
+							{moment
+								.unix(loan.end_date / 1000)
+								.format("dddd, MMMM Do YYYY, h:mm:ss a")}
+						</span>
+					) : null}
+				</span>
+				<div className="flex text-xs my-1"></div>
 			</div>
 			<div className="ml-auto flex items-center">
 				<div>
@@ -108,71 +111,141 @@ const Loans = (props) => {
 		<div>
 			<div>
 				<div className="text-xl">Borrowed</div>
-				{loans
-					.filter(
-						(book) => book.borrower_id === global.currentUser.id
-					)
-					.map((loan, index) => {
-						return (
-							<LoanBox
-								book={{
-									global_id: loan.global_id,
-									title: loan.title,
-									cover: loan.cover,
-								}}
-								user={{
-									user_id: loan.user_id,
-									user_name: loan.user_name,
-									user_picture: loan.user_picture,
-								}}
-								loan={{
-									borrower_id: loan.borrower_id,
-									lender_id: loan.lender_id,
-									start_date: loan.start_date,
-									end_date: loan.end_date,
-									id: loan.id,
-									type:
-										loan.lender_id === global.currentUser.id
-											? "lend"
-											: "borrow",
-								}}
-								index={index}
-							></LoanBox>
-						);
-					})}
+				{loans.filter(
+					(book) =>
+						book.borrower_id === global.currentUser.id &&
+						!book.end_date
+				).length < 1 ? (
+					"You currently are not borrowing any books."
+				) : (
+					<>
+						{loans
+							.filter(
+								(book) =>
+									book.borrower_id ===
+										global.currentUser.id && !book.end_date
+							)
+							.map((loan, index) => {
+								return (
+									<LoanBox
+										book={{
+											global_id: loan.global_id,
+											title: loan.title,
+											cover: loan.cover,
+										}}
+										user={{
+											user_id: loan.user_id,
+											user_name: loan.user_name,
+											user_picture: loan.user_picture,
+										}}
+										loan={{
+											borrower_id: loan.borrower_id,
+											lender_id: loan.lender_id,
+											start_date: loan.start_date,
+											end_date: loan.end_date,
+											id: loan.id,
+											type:
+												loan.lender_id ===
+												global.currentUser.id
+													? "lend"
+													: "borrow",
+										}}
+										index={index}
+									></LoanBox>
+								);
+							})}
+					</>
+				)}
 			</div>
 			<div>
 				<div className="text-xl">Loaned</div>
-				{loans
-					.filter((book) => book.lender_id === global.currentUser.id)
-					.map((loan, index) => {
-						return (
-							<LoanBox
-								book={{
-									global_id: loan.global_id,
-									title: loan.title,
-									cover: loan.cover,
-								}}
-								user={{
-									user_id: loan.user_id,
-									user_name: loan.user_name,
-									user_picture: loan.user_picture,
-								}}
-								loan={{
-									borrower_id: loan.borrower_id,
-									lender_id: loan.lender_id,
-									start_date: loan.start_date,
-									end_date: loan.end_date,
-									id: loan.id,
-									type:
-										loan.lender_id === global.currentUser.id
-											? "lend"
-											: "borrow",
-								}}
-								index={index}
-							></LoanBox>
-						);
-					})}
+				{loans.filter(
+					(book) =>
+						book.lender_id === global.currentUser.id &&
+						!book.end_date
+				).length < 1 ? (
+					"You currently are not lending any books."
+				) : (
+					<>
+						{loans
+							.filter(
+								(book) =>
+									book.lender_id === global.currentUser.id &&
+									!book.end_date
+							)
+							.map((loan, index) => {
+								return (
+									<LoanBox
+										book={{
+											global_id: loan.global_id,
+											title: loan.title,
+											cover: loan.cover,
+										}}
+										user={{
+											user_id: loan.user_id,
+											user_name: loan.user_name,
+											user_picture: loan.user_picture,
+										}}
+										loan={{
+											user_books_id: loan.user_books_id,
+											borrower_id: loan.borrower_id,
+											lender_id: loan.lender_id,
+											start_date: loan.start_date,
+											end_date: loan.end_date,
+											id: loan.id,
+											type:
+												loan.lender_id ===
+												global.currentUser.id
+													? "lend"
+													: "borrow",
+										}}
+										index={index}
+									></LoanBox>
+								);
+							})}
+					</>
+				)}
+			</div>
+			<div>
+				<div className="text-xl">Past</div>
+				{loans.length < 1 ? (
+					"You haven't loaned or borrowed any books."
+				) : (
+					<>
+						{loans
+							.filter((book) => book.end_date)
+							.map((loan, index) => {
+								return (
+									<LoanBox
+										book={{
+											global_id: loan.global_id,
+											title: loan.title,
+											cover: loan.cover,
+										}}
+										user={{
+											user_id: loan.user_id,
+											user_name: loan.user_name,
+											user_picture: loan.user_picture,
+										}}
+										loan={{
+											user_books_id: loan.user_books_id,
+											borrower_id: loan.borrower_id,
+											lender_id: loan.lender_id,
+											start_date: loan.start_date,
+											end_date: loan.end_date,
+											id: loan.id,
+											type:
+												loan.lender_id ===
+												global.currentUser.id
+													? "lend"
+													: "borrow",
+										}}
+										index={index}
+									></LoanBox>
+								);
+							})}
+					</>
+				)}
 			</div>
 		</div>
 	);

@@ -47,6 +47,7 @@ const addLoan = require("../queries/addLoan.js");
 const getLoans = require("../queries/getLoans");
 const getActivitiesPaginated = require("../queries/getActivitiesPaginated");
 const getConnections = require("../queries/getConnections")
+const updateLoan = require("../queries/updateLoan")
 
 
 const checkAuthed = (req, res, next) => {
@@ -749,6 +750,19 @@ module.exports = (app) => {
 	app.get("/api/loans", checkAuthed, async (req, res) => {
 		const response = await getLoans(req.user.id)
 		res.send(response)
+	})
+
+	app.put("/api/loans", checkAuthed, async (req, res) => {
+
+		switch (req.body.action) {
+			case "end":
+				const response = await updateLoan("end", req.body.id, req.body.user_books_id)
+				res.send(response)
+				break;
+			default:
+				break;
+		}
+
 	})
 
 	app.get("/api/connections", checkAuthed, async (req, res) => {
