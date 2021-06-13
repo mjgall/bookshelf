@@ -15,11 +15,11 @@ const GlobalModal = () => {
 	const size = useWindowSize();
 	const modalStyles = {
 		content: {
-			width: size.width > 500 ? "50vw" : "100%",
-			height: size.width > 500 ? "70vh" : "100%",
-			minHeight: "30vh",
+			// width: size.width > 500 ? "50vw" : "100%",
+			// height: size.width > 500 ? "70vh" : "100%",
+			minHeight: "20vh",
 			maxHeight: "80vh",
-			minWidth: "70vw",
+			minWidth: "30vw",
 			padding: 0,
 			top: "50%",
 			left: "50%",
@@ -27,6 +27,7 @@ const GlobalModal = () => {
 			bottom: "auto",
 			marginRight: "-50%",
 			transform: "translate(-50%, -50%)",
+			border: "1px solid black"
 		},
 	};
 
