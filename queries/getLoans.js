@@ -1,16 +1,23 @@
-const db = require('../config/db/mysql').pool;
-const sqlString = require('sqlstring');
+const db = require("../config/db/mysql").pool;
+const sqlString = require("sqlstring");
 
 module.exports = (userId) => {
-    return new Promise((resolve, reject) => {
-        const query = `SELECT * FROM loans WHERE lender_id = ${userId} or borrower_id = ${userId}`
-        
-        db.query(query, (err, results, fields) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(results)
-            }
-        })
-    })
-}
+	return new Promise((resolve, reject) => {
+		// const query = `SELECT * FROM loans WHERE lender_id = ${userId} or borrower_id = ${userId}`
+		const query = `SELECT loans.id, loans.global_id, loans.lender_id, loans.borrower_id, loans.start_date, loans.end_date, 
+        global_books.title, global_books.cover, 
+        users.id AS user_id, users.full AS user_name, users.picture AS user_picture FROM loans
+        JOIN global_books ON global_books.id = loans.global_id
+        JOIN users ON  (loans.lender_id = users.id OR loans.borrower_id = users.id)
+        WHERE (loans.lender_id = ${userId} OR loans.borrower_id = ${userId}) AND users.id != ${userId}
+		ORDER BY loans.start_date DESC;
+        `;
+		db.query(query, (err, results, fields) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(results);
+			}
+		});
+	});
+};

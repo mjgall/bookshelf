@@ -42,12 +42,6 @@ const GlobalFilter = ({
 };
 
 const BookTable = (props) => {
-	const global = useContext(Context);
-	const [householdOptions, setHouseholdOptions] = useState([]);
-	const [viewPrivate, setViewPrivate] = useState(false);
-	const [viewRead, setViewRead] = useState(false);
-	// const [books, setBooks] = useState([]);
-
 	const getSavedHouseholdSelect = () => {
 		const localSaved = JSON.parse(localStorage.getItem("householdFilter"));
 		if (localSaved) {
@@ -57,6 +51,15 @@ const BookTable = (props) => {
 				value: "none",
 				label: "Select household...",
 			};
+		}
+	};
+
+	const getSavedReadFilter = () => {
+		const localSaved = JSON.parse(localStorage.getItem("readFilter"));
+		if (localSaved) {
+			return localSaved;
+		} else {
+			return false;
 		}
 	};
 
@@ -72,10 +75,11 @@ const BookTable = (props) => {
 		}
 	};
 
-	const [householdSelect, setHouseholdSelect] = useState(
-		getSavedHouseholdSelect()
-	);
-
+	const global = useContext(Context);
+	const [householdOptions, setHouseholdOptions] = useState([]);
+	const [viewPrivate, setViewPrivate] = useState(false);
+	const [viewRead, setViewRead] = useState(getSavedReadFilter());
+	const [householdSelect, setHouseholdSelect] = useState(getSavedHouseholdSelect());
 	const [ownerSelect, setOwnerSelect] = useState(getSavedOwnerSelect());
 	const [owners, setOwners] = useState([]);
 
@@ -231,6 +235,7 @@ const BookTable = (props) => {
 			value: "none",
 		});
 		setViewRead(!viewRead);
+		localStorage.setItem("readFilter", JSON.stringify(!viewRead));
 	};
 
 	const data = useMemo(() => {
@@ -301,7 +306,7 @@ const BookTable = (props) => {
 		ownerSelect,
 		global.householdMembers,
 		viewPrivate,
-		viewRead
+		viewRead,
 	]);
 
 	const {
