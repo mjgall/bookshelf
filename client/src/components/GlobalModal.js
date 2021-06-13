@@ -33,7 +33,7 @@ const GlobalModal = () => {
 	const getModalContent = () => {
 		switch (global.currentModal) {
 			case "loan":
-				return <LoanModal bookId={global.bookId}></LoanModal>;
+				return <LoanModal bookId={global.bookId} userBookId={global.user_book_id}></LoanModal>;
 			default:
 				break;
 		}

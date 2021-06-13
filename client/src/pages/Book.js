@@ -363,6 +363,8 @@ const Book = (props) => {
 															currentModal:
 																"loan",
 															bookId: book.id,
+															userBookId:
+																book.user_book_id,
 														}),
 													confirm: false,
 													text: "Loan",
@@ -390,7 +392,7 @@ const Book = (props) => {
 						{book.on_loan ? (
 							<div className="bg-yellow-100 w-full h-12 rounded border-2 border-yellow-300 flex">
 								<div className="self-center text-center	w-full">
-									Loaned to 
+									Loaned to
 									<Link to={`/shelf/${book.borrower_id}`}>
 										{` ${book.full}`}
 									</Link>
@@ -497,6 +499,7 @@ const Book = (props) => {
 												modalOpen: true,
 												currentModal: "loan",
 												bookId: book.id,
+												userBookId: book.user_book_id,
 											}),
 										confirm: false,
 										text: "Loan",

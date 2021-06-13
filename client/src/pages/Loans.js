@@ -6,7 +6,27 @@ import { Context } from "../globalContext";
 
 import MoreMenu from "../common/MoreMenu";
 
-const LoanBox = ({ book, user, loan, index }) => {
+const LoanBox = ({ book, user, loan, index, update }) => {
+	const global = useContext(Context);
+	const endLoan = async () => {
+		const response = await axios.put("/api/loans", {
+			action: "end",
+			id: loan.id,
+			user_books_id: loan.user_books_id,
+		})
+
+		if (response) {
+
+			const index = global.allBooks.findIndex(book => book.user_book_id === loan.user_books_id)
+			
+			let updatedAllBooks = [...global.allBooks]
+			updatedAllBooks[index].on_loan = 0
+			updatedAllBooks[index].borrower_id = null
+			global.setGlobal({allBooks: updatedAllBooks})
+		}
+		update()
+	}
+
 	return (
 		<div
 			className="border-gray-400 border mt-2 mb-2 pr-6 rounded flex items-center"
@@ -20,12 +40,7 @@ const LoanBox = ({ book, user, loan, index }) => {
 							size="18px"
 							options={[
 								{
-									action: () =>
-										axios.put("/api/loans", {
-											action: "end",
-											id: loan.id,
-											user_books_id: loan.user_books_id,
-										}),
+									action: () => endLoan(),
 									confirm: true,
 									text: "End loan",
 								},
@@ -103,6 +118,10 @@ const Loans = (props) => {
 		setLoans(loans);
 	};
 
+	const update = () => {
+		getLoans()
+	}
+
 	useEffect(() => {
 		getLoans();
 	}, []);
@@ -116,7 +135,7 @@ const Loans = (props) => {
 						book.borrower_id === global.currentUser.id &&
 						!book.end_date
 				).length < 1 ? (
-					"You currently are not borrowing any books."
+					<div className="text-xs my-1 text-gray-500 italic font-weight-light">You currently are not borrowing any books.</div>
 				) : (
 					<>
 						{loans
@@ -151,6 +170,7 @@ const Loans = (props) => {
 													: "borrow",
 										}}
 										index={index}
+										update={update}
 									></LoanBox>
 								);
 							})}
@@ -164,7 +184,7 @@ const Loans = (props) => {
 						book.lender_id === global.currentUser.id &&
 						!book.end_date
 				).length < 1 ? (
-					"You currently are not lending any books."
+					<div className="text-xs my-1 text-gray-500 italic font-weight-light">You currently are not lending any books.</div>
 				) : (
 					<>
 						{loans
@@ -200,6 +220,7 @@ const Loans = (props) => {
 													: "borrow",
 										}}
 										index={index}
+										update={update}
 									></LoanBox>
 								);
 							})}
@@ -208,8 +229,8 @@ const Loans = (props) => {
 			</div>
 			<div>
 				<div className="text-xl">Past</div>
-				{loans.length < 1 ? (
-					"You haven't loaned or borrowed any books."
+				{loans.filter(loan => loan.end_date).length < 1 ? (
+					<div className="text-xs my-1 text-gray-500 italic font-weight-light">You haven't loaned or borrowed any books in the past.</div>
 				) : (
 					<>
 						{loans

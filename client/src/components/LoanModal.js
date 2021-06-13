@@ -13,12 +13,22 @@ const LoanModal = (props) => {
 		fetchConnections();
 	}, []);
 
-	const loanTo = async (friendId) => {
+	const loanTo = async (friendId, friendName) => {
 		await axios.post("/api/loans", {
 			bookId: props.bookId,
 			lenderId: global.currentUser.id,
 			borrowerId: friendId,
 		});
+
+		const index = global.allBooks.findIndex(
+			(book) => book.user_book_id === global.userBookId
+		);
+
+		let updatedAllBooks = [...global.allBooks];
+		updatedAllBooks[index].on_loan = 1;
+		updatedAllBooks[index].borrower_id = friendId;
+		updatedAllBooks[index].full = friendName
+		global.setGlobal({ allBooks: updatedAllBooks });
 	};
 
 	return (
@@ -28,9 +38,9 @@ const LoanModal = (props) => {
 					{connections.map((connection, index) => {
 						return (
 							<div
-								onClick={() => loanTo(connection.user_id)}
+								onClick={() => loanTo(connection.user_id, connection.full)}
 								key={index}
-								className="flex items-center my-2"
+								className="flex items-center my-2 cursor-pointer"
 							>
 								<img
 									alt={connection.full}
