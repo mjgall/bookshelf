@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import banner3 from "../images/banner3.jpg";
 import banner2 from "../images/banner2.jpg";
 import banner1 from "../images/banner1.jpg";
@@ -28,7 +29,7 @@ const MarketingHome = (props) => {
 				setBackground(banner2);
 				break;
 			case 3:
-				setBackground(banner3)
+				setBackground(banner3);
 				break;
 			default:
 				break;
@@ -37,7 +38,7 @@ const MarketingHome = (props) => {
 
 	useEffect(() => {
 		fetchData();
-		selectRandomBackground()
+		selectRandomBackground();
 	}, []);
 
 	return (
@@ -54,12 +55,15 @@ const MarketingHome = (props) => {
 						{props.redirect ? (
 							<div className="bg-green-400 text-white text-center rounded-lg border-gray-300 border p-3 shadow-lg mb-2">
 								<div className="ml-2 mr-6">
-									Log in to view
-									{props.redirect === "/profile"
-										? " your profile!"
-										: props.redirect.indexOf("/book") > -1
-										? " that book!"
-										: " that content!"}
+									<a href={`http://localhost:3600/auth/google/redirect${props.redirect}`}>
+										Log in to view
+										{props.redirect === "/profile"
+											? " your profile!"
+											: props.redirect.indexOf("/book") >
+											  -1
+											? " that book!"
+											: " that content!"}
+									</a>
 								</div>
 							</div>
 						) : null}
