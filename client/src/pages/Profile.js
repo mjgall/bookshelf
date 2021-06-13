@@ -430,7 +430,7 @@ export default class Profile extends React.Component {
 									</Tip>
 								)}
 							</div>
-							{this.state.households.length < 1 ? <div className="my-1 text-gray-500 italic font-weight-light">You don't have any households. Add one to the right.</div>	 : null}
+							{this.state.households.length < 1 ? <div className="my-1 text-gray-500 italic font-weight-light">You don't have any households. Add one to the right. Once you've added a household, you can invite members of your home.</div>	 : null}
 							
 							{this.state.addHousehold ? (
 								<form

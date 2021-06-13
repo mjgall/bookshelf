@@ -79,7 +79,9 @@ const BookTable = (props) => {
 	const [householdOptions, setHouseholdOptions] = useState([]);
 	const [viewPrivate, setViewPrivate] = useState(false);
 	const [viewRead, setViewRead] = useState(getSavedReadFilter());
-	const [householdSelect, setHouseholdSelect] = useState(getSavedHouseholdSelect());
+	const [householdSelect, setHouseholdSelect] = useState(
+		getSavedHouseholdSelect()
+	);
 	const [ownerSelect, setOwnerSelect] = useState(getSavedOwnerSelect());
 	const [owners, setOwners] = useState([]);
 
@@ -170,7 +172,7 @@ const BookTable = (props) => {
 			setHouseholdSelect({
 				label: "⛔ None (Only your own books)",
 				value: "none",
-			})
+			});
 		}
 	}, [
 		global.households,
@@ -339,7 +341,7 @@ const BookTable = (props) => {
 
 	return (
 		<div>
-			<div className="flex items-center md:h-8 mb-2">
+			<div className="flex items-center mb-2">
 				{props.sharedShelf || global.households.length < 1 ? null : (
 					<>
 						<div className="flex-none">
@@ -409,109 +411,122 @@ const BookTable = (props) => {
 					</>
 				)}
 			</div>
+			{data.length < 1 ? (
+				<div className="my-1 text-gray-500 italic font-weight-light">
+					You don't have any books yet - add some above!
+				</div>
+			) : (
+				<table
+					{...getTableProps()}
+					className="shadow-md text-xs md:text-base w-full"
+				>
+					<thead>
+						{headerGroups.map((headerGroup) => (
+							<tr {...headerGroup.getHeaderGroupProps()}>
+								{headerGroup.headers.map((column) => (
+									<th
+										{...column.getHeaderProps(
+											column.getSortByToggleProps()
+										)}
+										className="px-4 py-2 border"
+									>
+										{column.render("Header")}
 
-			<table
-				{...getTableProps()}
-				className="shadow-md text-xs md:text-base w-full"
-			>
-				<thead>
-					{headerGroups.map((headerGroup) => (
-						<tr {...headerGroup.getHeaderGroupProps()}>
-							{headerGroup.headers.map((column) => (
-								<th
-									{...column.getHeaderProps(
-										column.getSortByToggleProps()
-									)}
-									className="px-4 py-2 border"
-								>
-									{column.render("Header")}
-
-									<span>
-										{column.isSorted
-											? column.isSortedDesc
-												? " 🔽"
-												: " 🔼"
-											: null}
-									</span>
-								</th>
-							))}
-						</tr>
-					))}
-					<tr className="border leading-11">
-						<th
-							style={{
-								textAlign: "left",
-							}}
-						>
-							<GlobalFilter
-								preGlobalFilteredRows={preGlobalFilteredRows}
-								globalFilter={state.globalFilter}
-								setGlobalFilter={setGlobalFilter}
-							/>
-						</th>
-					</tr>
-				</thead>
-				<tbody {...getTableBodyProps()}>
-					{rows.map((row, i) => {
-						prepareRow(row);
-						return (
-							<tr
-								{...row.getRowProps()}
-								className={`hover:bg-gray-100 ${
-									global.currentUser ? "cursor-pointer" : ""
-								}  ${row.original.read ? "bg-green-100" : ""}`}
-								onClick={() => {
-									const book = row.original;
-
-									if (props.sharedShelf) {
-										props.history.push(
-											`/book/${book.global_id}`
-										);
-									} else {
-										props.history.push(`/book/${book.id}`);
-									}
-									// if (global.currentUser && !props.sharedShelf) {
-									//   if (Number(bookRow.user_id) === global.currentUser.id) {
-									//     props.history.push(
-									//       `/book/owned/${row.original.user_book_id}`
-									//     );
-									//   } else {
-									//     props.history.push(`/book/household/${row.original.id}`);
-									//   }
-									// } else if (global.currentUser && props.sharedShelf) {
-									//   switch (props.relation) {
-									//     case 'self':
-									//       props.history.push(`/book/owned/${row.original.id}`);
-									//       break;
-									//     case 'household':
-									//       props.history.push(
-									//         `/book/household/${row.original.global_id}`
-									//       );
-									//       break;
-									//     case 'none':
-									//       props.history.push(`/book/${row.original.global_id}`);
-									//       break;
-									//     default:
-									//       break;
-									//   }
-									// } else return;
+										<span>
+											{column.isSorted
+												? column.isSortedDesc
+													? " 🔽"
+													: " 🔼"
+												: null}
+										</span>
+									</th>
+								))}
+							</tr>
+						))}
+						<tr className="border leading-11">
+							<th
+								style={{
+									textAlign: "left",
 								}}
 							>
-								{row.cells.map((cell) => {
-									return (
-										<td
-											{...cell.getCellProps()}
-											className="border px-4 py-2"
-										>
-											{cell.render("Cell")}{" "}
-										</td>
-									);
-								})}
-							</tr>
-						);
-					})}
-				</tbody>
-			</table>
+								<GlobalFilter
+									preGlobalFilteredRows={
+										preGlobalFilteredRows
+									}
+									globalFilter={state.globalFilter}
+									setGlobalFilter={setGlobalFilter}
+								/>
+							</th>
+						</tr>
+					</thead>
+					<tbody {...getTableBodyProps()}>
+						{rows.map((row, i) => {
+							prepareRow(row);
+							return (
+								<tr
+									{...row.getRowProps()}
+									className={`hover:bg-gray-100 ${
+										global.currentUser
+											? "cursor-pointer"
+											: ""
+									}  ${
+										row.original.read ? "bg-green-100" : ""
+									}`}
+									onClick={() => {
+										const book = row.original;
+
+										if (props.sharedShelf) {
+											props.history.push(
+												`/book/${book.global_id}`
+											);
+										} else {
+											props.history.push(
+												`/book/${book.id}`
+											);
+										}
+										// if (global.currentUser && !props.sharedShelf) {
+										//   if (Number(bookRow.user_id) === global.currentUser.id) {
+										//     props.history.push(
+										//       `/book/owned/${row.original.user_book_id}`
+										//     );
+										//   } else {
+										//     props.history.push(`/book/household/${row.original.id}`);
+										//   }
+										// } else if (global.currentUser && props.sharedShelf) {
+										//   switch (props.relation) {
+										//     case 'self':
+										//       props.history.push(`/book/owned/${row.original.id}`);
+										//       break;
+										//     case 'household':
+										//       props.history.push(
+										//         `/book/household/${row.original.global_id}`
+										//       );
+										//       break;
+										//     case 'none':
+										//       props.history.push(`/book/${row.original.global_id}`);
+										//       break;
+										//     default:
+										//       break;
+										//   }
+										// } else return;
+									}}
+								>
+									{row.cells.map((cell) => {
+										return (
+											<td
+												{...cell.getCellProps()}
+												className="border px-4 py-2"
+											>
+												{cell.render("Cell")}{" "}
+											</td>
+										);
+									})}
+								</tr>
+							);
+						})}
+					</tbody>
+				</table>
+			)}
 		</div>
 	);
 };
