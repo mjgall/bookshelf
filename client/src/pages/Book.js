@@ -133,6 +133,37 @@ const Book = (props) => {
 		await axios.post("/api/books", book);
 	};
 
+	const getMenuOptions = () => {
+		if (book.on_loan) {
+			return [
+				{
+					action: () => deleteBook(),
+					confirm: true,
+					text: "Delete",
+				},
+			];
+		} else {
+			return [
+				{
+					action: () => deleteBook(),
+					confirm: true,
+					text: "Delete",
+				},
+				{
+					action: () =>
+						global.setGlobal({
+							modalOpen: true,
+							currentModal: "loan",
+							bookId: book.id,
+							userBookId: book.user_book_id,
+						}),
+					confirm: false,
+					text: "Loan",
+				},
+			];
+		}
+	};
+
 	return (
 		<div className="container mx-auto mt-12">
 			{loaded ? (
@@ -350,26 +381,7 @@ const Book = (props) => {
 											placement="bottom"
 											type="button"
 											size="1.5em"
-											options={[
-												{
-													action: () => deleteBook(),
-													confirm: true,
-													text: "Delete",
-												},
-												{
-													action: () =>
-														global.setGlobal({
-															modalOpen: true,
-															currentModal:
-																"loan",
-															bookId: book.id,
-															userBookId:
-																book.user_book_id,
-														}),
-													confirm: false,
-													text: "Loan",
-												},
-											]}
+											options={getMenuOptions()}
 										></MoreMenu>
 									) : type === "global" ? (
 										<MoreMenu
@@ -487,24 +499,7 @@ const Book = (props) => {
 							<MoreMenu
 								placement="left"
 								size="1.5em"
-								options={[
-									{
-										action: () => deleteBook(),
-										confirm: true,
-										text: "Delete",
-									},
-									{
-										action: () =>
-											global.setGlobal({
-												modalOpen: true,
-												currentModal: "loan",
-												bookId: book.id,
-												userBookId: book.user_book_id,
-											}),
-										confirm: false,
-										text: "Loan",
-									},
-								]}
+								options={getMenuOptions()}
 							></MoreMenu>
 						) : type === "global" ? (
 							<MoreMenu
