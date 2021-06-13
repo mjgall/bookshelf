@@ -757,7 +757,8 @@ module.exports = (app) => {
 		switch (req.body.action) {
 			case "end":
 				const response = await updateLoan("end", req.body.id, req.body.user_books_id)
-				res.send(response)
+				const activity = await addActivity(response[0].lender_id, response[0].global_id, 6, response[0].borrower_id)
+				res.send(activity)
 				break;
 			default:
 				break;

@@ -29,12 +29,15 @@ const LoanModal = (props) => {
 		updatedAllBooks[index].borrower_id = friendId;
 		updatedAllBooks[index].full = friendName
 		global.setGlobal({ allBooks: updatedAllBooks });
+
+		global.setGlobal({modalOpen: false})
 	};
 
 	return (
 		<>
 			<div className="flex flex-wrap py-6 px-8">
 				<div>
+					<div className="text-lg font-weight-bold">Loan to:</div>
 					{connections.map((connection, index) => {
 						return (
 							<div
