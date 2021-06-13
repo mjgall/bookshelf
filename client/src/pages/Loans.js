@@ -5,6 +5,7 @@ import moment from "moment";
 import { Context } from "../globalContext";
 
 import MoreMenu from "../common/MoreMenu";
+import Tip from "../common/Tip"
 
 const LoanBox = ({ book, user, loan, index, update }) => {
 	const global = useContext(Context);
@@ -13,19 +14,19 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 			action: "end",
 			id: loan.id,
 			user_books_id: loan.user_books_id,
-		})
+		});
 
 		if (response) {
-
-			const index = global.allBooks.findIndex(allBook => allBook.id === book.global_id)
-			let updatedAllBooks = [...global.allBooks]
-			updatedAllBooks[index].on_loan = 0
-			updatedAllBooks[index].borrower_id = null
-			global.setGlobal({allBooks: updatedAllBooks})
-
+			const index = global.allBooks.findIndex(
+				(allBook) => allBook.id === book.global_id
+			);
+			let updatedAllBooks = [...global.allBooks];
+			updatedAllBooks[index].on_loan = 0;
+			updatedAllBooks[index].borrower_id = null;
+			global.setGlobal({ allBooks: updatedAllBooks });
 		}
-		update()
-	}
+		update();
+	};
 
 	return (
 		<div
@@ -49,7 +50,11 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 					</div>
 				)}
 
-				<div className={loan.end_date ? "h-12 w-12 mr-2 ml-4" : "h-12 w-12 mr-2"}>
+				<div
+					className={
+						loan.end_date ? "h-12 w-12 mr-2 ml-4" : "h-12 w-12 mr-2"
+					}
+				>
 					<img
 						alt="user"
 						src={user.user_picture}
@@ -119,8 +124,8 @@ const Loans = (props) => {
 	};
 
 	const update = () => {
-		getLoans()
-	}
+		getLoans();
+	};
 
 	useEffect(() => {
 		getLoans();
@@ -128,6 +133,15 @@ const Loans = (props) => {
 
 	return (
 		<div>
+			<div className="flex items-center text-center">
+				<div className="text-2xl font-bold">Loans</div>
+				<Tip
+					content="You can track books you've loaned to friends and household members."
+					placement="right"
+					size="1rem"
+					className="ml-2"
+				></Tip>
+			</div>
 			<div>
 				<div className="text-xl">Borrowed</div>
 				{loans.filter(
@@ -135,7 +149,9 @@ const Loans = (props) => {
 						book.borrower_id === global.currentUser.id &&
 						!book.end_date
 				).length < 1 ? (
-					<div className="text-xs my-1 text-gray-500 italic font-weight-light">You currently are not borrowing any books.</div>
+					<div className="text-xs my-1 text-gray-500 italic font-weight-light">
+						You currently are not borrowing any books.
+					</div>
 				) : (
 					<>
 						{loans
@@ -185,7 +201,9 @@ const Loans = (props) => {
 						book.lender_id === global.currentUser.id &&
 						!book.end_date
 				).length < 1 ? (
-					<div className="text-xs my-1 text-gray-500 italic font-weight-light">You currently are not lending any books.</div>
+					<div className="text-xs my-1 text-gray-500 italic font-weight-light">
+						You currently are not lending any books.
+					</div>
 				) : (
 					<>
 						{loans
@@ -230,8 +248,10 @@ const Loans = (props) => {
 			</div>
 			<div>
 				<div className="text-xl">Past</div>
-				{loans.filter(loan => loan.end_date).length < 1 ? (
-					<div className="text-xs my-1 text-gray-500 italic font-weight-light">You haven't loaned or borrowed any books in the past.</div>
+				{loans.filter((loan) => loan.end_date).length < 1 ? (
+					<div className="text-xs my-1 text-gray-500 italic font-weight-light">
+						You haven't loaned or borrowed any books in the past.
+					</div>
 				) : (
 					<>
 						{loans

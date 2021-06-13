@@ -176,86 +176,105 @@ const Friends = (props) => {
 			) : null}
 
 			<div>
-				<div>Invites</div>
 				<div>
-					{friends
-						.filter((friendship) => {
-							return (
-								!friendship.accepted &&
-								!friendship.declined &&
-								friendship.user_id_2 === global.currentUser.id
-							);
-						})
-						.map((friend, index) => {
-							return (
-								<div
-									key={index}
-									className="flex items-center my-2"
-								>
-									<img
-										alt={friend.full}
-										src={friend.picture}
-										className="rounded-full h-12 w-12 mr-4"
-									></img>
-									<div className="flex items-center">
-										<div>
-											<Tip
-												content="Accept"
-												renderChildren
-												placement="right"
-											>
-												<CheckSquare
-													size="2em"
-													className="cursor-pointer text-green-400 w-full"
-													onClick={() =>
-														editInvite(
-															friend.friendship_id,
-															"accept"
-														)
-													}
-												></CheckSquare>
-											</Tip>
-										</div>
-										<div>{friend.full}</div>
-									</div>
-								</div>
-							);
-						})}
-				</div>
-			</div>
-			<div>
-				<div>Accepted</div>
-				<div>
-					{friends
-						.filter((friendship) => {
-							return friendship.accepted;
-						})
-						.map((friend, index) => {
-							return (
-								<div
-									key={index}
-									className="flex items-center my-2"
-								>
-									<img
-										alt={friend.full}
-										src={friend.picture}
-										className="rounded-full h-12 w-12 mr-4"
-									></img>
-									<Link
-										className="cursor-pointer"
-										to={`/shelf/${
-											global.currentUser.id ===
-											friend.user_id
-												? friend.user_id_2
-												: friend.user_id
-										}`}
+					{friends.filter((friendship) => {
+						return friendship.accepted && !friendship.declined;
+					}) < 1 ? (
+						<div className="text-xs my-1 text-gray-500 italic font-weight-light">
+							You don't have any friends. Search by name and add
+							some here.
+						</div>
+					) : null}
+
+					<div>
+						{friends
+							.filter((friendship) => {
+								return friendship.accepted;
+							})
+							.map((friend, index) => {
+								return (
+									<div
+										key={index}
+										className="flex items-center my-2"
 									>
-										<div>{friend.full}</div>
-									</Link>
-								</div>
-							);
-						})}
+										<img
+											alt={friend.full}
+											src={friend.picture}
+											className="rounded-full h-12 w-12 mr-4"
+										></img>
+										<Link
+											className="cursor-pointer"
+											to={`/shelf/${
+												global.currentUser.id ===
+												friend.user_id
+													? friend.user_id_2
+													: friend.user_id
+											}`}
+										>
+											<div>{friend.full}</div>
+										</Link>
+									</div>
+								);
+							})}
+					</div>
 				</div>
+				{friends.filter((friendship) => {
+					return (
+						!friendship.accepted &&
+						!friendship.declined &&
+						friendship.user_id_2 === global.currentUser.id
+					);
+				}).length > 0 ? (
+					<>
+						<div>Pending Invites</div>
+						<div>
+							{friends
+								.filter((friendship) => {
+									return (
+										!friendship.accepted &&
+										!friendship.declined &&
+										friendship.user_id_2 ===
+											global.currentUser.id
+									);
+								})
+								.map((friend, index) => {
+									return (
+										<div
+											key={index}
+											className="flex items-center my-2"
+										>
+											<img
+												alt={friend.full}
+												src={friend.picture}
+												className="rounded-full h-12 w-12 mr-4"
+											></img>
+											<div className="flex items-center">
+												<div>
+													<Tip
+														content="Accept"
+														renderChildren
+														placement="right"
+													>
+														<CheckSquare
+															size="2em"
+															className="cursor-pointer text-green-400 w-full"
+															onClick={() =>
+																editInvite(
+																	friend.friendship_id,
+																	"accept"
+																)
+															}
+														></CheckSquare>
+													</Tip>
+												</div>
+												<div>{friend.full}</div>
+											</div>
+										</div>
+									);
+								})}
+						</div>
+					</>
+				) : null}
 			</div>
 		</div>
 	);

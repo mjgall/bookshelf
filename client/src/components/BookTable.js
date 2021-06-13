@@ -166,6 +166,12 @@ const BookTable = (props) => {
 		// setBooks(props.books);
 		getOwners(global.householdMembers);
 		setHouseholdOptions(getHouseholdOptions());
+		if (global.households.length < 1) {
+			setHouseholdSelect({
+				label: "⛔ None (Only your own books)",
+				value: "none",
+			})
+		}
 	}, [
 		global.households,
 		global.householdMembers,
@@ -334,7 +340,7 @@ const BookTable = (props) => {
 	return (
 		<div>
 			<div className="flex items-center md:h-8 mb-2">
-				{props.sharedShelf ? null : (
+				{props.sharedShelf || global.households.length < 1 ? null : (
 					<>
 						<div className="flex-none">
 							<div className="flex">

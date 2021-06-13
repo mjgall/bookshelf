@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import banner3 from "../images/banner3.jpg";
 import banner2 from "../images/banner2.jpg";
 import banner1 from "../images/banner1.jpg";

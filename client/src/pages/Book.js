@@ -479,7 +479,7 @@ const Book = (props) => {
 								readViewFitContainerWidth
 							/>
 						)}
-						{type === "global" ? null : (
+						{type === "global" || global.households.length < 1 ? null : (
 							<div>
 								<div className="text-lg mt-6">
 									<span role="img" aria-label="house">
