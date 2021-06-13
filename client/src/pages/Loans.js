@@ -17,12 +17,12 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 
 		if (response) {
 
-			const index = global.allBooks.findIndex(book => book.user_book_id === loan.user_books_id)
-			
+			const index = global.allBooks.findIndex(allBook => allBook.id === book.global_id)
 			let updatedAllBooks = [...global.allBooks]
 			updatedAllBooks[index].on_loan = 0
 			updatedAllBooks[index].borrower_id = null
 			global.setGlobal({allBooks: updatedAllBooks})
+
 		}
 		update()
 	}
@@ -158,6 +158,7 @@ const Loans = (props) => {
 											user_picture: loan.user_picture,
 										}}
 										loan={{
+											user_books_id: loan.user_books_id,
 											borrower_id: loan.borrower_id,
 											lender_id: loan.lender_id,
 											start_date: loan.start_date,
