@@ -93,7 +93,7 @@ const NavBar = ({
 					</span>
 				</div>
 
-				<div>
+				<div className="flex items-center justify-center">
 					{!global.currentUser ? (
 						<a
 							onClick={clearReferrer}
@@ -111,10 +111,10 @@ const NavBar = ({
 						</a>
 					) : (
 						<>
-							<div className=" hidden lg:block">
+							<div className="hidden lg:flex">
 								<Link
 									to="/profile"
-									className="inline-block mx-1 text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white lg:mt-0 "
+									className="inline-block mx-1 text-sm px-4 py-1 leading-none border rounded text-white border-white hover:border-transparent hover:text-black hover:bg-white lg:mt-0 "
 								>
 									{global.householdMembers.some(
 										(membership) => {
@@ -128,7 +128,16 @@ const NavBar = ({
 									) && windowWidth > 380 ? (
 										<div className="mr-2 inline-block rounded-full bg-red-600 p-1 "></div>
 									) : null}
-									<div className="flex ">Profile</div>
+									<div className="flex items-center justify-center">
+										<div className="pr-2">
+											<img
+												role="user avatar"
+												src={global.currentUser.picture}
+												className="rounded-full h-6 w-6"
+											></img>
+										</div>
+										<div className="flex">Profile</div>
+									</div>
 								</Link>
 								<a
 									href="/api/logout"
