@@ -48,8 +48,8 @@ const NavBar = ({
 	//max-w-screen-lg container my-4
 	return (
 		// <nav className="z-50 flex shadow-lg items-center justify-between flex-wrap bg-royalblue px-8 py-1 md:py-3 sticky top-safe0 md:top-0">
-		<nav className="z-50 bg-royalblue sticky flex justify-center">
-			<div className="flex items-center justify-between md:px-0 px-8 flex-wrap py-1 md:my-3 top-safe0 md:top-0 max-w-screen-xl w-full">
+		<nav className="z-50 bg-royalblue sticky flex justify-center top-safe0">
+			<div className="flex items-center justify-between md:px-0 px-8 flex-wrap md:my-3 md:top-0 max-w-screen-xl w-full">
 				<div className="flex items-center">
 					<div
 						className="flex items-center flex-shrink-0 text-white mr-6 cursor-pointer"
@@ -131,7 +131,7 @@ const NavBar = ({
 									<div className="flex items-center justify-center">
 										<div className="pr-2">
 											<img
-												role="user avatar"
+												alt="user avatar"
 												src={global.currentUser.picture}
 												className="rounded-full h-6 w-6"
 											></img>
