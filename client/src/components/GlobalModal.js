@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import Modal from "react-modal";
 import { Context } from "../globalContext";
-import useWindowSize from "../hooks/useWindowSize";
+// import useWindowSize from "../hooks/useWindowSize";
 
 import LoanModal from "../components/LoanModal";
 
@@ -12,7 +12,7 @@ const GlobalModal = () => {
 		global.setGlobal({ modalOpen: !global.modalOpen });
 	};
 
-	const size = useWindowSize();
+	// const size = useWindowSize();
 	const modalStyles = {
 		content: {
 			// width: size.width > 500 ? "50vw" : "100%",
