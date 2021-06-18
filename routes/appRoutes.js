@@ -1,6 +1,7 @@
 const axios = require("axios");
 
 const keys = require("../config/keys");
+const randomId = require("../services/randomId")
 
 const _ = require("lodash");
 
@@ -48,6 +49,7 @@ const getLoans = require("../queries/getLoans");
 const getActivitiesPaginated = require("../queries/getActivitiesPaginated");
 const getConnections = require("../queries/getConnections")
 const updateLoan = require("../queries/updateLoan")
+const getSharedShelfBooks = require("../queries/getSharedShelfBooks")
 
 
 const checkAuthed = (req, res, next) => {
@@ -501,7 +503,10 @@ module.exports = (app) => {
 
 	//get a users public books
 	app.get("/api/shelves/:shelfId", async (req, res) => {
-		const books = await getBooks(req.params.shelfId);
+
+		const books = await getSharedShelfBooks(req.params.shelfId)
+
+		// const books = await getBooks(req.params.shelfId);
 		res.send(books);
 	});
 

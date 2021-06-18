@@ -51,7 +51,7 @@ const ProfileInfoCard = (props) => {
           </div>
           <Copy
             placement='top'
-            value={`${window.location.protocol}//${window.location.host}/shelf/${global.currentUser.id}`}></Copy>
+            value={`${window.location.protocol}//${window.location.host}/shelf/${global.currentUser.shelf_id}`}></Copy>
         </div>
       </div>
     </div>
