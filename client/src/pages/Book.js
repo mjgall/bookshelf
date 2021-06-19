@@ -405,7 +405,7 @@ const Book = (props) => {
 							<div className="bg-yellow-100 w-full h-12 rounded border-2 border-yellow-300 flex">
 								<div className="self-center text-center	w-full">
 									Loaned to
-									<Link to={`/shelf/${book.borrower_id}`}>
+									<Link to={`/shelf/${book.shelf_id}`}>
 										{` ${book.full}`}
 									</Link>
 								</div>

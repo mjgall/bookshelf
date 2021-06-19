@@ -205,10 +205,7 @@ const Friends = (props) => {
 										<Link
 											className="cursor-pointer"
 											to={`/shelf/${
-												global.currentUser.id ===
-												friend.user_id
-													? friend.user_id_2
-													: friend.user_id
+												friend.shelf_id
 											}`}
 										>
 											<div>{friend.full}</div>

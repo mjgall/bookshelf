@@ -50,6 +50,7 @@ const getActivitiesPaginated = require("../queries/getActivitiesPaginated");
 const getConnections = require("../queries/getConnections")
 const updateLoan = require("../queries/updateLoan")
 const getSharedShelfBooks = require("../queries/getSharedShelfBooks")
+const updateUser = require("../queries/updateUser")
 
 
 const checkAuthed = (req, res, next) => {
@@ -778,6 +779,12 @@ module.exports = (app) => {
 		const dupesRemoved = _.uniqBy(response, 'user_id');
 
 		res.send(dupesRemoved)
+	})
+
+	app.put("/api/users", checkAuthed, async (req, res) => {
+
+		const response = await updateUser(req.user.id, req.body.field, req.body.value)
+		res.send(response)
 	})
 
 };

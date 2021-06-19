@@ -16,7 +16,7 @@ module.exports = (userId) => {
     // ORDER BY user_books.id DESC`
 
 
-    const query = `SELECT DISTINCT user_books.id as user_book_id, user_books.user_id, user_books.global_id as id, user_books.title, user_books.author, user_books.isbn10, user_books.isbn13, user_books.cover, user_books.language, user_books.title_long, user_books.edition, user_books.pages, user_books.date_published, user_books.date_created, user_books.notes, user_books.read, user_books.private, user_books.started, null AS household_id, user_books.on_loan, user_books.borrower_id, users.full, users.picture
+    const query = `SELECT DISTINCT user_books.id as user_book_id, user_books.user_id, user_books.global_id as id, user_books.title, user_books.author, user_books.isbn10, user_books.isbn13, user_books.cover, user_books.language, user_books.title_long, user_books.edition, user_books.pages, user_books.date_published, user_books.date_created, user_books.notes, user_books.read, user_books.private, user_books.started, null AS household_id, user_books.on_loan, user_books.borrower_id, users.full, users.picture, users.shelf_id
     FROM user_books 
     LEFT JOIN users_globalbooks ON users_globalbooks.global_book_id = user_books.global_id
     LEFT JOIN loans ON loans.global_id = user_books.global_id
