@@ -48,9 +48,9 @@ const Account = (props) => {
 					<div className="text-2xl font-bold">Settings</div>
 				</div>
 				<div>
-					<div className="flex items-center justify-between w-1/2">
+					<div className="flex items-center justify-between mr-4 md:mr-0 md:w-1/2  border-b border-t border-dashed border-black py-2">
 						<div className="flex items-center">
-							<div>Public Shelf Available</div>
+							<div className="text-lg">Public Shelf Available</div>
 							<Tip
 								content="Whether your shared shelf is visible at the link found in your Profile."
 								placement="bottom"
