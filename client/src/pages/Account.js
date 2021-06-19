@@ -28,15 +28,6 @@ const Account = (props) => {
 					<div className="text-2xl font-bold">Account</div>
 				</div>
 			</div>
-			<div className="text-xl font bold underline mb-2">
-				<a
-					target="_blank"
-					rel="noopener noreferrer"
-					href="https://gllghr.io/blog/bookshelf-improvements/"
-				>
-					Improvements to be made (gllghr.io)
-				</a>
-			</div>
 			<div>
 				Joined{" "}
 				{moment(global.currentUser.create_date).format(
@@ -50,7 +41,7 @@ const Account = (props) => {
 				<div>
 					<div className="flex items-center justify-between md:w-1/2 border-b border-t border-dashed border-black py-2">
 						<div className="flex items-center">
-							<div className="ml-4 md:mr-0 text-lg">Public Shelf Available</div>
+							<div className="md:ml-0 ml-4 text-lg">Public Shelf Available</div>
 							<Tip
 								content="Whether your shared shelf is visible at the link found in your Profile."
 								placement="bottom"
