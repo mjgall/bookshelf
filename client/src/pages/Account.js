@@ -3,7 +3,8 @@ import moment from "moment";
 import { Context } from "../globalContext";
 import Transparent from "../components/Transparent";
 import axios from "axios";
-import Tip from "../common/Tip"
+import Tip from "../common/Tip";
+import Switch from "react-switch";
 
 const Account = (props) => {
 	const global = useContext(Context);
@@ -47,24 +48,20 @@ const Account = (props) => {
 					<div className="text-2xl font-bold">Settings</div>
 				</div>
 				<div>
-					<div className="flex items-center">
-						<div>Public Shelf Available</div>
-						<Tip
-							content="Whether your shared shelf is visible at the link found in your Profile."
-							placement="right"
-							size="1rem"
-							className="ml-2"
-						></Tip>
-						<input
-							style={{
-								height: "1.5rem",
-								width: "1.5rem",
-							}}
-							className="mx-2 cursor-pointer"
-							type="checkbox"
-							checked={shelfEnabled}
+					<div className="flex items-center justify-between w-1/2">
+						<div className="flex items-center">
+							<div>Public Shelf Available</div>
+							<Tip
+								content="Whether your shared shelf is visible at the link found in your Profile."
+								placement="bottom"
+								size="1rem"
+								className="ml-2"
+							></Tip>
+						</div>
+						<Switch
 							onChange={toggleShelfEnabled}
-						></input>
+							checked={shelfEnabled}
+						/>
 					</div>
 				</div>
 			</div>
