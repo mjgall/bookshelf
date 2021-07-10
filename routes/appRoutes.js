@@ -782,7 +782,7 @@ module.exports = (app) => {
 	})
 
 	app.put("/api/users", checkAuthed, async (req, res) => {
-		if (!req.body.field || req.body.field !== "shelf_enabled") {
+		if (!req.body.field || req.body.field === "admin") {
 			res.status(400)
 		}
 		const response = await updateUser(req.user.id, req.body.field, req.body.value)

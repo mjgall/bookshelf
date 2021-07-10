@@ -12,6 +12,19 @@ const Account = (props) => {
 		global.currentUser.shelf_enabled
 	);
 
+	const [searchable, setSearchable] = React.useState(
+		global.currentUser.searchable
+	);
+
+	const toggleSearchable = () => {
+		axios.put("/api/users", {
+			field: "searchable",
+			value: !searchable,
+		});
+
+		setSearchable(!searchable);
+	};
+
 	const toggleShelfEnabled = () => {
 		axios.put("/api/users", {
 			field: "shelf_enabled",
@@ -52,6 +65,21 @@ const Account = (props) => {
 						<Switch className="mr-4 md:mr-0"
 							onChange={toggleShelfEnabled}
 							checked={shelfEnabled}
+						/>
+					</div>
+					<div className="flex items-center justify-between md:w-1/2 border-b border-dashed border-black py-2">
+						<div className="flex items-center">
+							<div className="md:ml-0 ml-4 text-lg">Searchable</div>
+							<Tip
+								content="Whether you are seachable from others' Profiles by your name."
+								placement="bottom"
+								size="1rem"
+								className="ml-2"
+							></Tip>
+						</div>
+						<Switch className="mr-4 md:mr-0"
+							onChange={toggleSearchable}
+							checked={searchable}
 						/>
 					</div>
 				</div>
