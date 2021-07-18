@@ -3,7 +3,7 @@ const sqlString = require("sqlstring");
 
 module.exports = (term) => {
     return new Promise((resolve, reject) => {
-        const query = `SELECT * FROM users WHERE full LIKE '%${term}%' AND id != 23`
+        const query = `SELECT * FROM users WHERE full LIKE '%${term}%' AND id != 23 AND searchable = TRUE`
 
         db.query(query, (err, results, fields) => {
             if (err) {

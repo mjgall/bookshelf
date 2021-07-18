@@ -736,7 +736,6 @@ module.exports = (app) => {
 	});
 
 	app.get("/api/users/search/:term", checkAuthed, async (req, res) => {
-		console.log(req.params.term)
 		const results = await searchUsers(req.params.term);
 		res.send(results);
 	});

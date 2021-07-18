@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import moment from "moment";
 import { Context } from "../globalContext";
 import Transparent from "../components/Transparent";
@@ -8,11 +8,11 @@ import Switch from "react-switch";
 
 const Account = (props) => {
 	const global = useContext(Context);
-	const [shelfEnabled, setShelfEnabled] = React.useState(
+	const [shelfEnabled, setShelfEnabled] = useState(
 		global.currentUser.shelf_enabled
 	);
 
-	const [searchable, setSearchable] = React.useState(
+	const [searchable, setSearchable] = useState(
 		global.currentUser.searchable
 	);
 
@@ -21,7 +21,7 @@ const Account = (props) => {
 			field: "searchable",
 			value: !searchable,
 		});
-
+		global.setGlobal({currentUser: {...global.currentUser, searchable: !searchable}})
 		setSearchable(!searchable);
 	};
 
@@ -30,7 +30,7 @@ const Account = (props) => {
 			field: "shelf_enabled",
 			value: !shelfEnabled,
 		});
-
+		global.setGlobal({currentUser: {...global.currentUser, shelf_enabled: !shelfEnabled}})
 		setShelfEnabled(!shelfEnabled);
 	};
 
