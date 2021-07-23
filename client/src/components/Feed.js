@@ -20,15 +20,29 @@ const Feed = (props) => {
 		}
 	};
 
+	const getSavedOthersFilter = () => {
+		const local = JSON.parse(localStorage.getItem("hideOthers"));
+		if (local) {
+			return local;
+		} else {
+			return false;
+		}
+	};
+
 	const [activities, setActivities] = useState([]);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [hideSelf, setHideSelf] = useState(getSavedSelfFilter());
+	const [hideOthers, setHideOthers] = useState(getSavedOthersFilter());
 	const global = useContext(Context);
 
 	const filter = () => {
 		if (hideSelf) {
 			return activities.filter((activity) => {
 				return activity.user_id !== global.currentUser.id;
+			});
+		} else if (hideOthers) {
+			return activities.filter((activity) => {
+				return activity.user_id === global.currentUser.id;
 			});
 		} else {
 			return activities;
@@ -38,6 +52,18 @@ const Feed = (props) => {
 	const toggleHideSelf = () => {
 		setHideSelf(!hideSelf);
 		localStorage.setItem("hideSelf", !hideSelf);
+		if (hideOthers) {
+			toggleHideOthers()
+		}
+	};
+
+	const toggleHideOthers = () => {
+		setHideOthers(!hideOthers);
+		localStorage.setItem("hideOthers", !hideOthers);
+		if (hideSelf) {
+			toggleHideSelf()
+		}
+		
 	};
 
 	const fetchNextPage = async () => {
@@ -152,15 +178,27 @@ const Feed = (props) => {
 
 			{!activities.length < 1 ? (
 				<>
-					<div className="flex items-center ml-2">
-						<input
-							style={{ height: "1.5rem", width: "1.5rem" }}
-							className="mx-2 cursor-pointer"
-							type="checkbox"
-							checked={hideSelf}
-							onChange={toggleHideSelf}
-						></input>
-						<div>Hide self</div>
+					<div className="flex">
+						<div className="flex items-center ml-2">
+							<input
+								style={{ height: "1.5rem", width: "1.5rem" }}
+								className="mx-2 cursor-pointer"
+								type="checkbox"
+								checked={hideSelf}
+								onChange={toggleHideSelf}
+							></input>
+							<div>Hide self</div>
+						</div>
+						<div className="flex items-center ml-2">
+							<input
+								style={{ height: "1.5rem", width: "1.5rem" }}
+								className="mx-2 cursor-pointer"
+								type="checkbox"
+								checked={hideOthers}
+								onChange={toggleHideOthers}
+							></input>
+							<div>Hide others</div>
+						</div>
 					</div>
 					<>
 						{filter().map((item, index) => {
@@ -315,7 +353,10 @@ const Feed = (props) => {
 					</Button>
 				</>
 			) : (
-				<div className="my-1 text-gray-500 italic font-weight-light">You don't have any friend or household connections. Add some from your Profile.</div>	
+				<div className="my-1 text-gray-500 italic font-weight-light">
+					You don't have any friend or household connections. Add some
+					from your Profile.
+				</div>
 			)}
 		</div>
 	);
