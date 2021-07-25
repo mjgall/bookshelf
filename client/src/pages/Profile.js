@@ -1,14 +1,20 @@
 import React from "react";
 import axios from "axios";
 
+import InlineEdit from "@atlaskit/inline-edit";
+import TextArea from "@atlaskit/textarea";
+import Textfield from "@atlaskit/textfield";
+
 import {
 	CheckSquare,
 	XSquare,
 	PlusSquare,
 	ChevronDownSquare,
+	Pencil,
 } from "@styled-icons/boxicons-solid";
 
 import ProfileInfoCard from "../components/ProfileInfoCard";
+import Notifications from "../components/Notifications";
 import Friends from "../components/Friends";
 
 import Confirm from "../common/Confirm";
@@ -26,6 +32,9 @@ export default class Profile extends React.Component {
 		alert: false,
 		alertMessage: "",
 		alertNoAction: false,
+		editingHousehold: false,
+		editingHouseholdIndex: null,
+		editingHouseholdValue: "",
 	};
 
 	componentDidMount = async () => {
@@ -83,7 +92,7 @@ export default class Profile extends React.Component {
 			recipientAddress: invitedEmailAddress,
 			// recipientAddress: 'mike.gallagh@gmail.com',
 			subject: `📚 You've been invited to join Bookshelf!`,
-			body: `<p>${this.props.user.full} (${this.props.user.email}) invited you to join bookshelf.mikegallagher.app</p><a href="https://bookshelf.mikegallagher.app">bookshelf.mikegallagher.app</a>`,
+			body: `<p>${this.props.user.full} (${this.props.user.email}) invited you to join </p><a href="https://www.papyr.io">Papyr.io</a>`,
 		});
 		if (response.data.success) {
 			this.setState({
@@ -231,20 +240,20 @@ export default class Profile extends React.Component {
 		} else {
 			return Number(member.user_id) ===
 				this.props.user.id ? null : membership.is_owner ? (
-				<Confirm
-					position="left"
-					tipContent="Remove member"
-					onConfirm={() =>
-						this.removeMember(
-							Number(membership.household_id),
-							Number(member.user_id),
-							index
-						)
-					}
-				>
-					<XSquare className="text-red-600" size="1.5rem"></XSquare>
-				</Confirm>
-			) : null;
+					<Confirm
+						position="left"
+						tipContent="Remove member"
+						onConfirm={() =>
+							this.removeMember(
+								Number(membership.household_id),
+								Number(member.user_id),
+								index
+							)
+						}
+					>
+						<XSquare className="text-red-600" size="1.5rem"></XSquare>
+					</Confirm>
+				) : null;
 		}
 	};
 
@@ -270,6 +279,20 @@ export default class Profile extends React.Component {
 		} else {
 			return member.member_email || member.email;
 		}
+	};
+
+	editHouseholdName = (householdIndex, householdName) => {
+		console.log(householdIndex);
+
+		this.setState({
+			editingHousehold: !this.state.editingHousehold,
+			editingHouseholdIndex: householdIndex,
+			editingHouseholdValue: householdName,
+		});
+	};
+
+	handleEditHouseholdName = (e) => {
+		this.setState({ editingHouseholdValue: e.target.value });
 	};
 
 	render = () => {
@@ -313,8 +336,8 @@ export default class Profile extends React.Component {
 											onClick={() =>
 												this.handleBookshelfInviteSend(
 													this.state.inviteValues[
-														this.state
-															.affectedHouseholdIndex
+													this.state
+														.affectedHouseholdIndex
 													]
 												)
 											}
@@ -401,7 +424,7 @@ export default class Profile extends React.Component {
 										></Tip>
 									</span>
 								</div>
-								
+
 								{this.state.addHousehold ? (
 									<ChevronDownSquare
 										onClick={() => {
@@ -430,8 +453,13 @@ export default class Profile extends React.Component {
 									</Tip>
 								)}
 							</div>
-							{this.state.households.length < 1 ? <div className="my-1 text-gray-500 italic font-weight-light">You don't have any households. Add one to the right. Once you've added a household, you can invite members of your home.</div>	 : null}
-							
+							{this.state.households.length < 1 ? (
+								<div className="my-1 text-gray-500 italic font-weight-light">
+									You don't have any households. Add one to
+									the right. Once you've added a household,
+									you can invite members of your home.
+								</div>
+							) : null}
 							{this.state.addHousehold ? (
 								<form
 									onSubmit={this.handleHouseholdSubmit}
@@ -465,7 +493,7 @@ export default class Profile extends React.Component {
 								if (
 									membership.invite_accepted &&
 									Number(membership.user_id) ===
-										this.props.user.id
+									this.props.user.id
 								) {
 									return (
 										<div
@@ -473,27 +501,62 @@ export default class Profile extends React.Component {
 											className="border border-gray-400 shadow rounded-lg p-4"
 										>
 											<div className="text-2xl font-bold mb-3 flex justify-between items-center">
-												<span className="overflow-x-hidden">
-													{membership.household_name}
-												</span>
-												{membership.is_owner ? (
-													<Confirm
-														position="left"
-														tipContent="Delete household"
-														onConfirm={() =>
-															this.deleteHousehold(
-																Number(
-																	membership.household_id
-																),
-																index
-															)
+												{this.state.editingHousehold &&
+													this.state
+														.editingHouseholdIndex ===
+													index ? (
+													// "hello"
+													// <Textfield
+													// 	value={
+													// 		this.state.editingHouseholdValue
+													// 	}
+													// 	onChange={
+													// 		this.handleEditHouseholdName
+													// 	}
+													// ></Textfield>
+													<span className="overflow-x-hidden">
+														{
+															membership.household_name
 														}
-													>
-														<XSquare
-															size="2rem"
-															className="text-red-600"
-														></XSquare>
-													</Confirm>
+													</span>
+												) : (
+													<span className="overflow-x-hidden">
+														{
+															membership.household_name
+														}
+													</span>
+												)}
+
+												{membership.is_owner ? (
+													<div>
+														<Pencil
+															size="1.5rem"
+															className="text-gray-700 cursor-pointer"
+															onClick={() =>
+																this.editHouseholdName(
+																	index,
+																	membership.household_name
+																)
+															}
+														></Pencil>
+														<Confirm
+															position="left"
+															tipContent="Delete household"
+															onConfirm={() =>
+																this.deleteHousehold(
+																	Number(
+																		membership.household_id
+																	),
+																	index
+																)
+															}
+														>
+															<XSquare
+																size="2rem"
+																className="text-red-600"
+															></XSquare>
+														</Confirm>
+													</div>
 												) : null}
 											</div>
 											<form
@@ -511,7 +574,7 @@ export default class Profile extends React.Component {
 															value={
 																this.state
 																	.inviteValues[
-																	index
+																index
 																]
 															}
 															onChange={(e) =>
@@ -546,9 +609,9 @@ export default class Profile extends React.Component {
 															Number(
 																member.household_id
 															) ===
-																Number(
-																	membership.household_id
-																) &&
+															Number(
+																membership.household_id
+															) &&
 															member.invite_accepted
 														) {
 															return (
@@ -591,15 +654,15 @@ export default class Profile extends React.Component {
 																Number(
 																	member.user_id
 																) !==
-																	this.props
-																		.user
-																		.id &&
+																this.props
+																	.user
+																	.id &&
 																Number(
 																	member.household_id
 																) ===
-																	Number(
-																		membership.household_id
-																	)
+																Number(
+																	membership.household_id
+																)
 															);
 														})
 														.some(
@@ -620,9 +683,9 @@ export default class Profile extends React.Component {
 																	Number(
 																		member.household_id
 																	) ===
-																		Number(
-																			membership.household_id
-																		)
+																	Number(
+																		membership.household_id
+																	)
 																) {
 																	return (
 																		<li className="flex my-2">
@@ -659,6 +722,7 @@ export default class Profile extends React.Component {
 								}
 							})}
 						</div>
+						<Notifications></Notifications>
 					</div>
 					<div>
 						<Friends></Friends>

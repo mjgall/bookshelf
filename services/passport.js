@@ -7,6 +7,8 @@ const getUserByGoogleId = require('../queries/getUser');
 const addUser = require('../queries/addUser');
 const sendEmail = require('../services/aws-ses');
 const getUserById = require('../queries/getUserById')
+const updateUser = require('../queries/updateUser')
+
 
 
 passport.serializeUser((user, done) => {
@@ -81,6 +83,7 @@ passport.use(
         const user = await getUserByGoogleId(profile.id);
         if (user) {
           // sendEmail('mike@gllghr.io', '📚 Log in', `${user.full} logged into Bookshelf!`)
+          updateUser(user.id, "last_login", "NOW()")
           done(null, user);
         } else if (!user) {
           try {

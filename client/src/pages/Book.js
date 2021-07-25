@@ -405,9 +405,13 @@ const Book = (props) => {
 							<div className="bg-yellow-100 w-full h-12 rounded border-2 border-yellow-300 flex">
 								<div className="self-center text-center	w-full">
 									Loaned to
-									<Link to={`/shelf/${book.shelf_id}`}>
-										{` ${book.full}`}
-									</Link>
+									{book.shelf_enabled ? (
+										<Link to={`/shelf/${book.shelf_id}`}>
+											{` ${book.full}`}
+										</Link>
+									) : (
+										` ${book.full}`
+									)}
 								</div>
 							</div>
 						) : null}
@@ -479,7 +483,8 @@ const Book = (props) => {
 								readViewFitContainerWidth
 							/>
 						)}
-						{type === "global" || global.households.length < 1 ? null : (
+						{type === "global" ||
+						global.households.length < 1 ? null : (
 							<div>
 								<div className="text-lg mt-6">
 									<span role="img" aria-label="house">

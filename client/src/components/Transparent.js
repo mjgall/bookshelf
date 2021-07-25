@@ -4,6 +4,7 @@ import { ArrowFromLeft as LoginIcon } from "@styled-icons/boxicons-regular/Arrow
 import Tip from "../common/Tip"
 import { withRouter } from "react-router-dom";
 import { Context } from "../globalContext";
+import moment from "moment";
 
 const Transparent = (props) => {
 	const [id, setId] = useState("");
@@ -83,6 +84,7 @@ const Transparent = (props) => {
 					<tr>
 						<th className="text-left">Name</th>
 						<th className="text-left">Email</th>
+						<th className="text-left">Last login</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -92,6 +94,7 @@ const Transparent = (props) => {
 							<tr key={index}>
 								<td>{user.full}</td>
 								<td>{user.email}</td>
+								<td>{!user.last_login ? "---" : moment(user.last_login).subtract(5, 'hours').format("dddd, MMMM Do YYYY, h:mm:ss a")}</td>
 								<td>
 									<div>
 										<Tip
