@@ -49,6 +49,8 @@ const BookFeed = (props) => {
 				return "removed";
 			case 5:
 				return "loaned";
+			case 6:
+				return "reclaimed";
 			default:
 				break;
 		}
@@ -118,7 +120,12 @@ const BookFeed = (props) => {
 													? `you`
 													: item.interacted_user_name
 										  }`
-										: null}
+										: item.action === 6 ? ` from ${
+											item.interacted_user_id ===
+											global.currentUser.id
+												? `you`
+												: item.interacted_user_name
+									  }` : null}
 								</div>
 
 								<div className="text-xs font-thin">
