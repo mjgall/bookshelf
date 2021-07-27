@@ -9,6 +9,8 @@ import Select from "react-select";
 import _ from "lodash";
 import { Context } from "../globalContext";
 import { withRouter } from "react-router-dom";
+import Tip from "../common/Tip";
+import { EyeOffOutline } from "@styled-icons/evaicons-outline";
 
 const GlobalFilter = ({
 	preGlobalFilteredRows,
@@ -185,9 +187,30 @@ const BookTable = (props) => {
 		return [
 			{
 				Header: "Title",
-				accessor: "title",
+				// accessor: "title",
 				disableFilters: true,
 				isVisible: true,
+				Cell: (props) => {
+					return (
+						<div className="inline-flex align-middle items-center">
+							<div style={{minWidth: "1.25em"}}>
+								{props.row.original.private ? (
+									<Tip
+										renderChildren
+										content="You've marked this book as private."
+										placement="right"
+									>
+										<EyeOffOutline
+											size="1.25em"
+											className="text-red-600"
+										></EyeOffOutline>
+									</Tip>
+								) : null}
+							</div>
+							<div className="ml-2">{props.row.original.title}</div>
+						</div>
+					);
+				},
 			},
 			{
 				Header: "Author",

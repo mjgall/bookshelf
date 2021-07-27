@@ -94,7 +94,7 @@ const Transparent = (props) => {
 							<tr key={index}>
 								<td>{user.full}</td>
 								<td>{user.email}</td>
-								<td>{!user.last_login ? "---" : moment(user.last_login).subtract(5, 'hours').format("dddd, MMMM Do YYYY, h:mm:ss a")}</td>
+								<td>{!user.last_login ? "---" : moment(user.last_login).format("dddd, MMMM Do YYYY, h:mm:ss a")}</td>
 								<td>
 									<div>
 										<Tip
