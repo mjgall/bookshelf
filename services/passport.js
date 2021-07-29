@@ -21,10 +21,9 @@ passport.deserializeUser((id, done) => {
     if (err) throw err;
 
     connection.query(
-      `SELECT 
-      bookshelf.users.*
+      `SELECT id, email, first, last, full, picture, create_date, admin, shelf_id, shelf_enabled, searchable, last_login
       FROM bookshelf.users
-      WHERE bookshelf.users.id = ${id}`,
+      WHERE bookshelf.users.id = ${id};`,
       (err, results, fields) => {
         if (!results || err) {
           connection.query(
