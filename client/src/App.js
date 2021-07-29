@@ -20,6 +20,8 @@ import { Context } from "./globalContext";
 import { ToastProvider } from "react-toast-notifications";
 import Transparent from "./components/Transparent";
 import GlobalModal from "./components/GlobalModal";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 
 const App = (props) => {
@@ -66,6 +68,12 @@ const App = (props) => {
 									clearReferrer={clearReferrer}
 									updateNavReferrer={updateNavReferrer}
 								></Home>
+							</Route>
+							<Route exact path="/login">
+								<Login></Login>
+							</Route>
+							<Route exact path="/register">
+								<Register></Register>
 							</Route>
 							<PrivateRoute path="/profile" exact>
 								<Profile

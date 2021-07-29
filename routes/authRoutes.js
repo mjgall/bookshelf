@@ -1,4 +1,5 @@
 const passport = require('passport');
+const addUser = require('../queries/addUser')
 
 module.exports = (app) => {
   app.get('/auth/google/redirect/:referrer/', (req, res, next) => {
@@ -91,4 +92,37 @@ module.exports = (app) => {
   app.get('/api/current_user', (req, res) => {
     res.send(req.user);
   });
+
+  app.post('/auth/login', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+      if (err) {
+        return res.status(400).send({ error: 'Something went wrong.' });
+      }
+      if (!user) {
+        return res.status(200).send(info);
+      }
+
+      req.logIn(user, function(err) {
+        if (err) {
+          return next(err);
+        }
+        return res.status(200).send(info);
+      });
+    })(req, res, next);
+  });
+
+  app.post('/auth/register', async (req, res) => {
+    const { password, firstName, lastName, email } = req.body;
+    try {
+      await addUser({...req.body, first: firstName, last: lastName, googleId: null, picture: null})
+      res.status(200).send({ message: 'success' });
+    } catch (error) {
+      console.log(error)
+      res.sendStatus(500)
+    }
+
+    // console.log(req.body)
+    // res.send(req.body)
+  });
+
 };

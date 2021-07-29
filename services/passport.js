@@ -8,7 +8,8 @@ const addUser = require('../queries/addUser');
 const sendEmail = require('../services/aws-ses');
 const getUserById = require('../queries/getUserById')
 const updateUser = require('../queries/updateUser')
-
+const bcrypt = require('bcryptjs');
+const getUserByEmailAddress = require('../queries/getUserByEmailAddress')
 
 
 passport.serializeUser((user, done) => {
@@ -107,3 +108,44 @@ passport.use(
     }
   )
 );
+
+passport.use(
+  new LocalStrategy(
+    { usernameField: 'email', password: 'password', passReqToCallback: true },
+    async (req, username, password, done) => {
+      try {
+        const user = await getUserByEmailAddress(username).catch(err => {
+          console.log(err);
+          throw Error(err);
+        });
+
+        if (user && user.password) {
+          if (
+            await bcrypt.compare(password, user.password).catch(e => {
+              console.log(e);
+              throw Error(e);
+            })
+          ) {
+            done(false, user, { message: 'redirect' });
+          } else {
+            done(false, null, { message: 'Incorrect email and/or password.' });
+          }
+        } else if (!user) {
+          try {
+            done(false, null, { message: 'Incorrect email and/or password.' });
+          } catch (error) {
+            throw error;
+          }
+        } else {
+          //already exists from oauth login
+          done(false, null, { message: 'Existing Google account found.' });
+        }
+      } catch (error) {
+        console.log(error);
+        throw Error(error);
+      }
+      //find if username (email) exists already. If it does, call done(null, user). If it does not, create new user, then call done(null, user).
+    }
+  )
+);
+
