@@ -6,6 +6,7 @@ import {
 	BrowserRouter as Router,
 	Switch,
 	Route,
+	Redirect,
 	// useRouteMatch,
 } from "react-router-dom";
 
@@ -22,7 +23,6 @@ import Transparent from "./components/Transparent";
 import GlobalModal from "./components/GlobalModal";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-
 
 const App = (props) => {
 	const global = useContext(Context);
@@ -69,6 +69,13 @@ const App = (props) => {
 									updateNavReferrer={updateNavReferrer}
 								></Home>
 							</Route>
+							<Route
+								path="/logout"
+								component={() => {
+									window.location.href = "/api/logout";
+									return null;
+								}}
+							/>
 							<Route exact path="/login">
 								<Login></Login>
 							</Route>
@@ -92,7 +99,7 @@ const App = (props) => {
 							<PrivateRoute path="/transparent">
 								<Transparent></Transparent>
 							</PrivateRoute>
-							
+
 							<Route path="/scanner">
 								<Scanner></Scanner>
 							</Route>
