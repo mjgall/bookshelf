@@ -7,7 +7,7 @@ const Login = (props) => {
 	const [password, setPassword] = useState("");
 	const [email, setEmail] = useState("");
 
-    const global = useContext(Context);
+	const global = useContext(Context);
 
 	const updatePassword = (e) => {
 		setPassword(e.target.value);
@@ -19,85 +19,72 @@ const Login = (props) => {
 
 	const submit = async () => {
 		const response = await axios.post("/auth/login", { password, email });
-        if (response.data.message === 'redirect') {
-            const user = await axios.get("/api/current_user")
-            global.setGlobal({currentUser: user.data})
-            global.setAuth()
-            props.history.push("/");    
-          } else {
-            console.error(response.data)
-          }
+		if (response.data.message === "redirect") {
+			const user = await axios.get("/api/current_user");
+			global.setGlobal({ currentUser: user.data });
+			global.setAuth();
+			props.history.push("/");
+		} else {
+			console.error(response.data);
+		}
 	};
 
 	return (
-		<div className="md:container my-4">
-			<form className="w-full max-w-sm mx-auto" onSubmit={submit}>
-				<div className="md:flex md:items-center mb-6">
-					<div className="md:w-1/3">
-						<label
-							className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
-							for="inline-email"
-						>
-							Email
-						</label>
-					</div>
-					<div className="md:w-2/3">
-						<input
-							className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400"
-							id="inline-email"
-							type="text"
-							placeholder="mail@domain.com"
-							value={email}
-							onChange={updateEmail}
-						></input>
-					</div>
+		<div className="sm:container md:max-w-md my-4">
+			<form className="bg-white sm:shadow-md sm:rounded px-8 pt-6 pb-8 mb-4">
+				<div className="mb-4">
+					<label
+						className="block text-gray-700 text-sm font-bold mb-2"
+						for="username"
+					>
+						Email
+					</label>
+					<input
+						className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+						id="username"
+						type="text"
+						placeholder="email@domain.com"
+						value={email}
+						onChange={updateEmail}
+					></input>
 				</div>
-				<div className="md:flex md:items-center mb-6">
-					<div className="md:w-1/3">
-						<label
-							className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
-							for="inline-password"
-						>
-							Password
-						</label>
-					</div>
-					<div className="md:w-2/3">
-						<input
-							className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400"
-							id="inline-password"
-							type="password"
-							placeholder="******************"
-							value={password}
-							onChange={updatePassword}
-						></input>
-					</div>
+				<div className="mb-6">
+					<label
+						className="block text-gray-700 text-sm font-bold mb-2"
+						for="password"
+					>
+						Password
+					</label>
+					<input
+						className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+						id="password"
+						type="password"
+						placeholder="*******"
+						value={password}
+						onChange={updatePassword}
+					></input>
 				</div>
-
-				<div className="flex-col align-middle items-center text-center">
-					<div className="mb-1">
-						<button
-							className="shadow bg-royalblue hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-							type="button"
-							onClick={submit}
-						>
-							Log in
-						</button>
-					</div>
-					<div className="mt-1">
-						<Link to="/register">
-							<button
-								className="shadow bg-royalblue hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-								type="button"
-							>
-								Register
-							</button>
-						</Link>
-					</div>
+				<div className="flex items-center justify-between">
+					<button
+						className="bg-royalblue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+						type="button"
+						onClick={submit}
+					>
+						Sign In
+					</button>
+					<Link
+						className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+						to="/register"
+					>
+						Create an account instead
+					</Link>
 				</div>
 			</form>
+			<div className="bg-white sm:shadow-md sm:rounded px-8 pt-6 pb-8 mb-4">
+				Login with Google.
+			</div>
 		</div>
 	);
 };
 
 export default withRouter(Login);
-

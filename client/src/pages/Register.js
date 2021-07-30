@@ -32,108 +32,86 @@ const Register = (props) => {
 	};
 
 	return (
-		<div className="md:container my-4">
-			<form className="w-full max-w-sm mx-auto" onSubmit={submit}>
-				<div className="md:flex md:items-center mb-6">
-					<div className="md:w-1/3">
-						<label
-							className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
-							for="inline-first-name"
-						>
-							First Name
-						</label>
-					</div>
-					<div className="md:w-2/3">
-						<input
-							className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400"
-							id="inline-first-name"
-							type="text"
-							placeholder="Jane"
-							value={firstName}
-							onChange={updateFirstName}
-						></input>
-					</div>
+		<div className="sm:container md:max-w-md my-4">
+			<form className="bg-white sm:shadow-md sm:rounded px-8 pt-6 pb-8 mb-4">
+			<div className="mb-4">
+					<label
+						className="block text-gray-700 text-sm font-bold mb-2"
+						for="first-name"
+					>
+						First Name
+					</label>
+					<input
+						className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+						id="first-name"
+						type="text"
+						placeholder="Jane"
+						value={firstName}
+						onChange={updateFirstName}
+					></input>
 				</div>
-				<div className="md:flex md:items-center mb-6">
-					<div className="md:w-1/3">
-						<label
-							className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
-							for="inline-last-name"
-						>
-							Last Name
-						</label>
-					</div>
-					<div className="md:w-2/3">
-						<input
-							className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400"
-							id="inline-last-name"
-							type="text"
-							placeholder="Doe"
-							value={lastName}
-							onChange={updateLastName}
-						></input>
-					</div>
+				<div className="mb-4">
+					<label
+						className="block text-gray-700 text-sm font-bold mb-2"
+						for="last-name"
+					>
+						Last Name
+					</label>
+					<input
+						className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+						id="last-name"
+						type="text"
+						placeholder="Doe"
+						value={lastName}
+						onChange={updateLastName}
+					></input>
 				</div>
-				<div className="md:flex md:items-center mb-6">
-					<div className="md:w-1/3">
-						<label
-							className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
-							for="inline-email"
-						>
-							Email
-						</label>
-					</div>
-					<div className="md:w-2/3">
-						<input
-							className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400"
-							id="inline-email"
-							type="text"
-							placeholder="mail@domain.com"
-							value={email}
-							onChange={updateEmail}
-						></input>
-					</div>
+				<div className="mb-4">
+					<label
+						className="block text-gray-700 text-sm font-bold mb-2"
+						for="email"
+					>
+						Email
+					</label>
+					<input
+						className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+						id="email"
+						type="text"
+						placeholder="email@domain.com"
+						value={email}
+						onChange={updateEmail}
+					></input>
 				</div>
-				<div className="md:flex md:items-center mb-6">
-					<div className="md:w-1/3">
-						<label
-							className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
-							for="inline-password"
-						>
-							Password
-						</label>
-					</div>
-					<div className="md:w-2/3">
-						<input
-							className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-400"
-							id="inline-password"
-							type="password"
-							placeholder="******************"
-							value={password}
-							onChange={updatePassword}
-						></input>
-					</div>
+				<div className="mb-6">
+					<label
+						className="block text-gray-700 text-sm font-bold mb-2"
+						for="password"
+					>
+						Password
+					</label>
+					<input
+						className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+						id="password"
+						type="password"
+						placeholder="*******"
+						value={password}
+						onChange={updatePassword}
+					></input>
 				</div>
-				<div className="flex-col align-middle items-center text-center">
-					<div className="mb-1">
-						<button
-							className="shadow bg-royalblue hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-							type="button"
-							onClick={submit}
-						>
-							Register
-						</button>
-					</div>
-					<div className="mt-1">
-						<Link to="/login">
-							<button
-								className="shadow bg-royalblue hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-								type="button"
-							>
-								Log In
-							</button>
-						</Link>
-					</div>
+				<div className="flex items-center justify-between">
+					<button
+						className="bg-royalblue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+						type="button"
+						onClick={submit}
+					>
+						Register
+					</button>
+					<Link
+						className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+						to="/login"
+					>
+						Have an account already?
+					</Link>
 				</div>
 			</form>
 		</div>
