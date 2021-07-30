@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Link, Redirect, withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import { Google } from "@styled-icons/boxicons-logos";
+
 
 const Register = (props) => {
 	const [firstName, setFirstName] = useState("");
@@ -114,6 +116,23 @@ const Register = (props) => {
 					</Link>
 				</div>
 			</form>
+			<div className="bg-white sm:shadow-md sm:rounded px-2 mb-4">
+				<a
+					href={
+						global.redirect
+							? `/auth/google/redirect${global.redirect}`
+							: `/auth/google`
+					}
+					className="inline-block text-sm px-2 leading-none border rounded border-white hover:border-transparent text-royalblue hover:text-blue-600 hover:bg-white lg:mt-0 "
+				>
+					<div className="flex items-center">
+						<div>
+							<Google size="4em"></Google>
+						</div>
+						<div className="ml-4 text-lg text-gray-700">Register with Google</div>
+					</div>
+				</a>
+			</div>
 		</div>
 	);
 };

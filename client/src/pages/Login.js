@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useContext } from "react";
 import { withRouter, Link } from "react-router-dom";
+import { Google } from "@styled-icons/boxicons-logos";
 
 import { Context } from "../globalContext";
 const Login = (props) => {
@@ -80,8 +81,22 @@ const Login = (props) => {
 					</Link>
 				</div>
 			</form>
-			<div className="bg-white sm:shadow-md sm:rounded px-8 pt-6 pb-8 mb-4">
-				Login with Google.
+			<div className="bg-white sm:shadow-md sm:rounded px-2 mb-4">
+				<a
+					href={
+						global.redirect
+							? `/auth/google/redirect${global.redirect}`
+							: `/auth/google`
+					}
+					className="inline-block text-sm px-2 leading-none border rounded border-white hover:border-transparent text-royalblue hover:text-blue-600 hover:bg-white lg:mt-0 "
+				>
+					<div className="flex items-center">
+						<div>
+							<Google size="4em"></Google>
+						</div>
+						<div className="ml-4 text-lg text-gray-700">Log in with Google</div>
+					</div>
+				</a>
 			</div>
 		</div>
 	);

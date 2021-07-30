@@ -95,20 +95,16 @@ const NavBar = ({
 
 				<div className="flex items-center justify-center">
 					{!global.currentUser ? (
-						<a
+						<Link
 							onClick={clearReferrer}
-							href={
-								global.redirect
-									? `/auth/google/redirect${global.redirect}`
-									: `/auth/google`
-							}
+							to="/login"
 							className="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-teal-500 hover:bg-white lg:mt-0 "
 						>
 							{existingUser ? "Log In" : "Sign Up"}{" "}
 							<span role="img" aria-label="books">
 								📚
 							</span>
-						</a>
+						</Link>
 					) : (
 						<>
 							<div className="hidden lg:flex">
