@@ -494,8 +494,8 @@ module.exports = (app) => {
 	//send an email
 	//TODO put this somewhere else
 	app.post("/api/email", checkAuthed, async (req, res) => {
-		const { recipientAddress, subject, body } = req.body;
-		const email = await sendEmail(recipientAddress, subject, body);
+		const { recipientAddress, subject, body, html } = req.body;
+		const email = await sendEmail(recipientAddress, subject, body, html);
 		res.send({
 			success: true,
 			email,

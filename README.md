@@ -1,6 +1,6 @@
 # Bookshelf
 
-## [bookshelf.mikegallagher.app](https://bookshelf.mikegallagher.app)
+## [Papyr.io](https://www.papyr.io)
 
 ![screenshot of bookshelf](./bookshelf.png "Bookshelf")
 

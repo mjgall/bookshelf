@@ -68,7 +68,7 @@ export default class Profile extends React.Component {
 			this.setState({
 				alert: true,
 				alertMessage:
-					"No user with that email found - would you like to invite them to Bookself?",
+					"No user with that email found - would you like to invite them to Papyr?",
 				affectedHouseholdIndex: index,
 			});
 		} else {
@@ -77,7 +77,7 @@ export default class Profile extends React.Component {
 				recipientAddress: this.state.inviteValues[index],
 				// recipientAddress: 'mike.gallagh@gmail.com',
 				subject: `🏠 You've been invited to join a household!`,
-				body: `<p>${this.props.user.first} (${this.props.user.email}) invited you to their household to share your books at bookshelf.mikegallagher.app.</p><a href="https://bookshelf.mikegallagher.app/profile">Accept here</a>`,
+				html: `<p>${this.props.user.first} (${this.props.user.email}) invited you to their household to share your books at Papyr.io.</p><a href="https://www.papyr.io/profile">Accept here</a>`,
 			});
 
 			this.setState({
@@ -91,8 +91,8 @@ export default class Profile extends React.Component {
 		const response = await axios.post("/api/email", {
 			recipientAddress: invitedEmailAddress,
 			// recipientAddress: 'mike.gallagh@gmail.com',
-			subject: `📚 You've been invited to join Bookshelf!`,
-			body: `<p>${this.props.user.full} (${this.props.user.email}) invited you to join </p><a href="https://www.papyr.io">Papyr.io</a>`,
+			subject: `📚 You've been invited to join Papyr!`,
+			html: `<p>${this.props.user.full} (${this.props.user.email}) invited you to join <a href="https://www.papyr.io">Papyr.io</a></p>`,
 		});
 		if (response.data.success) {
 			this.setState({

@@ -8,11 +8,11 @@ module.exports = (recipientAddress, subject, raw, html) => {
       // AWS.config.loadFromPath(jsonPath);
       console.log({ recipientAddress, subject, raw, html })
       AWS.config.update({ accessKeyId: keys.accessKeyId, secretAccessKey: keys.secretAccessKey, region: keys.region })
-      const sender = 'Bookshelf <mike@gllghr.io>';
+      const sender = 'Papyr.io <mike@gllghr.io>';
 
       const recipient = recipientAddress;
 
-      const body_text = raw;
+      const body_text = raw || html;
 
       const body_html = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
