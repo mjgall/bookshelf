@@ -112,6 +112,7 @@ passport.use(
   new LocalStrategy(
     { usernameField: 'email', password: 'password', passReqToCallback: true },
     async (req, username, password, done) => {
+      console.log(req.body)
       try {
         const user = await getUserByEmailAddress(username).catch(err => {
           console.log(err);
