@@ -419,7 +419,7 @@ const Book = (props) => {
 												{
 													action: requestToBorrow,
 													confirm: true,
-													text: "Request to borrow",
+													text: props.location?.state?.ownerId ? `Request to borrow from ${props.location.state.ownerFull}` : `Request to borrow`,
 												},
 											]}
 										></MoreMenu>
@@ -545,7 +545,7 @@ const Book = (props) => {
 									{
 										action: requestToBorrow,
 										confirm: true,
-										text: "Request to borrow",
+										text: props.location?.state?.ownerId ? `Request to borrow from ${props.location.state.ownerFull}` : `Request to borrow`,
 									},
 								]}
 							></MoreMenu>

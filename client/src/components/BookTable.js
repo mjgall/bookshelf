@@ -503,7 +503,7 @@ const BookTable = (props) => {
 										if (props.sharedShelf) {
 											props.history.push(
 												`/book/${book.global_id}`,
-												{ ownerId: book.user_id }
+												{ ownerId: book.user_id, ownerFull: book.full }
 											);
 										} else {
 											props.history.push(
