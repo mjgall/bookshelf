@@ -7,7 +7,7 @@ const RequestToBorrowModal = (props) => {
 	const global = useContext(Context);
 	const [connections, setConnections] = useState([]);
 	const fetchConnections = async () => {
-		const result = await axios.get("/api/connections");
+		const result = await axios.get(`/api/friendwithbook/${props.bookId}`);
 
 		setConnections(result.data);
 	};

@@ -51,6 +51,7 @@ const getConnections = require("../queries/getConnections");
 const updateLoan = require("../queries/updateLoan");
 const getSharedShelfBooks = require("../queries/getSharedShelfBooks");
 const updateUser = require("../queries/updateUser");
+const getFriendsWithBook = require("../queries/getFriendsWithBook");
 
 const checkAuthed = (req, res, next) => {
 	if (req?.user?.id) {
@@ -824,6 +825,11 @@ module.exports = (app) => {
 
 		res.send(dupesRemoved);
 	});
+
+	app.get("/api/friendwithbook/:bookId", checkAuthed, async (req, res) => {
+		const response = await getFriendsWithBook(req?.user?.id, req.params.bookId)
+		res.send(response);
+	})
 
 	app.put("/api/users", checkAuthed, async (req, res) => {
 		if (!req.body.field || req.body.field === "admin") {
