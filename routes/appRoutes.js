@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 const keys = require("../config/keys");
-const randomId = require("../services/randomId")
+const randomId = require("../services/randomId");
 
 const _ = require("lodash");
 
@@ -47,30 +47,28 @@ const getUsers = require("../queries/getUsers");
 const addLoan = require("../queries/addLoan.js");
 const getLoans = require("../queries/getLoans");
 const getActivitiesPaginated = require("../queries/getActivitiesPaginated");
-const getConnections = require("../queries/getConnections")
-const updateLoan = require("../queries/updateLoan")
-const getSharedShelfBooks = require("../queries/getSharedShelfBooks")
-const updateUser = require("../queries/updateUser")
-
+const getConnections = require("../queries/getConnections");
+const updateLoan = require("../queries/updateLoan");
+const getSharedShelfBooks = require("../queries/getSharedShelfBooks");
+const updateUser = require("../queries/updateUser");
 
 const checkAuthed = (req, res, next) => {
 	if (req?.user?.id) {
-		next()
+		next();
 	} else {
 		res.status(401).send("Unauthorized");
 	}
-}
+};
 
 const checkAdmin = (req, res, next) => {
 	if (req?.user?.admin) {
-		next()
+		next();
 	} else {
 		res.status(401).send("Unauthorized");
 	}
-}
+};
 
 module.exports = (app) => {
-	
 	app.get("/api/bootstrap", async (req, res) => {
 		if (!req.user) {
 			res.send({
@@ -140,35 +138,39 @@ module.exports = (app) => {
 		}
 	});
 
-	app.get("/api/book/search/title/:term/author/:author", checkAuthed, async (req, res) => {
-		try {
-			const encoded = encodeURI(
-				`https://api2.isbndb.com/search/books?author=${req.params.author}&text=${req.params.term}`
-			);
-			const response = await axios.get(encoded, {
-				headers: {
-					Authorization: keys.ISBN_AUTH_API,
-				},
-			});
+	app.get(
+		"/api/book/search/title/:term/author/:author",
+		checkAuthed,
+		async (req, res) => {
+			try {
+				const encoded = encodeURI(
+					`https://api2.isbndb.com/search/books?author=${req.params.author}&text=${req.params.term}`
+				);
+				const response = await axios.get(encoded, {
+					headers: {
+						Authorization: keys.ISBN_AUTH_API,
+					},
+				});
 
-			const results = response.data.data.filter((result) => {
-				if (
-					result.binding === "Audio Cd" ||
-					result.binding === "Audio CD" ||
-					result.binding === "ePub" ||
-					result.binding === "Audio Cassette"
-				) {
-					return null;
-				} else {
-					return result;
-				}
-			});
+				const results = response.data.data.filter((result) => {
+					if (
+						result.binding === "Audio Cd" ||
+						result.binding === "Audio CD" ||
+						result.binding === "ePub" ||
+						result.binding === "Audio Cassette"
+					) {
+						return null;
+					} else {
+						return result;
+					}
+				});
 
-			res.send({ total: response.data.total, books: results });
-		} catch (error) {
-			res.send(error);
+				res.send({ total: response.data.total, books: results });
+			} catch (error) {
+				res.send(error);
+			}
 		}
-	});
+	);
 
 	app.post("/api/global_book", checkAuthed, async (req, res) => {
 		console.log({ isbn10: req.body.isbn, isbn13: req.body.isbn13 });
@@ -243,7 +245,6 @@ module.exports = (app) => {
 
 	//add a book
 	app.post("/api/books", checkAuthed, async (req, res) => {
-
 		const {
 			title,
 			author,
@@ -379,11 +380,15 @@ module.exports = (app) => {
 	});
 
 	//delete a household
-	app.delete("/api/households/:householdId", checkAuthed, async (req, res) => {
-		const { householdId } = req.params;
-		const householdDeleted = await deleteHousehold(householdId);
-		res.send(householdDeleted);
-	});
+	app.delete(
+		"/api/households/:householdId",
+		checkAuthed,
+		async (req, res) => {
+			const { householdId } = req.params;
+			const householdDeleted = await deleteHousehold(householdId);
+			res.send(householdDeleted);
+		}
+	);
 
 	//add a household
 	app.post("/api/households", checkAuthed, async (req, res) => {
@@ -405,20 +410,24 @@ module.exports = (app) => {
 	});
 
 	//get household notes on any book by global id
-	app.get("/api/notes/households/:globalBookId", checkAuthed, async (req, res) => {
-		try {
-			const householdNotes = await getHouseholdNotes(
-				req.params.globalBookId,
-				req.user.id
-			);
-			res.send(householdNotes);
-		} catch (error) {
-			res.send({
-				error: true,
-			});
-			throw Error(error);
+	app.get(
+		"/api/notes/households/:globalBookId",
+		checkAuthed,
+		async (req, res) => {
+			try {
+				const householdNotes = await getHouseholdNotes(
+					req.params.globalBookId,
+					req.user.id
+				);
+				res.send(householdNotes);
+			} catch (error) {
+				res.send({
+					error: true,
+				});
+				throw Error(error);
+			}
 		}
-	});
+	);
 
 	//send invitation
 	app.post("/api/invitations", checkAuthed, async (req, res) => {
@@ -504,8 +513,7 @@ module.exports = (app) => {
 
 	//get a users public books
 	app.get("/api/shelves/:shelfId", async (req, res) => {
-
-		const books = await getSharedShelfBooks(req.params.shelfId)
+		const books = await getSharedShelfBooks(req.params.shelfId);
 
 		// const books = await getBooks(req.params.shelfId);
 		res.send(books);
@@ -599,19 +607,18 @@ module.exports = (app) => {
 	});
 
 	app.post("/api/activities", checkAuthed, async (req, res) => {
-
-			// case 1:
-			// 	return "started reading";
-			// case 2:
-			// 	return "read";
-			// case 3:
-			// 	return "added";
-			// case 4:
-			// 	return "removed";
-			// case 5:
-			// 	return "loaned";
-			// default:
-			// 	break;
+		// case 1:
+		// 	return "started reading";
+		// case 2:
+		// 	return "read";
+		// case 3:
+		// 	return "added";
+		// case 4:
+		// 	return "removed";
+		// case 5:
+		// 	return "loaned";
+		// default:
+		// 	break;
 
 		try {
 			const activity = await addActivity(
@@ -628,9 +635,13 @@ module.exports = (app) => {
 	app.get("/api/activities", checkAuthed, async (req, res) => {
 		//should maybe return these separately so we render activities sooner
 		try {
-			let activities
+			let activities;
 			if (req.query.page && req.query.limit) {
-				activities = await getActivitiesPaginated(req.user.id, req.query.page, req.query.limit)
+				activities = await getActivitiesPaginated(
+					req.user.id,
+					req.query.page,
+					req.query.limit
+				);
 			} else {
 				activities = await getActivities(req.user.id);
 			}
@@ -642,42 +653,50 @@ module.exports = (app) => {
 
 				for (let index = 0; index < likes.length; index++) {
 					const like = likes[index];
-					
+
 					if (like.activity_id === activity.id) {
 						likesAdded = [...likesAdded, like];
 					}
-
 				}
 
 				return { ...activity, likes: likesAdded };
 			});
-			
-			const updatedActivities = activitiesWithLike.map(activity => {
+
+			const updatedActivities = activitiesWithLike.map((activity) => {
 				let likeContent = {
-					color: 'lightgray',
+					color: "lightgray",
 					likedByUser: false,
 					people: [],
-					string: '',
-					total: 0
-				}
-	
+					string: "",
+					total: 0,
+				};
+
 				if (activity.likes.length > 0) {
-	
-					if (activity.likes.some(like => like.liked_by === req.user.id)) {
-						likeContent.color = 'royalblue'
-						likeContent.likedByUser = true
-						likeContent.people = ['You', ...activity.likes.map(like => like.full).filter(person => person !== req.user.full)]
-				
+					if (
+						activity.likes.some(
+							(like) => like.liked_by === req.user.id
+						)
+					) {
+						likeContent.color = "royalblue";
+						likeContent.likedByUser = true;
+						likeContent.people = [
+							"You",
+							...activity.likes
+								.map((like) => like.full)
+								.filter((person) => person !== req.user.full),
+						];
 					} else {
-						likeContent.people = activity.likes.map(like => like.full).filter(person => person !== req.user.full)
+						likeContent.people = activity.likes
+							.map((like) => like.full)
+							.filter((person) => person !== req.user.full);
 					}
-	
-					likeContent.string = likeContent.people.join(', ')
-					likeContent.total = likeContent.people.length
+
+					likeContent.string = likeContent.people.join(", ");
+					likeContent.total = likeContent.people.length;
 				}
-	
-				return {...activity, likeContent}
-			})
+
+				return { ...activity, likeContent };
+			});
 
 			res.send(updatedActivities);
 		} catch (error) {
@@ -702,7 +721,12 @@ module.exports = (app) => {
 
 	app.get("/api/activities/book/:globalId", checkAuthed, async (req, res) => {
 		const { globalId } = req.params;
-		const activities = await getBookActivities(req.user.id, globalId, req.query.page, req.query.limit)
+		const activities = await getBookActivities(
+			req.user.id,
+			globalId,
+			req.query.page,
+			req.query.limit
+		);
 
 		res.send(activities);
 	});
@@ -741,51 +765,75 @@ module.exports = (app) => {
 	});
 
 	app.get("/api/users", checkAdmin, async (req, res) => {
-		const users = await getUsers()
-		res.send(users)
-	}) 
+		const users = await getUsers();
+		res.send(users);
+	});
 
 	app.post("/api/loans", checkAuthed, async (req, res) => {
-		const {bookId, lenderId, borrowerId} = req.body
-		const response = await addLoan(bookId, lenderId, borrowerId, Date.now() )
-		await addActivity(lenderId, bookId, 5, borrowerId)
-		res.send(response)
-	})
+		const { bookId, lenderId, borrowerId, requesting } = req.body;
+		if (requesting) {
+			const response = await addLoan(
+				bookId,
+				lenderId,
+				borrowerId
+			);
+			await addActivity(lenderId, bookId, 5, borrowerId);
+			res.send(response);
+		} else {
+			const response = await addLoan(
+				bookId,
+				lenderId,
+				borrowerId,
+				Date.now()
+			);
+			await addActivity(lenderId, bookId, 5, borrowerId);
+			res.send(response);
+		}
+	});
 
 	app.get("/api/loans", checkAuthed, async (req, res) => {
-		const response = await getLoans(req.user.id)
-		res.send(response)
-	})
+		const response = await getLoans(req.user.id);
+		res.send(response);
+	});
 
 	app.put("/api/loans", checkAuthed, async (req, res) => {
-
 		switch (req.body.action) {
 			case "end":
-				const response = await updateLoan("end", req.body.id, req.body.user_books_id)
-				const activity = await addActivity(response[0].lender_id, response[0].global_id, 6, response[0].borrower_id)
-				res.send(activity)
+				const response = await updateLoan(
+					"end",
+					req.body.id,
+					req.body.user_books_id
+				);
+				const activity = await addActivity(
+					response[0].lender_id,
+					response[0].global_id,
+					6,
+					response[0].borrower_id
+				);
+				res.send(activity);
 				break;
 			default:
 				break;
 		}
-
-	})
+	});
 
 	app.get("/api/connections", checkAuthed, async (req, res) => {
+		const response = await getConnections(req?.user?.id || undefined);
 
-		const response = await getConnections(req?.user?.id || undefined)
+		const dupesRemoved = _.uniqBy(response, "user_id");
 
-		const dupesRemoved = _.uniqBy(response, 'user_id');
-
-		res.send(dupesRemoved)
-	})
+		res.send(dupesRemoved);
+	});
 
 	app.put("/api/users", checkAuthed, async (req, res) => {
 		if (!req.body.field || req.body.field === "admin") {
-			res.status(400)
+			res.status(400);
 		}
-		const response = await updateUser(req.user.id, req.body.field, req.body.value)
-		res.send(response)
-	})
-
+		const response = await updateUser(
+			req.user.id,
+			req.body.field,
+			req.body.value
+		);
+		res.send(response);
+	});
 };

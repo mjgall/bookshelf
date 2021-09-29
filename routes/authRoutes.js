@@ -126,7 +126,7 @@ module.exports = (app) => {
           first: firstName,
           last: lastName,
           googleId: null,
-          picture: null,
+          picture: "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png",
         });
         res.status(200).send({ message: "success" });
       }

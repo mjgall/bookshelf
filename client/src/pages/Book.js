@@ -133,6 +133,28 @@ const Book = (props) => {
 		await axios.post("/api/books", book);
 	};
 
+	const requestToBorrow = async () => {
+		const data = {
+			bookId: book.id,
+			lenderId: null,
+			borrowerId: global.currentUser.id,
+			requesting: true,
+		};
+		// first check if we navigated here from a book table, if we did we will find the book owner in the location state
+		if (props.location?.state?.ownerId) {
+			data.lenderId = props.location.state.ownerId;
+			await axios.post("/api/loans", data);
+		} else {
+			// if not, throw modal to select the non-household connections who have this book
+			global.setGlobal({
+				modalOpen: true,
+				currentModal: "requestToBorrow",
+				bookId: book.id,
+				userBookId: book.user_book_id,
+			});
+		}
+	};
+
 	const getMenuOptions = () => {
 		if (book.on_loan) {
 			return [
@@ -393,6 +415,11 @@ const Book = (props) => {
 													confirm: true,
 													text: "Add to your shelf",
 												},
+												{
+													action: requestToBorrow,
+													confirm: true,
+													text: "Request to borrow",
+												},
 											]}
 										></MoreMenu>
 									) : null}
@@ -513,6 +540,11 @@ const Book = (props) => {
 										action: addToLibrary,
 										confirm: true,
 										text: "Add to your shelf",
+									},
+									{
+										action: requestToBorrow,
+										confirm: true,
+										text: "Request to borrow",
 									},
 								]}
 							></MoreMenu>

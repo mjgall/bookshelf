@@ -193,7 +193,7 @@ const BookTable = (props) => {
 				Cell: (props) => {
 					return (
 						<div className="inline-flex align-middle items-center">
-							<div style={{minWidth: "1.25em"}}>
+							<div style={{ minWidth: "1.25em" }}>
 								{props.row.original.private ? (
 									<Tip
 										renderChildren
@@ -207,7 +207,9 @@ const BookTable = (props) => {
 									</Tip>
 								) : null}
 							</div>
-							<div className="ml-2">{props.row.original.title}</div>
+							<div className="ml-2">
+								{props.row.original.title}
+							</div>
 						</div>
 					);
 				},
@@ -500,7 +502,8 @@ const BookTable = (props) => {
 
 										if (props.sharedShelf) {
 											props.history.push(
-												`/book/${book.global_id}`
+												`/book/${book.global_id}`,
+												{ ownerId: book.user_id }
 											);
 										} else {
 											props.history.push(

@@ -4,6 +4,7 @@ import { Context } from "../globalContext";
 // import useWindowSize from "../hooks/useWindowSize";
 
 import LoanModal from "../components/LoanModal";
+import RequestToBorrowModal from "./RequestToBorrowModal";
 
 const GlobalModal = () => {
 	const global = useContext(Context);
@@ -35,6 +36,8 @@ const GlobalModal = () => {
 		switch (global.currentModal) {
 			case "loan":
 				return <LoanModal bookId={global.bookId} userBookId={global.user_book_id}></LoanModal>;
+			case "requestToBorrow":
+				return <RequestToBorrowModal bookId={global.bookId}></RequestToBorrowModal>
 			default:
 				break;
 		}
