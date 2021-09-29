@@ -1,10 +1,16 @@
 const db = require("../config/db/mysql").pool;
 const sqlString = require("sqlstring");
 
-module.exports = (bookId, lenderId, borrowerId, startDate) => {
+module.exports = (bookId, lenderId, borrowerId, startDate, requesting) => {
 	return new Promise((resolve, reject) => {
 
-		const query = `INSERT INTO loans (global_id, lender_id, borrower_id, start_date) VALUES (${bookId}, ${lenderId}, ${borrowerId}, '${startDate}')`;
+		let query
+		if (requesting) {
+			query = `INSERT INTO loans (global_id, lender_id, borrower_id) VALUES (${bookId}, ${lenderId}, ${borrowerId})`;
+		} else {
+			query = `INSERT INTO loans (global_id, lender_id, borrower_id, start_date) VALUES (${bookId}, ${lenderId}, ${borrowerId}, '${startDate}')`;
+		}
+		// const query = `INSERT INTO loans (global_id, lender_id, borrower_id, start_date) VALUES (${bookId}, ${lenderId}, ${borrowerId}, '${startDate}')`;
 		db.query(query, (err, results, fields) => {
 			if (err) {
 				reject(err);

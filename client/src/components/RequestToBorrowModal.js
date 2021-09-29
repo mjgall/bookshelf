@@ -16,11 +16,12 @@ const RequestToBorrowModal = (props) => {
 	}, []);
 
 	const borrowFrom = async (friendId, friendName) => {
-        console.log("in borrow from");
+
 		await axios.post("/api/loans", {
 			bookId: props.bookId,
 			lenderId: friendId,
-			borrowerId: global.currentUser.id
+			borrowerId: global.currentUser.id,
+			requesting: true
 		});
 
 		// const index = global.allBooks.findIndex(

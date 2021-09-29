@@ -5,7 +5,7 @@ import moment from "moment";
 import { Context } from "../globalContext";
 
 import MoreMenu from "../common/MoreMenu";
-import Tip from "../common/Tip"
+import Tip from "../common/Tip";
 
 const LoanBox = ({ book, user, loan, index, update }) => {
 	const global = useContext(Context);
@@ -28,15 +28,48 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 		update();
 	};
 
+	const grantLoan = async () => {
+		console.log("loan granted");
+	};
+
+	const determineVerb = (type) => {
+		switch (type) {
+			case "lend":
+				return "loaned ";
+			case "borrow":
+				return "borrowed ";
+			case "requested":
+				return "requested ";
+			case "request":
+				return "requested ";
+			default:
+				break;
+		}
+	};
+
 	return (
 		<div
 			className="border-gray-400 border mt-2 mb-2 pr-6 rounded flex items-center"
 			key={index}
 		>
 			<div className="flex items-center">
-				{loan.end_date ? null : (
+				{(!loan.end_date && loan.start_date) ||
+				(!loan.start_date &&
+					loan.borrower_id !== global.currentUser.id) ? (
 					<div>
-						<MoreMenu
+						{loan.type === "request" ? (
+								<MoreMenu
+								placement="left"
+								size="18px"
+								options={[
+									{
+										action: () => grantLoan(),
+										confirm: true,
+										text: "Grant loan",
+									},
+								]}
+							></MoreMenu>
+						) : (<MoreMenu
 							placement="left"
 							size="18px"
 							options={[
@@ -46,13 +79,14 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 									text: "End loan",
 								},
 							]}
-						></MoreMenu>
+						></MoreMenu>)}
+						
 					</div>
-				)}
+				) : null}
 
 				<div
 					className={
-						loan.end_date ? "h-12 w-12 mr-2 ml-4" : "h-12 w-12 mr-2"
+						loan.end_date || (!loan.start_date && loan.borrower_id === global.currentUser.id) ? "h-12 w-12 mr-2 ml-4" : "h-12 w-12 mr-2"
 					}
 				>
 					<img
@@ -64,10 +98,12 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 			</div>
 			<div>
 				<div>
-					<span className="font-bold">You </span>
-					<span>
-						{loan.type === "lend" ? "loaned " : "borrowed "}
+					<span className="font-bold">
+						{loan.type === "request" || loan.type === "lend"
+							? `${user.user_name} `
+							: "You "}
 					</span>
+					<span>{determineVerb(loan.type)}</span>
 					<Link
 						className="border-gray-600 border-dotted border-b"
 						to={`/book/${book.global_id}`}
@@ -75,7 +111,11 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 						{book.title}
 					</Link>
 					{loan.type === "lend" ? " to " : " from "}
-					<span>{user.user_name}</span>
+					<span>
+						{loan.type === "request" || loan.type === "lend"
+							? "you."
+							: `${user.user_name}.`}
+					</span>
 				</div>
 				<span className="text-xs font-thin">
 					{moment
@@ -131,6 +171,18 @@ const Loans = (props) => {
 		getLoans();
 	}, []);
 
+	const determineLoanType = (lenderId, currentUserId, startDate) => {
+		if (lenderId === currentUserId && startDate) {
+			return "lend";
+		} else if (lenderId !== currentUserId && startDate) {
+			return "borrow";
+		} else if (lenderId !== currentUserId && !startDate) {
+			return "requested";
+		} else if (lenderId === currentUserId && !startDate) {
+			return "request";
+		}
+	};
+
 	return (
 		<div>
 			<div className="flex items-center text-center">
@@ -143,22 +195,28 @@ const Loans = (props) => {
 				></Tip>
 			</div>
 			<div>
-				<div className="text-xl">Borrowed</div>
+				<div className="text-xl">Loan Requests</div>
 				{loans.filter(
 					(book) =>
-						book.borrower_id === global.currentUser.id &&
-						!book.end_date
+						(book.borrower_id === global.currentUser.id ||
+							book.lender_id === global.currentUser.id) &&
+						!book.end_date &&
+						!book.start_date
 				).length < 1 ? (
 					<div className="text-xs my-1 text-gray-500 italic font-weight-light">
-						You currently are not borrowing any books.
+						You have not requested any books.
 					</div>
 				) : (
 					<>
 						{loans
 							.filter(
 								(book) =>
-									book.borrower_id ===
-										global.currentUser.id && !book.end_date
+									(book.borrower_id ===
+										global.currentUser.id ||
+										book.lender_id ===
+											global.currentUser.id) &&
+									!book.end_date &&
+									!book.start_date
 							)
 							.map((loan, index) => {
 								return (
@@ -180,11 +238,66 @@ const Loans = (props) => {
 											start_date: loan.start_date,
 											end_date: loan.end_date,
 											id: loan.id,
-											type:
-												loan.lender_id ===
-												global.currentUser.id
-													? "lend"
-													: "borrow",
+											type: determineLoanType(
+												loan.lender_id,
+												global.currentUser.id,
+												loan.start_date
+											),
+										}}
+										index={index}
+										update={update}
+									></LoanBox>
+								);
+							})}
+					</>
+				)}
+			</div>
+			<div>
+				<div className="text-xl">Borrowed</div>
+				{loans.filter(
+					(book) =>
+						book.borrower_id === global.currentUser.id &&
+						!book.end_date &&
+						book.start_date
+				).length < 1 ? (
+					<div className="text-xs my-1 text-gray-500 italic font-weight-light">
+						You currently are not borrowing any books.
+					</div>
+				) : (
+					<>
+						{loans
+							.filter(
+								(book) =>
+									book.borrower_id ===
+										global.currentUser.id &&
+									!book.end_date &&
+									book.start_date
+							)
+							.map((loan, index) => {
+								return (
+									<LoanBox
+										book={{
+											global_id: loan.global_id,
+											title: loan.title,
+											cover: loan.cover,
+										}}
+										user={{
+											user_id: loan.user_id,
+											user_name: loan.user_name,
+											user_picture: loan.user_picture,
+										}}
+										loan={{
+											user_books_id: loan.user_books_id,
+											borrower_id: loan.borrower_id,
+											lender_id: loan.lender_id,
+											start_date: loan.start_date,
+											end_date: loan.end_date,
+											id: loan.id,
+											type: determineLoanType(
+												loan.lender_id,
+												global.currentUser.id,
+												loan.start_date
+											),
 										}}
 										index={index}
 										update={update}
@@ -199,7 +312,8 @@ const Loans = (props) => {
 				{loans.filter(
 					(book) =>
 						book.lender_id === global.currentUser.id &&
-						!book.end_date
+						!book.end_date &&
+						book.start_date
 				).length < 1 ? (
 					<div className="text-xs my-1 text-gray-500 italic font-weight-light">
 						You currently are not lending any books.
@@ -210,7 +324,8 @@ const Loans = (props) => {
 							.filter(
 								(book) =>
 									book.lender_id === global.currentUser.id &&
-									!book.end_date
+									!book.end_date &&
+									book.start_date
 							)
 							.map((loan, index) => {
 								return (
@@ -232,11 +347,11 @@ const Loans = (props) => {
 											start_date: loan.start_date,
 											end_date: loan.end_date,
 											id: loan.id,
-											type:
-												loan.lender_id ===
-												global.currentUser.id
-													? "lend"
-													: "borrow",
+											type: determineLoanType(
+												loan.lender_id,
+												global.currentUser.id,
+												loan.start_date
+											),
 										}}
 										index={index}
 										update={update}
@@ -276,11 +391,11 @@ const Loans = (props) => {
 											start_date: loan.start_date,
 											end_date: loan.end_date,
 											id: loan.id,
-											type:
-												loan.lender_id ===
-												global.currentUser.id
-													? "lend"
-													: "borrow",
+											type: determineLoanType(
+												loan.lender_id,
+												global.currentUser.id,
+												loan.start_date
+											),
 										}}
 										index={index}
 									></LoanBox>

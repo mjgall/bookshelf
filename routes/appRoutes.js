@@ -776,9 +776,11 @@ module.exports = (app) => {
 			const response = await addLoan(
 				bookId,
 				lenderId,
-				borrowerId
+				borrowerId,
+				null,
+				requesting
 			);
-			await addActivity(lenderId, bookId, 5, borrowerId);
+			
 			res.send(response);
 		} else {
 			const response = await addLoan(
