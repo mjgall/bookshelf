@@ -99,7 +99,7 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 			<div>
 				<div>
 					<span className="font-bold">
-						{loan.type === "request" || loan.type === "lend"
+						{loan.type === "request"
 							? `${user.user_name} `
 							: "You "}
 					</span>
@@ -112,7 +112,7 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 					</Link>
 					{loan.type === "lend" ? " to " : " from "}
 					<span>
-						{loan.type === "request" || loan.type === "lend"
+						{loan.type === "request"
 							? "you."
 							: `${user.user_name}.`}
 					</span>
