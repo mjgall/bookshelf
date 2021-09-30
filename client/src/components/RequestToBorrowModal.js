@@ -5,14 +5,14 @@ import { Link } from "react-router-dom";
 
 const RequestToBorrowModal = (props) => {
 	const global = useContext(Context);
-	const [connections, setConnections] = useState([]);
-	const fetchConnections = async () => {
+	const [friendsWithBook, setfriendsWithBook] = useState([]);
+	const fetchFriendsWithBook = async () => {
 		const result = await axios.get(`/api/friendwithbook/${props.bookId}`);
 
-		setConnections(result.data);
+		setfriendsWithBook(result.data);
 	};
 	useEffect(() => {
-		fetchConnections();
+		fetchFriendsWithBook();
 	}, []);
 
 	const borrowFrom = async (friendId, friendName) => {
@@ -41,10 +41,10 @@ const RequestToBorrowModal = (props) => {
 		<>
 			<div className="flex flex-wrap py-6 px-8">
 				<div>
-					{connections.length < 1 ? (
+					{friendsWithBook.length < 1 ? (
 						<div className="text-center text my-1 text-gray-500 italic font-weight-light">
 							<div>
-								You don't have any connections, create a
+								You don't have any friendsWithBook, create a
 								household or connect with friends from
 							</div>
 							<Link
@@ -62,7 +62,7 @@ const RequestToBorrowModal = (props) => {
 							<div className="text-lg font-weight-bold">
 								Request From:
 							</div>
-							{connections.map((connection, index) => {
+							{friendsWithBook.map((connection, index) => {
 								return (
 									<div
 										onClick={() =>

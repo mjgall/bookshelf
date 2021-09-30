@@ -801,19 +801,32 @@ module.exports = (app) => {
 
 	app.put("/api/loans", checkAuthed, async (req, res) => {
 		switch (req.body.action) {
+			case "grant":
+				const grantResponse = await updateLoan(
+					"grant",
+					req.body.id,
+					req.body.user_books_id
+				);
+				const grantActivity = await addActivity(
+					grantResponse[0].lender_id,
+					grantResponse[0].global_id,
+					5,
+					grantResponse[0].borrower_id
+				);
+				res.send(grantActivity);
 			case "end":
-				const response = await updateLoan(
+				const endResponse = await updateLoan(
 					"end",
 					req.body.id,
 					req.body.user_books_id
 				);
-				const activity = await addActivity(
-					response[0].lender_id,
-					response[0].global_id,
+				const endActivity = await addActivity(
+					endResponse[0].lender_id,
+					endResponse[0].global_id,
 					6,
-					response[0].borrower_id
+					endResponse[0].borrower_id
 				);
-				res.send(activity);
+				res.send(endActivity);
 				break;
 			default:
 				break;

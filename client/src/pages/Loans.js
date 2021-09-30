@@ -28,7 +28,23 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 		update();
 	};
 
-	const grantLoan = async () => {
+	const grantLoan = async (loan, book) => {
+		console.log({ loan, book });
+
+		const response = await axios.put("/api/loans", {
+			action: "grant",
+			id: loan.id,
+			user_books_id: loan.user_books_id,
+		});
+
+		const index = global.allBooks.findIndex((book) => book.user_book_id === loan.user_books_id);
+		console.log(index);
+		let updatedAllBooks = [...global.allBooks];
+		updatedAllBooks[index].on_loan = 1;
+		updatedAllBooks[index].borrower_id = loan.borrower_id;
+		updatedAllBooks[index].full = loan.full;
+		global.setGlobal({ allBooks: updatedAllBooks });
+
 		console.log("loan granted");
 	};
 
@@ -58,35 +74,40 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 					loan.borrower_id !== global.currentUser.id) ? (
 					<div>
 						{loan.type === "request" ? (
-								<MoreMenu
+							<MoreMenu
 								placement="left"
 								size="18px"
 								options={[
 									{
-										action: () => grantLoan(),
+										action: () => grantLoan(loan, book),
 										confirm: true,
 										text: "Grant loan",
 									},
 								]}
 							></MoreMenu>
-						) : (<MoreMenu
-							placement="left"
-							size="18px"
-							options={[
-								{
-									action: () => endLoan(),
-									confirm: true,
-									text: "End loan",
-								},
-							]}
-						></MoreMenu>)}
-						
+						) : (
+							<MoreMenu
+								placement="left"
+								size="18px"
+								options={[
+									{
+										action: () => endLoan(),
+										confirm: true,
+										text: "End loan",
+									},
+								]}
+							></MoreMenu>
+						)}
 					</div>
 				) : null}
 
 				<div
 					className={
-						loan.end_date || (!loan.start_date && loan.borrower_id === global.currentUser.id) ? "h-12 w-12 mr-2 ml-4" : "h-12 w-12 mr-2"
+						loan.end_date ||
+						(!loan.start_date &&
+							loan.borrower_id === global.currentUser.id)
+							? "h-12 w-12 mr-2 ml-4"
+							: "h-12 w-12 mr-2"
 					}
 				>
 					<img
@@ -204,7 +225,8 @@ const Loans = (props) => {
 						!book.start_date
 				).length < 1 ? (
 					<div className="text-xs my-1 text-gray-500 italic font-weight-light">
-						You have not requested any books.
+						You have not requested any books nor has anyone
+						requested your books.
 					</div>
 				) : (
 					<>
@@ -232,6 +254,7 @@ const Loans = (props) => {
 											user_picture: loan.user_picture,
 										}}
 										loan={{
+											full: loan.full,
 											user_books_id: loan.user_books_id,
 											borrower_id: loan.borrower_id,
 											lender_id: loan.lender_id,
@@ -287,6 +310,7 @@ const Loans = (props) => {
 											user_picture: loan.user_picture,
 										}}
 										loan={{
+											full: loan.full,
 											user_books_id: loan.user_books_id,
 											borrower_id: loan.borrower_id,
 											lender_id: loan.lender_id,
@@ -341,6 +365,7 @@ const Loans = (props) => {
 											user_picture: loan.user_picture,
 										}}
 										loan={{
+											full: loan.full,
 											user_books_id: loan.user_books_id,
 											borrower_id: loan.borrower_id,
 											lender_id: loan.lender_id,
@@ -385,6 +410,7 @@ const Loans = (props) => {
 											user_picture: loan.user_picture,
 										}}
 										loan={{
+											full: loan.full,
 											user_books_id: loan.user_books_id,
 											borrower_id: loan.borrower_id,
 											lender_id: loan.lender_id,
