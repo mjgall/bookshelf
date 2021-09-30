@@ -5,7 +5,7 @@ module.exports = (bookId, lenderId, borrowerId, startDate, requesting) => {
 	return new Promise((resolve, reject) => {
 
 		if (requesting) {
-			query = `INSERT INTO loans (global_id, lender_id, borrower_id, start_date) VALUES (${bookId}, ${lenderId}, ${borrowerId}, '${startDate}')`;
+			query = `INSERT INTO loans (global_id, lender_id, borrower_id) VALUES (${bookId}, ${lenderId}, ${borrowerId})`;
 		} else {
 			query = `INSERT INTO loans (global_id, lender_id, borrower_id, start_date) VALUES (${bookId}, ${lenderId}, ${borrowerId}, '${startDate}')`;
 		}

@@ -15,7 +15,7 @@ module.exports = (action, loan_id, user_books_id) => {
 			WHERE loans.id = ${loan_id}`;
 		}
 		if (action === "grant") {
-			query = `UPDATE loans, user_books SET user_books.on_loan = TRUE WHERE loans.id = ${loan_id} AND user_books.id = ${user_books_id}`;
+			query = `UPDATE loans, user_books SET loans.start_date = '${Date.now()}', user_books.on_loan = TRUE WHERE loans.id = ${loan_id} AND user_books.id = ${user_books_id}`;
 			needsSecondQuery = true;
 			secondQuery = `SELECT borrowers.full AS borrower_full, lenders.full as lender_full, borrowers.id AS borrower_id, lenders.id AS lender_id, loans.* FROM loans 
 			JOIN users borrowers ON loans.borrower_id = borrowers.id

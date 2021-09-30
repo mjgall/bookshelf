@@ -814,6 +814,7 @@ module.exports = (app) => {
 					grantResponse[0].borrower_id
 				);
 				res.send(grantActivity);
+				break;
 			case "end":
 				const endResponse = await updateLoan(
 					"end",

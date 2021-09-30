@@ -46,6 +46,7 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 		global.setGlobal({ allBooks: updatedAllBooks });
 
 		console.log("loan granted");
+		update();
 	};
 
 	const determineVerb = (type) => {
