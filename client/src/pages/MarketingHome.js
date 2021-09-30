@@ -54,7 +54,7 @@ const MarketingHome = (props) => {
 						{props.redirect ? (
 							<div className="bg-green-400 text-white text-center rounded-lg border-gray-300 border p-3 shadow-lg mb-2">
 								<div className="ml-2 mr-6">
-									<a href={`http://localhost:3600/auth/google/redirect${props.redirect}`}>
+									<a href={`http://${window.location.hostname}/auth/google/redirect${props.redirect}`}>
 										Log in to view
 										{props.redirect === "/profile"
 											? " your profile!"
