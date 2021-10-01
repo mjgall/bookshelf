@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import { Context } from "../globalContext";
 
+import LoadingSpinner from "../components/LoadingSpinner";
+
 import MoreMenu from "../common/MoreMenu";
 import Tip from "../common/Tip";
 
@@ -75,7 +77,7 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 	};
 
 	const determineOptions = (loanType) => {
-		console.log(loanType)
+		console.log(loanType);
 		switch (loanType) {
 			case "requested":
 				return (
@@ -169,9 +171,7 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 				) : null} */}
 				<div
 					className={
-						loan.end_date
-							? "h-12 w-12 mr-2 ml-4"
-							: "h-12 w-12 mr-2"
+						loan.end_date ? "h-12 w-12 mr-2 ml-4" : "h-12 w-12 mr-2"
 					}
 				>
 					<img
@@ -241,11 +241,13 @@ const Loans = (props) => {
 	const global = useContext(Context);
 
 	const [loans, setLoans] = useState([]);
+	const [loaded, setLoaded] = useState(false);
 	const getLoans = async () => {
 		const loans = await axios
 			.get("/api/loans")
 			.then((response) => response.data);
 		setLoans(loans);
+		setLoaded(true);
 	};
 
 	const update = () => {
@@ -270,234 +272,252 @@ const Loans = (props) => {
 
 	return (
 		<div>
-			<div className="flex items-center text-center">
-				<div className="text-2xl font-bold">Loans</div>
-				<Tip
-					content="You can track books you've loaned to friends and household members."
-					placement="right"
-					size="1rem"
-					className="ml-2"
-				></Tip>
-			</div>
-			<div>
-				<div className="text-xl">Loan Requests</div>
-				{loans.filter(
-					(book) =>
-						(book.borrower_id === global.currentUser.id ||
-							book.lender_id === global.currentUser.id) &&
-						!book.end_date &&
-						!book.start_date
-				).length < 1 ? (
-					<div className="text-xs my-1 text-gray-500 italic font-weight-light">
-						You have not requested any books nor has anyone
-						requested your books.
+			{!loaded ? <LoadingSpinner></LoadingSpinner> : (
+				<>
+					<div className="flex items-center text-center">
+						<div className="text-2xl font-bold">Loans</div>
+						<Tip
+							content="You can track books you've loaned to friends and household members."
+							placement="right"
+							size="1rem"
+							className="ml-2"
+						></Tip>
 					</div>
-				) : (
-					<>
-						{loans
-							.filter(
-								(book) =>
-									(book.borrower_id ===
-										global.currentUser.id ||
-										book.lender_id ===
-											global.currentUser.id) &&
-									!book.end_date &&
-									!book.start_date
-							)
-							.map((loan, index) => {
-								return (
-									<LoanBox
-										key={index}
-										book={{
-											global_id: loan.global_id,
-											title: loan.title,
-											cover: loan.cover,
-										}}
-										user={{
-											user_id: loan.user_id,
-											user_name: loan.user_name,
-											user_picture: loan.user_picture,
-										}}
-										loan={{
-											full: loan.full,
-											user_books_id: loan.user_books_id,
-											borrower_id: loan.borrower_id,
-											lender_id: loan.lender_id,
-											start_date: loan.start_date,
-											end_date: loan.end_date,
-											id: loan.id,
-											type: determineLoanType(
-												loan.lender_id,
-												global.currentUser.id,
-												loan.start_date
-											),
-										}}
-										index={index}
-										update={update}
-									></LoanBox>
-								);
-							})}
-					</>
-				)}
-			</div>
-			<div>
-				<div className="text-xl">Borrowed</div>
-				{loans.filter(
-					(book) =>
-						book.borrower_id === global.currentUser.id &&
-						!book.end_date &&
-						book.start_date
-				).length < 1 ? (
-					<div className="text-xs my-1 text-gray-500 italic font-weight-light">
-						You currently are not borrowing any books.
+					<div>
+						<div className="text-xl">Loan Requests</div>
+						{loans.filter(
+							(book) =>
+								(book.borrower_id === global.currentUser.id ||
+									book.lender_id === global.currentUser.id) &&
+								!book.end_date &&
+								!book.start_date
+						).length < 1 ? (
+							<div className="text-xs my-1 text-gray-500 italic font-weight-light">
+								You have not requested any books nor has anyone
+								requested your books.
+							</div>
+						) : (
+							<>
+								{loans
+									.filter(
+										(book) =>
+											(book.borrower_id ===
+												global.currentUser.id ||
+												book.lender_id ===
+													global.currentUser.id) &&
+											!book.end_date &&
+											!book.start_date
+									)
+									.map((loan, index) => {
+										return (
+											<LoanBox
+												key={index}
+												book={{
+													global_id: loan.global_id,
+													title: loan.title,
+													cover: loan.cover,
+												}}
+												user={{
+													user_id: loan.user_id,
+													user_name: loan.user_name,
+													user_picture:
+														loan.user_picture,
+												}}
+												loan={{
+													full: loan.full,
+													user_books_id:
+														loan.user_books_id,
+													borrower_id:
+														loan.borrower_id,
+													lender_id: loan.lender_id,
+													start_date: loan.start_date,
+													end_date: loan.end_date,
+													id: loan.id,
+													type: determineLoanType(
+														loan.lender_id,
+														global.currentUser.id,
+														loan.start_date
+													),
+												}}
+												index={index}
+												update={update}
+											></LoanBox>
+										);
+									})}
+							</>
+						)}
 					</div>
-				) : (
-					<>
-						{loans
-							.filter(
-								(book) =>
-									book.borrower_id ===
-										global.currentUser.id &&
-									!book.end_date &&
-									book.start_date
-							)
-							.map((loan, index) => {
-								return (
-									<LoanBox
-										key={index}
-										book={{
-											global_id: loan.global_id,
-											title: loan.title,
-											cover: loan.cover,
-										}}
-										user={{
-											user_id: loan.user_id,
-											user_name: loan.user_name,
-											user_picture: loan.user_picture,
-										}}
-										loan={{
-											full: loan.full,
-											user_books_id: loan.user_books_id,
-											borrower_id: loan.borrower_id,
-											lender_id: loan.lender_id,
-											start_date: loan.start_date,
-											end_date: loan.end_date,
-											id: loan.id,
-											type: determineLoanType(
-												loan.lender_id,
-												global.currentUser.id,
-												loan.start_date
-											),
-										}}
-										index={index}
-										update={update}
-									></LoanBox>
-								);
-							})}
-					</>
-				)}
-			</div>
-			<div>
-				<div className="text-xl">Loaned</div>
-				{loans.filter(
-					(book) =>
-						book.lender_id === global.currentUser.id &&
-						!book.end_date &&
-						book.start_date
-				).length < 1 ? (
-					<div className="text-xs my-1 text-gray-500 italic font-weight-light">
-						You currently are not lending any books.
+					<div>
+						<div className="text-xl">Borrowed</div>
+						{loans.filter(
+							(book) =>
+								book.borrower_id === global.currentUser.id &&
+								!book.end_date &&
+								book.start_date
+						).length < 1 ? (
+							<div className="text-xs my-1 text-gray-500 italic font-weight-light">
+								You currently are not borrowing any books.
+							</div>
+						) : (
+							<>
+								{loans
+									.filter(
+										(book) =>
+											book.borrower_id ===
+												global.currentUser.id &&
+											!book.end_date &&
+											book.start_date
+									)
+									.map((loan, index) => {
+										return (
+											<LoanBox
+												key={index}
+												book={{
+													global_id: loan.global_id,
+													title: loan.title,
+													cover: loan.cover,
+												}}
+												user={{
+													user_id: loan.user_id,
+													user_name: loan.user_name,
+													user_picture:
+														loan.user_picture,
+												}}
+												loan={{
+													full: loan.full,
+													user_books_id:
+														loan.user_books_id,
+													borrower_id:
+														loan.borrower_id,
+													lender_id: loan.lender_id,
+													start_date: loan.start_date,
+													end_date: loan.end_date,
+													id: loan.id,
+													type: determineLoanType(
+														loan.lender_id,
+														global.currentUser.id,
+														loan.start_date
+													),
+												}}
+												index={index}
+												update={update}
+											></LoanBox>
+										);
+									})}
+							</>
+						)}
 					</div>
-				) : (
-					<>
-						{loans
-							.filter(
-								(book) =>
-									book.lender_id === global.currentUser.id &&
-									!book.end_date &&
-									book.start_date
-							)
-							.map((loan, index) => {
-								return (
-									<LoanBox
-										key={index}
-										book={{
-											global_id: loan.global_id,
-											title: loan.title,
-											cover: loan.cover,
-										}}
-										user={{
-											user_id: loan.user_id,
-											user_name: loan.user_name,
-											user_picture: loan.user_picture,
-										}}
-										loan={{
-											full: loan.full,
-											user_books_id: loan.user_books_id,
-											borrower_id: loan.borrower_id,
-											lender_id: loan.lender_id,
-											start_date: loan.start_date,
-											end_date: loan.end_date,
-											id: loan.id,
-											type: determineLoanType(
-												loan.lender_id,
-												global.currentUser.id,
-												loan.start_date
-											),
-										}}
-										index={index}
-										update={update}
-									></LoanBox>
-								);
-							})}
-					</>
-				)}
-			</div>
-			<div>
-				<div className="text-xl">Past</div>
-				{loans.filter((loan) => loan.end_date).length < 1 ? (
-					<div className="text-xs my-1 text-gray-500 italic font-weight-light">
-						You haven't loaned or borrowed any books in the past.
+					<div>
+						<div className="text-xl">Loaned</div>
+						{loans.filter(
+							(book) =>
+								book.lender_id === global.currentUser.id &&
+								!book.end_date &&
+								book.start_date
+						).length < 1 ? (
+							<div className="text-xs my-1 text-gray-500 italic font-weight-light">
+								You currently are not lending any books.
+							</div>
+						) : (
+							<>
+								{loans
+									.filter(
+										(book) =>
+											book.lender_id ===
+												global.currentUser.id &&
+											!book.end_date &&
+											book.start_date
+									)
+									.map((loan, index) => {
+										return (
+											<LoanBox
+												key={index}
+												book={{
+													global_id: loan.global_id,
+													title: loan.title,
+													cover: loan.cover,
+												}}
+												user={{
+													user_id: loan.user_id,
+													user_name: loan.user_name,
+													user_picture:
+														loan.user_picture,
+												}}
+												loan={{
+													full: loan.full,
+													user_books_id:
+														loan.user_books_id,
+													borrower_id:
+														loan.borrower_id,
+													lender_id: loan.lender_id,
+													start_date: loan.start_date,
+													end_date: loan.end_date,
+													id: loan.id,
+													type: determineLoanType(
+														loan.lender_id,
+														global.currentUser.id,
+														loan.start_date
+													),
+												}}
+												index={index}
+												update={update}
+											></LoanBox>
+										);
+									})}
+							</>
+						)}
 					</div>
-				) : (
-					<>
-						{loans
-							.filter((book) => book.end_date)
-							.map((loan, index) => {
-								return (
-									<LoanBox
-										key={index}
-										book={{
-											global_id: loan.global_id,
-											title: loan.title,
-											cover: loan.cover,
-										}}
-										user={{
-											user_id: loan.user_id,
-											user_name: loan.user_name,
-											user_picture: loan.user_picture,
-										}}
-										loan={{
-											full: loan.full,
-											user_books_id: loan.user_books_id,
-											borrower_id: loan.borrower_id,
-											lender_id: loan.lender_id,
-											start_date: loan.start_date,
-											end_date: loan.end_date,
-											id: loan.id,
-											type: determineLoanType(
-												loan.lender_id,
-												global.currentUser.id,
-												loan.start_date
-											),
-										}}
-										index={index}
-									></LoanBox>
-								);
-							})}
-					</>
-				)}
-			</div>
+					<div>
+						<div className="text-xl">Past</div>
+						{loans.filter((loan) => loan.end_date).length < 1 ? (
+							<div className="text-xs my-1 text-gray-500 italic font-weight-light">
+								You haven't loaned or borrowed any books in the
+								past.
+							</div>
+						) : (
+							<>
+								{loans
+									.filter((book) => book.end_date)
+									.map((loan, index) => {
+										return (
+											<LoanBox
+												key={index}
+												book={{
+													global_id: loan.global_id,
+													title: loan.title,
+													cover: loan.cover,
+												}}
+												user={{
+													user_id: loan.user_id,
+													user_name: loan.user_name,
+													user_picture:
+														loan.user_picture,
+												}}
+												loan={{
+													full: loan.full,
+													user_books_id:
+														loan.user_books_id,
+													borrower_id:
+														loan.borrower_id,
+													lender_id: loan.lender_id,
+													start_date: loan.start_date,
+													end_date: loan.end_date,
+													id: loan.id,
+													type: determineLoanType(
+														loan.lender_id,
+														global.currentUser.id,
+														loan.start_date
+													),
+												}}
+												index={index}
+											></LoanBox>
+										);
+									})}
+							</>
+						)}
+					</div>
+				</>
+			)}
 		</div>
 	);
 };
