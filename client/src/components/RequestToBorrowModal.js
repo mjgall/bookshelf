@@ -6,14 +6,20 @@ import { Link } from "react-router-dom";
 const RequestToBorrowModal = (props) => {
 	const global = useContext(Context);
 	const [friendsWithBook, setfriendsWithBook] = useState([]);
-	const fetchFriendsWithBook = async () => {
-		const result = await axios.get(`/api/friendwithbook/${props.bookId}`);
 
-		setfriendsWithBook(result.data);
-	};
+	
+
 	useEffect(() => {
+
+		const fetchFriendsWithBook = async () => {
+			const result = await axios.get(`/api/friendwithbook/${props.bookId}`);
+	
+			setfriendsWithBook(result.data);
+		};
+		
+
 		fetchFriendsWithBook();
-	}, []);
+	}, [props.bookId]);
 
 	const borrowFrom = async (friendId, friendName) => {
 

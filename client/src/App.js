@@ -6,7 +6,7 @@ import {
 	BrowserRouter as Router,
 	Switch,
 	Route,
-	Redirect,
+	// Redirect,
 	// useRouteMatch,
 } from "react-router-dom";
 

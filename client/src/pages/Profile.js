@@ -1,9 +1,9 @@
 import React from "react";
 import axios from "axios";
 
-import InlineEdit from "@atlaskit/inline-edit";
-import TextArea from "@atlaskit/textarea";
-import Textfield from "@atlaskit/textfield";
+// import InlineEdit from "@atlaskit/inline-edit";
+// import TextArea from "@atlaskit/textarea";
+// import Textfield from "@atlaskit/textfield";
 
 import {
 	CheckSquare,

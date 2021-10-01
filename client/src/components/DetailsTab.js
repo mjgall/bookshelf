@@ -218,7 +218,7 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 						})
 						.map((object, index) => {
 							return (
-								<div>
+								<div key={index}>
 									<InlineEdit
 										className="w-4/5 my-2"
 										readViewFitContainerWidth

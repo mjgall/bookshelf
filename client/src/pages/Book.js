@@ -25,7 +25,6 @@ const Book = (props) => {
 	const [book, setBook] = useState(undefined);
 	const [type, setType] = useState("");
 	const [loaded, setLoaded] = useState(false);
-	const [ownerId, setOwnerId] = useState(null);
 
 	const fetchGlobalBook = useCallback(async (id) => {
 		const globalBookDetails = await axios

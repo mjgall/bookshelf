@@ -780,7 +780,7 @@ module.exports = (app) => {
 				null,
 				requesting
 			);
-			
+
 			res.send(response);
 		} else {
 			const response = await addLoan(
@@ -829,6 +829,13 @@ module.exports = (app) => {
 				);
 				res.send(endActivity);
 				break;
+			case "cancel":
+				const cancelResponse = await updateLoan(
+					"cancel",
+					req.body.id,
+				);
+				res.send(cancelResponse);
+				break;
 			default:
 				break;
 		}
@@ -843,9 +850,12 @@ module.exports = (app) => {
 	});
 
 	app.get("/api/friendwithbook/:bookId", checkAuthed, async (req, res) => {
-		const response = await getFriendsWithBook(req?.user?.id, req.params.bookId)
+		const response = await getFriendsWithBook(
+			req?.user?.id,
+			req.params.bookId
+		);
 		res.send(response);
-	})
+	});
 
 	app.put("/api/users", checkAuthed, async (req, res) => {
 		if (!req.body.field || req.body.field === "admin") {

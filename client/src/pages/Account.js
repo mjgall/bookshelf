@@ -64,7 +64,7 @@ const Account = (props) => {
 						</div>
 						<Switch className="mr-4 md:mr-0"
 							onChange={toggleShelfEnabled}
-							checked={shelfEnabled === 1 ? true : false}
+							checked={shelfEnabled}
 						/>
 					</div>
 					<div className="flex items-center justify-between md:w-1/2 border-b border-dashed border-black py-2">

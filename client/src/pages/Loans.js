@@ -31,13 +31,15 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 	const grantLoan = async (loan, book) => {
 		console.log({ loan, book });
 
-		const response = await axios.put("/api/loans", {
+		await axios.put("/api/loans", {
 			action: "grant",
 			id: loan.id,
 			user_books_id: loan.user_books_id,
 		});
 
-		const index = global.allBooks.findIndex((book) => book.user_book_id === loan.user_books_id);
+		const index = global.allBooks.findIndex(
+			(book) => book.user_book_id === loan.user_books_id
+		);
 		console.log(index);
 		let updatedAllBooks = [...global.allBooks];
 		updatedAllBooks[index].on_loan = 1;
@@ -46,6 +48,14 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 		global.setGlobal({ allBooks: updatedAllBooks });
 
 		console.log("loan granted");
+		update();
+	};
+
+	const cancelLoan = async (loan) => {
+		await axios.put("/api/loans", {
+			action: "cancel",
+			id: loan.id,
+		});
 		update();
 	};
 
@@ -64,6 +74,57 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 		}
 	};
 
+	const determineOptions = (loanType) => {
+		console.log(loanType)
+		switch (loanType) {
+			case "requested":
+				return (
+					<MoreMenu
+						placement="left"
+						size="18px"
+						options={[
+							{
+								action: () => cancelLoan(loan),
+								confirm: true,
+								text: "Cancel request",
+							},
+						]}
+					></MoreMenu>
+				);
+
+			case "request":
+				return (
+					<MoreMenu
+						placement="left"
+						size="18px"
+						options={[
+							{
+								action: () => grantLoan(loan, book),
+								confirm: true,
+								text: "Grant loan",
+							},
+						]}
+					></MoreMenu>
+				);
+			case "lend":
+				return (
+					<MoreMenu
+						placement="left"
+						size="18px"
+						options={[
+							{
+								action: () => endLoan(),
+								confirm: true,
+								text: "End loan",
+							},
+						]}
+					></MoreMenu>
+				);
+			default:
+				break;
+		}
+	};
+
 	return (
 		<div
 			className="border-gray-400 border mt-2 mb-2 pr-6 rounded flex items-center"
@@ -71,6 +132,11 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 		>
 			<div className="flex items-center">
 				{(!loan.end_date && loan.start_date) ||
+				(!loan.end_date && !loan.start_date)
+					? determineOptions(loan.type)
+					: null}
+
+				{/* {(!loan.end_date && loan.start_date) ||
 				(!loan.start_date &&
 					loan.borrower_id !== global.currentUser.id) ? (
 					<div>
@@ -100,13 +166,10 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 							></MoreMenu>
 						)}
 					</div>
-				) : null}
-
+				) : null} */}
 				<div
 					className={
-						loan.end_date ||
-						(!loan.start_date &&
-							loan.borrower_id === global.currentUser.id)
+						loan.end_date
 							? "h-12 w-12 mr-2 ml-4"
 							: "h-12 w-12 mr-2"
 					}
@@ -244,6 +307,7 @@ const Loans = (props) => {
 							.map((loan, index) => {
 								return (
 									<LoanBox
+										key={index}
 										book={{
 											global_id: loan.global_id,
 											title: loan.title,
@@ -300,6 +364,7 @@ const Loans = (props) => {
 							.map((loan, index) => {
 								return (
 									<LoanBox
+										key={index}
 										book={{
 											global_id: loan.global_id,
 											title: loan.title,
@@ -355,6 +420,7 @@ const Loans = (props) => {
 							.map((loan, index) => {
 								return (
 									<LoanBox
+										key={index}
 										book={{
 											global_id: loan.global_id,
 											title: loan.title,
@@ -400,6 +466,7 @@ const Loans = (props) => {
 							.map((loan, index) => {
 								return (
 									<LoanBox
+										key={index}
 										book={{
 											global_id: loan.global_id,
 											title: loan.title,
