@@ -11,6 +11,16 @@ import Tip from "../common/Tip";
 
 const LoanBox = ({ book, user, loan, index, update }) => {
 	const global = useContext(Context);
+
+	const hideLoan = async () => {
+		const response = await axios.put("/api/loans", {
+			action: "hide",
+			id: loan.id,
+			user_books_id: loan.user_books_id,
+		});
+		update();
+	};
+
 	const endLoan = async () => {
 		const response = await axios.put("/api/loans", {
 			action: "end",
@@ -77,7 +87,6 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 	};
 
 	const determineOptions = (loanType) => {
-		console.log(loanType);
 		switch (loanType) {
 			case "requested":
 				return (
@@ -122,6 +131,20 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 						]}
 					></MoreMenu>
 				);
+			case "past":
+				return (
+					<MoreMenu
+						placement="left"
+						size="18px"
+						options={[
+							{
+								action: () => hideLoan(),
+								confirm: true,
+								text: "Hide loan",
+							},
+						]}
+					></MoreMenu>
+				);
 			default:
 				break;
 		}
@@ -133,47 +156,8 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 			key={index}
 		>
 			<div className="flex items-center">
-				{(!loan.end_date && loan.start_date) ||
-				(!loan.end_date && !loan.start_date)
-					? determineOptions(loan.type)
-					: null}
-
-				{/* {(!loan.end_date && loan.start_date) ||
-				(!loan.start_date &&
-					loan.borrower_id !== global.currentUser.id) ? (
-					<div>
-						{loan.type === "request" ? (
-							<MoreMenu
-								placement="left"
-								size="18px"
-								options={[
-									{
-										action: () => grantLoan(loan, book),
-										confirm: true,
-										text: "Grant loan",
-									},
-								]}
-							></MoreMenu>
-						) : (
-							<MoreMenu
-								placement="left"
-								size="18px"
-								options={[
-									{
-										action: () => endLoan(),
-										confirm: true,
-										text: "End loan",
-									},
-								]}
-							></MoreMenu>
-						)}
-					</div>
-				) : null} */}
-				<div
-					className={
-						loan.end_date ? "h-12 w-12 mr-2 ml-4" : "h-12 w-12 mr-2"
-					}
-				>
+				{determineOptions(loan.type)}
+				<div className="h-12 w-12 mr-2">
 					<img
 						alt="user"
 						src={user.user_picture}
@@ -258,21 +242,26 @@ const Loans = (props) => {
 		getLoans();
 	}, []);
 
-	const determineLoanType = (lenderId, currentUserId, startDate) => {
-		if (lenderId === currentUserId && startDate) {
+	const determineLoanType = (lenderId, currentUserId, startDate, endDate) => {
+		console.log(endDate);
+		if (lenderId === currentUserId && startDate && !endDate) {
 			return "lend";
-		} else if (lenderId !== currentUserId && startDate) {
+		} else if (lenderId !== currentUserId && startDate && !endDate) {
 			return "borrow";
-		} else if (lenderId !== currentUserId && !startDate) {
+		} else if (lenderId !== currentUserId && !startDate && !endDate) {
 			return "requested";
-		} else if (lenderId === currentUserId && !startDate) {
+		} else if (lenderId === currentUserId && !startDate && !endDate) {
 			return "request";
+		} else {
+			return "past";
 		}
 	};
 
 	return (
 		<div>
-			{!loaded ? <LoadingSpinner></LoadingSpinner> : (
+			{!loaded ? (
+				<LoadingSpinner></LoadingSpinner>
+			) : (
 				<>
 					<div className="flex items-center text-center">
 						<div className="text-2xl font-bold">Loans</div>
@@ -336,7 +325,8 @@ const Loans = (props) => {
 													type: determineLoanType(
 														loan.lender_id,
 														global.currentUser.id,
-														loan.start_date
+														loan.start_date,
+														loan.end_date
 													),
 												}}
 												index={index}
@@ -396,7 +386,8 @@ const Loans = (props) => {
 													type: determineLoanType(
 														loan.lender_id,
 														global.currentUser.id,
-														loan.start_date
+														loan.start_date,
+														loan.end_date
 													),
 												}}
 												index={index}
@@ -456,7 +447,8 @@ const Loans = (props) => {
 													type: determineLoanType(
 														loan.lender_id,
 														global.currentUser.id,
-														loan.start_date
+														loan.start_date,
+														loan.endDate
 													),
 												}}
 												index={index}
@@ -506,9 +498,11 @@ const Loans = (props) => {
 													type: determineLoanType(
 														loan.lender_id,
 														global.currentUser.id,
-														loan.start_date
+														loan.start_date,
+														loan.end_date
 													),
 												}}
+												update={update}
 												index={index}
 											></LoanBox>
 										);

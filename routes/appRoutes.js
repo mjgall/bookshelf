@@ -800,7 +800,16 @@ module.exports = (app) => {
 	});
 
 	app.put("/api/loans", checkAuthed, async (req, res) => {
+		console.log(req.body.action);
 		switch (req.body.action) {
+			case "hide":
+				const hide = await updateLoan(
+					"hide",
+					req.body.id,
+					req.body.user_books_id
+				);
+				res.send(hide);
+				break
 			case "grant":
 				const grantResponse = await updateLoan(
 					"grant",

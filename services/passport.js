@@ -146,6 +146,7 @@ passport.use(
 								throw Error(e);
 							})
 					) {
+						updateUser(user.id, "last_login", "NOW()");
 						done(false, user, { message: "redirect" });
 					} else {
 						done(false, null, {

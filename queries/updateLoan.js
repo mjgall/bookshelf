@@ -30,6 +30,15 @@ module.exports = (action, loan_id, user_books_id) => {
 			JOIN users lenders ON loans.lender_id = lenders.id
 			WHERE loans.id = ${loan_id}`;
 		}
+		if (action === "hide") {
+			query = `UPDATE loans, user_books SET loans.hidden = TRUE WHERE loans.id = ${loan_id}`;
+			needsSecondQuery = true;
+			secondQuery = `SELECT borrowers.full AS borrower_full, lenders.full as lender_full, borrowers.id AS borrower_id, lenders.id AS lender_id, loans.* FROM loans 
+			JOIN users borrowers ON loans.borrower_id = borrowers.id
+			JOIN users lenders ON loans.lender_id = lenders.id
+			WHERE loans.id = ${loan_id}`;
+		}
+		
 		// else {
 		// 	query = `INSERT INTO likes (activity_id, liked_by, timestamp) VALUES (${activityId}, ${likedBy}, '${Date.now()}')`;
 		// }
