@@ -678,7 +678,7 @@ module.exports = (app) => {
 							(like) => like.liked_by === req.user.id
 						)
 					) {
-						likeContent.color = "royalblue";
+						likeContent.color = "newblue";
 						likeContent.likedByUser = true;
 						likeContent.people = [
 							"You",

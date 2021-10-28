@@ -363,7 +363,7 @@ export default class Profile extends React.Component {
 							) {
 								return (
 									<div
-										className="w-5/6 md:w-full container shadow text-sm bg-blue-100 border border-royalblue text-blue-700 my-2 px-4 py-3 rounded md:flex justify-between"
+										className="w-5/6 md:w-full container shadow text-sm bg-blue-100 border border-newblue text-blue-700 my-2 px-4 py-3 rounded md:flex justify-between"
 										role="alert"
 									>
 										<div className="text-center md:text-left">
@@ -465,7 +465,7 @@ export default class Profile extends React.Component {
 									onSubmit={this.handleHouseholdSubmit}
 									className="w-full"
 								>
-									<div className="flex items-center border-b border-b-1 border-royalblue ">
+									<div className="flex items-center border-b border-b-1 border-newblue ">
 										<input
 											className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none"
 											type="text"
@@ -479,7 +479,7 @@ export default class Profile extends React.Component {
 											aria-label="Household Name"
 										></input>
 										<button
-											className="bg-royalblue hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
+											className="bg-newblue hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
 											type="submit"
 										>
 											Create
@@ -566,7 +566,7 @@ export default class Profile extends React.Component {
 												className="w-full max-w-md"
 											>
 												{membership.is_owner ? (
-													<div className="flex items-center border-b border-b-2 border-royalblue ">
+													<div className="flex items-center border-b border-b-2 border-newblue ">
 														<input
 															className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none"
 															type="text"
@@ -594,7 +594,7 @@ export default class Profile extends React.Component {
 																	index
 																)
 															}
-															className="bg-royalblue hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
+															className="bg-newblue hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
 															type="submit"
 														>
 															Invite

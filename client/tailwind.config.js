@@ -22,6 +22,7 @@ module.exports = {
     },
     colors: {
       transparent: 'transparent',
+      newblue: '#456184',
       royalblue: '#002366',
       saffron: '#eac435',
       black: '#000',

@@ -54,7 +54,7 @@ const MoreMenu = (props) => {
 					onClick={() => {
 						setMenuOpen(!menuOpen);
 					}}
-					className="bg-royalblue hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
+					className="bg-newblue hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
 				>
 					<div className="flex justify-center">
 						<MoreVertical size="1.5rem"></MoreVertical>

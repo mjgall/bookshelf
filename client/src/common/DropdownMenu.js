@@ -22,7 +22,7 @@ const Dropdown = ({ color, path }) => {
 
 	const determineClass = (currentPage, to) => {
 		if (currentPage === to || (currentPage === "/" && to === "/library")) {
-			return "bg-royalblue text-white";
+			return "bg-newblue text-white";
 		} else {
 			return "hover:bg-gray-400 text-black";
 		}

@@ -9,7 +9,7 @@ const ProfileInfoCard = (props) => {
   return (
     <div>
       <div className='rounded-lg overflow-hidden shadow w-5/6 mx-auto md:mx-0 md:w-64 md:max-w-md my-3'>
-        <div className='h-24 w-full bg-royalblue'></div>
+        <div className='h-24 w-full bg-newblue'></div>
         <div className='flex justify-center -mt-16'>
           <img
             alt='user'

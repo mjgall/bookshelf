@@ -55,7 +55,7 @@ const Modal = ({ isShowing, hide, confirmAction, header, children }) => {
               confirmAction();
               hide();
             }}
-            className='bg-royalblue hover:bg-blue-700 py-1 px-4 rounded text-white'>
+            className='bg-newblue hover:bg-blue-700 py-1 px-4 rounded text-white'>
             Confirm
           </button>
         </div>

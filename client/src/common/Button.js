@@ -5,7 +5,7 @@ const Button = (props) => {
 		<button
 			{...props}
 			className={
-				`bg-royalblue hover:bg-blue-700 text-white my-2 mx-1 py-2 px-4 rounded text-center cursor-pointer ` +
+				`bg-newblue hover:bg-blue-700 text-white my-2 mx-1 py-2 px-4 rounded text-center cursor-pointer ` +
 				props.className
 			}
 			type="button"

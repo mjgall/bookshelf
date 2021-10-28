@@ -40,15 +40,15 @@ const NavBar = ({
 			scrollPosition > 0 ||
 			location.pathname.indexOf("/book/") > -1
 		) {
-			return "1.5rem";
+			return "2.5rem";
 		} else {
-			return "3rem";
+			return "3.3rem";
 		}
 	};
 	//max-w-screen-lg container my-4
 	return (
-		// <nav className="z-50 flex shadow-lg items-center justify-between flex-wrap bg-royalblue px-8 py-1 md:py-3 sticky top-safe0 md:top-0">
-		<nav className="z-50 bg-royalblue sticky flex justify-center top-safe0">
+		// <nav className="z-50 flex shadow-lg items-center justify-between flex-wrap bg-newblue px-8 py-1 md:py-3 sticky top-safe0 md:top-0">
+		<nav className="z-50 bg-newblue sticky flex justify-center top-safe0">
 			<div className="flex items-center justify-between md:px-0 px-8 flex-wrap md:my-3 md:top-0 max-w-screen-xl w-full">
 				<div className="flex items-center">
 					<div

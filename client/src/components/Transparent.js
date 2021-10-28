@@ -72,7 +72,7 @@ const Transparent = (props) => {
 					></input>
 					<button
 						onClick={login}
-						className="bg-royalblue hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
+						className="bg-newblue hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outlineundefined"
 						type="submit"
 					>
 						Login

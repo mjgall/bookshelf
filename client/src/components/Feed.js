@@ -150,7 +150,7 @@ const Feed = (props) => {
 				activities.map((activity) => {
 					if (activity.id === item.id) {
 						let likeContent = {
-							color: "royalblue",
+							color: "newblue",
 							likedByUser: true,
 							people: activity.likeContent.people,
 							string: activity.likeContent.string,

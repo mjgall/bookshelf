@@ -141,7 +141,7 @@ const AddBook = () => {
 								<div
 									className={
 										"text-sm px-5 py-3 block leading-normal " +
-										(openTab === 1 ? "text-white bg-royalblue" : "bg-white")
+										(openTab === 1 ? "text-white bg-newblue" : "bg-white")
 									}
 									onClick={(e) => {
 										setOpenTab(1);
@@ -156,7 +156,7 @@ const AddBook = () => {
 								<div
 									className={
 										"text-sm px-5 py-3 block leading-normal " +
-										(openTab === 2 ? "text-white bg-royalblue" : "bg-white")
+										(openTab === 2 ? "text-white bg-newblue" : "bg-white")
 									}
 									onClick={(e) => {
 										setOpenTab(2);
@@ -172,7 +172,7 @@ const AddBook = () => {
 								<div
 									className={
 										"text-sm px-5 py-3 block leading-normal " +
-										(openTab === 3 ? "text-white bg-royalblue" : "bg-white")
+										(openTab === 3 ? "text-white bg-newblue" : "bg-white")
 									}
 									onClick={(e) => {
 										setOpenTab(3);
@@ -218,7 +218,7 @@ const AddBook = () => {
 											/>
 											<button
 												onClick={submitManual}
-												className="bg-royalblue hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outline"
+												className="bg-newblue hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outline"
 											>
 												Submit
                       </button>
@@ -240,7 +240,7 @@ const AddBook = () => {
 												<button
 													onSubmit={submitSearch}
 													onClick={submitSearch}
-													className="bg-royalblue hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outline"
+													className="bg-newblue hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outline"
 												>
 													Search
                         </button>

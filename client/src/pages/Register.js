@@ -102,7 +102,7 @@ const Register = (props) => {
 				</div>
 				<div className="flex items-center justify-between">
 					<button
-						className="bg-royalblue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+						className="bg-newblue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
 						type="button"
 						onClick={submit}
 					>
@@ -123,7 +123,7 @@ const Register = (props) => {
 							? `/auth/google/redirect${global.redirect}`
 							: `/auth/google`
 					}
-					className="inline-block text-sm px-2 leading-none border rounded border-white hover:border-transparent text-royalblue hover:text-blue-600 hover:bg-white lg:mt-0 "
+					className="inline-block text-sm px-2 leading-none border rounded border-white hover:border-transparent text-newblue hover:text-blue-600 hover:bg-white lg:mt-0 "
 				>
 					<div className="flex items-center">
 						<div>

@@ -196,10 +196,10 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 						</div>
 					</div>
 
-					<Button color="royalblue" onClick={add}>
+					<Button color="newblue" onClick={add}>
 						Save
 					</Button>
-					<Button color="royalblue" onClick={addAndAnother}>
+					<Button color="newblue" onClick={addAndAnother}>
 						Save + Add Another
 					</Button>
 				</div>
@@ -258,10 +258,10 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 								</div>
 							);
 						})}
-					<Button color="royalblue" onClick={add}>
+					<Button color="newblue" onClick={add}>
 						Save
 					</Button>
-					<Button color="royalblue" onClick={addAndAnother}>
+					<Button color="newblue" onClick={addAndAnother}>
 						Save + Add Another
 					</Button>
 				</>
