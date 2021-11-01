@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 
 import BookTable from "./BookTable";
+import TaniaTable from "./TaniaTable";
 import { Context } from "../globalContext";
 import AddBook from "./AddBook";
 
@@ -15,13 +16,23 @@ const Library = () => {
 			<div className="md:m-0 m-auto w-3/4">
 				<AddBook></AddBook>
 			</div>
-			<BookTable
+			<TaniaTable
+				rows={global.books.userBooks.concat(
+					global.books.householdBooks
+				)}
+				columns={[
+					{ accessor: "title", label: "Title" },
+					{ accessor: "author", label: "Author" },
+					{ accessor: "cover", label: "cover" },
+				]}
+			></TaniaTable>
+			{/* <BookTable
 				user={global.currentUser}
 				books={global.books.userBooks.concat(
 					global.books.householdBooks
 				)}
 				// books={global.allBooks}
-			></BookTable>
+			></BookTable> */}
 		</div>
 	);
 };

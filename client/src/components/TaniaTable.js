@@ -1,6 +1,56 @@
-import { useState, useMemo } from "react";
-import { sortRows, filterRows, paginateRows } from "./helpers";
-import { Pagination } from "./Pagination";
+import React, { useState, useMemo } from "react";
+import { withRouter } from "react-router-dom";
+
+
+const Pagination = ({
+	activePage,
+	count,
+	rowsPerPage,
+	totalPages,
+	setActivePage,
+}) => {
+	const beginning = activePage === 1 ? 1 : rowsPerPage * (activePage - 1) + 1;
+	const end = activePage === totalPages ? count : beginning + rowsPerPage - 1;
+
+	return (
+		<>
+			<div className="pagination">
+				<button
+					disabled={activePage === 1}
+					onClick={() => setActivePage(1)}
+				>
+					⏮️ First
+				</button>
+				<button
+					disabled={activePage === 1}
+					onClick={() => setActivePage(activePage - 1)}
+				>
+					⬅️ Previous
+				</button>
+				<button
+					disabled={activePage === totalPages}
+					onClick={() => setActivePage(activePage + 1)}
+				>
+					Next ➡️
+				</button>
+				<button
+					disabled={activePage === totalPages}
+					onClick={() => setActivePage(totalPages)}
+				>
+					Last ⏭️
+				</button>
+			</div>
+			<p>
+				Page {activePage} of {totalPages}
+			</p>
+			<p>
+				Rows: {beginning === end ? end : `${beginning} - ${end}`} of{" "}
+				{count}
+			</p>
+		</>
+	);
+};
+
 
 const isEmpty = (obj = {}) => {
 	return Object.keys(obj).length === 0;
@@ -112,11 +162,11 @@ const paginateRows = (sortedRows, activePage, rowsPerPage) => {
 	);
 };
 
-export const Table = ({ columns, rows }) => {
+const Table = ({ columns, rows, history }) => {
 	const [activePage, setActivePage] = useState(1);
 	const [filters, setFilters] = useState({});
 	const [sort, setSort] = useState({ order: "asc", orderBy: "id" });
-	const rowsPerPage = 3;
+	const rowsPerPage = 10;
 
 	const filteredRows = useMemo(
 		() => filterRows(rows, filters),
@@ -127,6 +177,8 @@ export const Table = ({ columns, rows }) => {
 		[filteredRows, sort]
 	);
 	const calculatedRows = paginateRows(sortedRows, activePage, rowsPerPage);
+
+    console.log(calculatedRows);
 
 	const count = filteredRows.length;
 	const totalPages = Math.ceil(count / rowsPerPage);
@@ -220,7 +272,7 @@ export const Table = ({ columns, rows }) => {
 				<tbody>
 					{calculatedRows.map((row) => {
 						return (
-							<tr key={row.id}>
+							<tr onClick={() => history.push(`/book/${row.id}`)} key={row.id}>
 								{columns.map((column) => {
 									if (column.format) {
 										return (
@@ -263,3 +315,5 @@ export const Table = ({ columns, rows }) => {
 		</>
 	);
 };
+
+export default withRouter(Table);
