@@ -21,9 +21,23 @@ const Library = () => {
 					global.books.householdBooks
 				)}
 				columns={[
+					{
+						accessor: "cover",
+						label: "",
+						format: (value) => {
+							return (
+								<img
+									width="5rem"
+									loading="lazy"
+									className="w-8 container"
+									src={value}
+									alt="cover"
+								></img>
+							);
+						},
+					},
 					{ accessor: "title", label: "Title" },
-					{ accessor: "author", label: "Author" },
-					{ accessor: "cover", label: "cover" },
+					{ accessor: "author", label: "Author" }
 				]}
 			></TaniaTable>
 			{/* <BookTable
