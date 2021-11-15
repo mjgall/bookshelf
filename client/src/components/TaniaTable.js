@@ -112,9 +112,10 @@ const convertType = (value) => {
 	return value;
 };
 
-const filterRows = (rows, filters) => {
+const filterRows = (rows, filters, currentUserId) => {
+	console.log({ rows, filters });
 	if (isEmpty(filters)) return rows;
-
+	let results;
 	if (filters.global) {
 		const authorTitleStringRows = rows.map((row) => {
 			return {
@@ -122,10 +123,9 @@ const filterRows = (rows, filters) => {
 				authorTitleString: row.author.concat(" ", row.title),
 			};
 		});
-		return authorTitleStringRows.filter((row) => {
+		results = authorTitleStringRows.filter((row) => {
 			return Object.keys(filters).every(() => {
 				const value = row.authorTitleString;
-				console.log(value);
 				const searchValue = filters.global;
 
 				if (isString(value)) {
@@ -146,8 +146,8 @@ const filterRows = (rows, filters) => {
 				return false;
 			});
 		});
-	} else {
-		return rows.filter((row) => {
+	} else if (filters.title || filters.author) {
+		results = rows.filter((row) => {
 			return Object.keys(filters).every((accessor) => {
 				const value = row[accessor];
 				const searchValue = filters[accessor];
@@ -170,7 +170,56 @@ const filterRows = (rows, filters) => {
 				return false;
 			});
 		});
+	} else {
+		results = rows;
+		console.log({ results });
 	}
+
+	let filterBooksByHouseholdOwner = (books, householdSelect, ownerSelect) => {
+		let filteredBooks;
+		console.log({ books, householdSelect, ownerSelect });
+		// if (viewPrivate) {
+		// 	filteredBooks = books.filter((book) => book.private === 1);
+		// }
+		// else
+		if (householdSelect?.value == null || !ownerSelect) {
+			filteredBooks = books;
+		} else if (householdSelect.value === "none") {
+			filteredBooks = books.filter(
+				(book) => Number(book.user_id) === currentUserId
+			);
+		} else if (
+			householdSelect?.value === "all" &&
+			ownerSelect?.value === "all"
+		) {
+			return (filteredBooks = books);
+		} else {
+			const newBooks = books.filter((book) => {
+				if (ownerSelect?.value === "all") {
+					return (
+						Number(book.household_id) ===
+							Number(householdSelect.value) ||
+						book.household_id === null
+					);
+				} else {
+					return book.user_id === Number(ownerSelect?.value);
+				}
+			});
+			filteredBooks = newBooks;
+		}
+
+		// if (viewRead) {
+		// 	filteredBooks = filteredBooks.filter((book) => book.read === 1);
+		// }
+
+		return filteredBooks;
+	};
+
+	return filterBooksByHouseholdOwner(
+		results,
+		filters.householdSelect,
+		filters.owner
+	);
 };
 
 const sortRows = (rows, sort) => {
@@ -242,8 +291,8 @@ const Table = ({ columns, rows, history }) => {
 	const rowsPerPage = 25;
 
 	const filteredRows = useMemo(
-		() => filterRows(rows, filters),
-		[rows, filters]
+		() => filterRows(rows, filters, global.currentUser.id),
+		[rows, filters, global.currentUser.id]
 	);
 	const sortedRows = useMemo(
 		() => sortRows(filteredRows, sort),
@@ -254,18 +303,27 @@ const Table = ({ columns, rows, history }) => {
 	const count = filteredRows.length;
 	const totalPages = Math.ceil(count / rowsPerPage);
 
-	const handleHouseholdChange = (selected) => {
+	const handleHouseholdChange = useCallback((selected) => {
 		getOwners(global.householdMembers, selected.value);
 		setHouseholdSelect(selected);
 		setOwnerSelect({ label: "All members", value: "all" });
+		setFilters((prevFilters) => ({
+			...prevFilters,
+			householdSelect: selected,
+			owner: null
+		}));
 		localStorage.setItem("householdFilter", JSON.stringify(selected));
 		localStorage.setItem("ownerFilter", null);
-	};
+	}, [global.householdMembers]);
 
-	const handleOwnerChange = (selected) => {
+	const handleOwnerChange = useCallback((selected) => {
 		setOwnerSelect(selected);
+		setFilters((prevFilters) => ({
+			...prevFilters,
+			owner: selected,
+		}));
 		localStorage.setItem("ownerFilter", JSON.stringify(selected));
-	};
+	}, []);
 
 	const getOwners = (members, householdId = null) => {
 		if (!householdId || householdId === "all" || householdId === "none") {
@@ -378,6 +436,8 @@ const Table = ({ columns, rows, history }) => {
 
 	const clearAll = () => {
 		setSort({ order: "asc", orderBy: "id" });
+		setHouseholdSelect(null);
+		setOwnerSelect(null);
 		setActivePage(1);
 		setFilters({});
 	};
@@ -385,6 +445,9 @@ const Table = ({ columns, rows, history }) => {
 	useEffect(() => {
 		getOwners(global.householdMembers);
 		setHouseholdOptions(getHouseholdOptions());
+		getSavedHouseholdSelect()
+		getSavedOwnerSelect()
+		setFilters({householdSelect: getSavedHouseholdSelect(), owner: getSavedOwnerSelect()})
 	}, [global.householdMembers, getHouseholdOptions]);
 
 	return (
@@ -424,7 +487,7 @@ const Table = ({ columns, rows, history }) => {
 					className="w-full h-12 p-2 border-2 rounded"
 					key={`global-search`}
 					type="search"
-					placeholder="Search your books..."
+					placeholder={`Search books (${count})...`}
 					value={filters.global}
 					onChange={(event) => handleSearch(event.target.value)}
 				/>
