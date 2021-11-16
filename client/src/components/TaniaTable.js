@@ -310,7 +310,7 @@ const Table = ({ columns, rows, history }) => {
 		setFilters((prevFilters) => ({
 			...prevFilters,
 			householdSelect: selected,
-			owner: null
+			owner: { value: "all", label: "All members" }
 		}));
 		localStorage.setItem("householdFilter", JSON.stringify(selected));
 		localStorage.setItem("ownerFilter", null);
@@ -443,7 +443,7 @@ const Table = ({ columns, rows, history }) => {
 	};
 
 	useEffect(() => {
-		getOwners(global.householdMembers);
+		getOwners(global.householdMembers, householdSelect.value);
 		setHouseholdOptions(getHouseholdOptions());
 		getSavedHouseholdSelect()
 		getSavedOwnerSelect()
