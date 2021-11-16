@@ -303,18 +303,21 @@ const Table = ({ columns, rows, history }) => {
 	const count = filteredRows.length;
 	const totalPages = Math.ceil(count / rowsPerPage);
 
-	const handleHouseholdChange = useCallback((selected) => {
-		getOwners(global.householdMembers, selected.value);
-		setHouseholdSelect(selected);
-		setOwnerSelect({ label: "All members", value: "all" });
-		setFilters((prevFilters) => ({
-			...prevFilters,
-			householdSelect: selected,
-			owner: { value: "all", label: "All members" }
-		}));
-		localStorage.setItem("householdFilter", JSON.stringify(selected));
-		localStorage.setItem("ownerFilter", null);
-	}, [global.householdMembers]);
+	const handleHouseholdChange = useCallback(
+		(selected) => {
+			getOwners(global.householdMembers, selected.value);
+			setHouseholdSelect(selected);
+			setOwnerSelect({ label: "All members", value: "all" });
+			setFilters((prevFilters) => ({
+				...prevFilters,
+				householdSelect: selected,
+				owner: { value: "all", label: "All members" },
+			}));
+			localStorage.setItem("householdFilter", JSON.stringify(selected));
+			localStorage.setItem("ownerFilter", null);
+		},
+		[global.householdMembers]
+	);
 
 	const handleOwnerChange = useCallback((selected) => {
 		setOwnerSelect(selected);
@@ -445,9 +448,12 @@ const Table = ({ columns, rows, history }) => {
 	useEffect(() => {
 		getOwners(global.householdMembers, householdSelect.value);
 		setHouseholdOptions(getHouseholdOptions());
-		getSavedHouseholdSelect()
-		getSavedOwnerSelect()
-		setFilters({householdSelect: getSavedHouseholdSelect(), owner: getSavedOwnerSelect()})
+		getSavedHouseholdSelect();
+		getSavedOwnerSelect();
+		setFilters({
+			householdSelect: getSavedHouseholdSelect(),
+			owner: getSavedOwnerSelect(),
+		});
 	}, [global.householdMembers, getHouseholdOptions]);
 
 	return (
@@ -456,6 +462,7 @@ const Table = ({ columns, rows, history }) => {
 				<div className="flex w-full">
 					<div className="flex-1">
 						<Select
+							className="cursor-pointer"
 							isOptionDisabled={(option) =>
 								option.value === "no-households"
 							}
@@ -470,6 +477,7 @@ const Table = ({ columns, rows, history }) => {
 					{householdSelect.value === "none" || viewPrivate ? null : (
 						<div className="flex-1 ml-1">
 							<Select
+								className="cursor-pointer"
 								isOptionDisabled={(option) =>
 									option.value === "no-households"
 								}
