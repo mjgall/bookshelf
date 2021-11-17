@@ -9,6 +9,7 @@ import { withRouter } from "react-router-dom";
 import Select from "react-select";
 import { Context } from "../globalContext";
 import _ from "lodash";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
 
 const Pagination = ({
 	activePage,
@@ -19,10 +20,112 @@ const Pagination = ({
 }) => {
 	const beginning = activePage === 1 ? 1 : rowsPerPage * (activePage - 1) + 1;
 	const end = activePage === totalPages ? count : beginning + rowsPerPage - 1;
-
 	return (
 		<>
-			<div className="pagination">
+			<div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+				<div className="flex-1 flex justify-between sm:hidden">
+					<div
+						className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer"
+						onClick={() => {
+							if (activePage === 1) {
+								return;
+							} else {
+								setActivePage(activePage - 1);
+							}
+						}}
+					>
+						Previous
+					</div>
+					<div
+						className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer"
+						onClick={() => {
+							if (activePage === totalPages) {
+								return;
+							} else {
+								setActivePage(activePage + 1);
+							}
+						}}
+					>
+						Next
+					</div>
+				</div>
+				<div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+					<div>
+						<p className="text-sm text-gray-700">
+							Showing{" "}
+							<span className="font-medium">{beginning}</span> to{" "}
+							<span className="font-medium">{end}</span> of{" "}
+							<span className="font-medium">{count}</span> results
+						</p>
+					</div>
+					<div>
+						<nav
+							className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
+							aria-label="Pagination"
+						>
+							<div
+								className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer"
+								onClick={() => {
+									if (activePage === 1) {
+										return;
+									} else {
+										setActivePage(activePage - 1);
+									}
+								}}
+							>
+								<span className="sr-only">Previous</span>
+								<ChevronLeftIcon
+									className="h-5 w-5"
+									aria-hidden="true"
+								/>
+							</div>
+							{/* Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" */}
+							{Array.from(Array(totalPages))
+								.map((e, i) => i + 1)
+								.map((page, index) => {
+									if (page === activePage) {
+										return (
+											<div
+												aria-current="page"
+												className="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
+											>
+												{page}
+											</div>
+										);
+									} else {
+										return (
+											<div
+												className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium cursor-pointer"
+												onClick={() =>
+													setActivePage(page)
+												}
+											>
+												{page}
+											</div>
+										);
+									}
+								})}
+							<div
+								className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer"
+								onClick={() => {
+									if (activePage === totalPages) {
+										return;
+									} else {
+										setActivePage(activePage + 1);
+									}
+								}}
+							>
+								<span className="sr-only">Next</span>
+								<ChevronRightIcon
+									className="h-5 w-5"
+									aria-hidden="true"
+								/>
+							</div>
+						</nav>
+					</div>
+				</div>
+			</div>
+			{/* <div className="pagination text-center space-x-6 half-width ">
 				<button
 					disabled={activePage === 1}
 					onClick={() => setActivePage(1)}
@@ -54,7 +157,7 @@ const Pagination = ({
 			<p>
 				Rows: {beginning === end ? end : `${beginning} - ${end}`} of{" "}
 				{count}
-			</p>
+			</p> */}
 		</>
 	);
 };
@@ -184,7 +287,7 @@ const filterRows = (rows, filters, currentUserId) => {
 		// else
 		if (householdSelect?.value == null || !ownerSelect) {
 			filteredBooks = books;
-		} else if (householdSelect.value === "none") {
+		} else if (householdSelect?.value === "none") {
 			filteredBooks = books.filter(
 				(book) => Number(book.user_id) === currentUserId
 			);
@@ -198,7 +301,7 @@ const filterRows = (rows, filters, currentUserId) => {
 				if (ownerSelect?.value === "all") {
 					return (
 						Number(book.household_id) ===
-							Number(householdSelect.value) ||
+							Number(householdSelect?.value) ||
 						book.household_id === null
 					);
 				} else {
@@ -305,7 +408,7 @@ const Table = ({ columns, rows, history }) => {
 
 	const handleHouseholdChange = useCallback(
 		(selected) => {
-			getOwners(global.householdMembers, selected.value);
+			getOwners(global.householdMembers, selected?.value);
 			setHouseholdSelect(selected);
 			setOwnerSelect({ label: "All members", value: "all" });
 			setFilters((prevFilters) => ({
@@ -446,7 +549,7 @@ const Table = ({ columns, rows, history }) => {
 	};
 
 	useEffect(() => {
-		getOwners(global.householdMembers, householdSelect.value);
+		getOwners(global.householdMembers, householdSelect?.value);
 		setHouseholdOptions(getHouseholdOptions());
 		getSavedHouseholdSelect();
 		getSavedOwnerSelect();
@@ -464,7 +567,7 @@ const Table = ({ columns, rows, history }) => {
 						<Select
 							className="cursor-pointer"
 							isOptionDisabled={(option) =>
-								option.value === "no-households"
+								option?.value === "no-households"
 							}
 							placeholder="Household..."
 							blurInputOnSelect
@@ -474,12 +577,12 @@ const Table = ({ columns, rows, history }) => {
 							onChange={handleHouseholdChange}
 						></Select>
 					</div>
-					{householdSelect.value === "none" || viewPrivate ? null : (
+					{householdSelect?.value === "none" || viewPrivate ? null : (
 						<div className="flex-1 ml-1">
 							<Select
 								className="cursor-pointer"
 								isOptionDisabled={(option) =>
-									option.value === "no-households"
+									option?.value === "no-households"
 								}
 								placeholder="Owner..."
 								blurInputOnSelect
@@ -497,7 +600,7 @@ const Table = ({ columns, rows, history }) => {
 					type="search"
 					placeholder={`Search books (${count})...`}
 					value={filters.global}
-					onChange={(event) => handleSearch(event.target.value)}
+					onChange={(event) => handleSearch(event.target?.value)}
 				/>
 			</div>
 			<table className="w-full">
@@ -532,26 +635,6 @@ const Table = ({ columns, rows, history }) => {
 							);
 						})}
 					</tr>
-					{/* <tr>
-						{columns.map((column) => {
-							return (
-								<th>
-									<input
-										key={`${column.accessor}-search`}
-										type="search"
-										placeholder={`Search ${column.label}`}
-										value={filters[column.accessor]}
-										onChange={(event) =>
-											handleSearch(
-												event.target.value,
-												column.accessor
-											)
-										}
-									/>
-								</th>
-							);
-						})}
-					</tr> */}
 				</thead>
 				<tbody>
 					{calculatedRows.map((row) => {
@@ -593,11 +676,6 @@ const Table = ({ columns, rows, history }) => {
 				/>
 			) : null}
 
-			<div>
-				<p>
-					<button onClick={clearAll}>Clear all</button>
-				</p>
-			</div>
 		</>
 	);
 };
