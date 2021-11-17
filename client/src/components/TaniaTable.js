@@ -9,7 +9,12 @@ import { withRouter } from "react-router-dom";
 import Select from "react-select";
 import { Context } from "../globalContext";
 import _ from "lodash";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
+import {
+	ChevronDownIcon,
+	ChevronUpIcon,
+	ChevronLeftIcon,
+	ChevronRightIcon,
+} from "@heroicons/react/solid";
 
 const Pagination = ({
 	activePage,
@@ -22,7 +27,7 @@ const Pagination = ({
 	const end = activePage === totalPages ? count : beginning + rowsPerPage - 1;
 	return (
 		<>
-			<div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+			<div className="bg-white py-3 flex items-center justify-between border-t border-gray-200">
 				<div className="flex-1 flex justify-between sm:hidden">
 					<div
 						className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer"
@@ -613,24 +618,34 @@ const Table = ({ columns, rows, history }) => {
 								} else {
 									if (column.accessor === sort.orderBy) {
 										if (sort.order === "asc") {
-											return "⬆️";
+											return (
+												<ChevronUpIcon
+													className="h-4 w-4 ml-2"
+													aria-hidden="true"
+												/>
+											);
 										}
-										return "⬇️";
+										return (
+											<ChevronDownIcon
+												className="h-4 w-4 ml-2"
+												aria-hidden="true"
+											/>
+										);
 									} else {
-										return "️↕️";
+										return;
 									}
 								}
 							};
 							return (
-								<th key={column.accessor}>
-									<span>{column.label}</span>
-									<button
-										onClick={() =>
-											handleSort(column.accessor)
-										}
-									>
-										{sortIcon()}
-									</button>
+								<th
+									className="cursor-pointer"
+									key={column.accessor}
+									onClick={() => handleSort(column.accessor)}
+								>
+									<div className="flex items-center justify-center">
+										<span>{column.label}</span>
+										<div>{sortIcon()}</div>
+									</div>
 								</th>
 							);
 						})}
@@ -675,7 +690,6 @@ const Table = ({ columns, rows, history }) => {
 					setActivePage={setActivePage}
 				/>
 			) : null}
-
 		</>
 	);
 };
