@@ -7,6 +7,7 @@ import useWindowSize from "../hooks/useWindowSize";
 import DetailsTab from "./DetailsTab";
 import Button from "../common/Button";
 import { useToasts } from "react-toast-notifications";
+import { PlusCircleIcon as PlusCircle } from "@heroicons/react/outline";
 
 const AddBook = () => {
 	const { addToast } = useToasts();
@@ -17,7 +18,7 @@ const AddBook = () => {
 	const [title, setTitle] = useState("");
 	const [author, setAuthor] = useState("");
 	const [reason, setReason] = useState("");
-	const [searchResults, setSearchResults] = useState([])
+	const [searchResults, setSearchResults] = useState([]);
 	const global = useContext(Context);
 
 	const toggleModal = () => {
@@ -26,28 +27,34 @@ const AddBook = () => {
 	};
 	const size = useWindowSize();
 
-	const titleCase = (s) => s.replace(/^_*(.)|_+(.)/g, (s, c, d) => c ? c.toUpperCase() : ' ' + d.toUpperCase())
+	const titleCase = (s) =>
+		s.replace(/^_*(.)|_+(.)/g, (s, c, d) =>
+			c ? c.toUpperCase() : " " + d.toUpperCase()
+		);
 
 	const submitManual = async () => {
-
 		const index = global.books.userBooks.findIndex((element) => {
-			return element.isbn10 === enteredISBN || element.isbn13 === enteredISBN;
+			return (
+				element.isbn10 === enteredISBN || element.isbn13 === enteredISBN
+			);
 		});
 
 		if (enteredISBN) {
 			if (index >= 0) {
 				setReason("This book has already been saved.");
 			} else {
-				axios.get(`/api/book/lookup/${enteredISBN}`).then((response) => {
-					if (!response.data.error) {
-						global.setGlobal({
-							capturedBook: response.data,
-						});
-						setOpenTab(3);
-					} else {
-						setReason(response.data.reason);
-					}
-				});
+				axios
+					.get(`/api/book/lookup/${enteredISBN}`)
+					.then((response) => {
+						if (!response.data.error) {
+							global.setGlobal({
+								capturedBook: response.data,
+							});
+							setOpenTab(3);
+						} else {
+							setReason(response.data.reason);
+						}
+					});
 			}
 		} else {
 			setReason("This is not a valid ISBN");
@@ -68,14 +75,15 @@ const AddBook = () => {
 				const response = await axios.get(
 					encodeURI(`/api/book/search/title/${title}`)
 				);
-				
-				setSearchResults(response.data.books)
+
+				setSearchResults(response.data.books);
 			} else {
 				const response = await axios.get(
-					encodeURI(`/api/book/search/title/${title}/author/${author}`)
+					encodeURI(
+						`/api/book/search/title/${title}/author/${author}`
+					)
 				);
-				setSearchResults(response.data.books)
-			
+				setSearchResults(response.data.books);
 			}
 		} catch (error) {
 			console.error(error);
@@ -95,13 +103,13 @@ const AddBook = () => {
 	};
 
 	const selectSearch = async (book) => {
-		await axios.post("/api/global_book", { ...book })
+		await axios.post("/api/global_book", { ...book });
 
 		global.setGlobal({
-			capturedBook: book
+			capturedBook: book,
 		});
 		setOpenTab(3);
-	}
+	};
 
 	const modalStyles = {
 		content: {
@@ -122,9 +130,15 @@ const AddBook = () => {
 
 	return (
 		<>
-			<Button className="md:w-1/6 w-full" color="green" onClick={toggleModal}>
-				Add Book
-      </Button>
+			<div
+				className="cursor-pointer inline-block mx-1 text-sm px-4 py-1 leading-none border rounded text-green bg-green-600 text-white border-green-600 hover:border-white hover:bg-green-600 lg:mt-0 "
+				onClick={toggleModal}
+			>
+				<div className="flex items-center justify-center">
+					<PlusCircle className="h-6 w-6" aria-hidden="true" />
+					<span className="hidden md:inline-block">Add Book</span>
+				</div>
+			</div>
 			<Modal
 				shouldCloseOnEsc
 				style={modalStyles}
@@ -141,7 +155,9 @@ const AddBook = () => {
 								<div
 									className={
 										"text-sm px-5 py-3 block leading-normal " +
-										(openTab === 1 ? "text-white bg-newblue" : "bg-white")
+										(openTab === 1
+											? "text-white bg-newblue"
+											: "bg-white")
 									}
 									onClick={(e) => {
 										setOpenTab(1);
@@ -150,13 +166,15 @@ const AddBook = () => {
 									role="tablist"
 								>
 									Scan Barcode
-                </div>
+								</div>
 							</li>
 							<li className="-mb-px mr-2 last:mr-0 flex-auto text-center cursor-pointer">
 								<div
 									className={
 										"text-sm px-5 py-3 block leading-normal " +
-										(openTab === 2 ? "text-white bg-newblue" : "bg-white")
+										(openTab === 2
+											? "text-white bg-newblue"
+											: "bg-white")
 									}
 									onClick={(e) => {
 										setOpenTab(2);
@@ -166,13 +184,15 @@ const AddBook = () => {
 									role="tablist"
 								>
 									Search
-                </div>
+								</div>
 							</li>
 							<li className="-mb-px mr-0  flex-auto text-center cursor-pointer">
 								<div
 									className={
 										"text-sm px-5 py-3 block leading-normal " +
-										(openTab === 3 ? "text-white bg-newblue" : "bg-white")
+										(openTab === 3
+											? "text-white bg-newblue"
+											: "bg-white")
 									}
 									onClick={(e) => {
 										setOpenTab(3);
@@ -180,7 +200,9 @@ const AddBook = () => {
 									data-toggle="tab"
 									role="tablist"
 								>
-									{global.capturedBook ? "Edit and Save" : "Enter Manually"}
+									{global.capturedBook
+										? "Edit and Save"
+										: "Enter Manually"}
 								</div>
 							</li>
 						</ul>
@@ -188,19 +210,28 @@ const AddBook = () => {
 							<div className="px-4 flex-auto">
 								<div className="tab-content tab-space">
 									<div
-										className={openTab === 1 ? "block" : "hidden"}
+										className={
+											openTab === 1 ? "block" : "hidden"
+										}
 										id="link1"
 									>
-										<div ref={scanTabRef} className="md:w-3/4 m-auto h-8">
+										<div
+											ref={scanTabRef}
+											className="md:w-3/4 m-auto h-8"
+										>
 											<Scan
-												currentTab={openTab === 1 ? true : false}
+												currentTab={
+													openTab === 1 ? true : false
+												}
 												setReason={setReason}
 												onFound={() => setOpenTab(3)}
 											></Scan>
 										</div>
 									</div>
 									<div
-										className={openTab === 2 ? "block" : "hidden"}
+										className={
+											openTab === 2 ? "block" : "hidden"
+										}
 										id="link2"
 									>
 										{reason ? (
@@ -221,7 +252,7 @@ const AddBook = () => {
 												className="bg-newblue hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outline"
 											>
 												Submit
-                      </button>
+											</button>
 										</div>
 										<div className="m-auto text-center">
 											<form>
@@ -243,32 +274,87 @@ const AddBook = () => {
 													className="bg-newblue hover:bg-blue-700 text-white my-1 mx-1 py-1 px-4 rounded focus:outline-none focus:shadow-outline"
 												>
 													Search
-                        </button>
+												</button>
 											</form>
-											{searchResults ? <div>
-												{searchResults.filter(result => {
-													if (!result.authors || result.authors?.length === 0) {
-														return null
-													} else {
-														return result
-													}
-												}).map(result => {
-													return { ...result, author: result.authors.length > 0 ? titleCase(result.authors?.[0]) : null, title: result.title ? titleCase(result.title) : null }
-												}).map(result => {
-													return (
-														<div className="flex cursor-pointer my-2" onClick={() => selectSearch(result)}>
-															<div className="flex-none w-1/3"><img style={{ maxHeight: "8rem" }} className="m-auto" alt={`Cover of ${result.title}`} src={result.image}></img></div>
-															<div className="flex-none w-1/3">{result.title}</div>
-															<div className="flex-none w-1/3">{result.author}</div>
-														</div>
-													)
-												})}
-											</div> : null}
-
+											{searchResults ? (
+												<div>
+													{searchResults
+														.filter((result) => {
+															if (
+																!result.authors ||
+																result.authors
+																	?.length ===
+																	0
+															) {
+																return null;
+															} else {
+																return result;
+															}
+														})
+														.map((result) => {
+															return {
+																...result,
+																author:
+																	result
+																		.authors
+																		.length >
+																	0
+																		? titleCase(
+																				result
+																					.authors?.[0]
+																		  )
+																		: null,
+																title: result.title
+																	? titleCase(
+																			result.title
+																	  )
+																	: null,
+															};
+														})
+														.map((result) => {
+															return (
+																<div
+																	className="flex cursor-pointer my-2"
+																	onClick={() =>
+																		selectSearch(
+																			result
+																		)
+																	}
+																>
+																	<div className="flex-none w-1/3">
+																		<img
+																			style={{
+																				maxHeight:
+																					"8rem",
+																			}}
+																			className="m-auto"
+																			alt={`Cover of ${result.title}`}
+																			src={
+																				result.image
+																			}
+																		></img>
+																	</div>
+																	<div className="flex-none w-1/3">
+																		{
+																			result.title
+																		}
+																	</div>
+																	<div className="flex-none w-1/3">
+																		{
+																			result.author
+																		}
+																	</div>
+																</div>
+															);
+														})}
+												</div>
+											) : null}
 										</div>
 									</div>
 									<div
-										className={openTab === 3 ? "block" : "hidden"}
+										className={
+											openTab === 3 ? "block" : "hidden"
+										}
 										id="link3"
 									>
 										<DetailsTab

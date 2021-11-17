@@ -8,6 +8,7 @@
     "@atlaskit/textfield": "^3.1.13",
     "@ericblade/quagga2": "^1.2.4",
     "@fortawesome/fontawesome-free": "^5.15.1",
+    "@heroicons/react": "^1.0.5",
     "@prosperstack/flow": "^0.10.4",
     "@styled-icons/boxicons-regular": "^10.18.0",
     "@testing-library/react": "^9.5.0",

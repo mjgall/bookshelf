@@ -3,6 +3,7 @@ import { withRouter, Link } from "react-router-dom";
 import logo from "../images/logo.png";
 import { Context } from "../globalContext";
 import DropdownMenu from "../common/DropdownMenu";
+import AddBook from "./AddBook";
 
 const NavBar = ({
 	windowWidth,
@@ -107,6 +108,7 @@ const NavBar = ({
 						</Link>
 					) : (
 						<>
+						<AddBook></AddBook>
 							<div className="hidden lg:flex">
 								<Link
 									to="/profile"

@@ -13,9 +13,7 @@ const Library = () => {
 			<div className="md:text-left text-center">
 				<div className="text-2xl font-bold">Your Library</div>
 			</div>
-			<div className="md:m-0 m-auto w-3/4">
-				<AddBook></AddBook>
-			</div>
+
 			<TaniaTable
 				rows={global.books.userBooks.concat(
 					global.books.householdBooks
