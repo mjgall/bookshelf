@@ -27,7 +27,7 @@ const Pagination = ({
 	const end = activePage === totalPages ? count : beginning + rowsPerPage - 1;
 	return (
 		<>
-			<div className="bg-white py-3 flex items-center justify-between border-t border-gray-200">
+			<div className="bg-white py-3 flex items-center justify-between">
 				<div className="flex-1 flex justify-between sm:hidden">
 					<div
 						className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 cursor-pointer"
@@ -84,7 +84,6 @@ const Pagination = ({
 									aria-hidden="true"
 								/>
 							</div>
-							{/* Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" */}
 							{Array.from(Array(totalPages))
 								.map((e, i) => i + 1)
 								.map((page, index) => {
@@ -130,39 +129,6 @@ const Pagination = ({
 					</div>
 				</div>
 			</div>
-			{/* <div className="pagination text-center space-x-6 half-width ">
-				<button
-					disabled={activePage === 1}
-					onClick={() => setActivePage(1)}
-				>
-					⏮️ First
-				</button>
-				<button
-					disabled={activePage === 1}
-					onClick={() => setActivePage(activePage - 1)}
-				>
-					⬅️ Previous
-				</button>
-				<button
-					disabled={activePage === totalPages}
-					onClick={() => setActivePage(activePage + 1)}
-				>
-					Next ➡️
-				</button>
-				<button
-					disabled={activePage === totalPages}
-					onClick={() => setActivePage(totalPages)}
-				>
-					Last ⏭️
-				</button>
-			</div>
-			<p>
-				Page {activePage} of {totalPages}
-			</p>
-			<p>
-				Rows: {beginning === end ? end : `${beginning} - ${end}`} of{" "}
-				{count}
-			</p> */}
 		</>
 	);
 };
@@ -567,7 +533,7 @@ const Table = ({ columns, rows, history }) => {
 	return (
 		<>
 			<div className="w-full">
-				<div className="flex w-full">
+				<div className="flex w-full mb-2">
 					<div className="flex-1">
 						<Select
 							className="cursor-pointer"
@@ -608,78 +574,92 @@ const Table = ({ columns, rows, history }) => {
 					onChange={(event) => handleSearch(event.target?.value)}
 				/>
 			</div>
-			<table className="w-full">
-				<thead>
-					<tr>
-						{columns.map((column) => {
-							const sortIcon = () => {
-								if (column.accessor === "cover") {
-									return null;
-								} else {
-									if (column.accessor === sort.orderBy) {
-										if (sort.order === "asc") {
+			<div className="md:border-t-2 md:border-b-2 border-gray-300 my-2 py-2 md:py-4 md:my-4">
+				<table className="w-full text-xs md:text-base table-fixed">
+					<thead>
+						<tr className="border-b border-gray-200">
+							{columns.map((column) => {
+								const sortIcon = () => {
+									if (column.accessor === "cover") {
+										return;
+									} else {
+										if (column.accessor === sort.orderBy) {
+											if (sort.order === "asc") {
+												return (
+													<ChevronUpIcon
+														className="h-4 w-4 ml-2"
+														aria-hidden="true"
+													/>
+												);
+											}
 											return (
-												<ChevronUpIcon
+												<ChevronDownIcon
 													className="h-4 w-4 ml-2"
 													aria-hidden="true"
 												/>
 											);
+										} else {
+											return;
+										}
+									}
+								};
+								return (
+									<th
+										style={
+											column.accessor === "cover"
+												? { width: "4%" }
+												: { width: "48%" }
+										}
+										className="cursor-pointer"
+										key={column.accessor}
+										onClick={() =>
+											handleSort(column.accessor)
+										}
+									>
+										<div className="items-center md:text-left">
+											<span>{column.label}</span>
+											<div>{sortIcon()}</div>
+										</div>
+									</th>
+								);
+							})}
+						</tr>
+					</thead>
+					<tbody>
+						{calculatedRows.map((row) => {
+							return (
+								<tr
+									className="cursor-pointer md:h-12 h-8 hover:bg-gray-200 text-center md:text-left border-b border-gray-200"
+									onClick={() =>
+										history.push(`/book/${row.id}`)
+									}
+									key={row.id}
+								>
+									{columns.map((column) => {
+										if (column.format) {
+											return (
+												<td key={column.accessor}>
+													{column.format(
+														row[column.accessor]
+													)}
+												</td>
+											);
 										}
 										return (
-											<ChevronDownIcon
-												className="h-4 w-4 ml-2"
-												aria-hidden="true"
-											/>
-										);
-									} else {
-										return;
-									}
-								}
-							};
-							return (
-								<th
-									className="cursor-pointer"
-									key={column.accessor}
-									onClick={() => handleSort(column.accessor)}
-								>
-									<div className="flex items-center justify-center">
-										<span>{column.label}</span>
-										<div>{sortIcon()}</div>
-									</div>
-								</th>
-							);
-						})}
-					</tr>
-				</thead>
-				<tbody>
-					{calculatedRows.map((row) => {
-						return (
-							<tr
-								className="cursor-pointer h-12 hover:bg-gray-200"
-								onClick={() => history.push(`/book/${row.id}`)}
-								key={row.id}
-							>
-								{columns.map((column) => {
-									if (column.format) {
-										return (
-											<td key={column.accessor}>
-												{column.format(
-													row[column.accessor]
-												)}
+											<td
+												className="overflow-hidden truncate"
+												key={column.accessor}
+											>
+												{row[column.accessor]}
 											</td>
 										);
-									}
-									return (
-										<td key={column.accessor}>
-											{row[column.accessor]}
-										</td>
-									);
-								})}
-							</tr>
-						);
-					})}
-				</tbody>
-			</table>
+									})}
+								</tr>
+							);
+						})}
+					</tbody>
+				</table>
+			</div>
 
 			{count > 0 ? (
 				<Pagination
