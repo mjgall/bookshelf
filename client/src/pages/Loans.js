@@ -13,7 +13,7 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 	const global = useContext(Context);
 
 	const hideLoan = async () => {
-		const response = await axios.put("/api/loans", {
+		await axios.put("/api/loans", {
 			action: "hide",
 			id: loan.id,
 			user_books_id: loan.user_books_id,

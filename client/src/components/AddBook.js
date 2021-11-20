@@ -5,7 +5,6 @@ import Scan from "./Scanner2";
 import axios from "axios";
 import useWindowSize from "../hooks/useWindowSize";
 import DetailsTab from "./DetailsTab";
-import Button from "../common/Button";
 import { useToasts } from "react-toast-notifications";
 import { PlusCircleIcon as PlusCircle } from "@heroicons/react/outline";
 

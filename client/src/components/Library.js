@@ -1,9 +1,8 @@
 import React, { useContext } from "react";
 
-import BookTable from "./BookTable";
 import TaniaTable from "./TaniaTable";
 import { Context } from "../globalContext";
-import AddBook from "./AddBook";
+
 
 const Library = () => {
 	const global = useContext(Context);
