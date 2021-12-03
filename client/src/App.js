@@ -23,6 +23,7 @@ import Transparent from "./components/Transparent";
 import GlobalModal from "./components/GlobalModal";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import { Helmet } from "react-helmet";
 
 const App = (props) => {
 	const global = useContext(Context);
@@ -50,10 +51,24 @@ const App = (props) => {
 				email: global.currentUser.email,
 			});
 		}
+		if (global.currentUser) {
+			window.Frill_Config = window.Frill_Config || [];
+			window.Frill_Config.push({
+				key: "766e4f5e-5a68-446c-8d0c-71dbf086c7ae",
+			});
+		}
 	}, [global.currentUser, loading]);
 
 	return (
 		<ToastProvider transitionDuration="100" autoDismissTimeout="2000">
+			{global.currentUser ? (
+				<Helmet>
+					<script
+						async
+						src="https://widget.frill.co/v2/widget.js"
+					></script>
+				</Helmet>
+			) : null}
 			<Router>
 				{loading ? null : (
 					<>
@@ -103,7 +118,6 @@ const App = (props) => {
 							<Route path="/scanner">
 								<Scanner></Scanner>
 							</Route>
-
 							<Route path="/*">
 								<Home
 									clearReferrer={clearReferrer}
