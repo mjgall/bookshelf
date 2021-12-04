@@ -51,7 +51,7 @@ const App = (props) => {
 				email: global.currentUser.email,
 			});
 		}
-		if (global.currentUser) {
+		if (global.currentUser && !window.Frill_Config) {
 			window.Frill_Config = window.Frill_Config || [];
 			window.Frill_Config.push({
 				key: "766e4f5e-5a68-446c-8d0c-71dbf086c7ae",
