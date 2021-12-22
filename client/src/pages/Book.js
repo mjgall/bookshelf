@@ -199,6 +199,12 @@ const Book = (props) => {
 								{book.cover ? (
 									<div className="mx-0">
 										<img
+											onClick={() => {
+												global.setGlobal({
+													modalOpen: true,
+													currentModal: "upload",
+												});
+											}}
 											alt="book cover"
 											className="w-2/5 block ml-auto mr-auto"
 											src={book.cover}
@@ -418,7 +424,10 @@ const Book = (props) => {
 												{
 													action: requestToBorrow,
 													confirm: true,
-													text: props.location?.state?.ownerId ? `Request to borrow from ${props.location.state.ownerFull}` : `Request to borrow`,
+													text: props.location?.state
+														?.ownerId
+														? `Request to borrow from ${props.location.state.ownerFull}`
+														: `Request to borrow`,
 												},
 											]}
 										></MoreMenu>
@@ -544,7 +553,9 @@ const Book = (props) => {
 									{
 										action: requestToBorrow,
 										confirm: true,
-										text: props.location?.state?.ownerId ? `Request to borrow from ${props.location.state.ownerFull}` : `Request to borrow`,
+										text: props.location?.state?.ownerId
+											? `Request to borrow from ${props.location.state.ownerFull}`
+											: `Request to borrow`,
 									},
 								]}
 							></MoreMenu>

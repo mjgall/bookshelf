@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useCallback, useState, useMemo, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 
-const FileUpload = () => {
+const FileUpload = (props) => {
 	const [files, setFiles] = useState([]);
 	const [acceptedFiles, setAcceptedFiles] = useState([]);
 
@@ -42,7 +42,7 @@ const FileUpload = () => {
 
 			reader.onabort = () => console.log("file reading was aborted");
 			reader.onerror = () => console.log("file reading has failed");
-			reader.onload = () => {
+			reader.onload = async () => {
 				// Do whatever you want with the file contents
 				const arrayBuffer = reader.result;
 				console.log(file);
@@ -58,7 +58,8 @@ const FileUpload = () => {
 
 				const base64 = _arrayBufferToBase64(arrayBuffer);
 
-				axios.post("/api/upload", { ...file, type: file.type, base64 });
+				const uploaded = await axios.post("/api/upload", { ...file, type: file.type, base64 });
+				console.log(uploaded);
 			};
 			reader.readAsArrayBuffer(file);
 		});

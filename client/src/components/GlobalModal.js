@@ -5,6 +5,7 @@ import { Context } from "../globalContext";
 
 import LoanModal from "../components/LoanModal";
 import RequestToBorrowModal from "./RequestToBorrowModal";
+import UploadModal from "./UploadModal";
 
 const GlobalModal = () => {
 	const global = useContext(Context);
@@ -28,16 +29,27 @@ const GlobalModal = () => {
 			bottom: "auto",
 			marginRight: "-50%",
 			transform: "translate(-50%, -50%)",
-			border: "1px solid black"
+			border: "1px solid black",
 		},
 	};
 
 	const getModalContent = () => {
 		switch (global.currentModal) {
 			case "loan":
-				return <LoanModal bookId={global.bookId} userBookId={global.user_book_id}></LoanModal>;
+				return (
+					<LoanModal
+						bookId={global.bookId}
+						userBookId={global.user_book_id}
+					></LoanModal>
+				);
 			case "requestToBorrow":
-				return <RequestToBorrowModal bookId={global.bookId}></RequestToBorrowModal>
+				return (
+					<RequestToBorrowModal
+						bookId={global.bookId}
+					></RequestToBorrowModal>
+				);
+			case "upload":
+				return <UploadModal></UploadModal>;
 			default:
 				break;
 		}
