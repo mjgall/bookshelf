@@ -1,4 +1,4 @@
-# Bookshelf
+# Papyr.io
 
 ## [Papyr.io](https://www.papyr.io)
 
