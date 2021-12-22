@@ -3,6 +3,9 @@ const axios = require("axios");
 const keys = require("../config/keys");
 const randomId = require("../services/randomId");
 
+const awsS3 = require("../services/aws-s3");
+const fs = require("fs");
+
 const _ = require("lodash");
 
 const getBooks = require("../queries/getBooks");
@@ -809,7 +812,7 @@ module.exports = (app) => {
 					req.body.user_books_id
 				);
 				res.send(hide);
-				break
+				break;
 			case "grant":
 				const grantResponse = await updateLoan(
 					"grant",
@@ -839,10 +842,7 @@ module.exports = (app) => {
 				res.send(endActivity);
 				break;
 			case "cancel":
-				const cancelResponse = await updateLoan(
-					"cancel",
-					req.body.id,
-				);
+				const cancelResponse = await updateLoan("cancel", req.body.id);
 				res.send(cancelResponse);
 				break;
 			default:
@@ -876,5 +876,14 @@ module.exports = (app) => {
 			req.body.value
 		);
 		res.send(response);
+	});
+
+	app.post("/api/upload", checkAuthed, async (req, res) => {
+		try {
+			const file = await awsS3(req.body);
+			res.send({ file });
+		} catch (error) {
+			console.log(error);
+		}
 	});
 };

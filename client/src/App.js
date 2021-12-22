@@ -24,6 +24,7 @@ import GlobalModal from "./components/GlobalModal";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { Helmet } from "react-helmet";
+import FileUpload from "./components/FileUpload";
 
 const App = (props) => {
 	const global = useContext(Context);
@@ -117,6 +118,9 @@ const App = (props) => {
 
 							<Route path="/scanner">
 								<Scanner></Scanner>
+							</Route>
+							<Route path="/upload">
+								<FileUpload></FileUpload>
 							</Route>
 							<Route path="/*">
 								<Home

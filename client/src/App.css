@@ -86,3 +86,10 @@ video {
   top: 20%;
   bottom: 20%;
 }
+
+@media only screen and (max-width: 600px) {
+  .Frill_Trigger_Floating--bottom-right {
+    right: 20%!important;
+  }
+}
+

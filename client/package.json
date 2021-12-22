@@ -26,6 +26,7 @@
     "react": "^16.14.0",
     "react-bootstrap": "^1.4.0",
     "react-dom": "^16.14.0",
+    "react-dropzone": "^11.4.2",
     "react-helmet": "^6.1.0",
     "react-loading": "^2.0.3",
     "react-modal": "^3.11.2",
