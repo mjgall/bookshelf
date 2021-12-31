@@ -47,7 +47,7 @@ export function Modal({ children, fade = false, defaultOpened = false, header = 
                     style={{ maxHeight: "calc(100vh - 10rem)" }}
                 >
                     <div className="px-4 py-3 border-b border-divider font-title text-lg font-semibold relative">{header}</div>
-                    <div className="px-4 py-3">{children}</div>
+                    <div className="px-4 py-3 h-full flex flex-col">{children}</div>
                 </div>
             </div>
         ) : null,
