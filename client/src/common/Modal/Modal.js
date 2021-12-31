@@ -10,7 +10,7 @@ import "./styles.css";
 
 const modalElement = document.getElementById("modal-root");
 
-export function Modal({ children, fade = false, defaultOpened = false, header = "Header" }, ref) {
+export function Modal({ children, fade = false, defaultOpened = false, header = "Header", footer }, ref) {
     const [isOpen, setIsOpen] = useState(defaultOpened);
 
     const close = useCallback(() => setIsOpen(false), []);
@@ -43,10 +43,10 @@ export function Modal({ children, fade = false, defaultOpened = false, header = 
             <div className={`modal  ${fade ? "modal-fade" : ""}`}>
                 <div className="modal-overlay z-40" onClick={close} />
                 <div
-                    className="bg-white mx-auto rounded shadow-lg z-50 md:max-w-xl w-full h-full"
+                    className="bg-white mx-auto rounded shadow-lg z-50 md:max-w-xl w-full h-full flex flex-col"
                     style={{ maxHeight: "calc(100vh - 10rem)" }}
                 >
-                    <div className="px-4 py-3 border-b border-divider font-title text-xl font-semibold relative">{header}</div>
+                    <div className="px-4 py-3 border-b border-divider font-title text-lg font-semibold relative">{header}</div>
                     <div className="px-4 py-3">{children}</div>
                 </div>
             </div>

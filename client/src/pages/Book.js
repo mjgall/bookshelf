@@ -210,7 +210,7 @@ const Book = (props) => {
 
 	return (
 		<div className="container mx-auto mt-12">
-			<Modal ref={modal} header="Upload cover image">
+			<Modal ref={modal} header="Upload cover">
 				<FileUpload onUpload={onUpload}></FileUpload>
 			</Modal>
 			{loaded ? (

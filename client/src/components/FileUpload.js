@@ -1,33 +1,86 @@
 import axios from "axios";
-import React, { useCallback, useState, useRef, useEffect } from "react";
+import React, { useCallback, useState, useRef, useEffect, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
-import Modal from "../common/Modal/Modal";
+import { useToasts } from "react-toast-notifications";
 
 const FileUpload = ({ onUpload }) => {
 	const [files, setFiles] = useState([]);
 	const [acceptedFiles, setAcceptedFiles] = useState([]);
+	const [message, setMessage] = useState(undefined)
+	const { addToast } = useToasts();
 
 	const modal = useRef(null);
 
+
 	const onDrop = useCallback(async (acceptedFiles) => {
-		setAcceptedFiles(acceptedFiles);
-		setFiles(
-			acceptedFiles.map((file) =>
-				Object.assign(file, {
-					preview: URL.createObjectURL(file),
-				})
-			)
-		);
+		if (acceptedFiles[0].size > 2000000) {
+			setMessage("Max file size is 2mb")
+			addToast("Max file size is 2mb", {
+				appearance: "error",
+				autoDismiss: true,
+			})
+		} else {
+			setMessage(undefined)
+			setAcceptedFiles(acceptedFiles);
+			setFiles(
+				acceptedFiles.map((file) =>
+					Object.assign(file, {
+						preview: URL.createObjectURL(file),
+					})
+				)
+			);
+		}
 	}, []);
 
-	const { getRootProps, getInputProps } = useDropzone({
+
+
+	const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
 		onDrop,
 		accept: "image/jpeg, image/png",
+		maxFiles: 1
 	});
+	const baseStyle = {
+		flex: 1,
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		padding: '20px',
+		borderWidth: 2,
+		borderRadius: 2,
+		borderColor: '#eeeeee',
+		borderStyle: 'dashed',
+		backgroundColor: '#fafafa',
+		color: '#bdbdbd',
+		outline: 'none',
+		transition: 'border .24s ease-in-out'
+	};
+
+	const activeStyle = {
+		borderColor: '#2196f3'
+	};
+
+	const acceptStyle = {
+		borderColor: '#00e676'
+	};
+
+	const rejectStyle = {
+		borderColor: '#ff1744'
+	};
+
+	const style = useMemo(() => ({
+		...baseStyle,
+		...(isDragActive ? activeStyle : {}),
+		...(isDragAccept ? acceptStyle : {}),
+		...(isDragReject ? rejectStyle : {})
+	}), [
+		isDragActive,
+		isDragReject,
+		isDragAccept
+	]);
 
 	const thumbs = files.map((file) => (
 		<div key={file.name}>
-			<img className="h-64" src={file.preview} alt={file.name} />
+			<img className="h-64 mx-auto" src={file.preview} alt={file.name} />
 		</div>
 	));
 
@@ -73,16 +126,18 @@ const FileUpload = ({ onUpload }) => {
 		});
 	};
 
+
 	return (
 		<div>
-
-			<div {...getRootProps()}>
-				<input {...getInputProps()} />
-				<div>Drag and drop your images here.</div>
+			<div>{message}</div>
+			<div className="container cursor-pointer">
+				<div {...getRootProps({ style })}>
+					<input {...getInputProps()} />
+					<p>Drop a file here, or click to select file</p>
+				</div>
 			</div>
-			<div>{thumbs}</div>
-			<button onClick={submit}>Submit</button>
-
+			<div className="my-2">{thumbs}</div>
+			<div className="bg-newblue hover:bg-blue-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer" onClick={submit}>Submit</div>
 		</div>
 	);
 };
