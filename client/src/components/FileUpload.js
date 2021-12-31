@@ -1,10 +1,13 @@
 import axios from "axios";
-import React, { useCallback, useState, useMemo, useEffect } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
+import Modal from "../common/Modal/Modal";
 
-const FileUpload = (props) => {
+const FileUpload = ({ onUpload }) => {
 	const [files, setFiles] = useState([]);
 	const [acceptedFiles, setAcceptedFiles] = useState([]);
+
+	const modal = useRef(null);
 
 	const onDrop = useCallback(async (acceptedFiles) => {
 		setAcceptedFiles(acceptedFiles);
@@ -58,8 +61,13 @@ const FileUpload = (props) => {
 
 				const base64 = _arrayBufferToBase64(arrayBuffer);
 
-				const uploaded = await axios.post("/api/upload", { ...file, type: file.type, base64 });
+				const uploaded = await axios.post("/api/upload", {
+					...file,
+					type: file.type,
+					base64,
+				});
 				console.log(uploaded);
+				onUpload(uploaded.data.file)
 			};
 			reader.readAsArrayBuffer(file);
 		});
@@ -67,12 +75,14 @@ const FileUpload = (props) => {
 
 	return (
 		<div>
+
 			<div {...getRootProps()}>
 				<input {...getInputProps()} />
 				<div>Drag and drop your images here.</div>
 			</div>
 			<div>{thumbs}</div>
 			<button onClick={submit}>Submit</button>
+
 		</div>
 	);
 };

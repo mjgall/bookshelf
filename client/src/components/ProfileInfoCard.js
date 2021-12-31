@@ -1,24 +1,36 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
 import Copy from "../common/Copy";
 import Tip from "../common/Tip";
 import { Context } from "../globalContext";
+import Modal from "../common/Modal/Modal";
+import FileUpload from "./FileUpload";
+import axios from "axios";
+
 
 const ProfileInfoCard = (props) => {
 	const global = useContext(Context);
+	const [newImage, setNewImage] = useState(null)
+	const modal = useRef(null);
 
-	const changeProfilePicture = () => {
-		global.setGlobal({ modalOpen: true, currentModal: "upload" });
-	};
+	const onUpload = async (image) => {
+		await axios.put("/api/users", { field: "picture", value: image.Location })
+		setNewImage(image.Location)
+		modal.current.close()
+	}
 
 	return (
 		<div>
+			<Modal ref={modal} header="Upload profile picture">
+				<FileUpload onUpload={onUpload}></FileUpload>
+			</Modal>
+
 			<div className="rounded-lg overflow-hidden shadow w-5/6 mx-auto md:mx-0 md:w-64 md:max-w-md my-3">
 				<div className="h-24 w-full bg-newblue"></div>
 				<div className="flex justify-center -mt-16">
 					<img
 						alt="user"
-						src={global.currentUser.picture}
-						onClick={changeProfilePicture}
+						src={newImage || global.currentUser.picture}
+						onClick={() => modal.current.open()}
 						className="rounded-full h-32 w-32 border-solid border-white border-2 cursor-pointer -mt-3"
 					></img>
 				</div>
