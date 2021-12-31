@@ -27,12 +27,15 @@ const ProfileInfoCard = (props) => {
 			<div className="rounded-lg overflow-hidden shadow w-5/6 mx-auto md:mx-0 md:w-64 md:max-w-md my-3">
 				<div className="h-24 w-full bg-newblue"></div>
 				<div className="flex justify-center -mt-16">
-					<img
-						alt="user"
-						src={newImage || global.currentUser.picture}
-						onClick={() => modal.current.open()}
-						className="rounded-full h-32 w-32 border-solid border-white border-2 cursor-pointer -mt-3"
-					></img>
+					<Tip renderChildren content="Change profile photo" placement="right">
+						<img
+							alt="user"
+							src={newImage || global.currentUser.picture}
+							onClick={() => modal.current.open()}
+							className="rounded-full h-32 w-32 border-solid border-white border-2 cursor-pointer -mt-3"
+						></img>
+					</Tip>
+
 				</div>
 				<div className="text-center px-3 pb-6 pt-2">
 					<h3 className="text-black text-lg bold font-sans">
