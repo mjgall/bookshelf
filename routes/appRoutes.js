@@ -318,6 +318,8 @@ module.exports = (app) => {
 			...req.body,
 		};
 
+		console.log(book);
+
 		if (req.body.field === "read") {
 			if (book.bookType === "personal") {
 				const updatedBook = await updateBook(

@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, {
+	useState,
+	useEffect,
+	useContext,
+	useCallback,
+	useRef,
+} from "react";
 import axios from "axios";
 import InlineEdit from "@atlaskit/inline-edit";
 import TextArea from "@atlaskit/textarea";
@@ -16,6 +22,8 @@ import { Context } from "../globalContext";
 import { withRouter } from "react-router-dom";
 import MoreMenu from "../common/MoreMenu";
 import BookFeed from "../components/BookFeed";
+import Modal from "../common/Modal/Modal";
+import FileUpload from "../components/FileUpload";
 
 const Book = (props) => {
 	const global = useContext(Context);
@@ -25,6 +33,8 @@ const Book = (props) => {
 	const [book, setBook] = useState(undefined);
 	const [type, setType] = useState("");
 	const [loaded, setLoaded] = useState(false);
+	const [newImage, setNewImage] = useState(null);
+	const modal = useRef(null);
 
 	const fetchGlobalBook = useCallback(async (id) => {
 		const globalBookDetails = await axios
@@ -42,9 +52,7 @@ const Book = (props) => {
 
 			if (!global.allBooks[index]) {
 				return "global";
-			} else if (
-				global.allBooks[index].user_id === global.currentUser.id
-			) {
+			} else if (global.allBooks[index].user_id === global.currentUser.id) {
 				return "personal";
 			} else if (global.allBooks[index].household_id) {
 				return "household";
@@ -96,9 +104,15 @@ const Book = (props) => {
 					options.usersGlobalBooksId = book.users_globalbooks_id;
 				}
 				break;
+			case "cover":
+				options.id = book.user_book_id;
+				options.globalId = book.id;
+
 			default:
 				break;
 		}
+
+		console.log(options);
 
 		axios.put("/api/books", options).then((response) => {
 			if (type !== "global") {
@@ -186,8 +200,19 @@ const Book = (props) => {
 		}
 	};
 
+	const onUpload = async (image) => {
+		// await axios.put("/api/users", { field: "picture", value: image.Location })
+		const response = await updateBookField("cover", image.Location);
+		console.log(response);
+		setNewImage(image.Location);
+		modal.current.close();
+	};
+
 	return (
 		<div className="container mx-auto mt-12">
+			<Modal ref={modal} header="Upload cover image">
+				<FileUpload onUpload={onUpload}></FileUpload>
+			</Modal>
 			{loaded ? (
 				<div
 					className="md:grid md:grid-cols-2"
@@ -198,17 +223,22 @@ const Book = (props) => {
 							<div id="book-details">
 								{book.cover ? (
 									<div className="mx-0">
-										<img
-											onClick={() => {
-												global.setGlobal({
-													modalOpen: true,
-													currentModal: "upload",
-												});
-											}}
-											alt="book cover"
-											className="w-2/5 block ml-auto mr-auto"
-											src={book.cover}
-										></img>
+										{type === "personal" ? (
+											<Tip renderChildren content="Change cover photo" placement="right">
+												<img
+													onClick={() => modal.current.open()}
+													alt="book cover"
+													className="w-2/5 block ml-auto mr-auto cursor-pointer"
+													src={newImage || book.cover}
+												></img>
+											</Tip>
+										) : (
+											<img
+												alt="book cover"
+												className="w-2/5 block ml-auto mr-auto"
+												src={book.cover}
+											></img>
+										)}
 									</div>
 								) : null}
 
@@ -217,22 +247,16 @@ const Book = (props) => {
 								) : (
 									<InlineEdit
 										readViewFitContainerWidth
-										defaultValue={book.title}
+										defaultValue={book.title || undefined}
 										editView={(fieldProps) => (
-											<Textfield
-												{...fieldProps}
-												autoFocus
-											/>
+											<Textfield {...fieldProps} autoFocus />
 										)}
 										readView={() => (
 											<div className="text-center">
-												{book.title ||
-													"No notes, click to enter some!"}
+												{book.title || "No notes, click to enter some!"}
 											</div>
 										)}
-										onConfirm={(value) =>
-											updateBookField("title", value)
-										}
+										onConfirm={(value) => updateBookField("title", value)}
 									/>
 								)}
 								{type === "household" || type === "global" ? (
@@ -240,21 +264,16 @@ const Book = (props) => {
 								) : (
 									<InlineEdit
 										readViewFitContainerWidth
-										defaultValue={book.author}
+										defaultValue={book.author || undefined}
 										editView={(fieldProps) => (
-											<Textfield
-												{...fieldProps}
-												autoFocus
-											/>
+											<Textfield {...fieldProps} autoFocus />
 										)}
 										readView={() => (
 											<div className="text-center">
 												{book.author || "No author"}
 											</div>
 										)}
-										onConfirm={(value) =>
-											updateBookField("author", value)
-										}
+										onConfirm={(value) => updateBookField("author", value)}
 									/>
 								)}
 
@@ -265,42 +284,24 @@ const Book = (props) => {
 										placement="right"
 									>
 										<div
-											onClick={() =>
-												updateBookField(
-													"read",
-													!book.read
-												)
-											}
+											onClick={() => updateBookField("read", !book.read)}
 											className="bg-green-500 hover:bg-green-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
 										>
 											<div className="flex justify-center">
 												<BookIcon size="1.5rem"></BookIcon>
-												<span className="ml-2">
-													You've read this book
-												</span>
+												<span className="ml-2">You've read this book</span>
 											</div>
 										</div>
 									</Tip>
 								) : (
-									<Tip
-										renderChildren
-										content="Mark as read"
-										placement="right"
-									>
+									<Tip renderChildren content="Mark as read" placement="right">
 										<div
-											onClick={() =>
-												updateBookField(
-													"read",
-													!book.read
-												)
-											}
+											onClick={() => updateBookField("read", !book.read)}
 											className="bg-newblue hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
 										>
 											<div className="flex justify-center">
 												<BookOpen size="1.5rem"></BookOpen>
-												<span className="ml-2">
-													Not read yet
-												</span>
+												<span className="ml-2">Not read yet</span>
 											</div>
 										</div>
 									</Tip>
@@ -308,25 +309,16 @@ const Book = (props) => {
 								{type === "personal" ? (
 									<>
 										{book.read ? null : book.started ? (
-											<Tip
-												renderChildren
-												content="Started"
-												placement="right"
-											>
+											<Tip renderChildren content="Started" placement="right">
 												<div
 													onClick={() =>
-														updateBookField(
-															"started",
-															!book.started
-														)
+														updateBookField("started", !book.started)
 													}
 													className="bg-green-500 hover:bg-green-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
 												>
 													<div className="flex justify-center">
 														<BookIcon size="1.5rem"></BookIcon>
-														<span className="ml-2">
-															Started
-														</span>
+														<span className="ml-2">Started</span>
 													</div>
 												</div>
 											</Tip>
@@ -338,18 +330,13 @@ const Book = (props) => {
 											>
 												<div
 													onClick={() =>
-														updateBookField(
-															"started",
-															!book.started
-														)
+														updateBookField("started", !book.started)
 													}
 													className="bg-newblue hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
 												>
 													<div className="flex justify-center">
 														<BookOpen size="1.5rem"></BookOpen>
-														<span className="ml-2">
-															Not started
-														</span>
+														<span className="ml-2">Not started</span>
 													</div>
 												</div>
 											</Tip>
@@ -363,17 +350,12 @@ const Book = (props) => {
 												<div
 													className="bg-red-500 hover:bg-red-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
 													onClick={() =>
-														updateBookField(
-															"private",
-															!book.private
-														)
+														updateBookField("private", !book.private)
 													}
 												>
 													<div className="flex justify-center">
 														<Lock size="1.5rem"></Lock>
-														<span className="ml-2">
-															Private
-														</span>
+														<span className="ml-2">Private</span>
 													</div>
 												</div>
 											</Tip>
@@ -385,18 +367,13 @@ const Book = (props) => {
 											>
 												<div
 													onClick={() =>
-														updateBookField(
-															"private",
-															!book.private
-														)
+														updateBookField("private", !book.private)
 													}
 													className="bg-newblue hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
 												>
 													<div className="flex justify-center">
 														<LockOpen size="1.5rem"></LockOpen>
-														<span className="ml-2">
-															Public
-														</span>
+														<span className="ml-2">Public</span>
 													</div>
 												</div>
 											</Tip>
@@ -424,8 +401,7 @@ const Book = (props) => {
 												{
 													action: requestToBorrow,
 													confirm: true,
-													text: props.location?.state
-														?.ownerId
+													text: props.location?.state?.ownerId
 														? `Request to borrow from ${props.location.state.ownerFull}`
 														: `Request to borrow`,
 												},
@@ -454,73 +430,51 @@ const Book = (props) => {
 
 						{type === "household" || type === "global" ? (
 							<InlineEdit
-								defaultValue={book.notes}
+								defaultValue={book.notes || undefined}
 								label="Personal Notes"
 								editView={(fieldProps, ref) => (
 									// textarea does not currently correctly pass through ref as a prop
-									<TextArea
-										type="text"
-										className="w-full"
-										{...fieldProps}
-									/>
+									<TextArea type="text" className="w-full" {...fieldProps} />
 								)}
 								readView={() => {
 									if (book.notes) {
-										return (
-											<div className="multiline">
-												{book.notes}
-											</div>
-										);
+										return <div className="multiline">{book.notes}</div>;
 									} else {
 										return (
 											<div className="text-gray-500">
-												No notes yet - click to add
-												some!
+												No notes yet - click to add some!
 											</div>
 										);
 									}
 								}}
-								onConfirm={(value) =>
-									updateBookField("notes", value)
-								}
+								onConfirm={(value) => updateBookField("notes", value)}
 								autoFocus
 								readViewFitContainerWidth
 							/>
 						) : (
 							<InlineEdit
-								defaultValue={book.notes}
+								defaultValue={book.notes || undefined}
 								label={"Personal Notes"}
 								editView={(fieldProps, ref) => (
-									<TextArea
-										{...fieldProps}
-										ref={ref}
-									></TextArea>
+									<TextArea {...fieldProps} ref={ref}></TextArea>
 								)}
 								readView={() => {
 									if (book.notes) {
-										return (
-											<div className="multiline">
-												{book.notes}
-											</div>
-										);
+										return <div className="multiline">{book.notes}</div>;
 									} else {
 										return (
 											<div className="text-gray-500">
-												No notes yet - click to add
-												some!
+												No notes yet - click to add some!
 											</div>
 										);
 									}
 								}}
-								onConfirm={(value) =>
-									updateBookField("notes", value)
-								}
+								onConfirm={(value) => updateBookField("notes", value)}
 								autoFocus
 								readViewFitContainerWidth
 							/>
 						)}
-						{type === "global" ||
-						global.households.length < 1 ? null : (
+						{type === "global" || global.households.length < 1 ? null : (
 							<div>
 								<div className="text-lg mt-6">
 									<span role="img" aria-label="house">
@@ -528,9 +482,7 @@ const Book = (props) => {
 									</span>
 									Notes from households
 								</div>
-								<NotesFromHouseholds
-									bookId={book.id}
-								></NotesFromHouseholds>
+								<NotesFromHouseholds bookId={book.id}></NotesFromHouseholds>
 							</div>
 						)}
 						<BookFeed bookId={book.id}></BookFeed>
