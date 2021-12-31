@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useCallback, useState, useRef, useEffect, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 import { useToasts } from "react-toast-notifications";
+import imageCompression from 'browser-image-compression';
+
 
 const FileUpload = ({ onUpload }) => {
 	const [files, setFiles] = useState([]);
@@ -13,23 +15,23 @@ const FileUpload = ({ onUpload }) => {
 
 
 	const onDrop = useCallback(async (acceptedFiles) => {
-		if (acceptedFiles[0].size > 2000000) {
-			setMessage("Max file size is 2mb")
-			addToast("Max file size is 2mb", {
-				appearance: "error",
-				autoDismiss: true,
-			})
-		} else {
-			setMessage(undefined)
-			setAcceptedFiles(acceptedFiles);
-			setFiles(
-				acceptedFiles.map((file) =>
-					Object.assign(file, {
-						preview: URL.createObjectURL(file),
-					})
-				)
-			);
-		}
+		// if (acceptedFiles[0].size > 2000000) {
+		// 	setMessage("Max file size is 2mb")
+		// 	addToast("Max file size is 2mb", {
+		// 		appearance: "error",
+		// 		autoDismiss: true,
+		// 	})
+		// } else {
+		setMessage(undefined)
+		setAcceptedFiles(acceptedFiles);
+		setFiles(
+			acceptedFiles.map((file) =>
+				Object.assign(file, {
+					preview: URL.createObjectURL(file),
+				})
+			)
+		);
+		// }
 	}, []);
 
 
@@ -92,16 +94,36 @@ const FileUpload = ({ onUpload }) => {
 		[files]
 	);
 
-	const submit = async () => {
-		acceptedFiles.forEach((file) => {
-			const reader = new FileReader();
+	const compressFile = async (file) => {
+		console.log("Compressing...")
+		const imageFile = file
+		console.log('originalFile instanceof Blob', imageFile instanceof Blob); // true
+		console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
 
+		const options = {
+			maxSizeMB: 1,
+			useWebWorker: true
+		}
+		try {
+			const compressedFile = await imageCompression(imageFile, options);
+			console.log('compressedFile instanceof Blob', compressedFile instanceof Blob); // true
+			console.log(`compressedFile size ${compressedFile.size / 1024 / 1024} MB`); // smaller than maxSizeMB
+			console.log("Done compressing. Uploading now.")
+			return compressedFile;
+		} catch (error) {
+			console.log(error);
+		}
+	}
+
+	const submit = async () => {
+		acceptedFiles.forEach(async (file) => {
+			const compressed = await compressFile(file)
+			const reader = new FileReader();
 			reader.onabort = () => console.log("file reading was aborted");
 			reader.onerror = () => console.log("file reading has failed");
 			reader.onload = async () => {
 				// Do whatever you want with the file contents
 				const arrayBuffer = reader.result;
-				console.log(file);
 				function _arrayBufferToBase64(buffer) {
 					var binary = "";
 					var bytes = new Uint8Array(buffer);
@@ -112,7 +134,17 @@ const FileUpload = ({ onUpload }) => {
 					return window.btoa(binary);
 				}
 
-				const base64 = _arrayBufferToBase64(arrayBuffer);
+				function blobToBase64(blob) {
+					return new Promise((resolve, _) => {
+						const reader = new FileReader();
+						reader.onloadend = () => resolve(reader.result);
+						reader.readAsDataURL(blob);
+					});
+				}
+
+				// const base64 = _arrayBufferToBase64(arrayBuffer);
+				const base64 = await blobToBase64(compressed);
+
 
 				const uploaded = await axios.post("/api/upload", {
 					...file,
