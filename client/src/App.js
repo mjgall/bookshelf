@@ -18,13 +18,13 @@ import Scanner from "./components/AddBook";
 import SharedShelf from "./pages/SharedShelf";
 import PrivateRoute from "./components/PrivateRoute";
 import { Context } from "./globalContext";
-import { ToastProvider } from "react-toast-notifications";
+import { ToastProvider, DefaultToast } from "react-toast-notifications";
 import Transparent from "./components/Transparent";
 import GlobalModal from "./components/GlobalModal";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { Helmet } from "react-helmet";
-import FileUpload from "./components/FileUpload";
+import NewAddBook from "./components/NewAddBook";
 
 const App = (props) => {
 	const global = useContext(Context);
@@ -60,8 +60,14 @@ const App = (props) => {
 		}
 	}, [global.currentUser, loading]);
 
+	const CustomToast = ({ children, ...props }) => (
+		<DefaultToast {...props}>
+			{children}
+		</DefaultToast>
+	);
+
 	return (
-		<ToastProvider transitionDuration="100" autoDismissTimeout="2000">
+		<ToastProvider transitionDuration="100" autoDismissTimeout="2000" components={{ Toast: CustomToast }}>
 			{global.currentUser ? (
 				<Helmet>
 					<script
@@ -119,8 +125,8 @@ const App = (props) => {
 							<Route path="/scanner">
 								<Scanner></Scanner>
 							</Route>
-							<Route path="/upload">
-								<FileUpload></FileUpload>
+							<Route path="/sandbox">
+								<NewAddBook></NewAddBook>
 							</Route>
 							<Route path="/*">
 								<Home
