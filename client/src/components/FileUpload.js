@@ -14,18 +14,8 @@ const FileUpload = ({ onUpload }) => {
 	const [files, setFiles] = useState([]);
 	const [acceptedFiles, setAcceptedFiles] = useState([]);
 	const [message, setMessage] = useState(undefined);
-	const { addToast } = useToasts();
-
-	const modal = useRef(null);
 
 	const onDrop = useCallback(async (acceptedFiles) => {
-		// if (acceptedFiles[0].size > 2000000) {
-		// 	setMessage("Max file size is 2mb")
-		// 	addToast("Max file size is 2mb", {
-		// 		appearance: "error",
-		// 		autoDismiss: true,
-		// 	})
-		// } else {
 		setMessage(undefined);
 		setAcceptedFiles(acceptedFiles);
 		setFiles(
@@ -35,7 +25,6 @@ const FileUpload = ({ onUpload }) => {
 				})
 			)
 		);
-		// }
 	}, []);
 
 	const {
@@ -101,68 +90,35 @@ const FileUpload = ({ onUpload }) => {
 		[files]
 	);
 
-	const compressFile = async (file) => {
-		console.log("Compressing...");
-		const imageFile = file;
-		console.log("originalFile instanceof Blob", imageFile instanceof Blob); // true
-		console.log(`originalFile size ${imageFile.size / 1024 / 1024} MB`);
-
-		const options = {
-			maxSizeMB: 1,
-			useWebWorker: true,
-		};
-		try {
-			const compressedFile = await imageCompression(imageFile, options);
-			console.log(
-				"compressedFile instanceof Blob",
-				compressedFile instanceof Blob
-			); // true
-			console.log(
-				`compressedFile size ${compressedFile.size / 1024 / 1024} MB`
-			); // smaller than maxSizeMB
-			console.log("Done compressing. Uploading now.");
-			return compressedFile;
-		} catch (error) {
-			console.log(error);
+	const arrayBufferToBase64 = (buffer) => {
+		var binary = "";
+		var bytes = new Uint8Array(buffer);
+		var len = bytes.byteLength;
+		for (var i = 0; i < len; i++) {
+			binary += String.fromCharCode(bytes[i]);
 		}
+		return window.btoa(binary);
 	};
 
 	const submit = async () => {
 		acceptedFiles.forEach(async (file) => {
-			const compressed = await compressFile(file);
+			// const compressed = await compressFile(file);
 			const reader = new FileReader();
 			reader.onabort = () => console.log("file reading was aborted");
 			reader.onerror = () => console.log("file reading has failed");
 			reader.onload = async () => {
 				// Do whatever you want with the file contents
 				const arrayBuffer = reader.result;
-				function _arrayBufferToBase64(buffer) {
-					var binary = "";
-					var bytes = new Uint8Array(buffer);
-					var len = bytes.byteLength;
-					for (var i = 0; i < len; i++) {
-						binary += String.fromCharCode(bytes[i]);
-					}
-					return window.btoa(binary);
-				}
 
-				function blobToBase64(blob) {
-					return new Promise((resolve, _) => {
-						const reader = new FileReader();
-						reader.onloadend = () => resolve(reader.result);
-						reader.readAsDataURL(blob);
-					});
-				}
-
-				// const base64 = _arrayBufferToBase64(arrayBuffer);
-				const base64 = await blobToBase64(compressed);
+				const base64 = arrayBufferToBase64(arrayBuffer);
+				// const base64 = await blobToBase64(compressed);
 
 				const uploaded = await axios.post("/api/upload", {
 					...file,
 					type: file.type,
 					base64,
 				});
-				console.log(uploaded);
+
 				onUpload(uploaded.data.file);
 			};
 			reader.readAsArrayBuffer(file);

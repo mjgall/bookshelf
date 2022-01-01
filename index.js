@@ -14,8 +14,8 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // The request handler must be the first middleware on the app
-app.use(bodyParser.json({ limit: "2mb" }));
-app.use(bodyParser.urlencoded({ extended: true, limit: "2mb" }));
+app.use(bodyParser.json({ limit: "10mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use(
 	cookieSession({ maxAge: 30 * 24 * 60 * 60 * 1000, keys: [keys.cookieKey] })

@@ -882,6 +882,7 @@ module.exports = (app) => {
 
 	app.post("/api/upload", checkAuthed, async (req, res) => {
 		try {
+
 			const file = await awsS3(req.body);
 			res.send({ file });
 		} catch (error) {
