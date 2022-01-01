@@ -14,8 +14,9 @@ const ProfileInfoCard = (props) => {
 
 	const onUpload = async (image) => {
 		await axios.put("/api/users", { field: "picture", value: image.Location })
-		setNewImage(image.Location)
 		modal.current.close()
+		global.setGlobal({ currentUser: { ...global.currentUser, picture: image.Location } })
+		setNewImage(image.Location)
 	}
 
 	return (
