@@ -21,7 +21,7 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 		update();
 	};
 
-	const endLoan = async () => {
+	const endLoan = async (loanType) => {
 		const response = await axios.put("/api/loans", {
 			action: "end",
 			id: loan.id,
@@ -33,8 +33,10 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 				(allBook) => allBook.id === book.global_id
 			);
 			let updatedAllBooks = [...global.allBooks];
-			updatedAllBooks[index].on_loan = 0;
-			updatedAllBooks[index].borrower_id = null;
+			if (loanType !== "borrow") {
+				updatedAllBooks[index].on_loan = 0;
+				updatedAllBooks[index].borrower_id = null;
+			}
 			global.setGlobal({ allBooks: updatedAllBooks });
 		}
 		update();
@@ -95,7 +97,7 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 						size="18px"
 						options={[
 							{
-								action: () => endLoan(),
+								action: () => endLoan(loanType),
 								confirm: true,
 								text: "End loan",
 							},

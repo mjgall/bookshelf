@@ -25,6 +25,7 @@ const Pagination = ({
 }) => {
 	const beginning = activePage === 1 ? 1 : rowsPerPage * (activePage - 1) + 1;
 	const end = activePage === totalPages ? count : beginning + rowsPerPage - 1;
+
 	return (
 		<>
 			<div className="bg-white py-3 flex items-center justify-between">
@@ -37,6 +38,7 @@ const Pagination = ({
 							} else {
 								setActivePage(activePage - 1);
 							}
+							localStorage.setItem("activePage", activePage - 1)
 						}}
 					>
 						Previous
@@ -49,6 +51,7 @@ const Pagination = ({
 							} else {
 								setActivePage(activePage + 1);
 							}
+							localStorage.setItem("activePage", activePage + 1)
 						}}
 					>
 						Next
@@ -76,6 +79,7 @@ const Pagination = ({
 									} else {
 										setActivePage(activePage - 1);
 									}
+									localStorage.setItem("activePage", activePage - 1)
 								}}
 							>
 								<span className="sr-only">Previous</span>
@@ -100,8 +104,10 @@ const Pagination = ({
 										return (
 											<div
 												className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium cursor-pointer"
-												onClick={() =>
+												onClick={() => {
 													setActivePage(page)
+													localStorage.setItem("activePage", page)
+												}
 												}
 											>
 												{page}
@@ -116,6 +122,7 @@ const Pagination = ({
 										return;
 									} else {
 										setActivePage(activePage + 1);
+										localStorage.setItem("activePage", activePage + 1)
 									}
 								}}
 							>
@@ -272,7 +279,7 @@ const filterRows = (rows, filters, currentUserId) => {
 				if (ownerSelect?.value === "all") {
 					return (
 						Number(book.household_id) ===
-							Number(householdSelect?.value) ||
+						Number(householdSelect?.value) ||
 						book.household_id === null
 					);
 				} else {
@@ -350,6 +357,7 @@ const Table = ({ columns, rows, history }) => {
 		}
 	};
 
+
 	const global = useContext(Context);
 
 	const [activePage, setActivePage] = useState(1);
@@ -376,6 +384,8 @@ const Table = ({ columns, rows, history }) => {
 
 	const count = filteredRows.length;
 	const totalPages = Math.ceil(count / rowsPerPage);
+
+
 
 	const handleHouseholdChange = useCallback(
 		(selected) => {
@@ -519,11 +529,21 @@ const Table = ({ columns, rows, history }) => {
 		setFilters({});
 	};
 
+	const getSavedActivePage = () => {
+		const localSaved = JSON.parse(localStorage.getItem("activePage"));
+		if (localSaved) {
+			return localSaved;
+		} else {
+			return 1;
+		}
+	};
+
 	useEffect(() => {
 		getOwners(global.householdMembers, householdSelect?.value);
 		setHouseholdOptions(getHouseholdOptions());
 		getSavedHouseholdSelect();
 		getSavedOwnerSelect();
+		setActivePage(getSavedActivePage())
 		setFilters({
 			householdSelect: getSavedHouseholdSelect(),
 			owner: getSavedOwnerSelect(),
