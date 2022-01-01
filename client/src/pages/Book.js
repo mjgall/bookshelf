@@ -24,6 +24,7 @@ import MoreMenu from "../common/MoreMenu";
 import BookFeed from "../components/BookFeed";
 import Modal from "../common/Modal/Modal";
 import FileUpload from "../components/FileUpload";
+import LoanModal from "../components/LoanModal";
 
 const Book = (props) => {
 	const global = useContext(Context);
@@ -35,7 +36,7 @@ const Book = (props) => {
 	const [loaded, setLoaded] = useState(false);
 	const [newImage, setNewImage] = useState(null);
 	const modal = useRef(null);
-
+	const loanModal = useRef(null)
 	const fetchGlobalBook = useCallback(async (id) => {
 		const globalBookDetails = await axios
 			.get(`/api/book/${id}`)
@@ -186,13 +187,9 @@ const Book = (props) => {
 					text: "Delete",
 				},
 				{
-					action: () =>
-						global.setGlobal({
-							modalOpen: true,
-							currentModal: "loan",
-							bookId: book.id,
-							userBookId: book.user_book_id,
-						}),
+					action: () => {
+						loanModal.current.open();
+					},
 					confirm: false,
 					text: "Loan",
 				},
@@ -210,8 +207,16 @@ const Book = (props) => {
 
 	return (
 		<div className="container mx-auto mt-12">
+			{/* Upload new cover image modal */}
 			<Modal ref={modal} header="Upload cover">
 				<FileUpload onUpload={onUpload}></FileUpload>
+			</Modal>
+			{/* Lend book to connection modal */}
+			<Modal ref={loanModal} header="Loan book">
+				<LoanModal bookId={book?.id}
+					userBookId={global.user_book_id}
+					closeModal={() => loanModal.current.close()}
+				></LoanModal>
 			</Modal>
 			{loaded ? (
 				<div

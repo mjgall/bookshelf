@@ -31,7 +31,8 @@ const LoanModal = (props) => {
 		updatedAllBooks[index].full = friendName;
 		global.setGlobal({ allBooks: updatedAllBooks });
 
-		global.setGlobal({ modalOpen: false });
+		// global.setGlobal({ modalOpen: false });
+		// props.closeModal()
 	};
 
 	return (
