@@ -19,7 +19,6 @@ const FileUpload = ({ onUpload }) => {
 
 
 	const onDrop = useCallback(async (acceptedFiles, fileRejections) => {
-		// console.log(fileRejections[0]);
 		if (fileRejections[0]?.errors?.length > 0) {
 			addToast(fileRejections[0].errors[0].message === "File is larger than 9999999 bytes" ? "File must be less than 10mb" : fileRejections[0].errors[0].message, {
 				appearance: "error",
@@ -117,16 +116,13 @@ const FileUpload = ({ onUpload }) => {
 	const submit = async () => {
 		acceptedFiles.forEach(async (file) => {
 			setUploading(true)
-			// const compressed = await compressFile(file);
 			const reader = new FileReader();
 			reader.onabort = () => console.log("file reading was aborted");
 			reader.onerror = () => console.log("file reading has failed");
 			reader.onload = async () => {
-				// Do whatever you want with the file contents
 				const arrayBuffer = reader.result;
 
 				const base64 = arrayBufferToBase64(arrayBuffer);
-				// const base64 = await blobToBase64(compressed);
 
 				const uploaded = await axios.post("/api/upload", {
 					...file,
