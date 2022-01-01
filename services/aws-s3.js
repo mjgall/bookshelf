@@ -7,7 +7,9 @@ const sharp = require("sharp")
 
 const resizeImage = (imageBuffer) => {
 	return new Promise(async (resolve, reject) => {
-		resolve(sharp(imageBuffer).resize({ width: 1024 }).toBuffer())
+		resolve(sharp(imageBuffer).resize({ width: 1024 }).jpeg({
+			quality: 60,
+		}).toBuffer())
 	})
 }
 

@@ -88,6 +88,20 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 
 	const determineOptions = (loanType) => {
 		switch (loanType) {
+			case "borrow":
+				return (
+					<MoreMenu
+						placement="left"
+						size="18px"
+						options={[
+							{
+								action: () => endLoan(),
+								confirm: true,
+								text: "End loan",
+							},
+						]}
+					></MoreMenu>
+				)
 			case "requested":
 				return (
 					<MoreMenu
@@ -293,7 +307,7 @@ const Loans = (props) => {
 											(book.borrower_id ===
 												global.currentUser.id ||
 												book.lender_id ===
-													global.currentUser.id) &&
+												global.currentUser.id) &&
 											!book.end_date &&
 											!book.start_date
 									)
@@ -354,7 +368,7 @@ const Loans = (props) => {
 									.filter(
 										(book) =>
 											book.borrower_id ===
-												global.currentUser.id &&
+											global.currentUser.id &&
 											!book.end_date &&
 											book.start_date
 									)
@@ -415,7 +429,7 @@ const Loans = (props) => {
 									.filter(
 										(book) =>
 											book.lender_id ===
-												global.currentUser.id &&
+											global.currentUser.id &&
 											!book.end_date &&
 											book.start_date
 									)

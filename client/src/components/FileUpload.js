@@ -7,24 +7,36 @@ import React, {
 	useMemo,
 } from "react";
 import { useDropzone } from "react-dropzone";
+import LoadingSpinner from "../components/LoadingSpinner"
 import { useToasts } from "react-toast-notifications";
-import imageCompression from "browser-image-compression";
+
 
 const FileUpload = ({ onUpload }) => {
 	const [files, setFiles] = useState([]);
 	const [acceptedFiles, setAcceptedFiles] = useState([]);
-	const [message, setMessage] = useState(undefined);
+	const [uploading, setUploading] = useState(false)
+	const { addToast } = useToasts();
 
-	const onDrop = useCallback(async (acceptedFiles) => {
-		setMessage(undefined);
-		setAcceptedFiles(acceptedFiles);
-		setFiles(
-			acceptedFiles.map((file) =>
-				Object.assign(file, {
-					preview: URL.createObjectURL(file),
-				})
-			)
-		);
+
+	const onDrop = useCallback(async (acceptedFiles, fileRejections) => {
+		// console.log(fileRejections[0]);
+		if (fileRejections[0].errors.length > 0) {
+			addToast(fileRejections[0].errors[0].message === "File is larger than 9999999 bytes" ? "File must be less than 10mb" : fileRejections[0].errors[0].message, {
+				appearance: "error",
+				autoDismiss: true,
+				autoDismissTimeout: 10000
+			});
+		} else {
+			setAcceptedFiles(acceptedFiles);
+			setFiles(
+				acceptedFiles.map((file) =>
+					Object.assign(file, {
+						preview: URL.createObjectURL(file),
+					})
+				)
+			);
+		}
+
 	}, []);
 
 	const {
@@ -37,7 +49,9 @@ const FileUpload = ({ onUpload }) => {
 		onDrop,
 		accept: "image/jpeg, image/png",
 		maxFiles: 1,
+		maxSize: 9999999
 	});
+
 	const baseStyle = {
 		flex: 1,
 		display: "flex",
@@ -102,6 +116,7 @@ const FileUpload = ({ onUpload }) => {
 
 	const submit = async () => {
 		acceptedFiles.forEach(async (file) => {
+			setUploading(true)
 			// const compressed = await compressFile(file);
 			const reader = new FileReader();
 			reader.onabort = () => console.log("file reading was aborted");
@@ -118,8 +133,13 @@ const FileUpload = ({ onUpload }) => {
 					type: file.type,
 					base64,
 				});
+				if (uploaded) {
+					setUploading(false)
+					onUpload(uploaded.data.file);
+				} else {
+					console.log("error uploading");
+				}
 
-				onUpload(uploaded.data.file);
 			};
 			reader.readAsArrayBuffer(file);
 		});
@@ -127,21 +147,25 @@ const FileUpload = ({ onUpload }) => {
 
 	return (
 		<div className="h-full flex flex-col">
-			<div>{message}</div>
 			<div className="container cursor-pointer">
 				<div {...getRootProps({ style })}>
 					<input {...getInputProps()} />
 					<p>Drop a file here, or click to select file</p>
 				</div>
 			</div>
-			<div className="my-2">{thumbs}</div>
+			{uploading ? <LoadingSpinner></LoadingSpinner> : <div className="my-2">{thumbs}</div>}
 			<div className="mt-auto">
-				<div
+				{uploading || acceptedFiles.length === 0 ? <div
+					className="bg-newblue text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-not-allowed"
+
+				>
+					Submit
+				</div> : <div
 					className="bg-newblue hover:bg-blue-700 text-white py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
 					onClick={submit}
 				>
 					Submit
-				</div>
+				</div>}
 			</div>
 		</div>
 	);
