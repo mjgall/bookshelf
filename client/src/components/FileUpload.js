@@ -20,7 +20,7 @@ const FileUpload = ({ onUpload }) => {
 
 	const onDrop = useCallback(async (acceptedFiles, fileRejections) => {
 		// console.log(fileRejections[0]);
-		if (fileRejections[0].errors.length > 0) {
+		if (fileRejections[0]?.errors?.length > 0) {
 			addToast(fileRejections[0].errors[0].message === "File is larger than 9999999 bytes" ? "File must be less than 10mb" : fileRejections[0].errors[0].message, {
 				appearance: "error",
 				autoDismiss: true,
