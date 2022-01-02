@@ -34,15 +34,15 @@ const MoreMenu = (props) => {
 										text={option.text}
 									></MenuConfirm>
 								) : (
-										<div
-											onClick={() => {
-												option.action();
-												setMenuOpen(false);
-											}}
-										>
-											{option.text}
-										</div>
-									)}
+									<div
+										onClick={() => {
+											option.action();
+											setMenuOpen(false);
+										}}
+									>
+										{option.text}
+									</div>
+								)}
 							</div>
 						);
 					})}
@@ -62,17 +62,17 @@ const MoreMenu = (props) => {
 					</div>
 				</div>
 			) : (
-					<div
-						onClick={() => {
-							setMenuOpen(!menuOpen);
-						}}
-					>
-						<MoreVertical
-							className="cursor-pointer"
-							size={props.size || "2em"}
-						></MoreVertical>
-					</div>
-				)}
+				<div
+					onClick={() => {
+						setMenuOpen(!menuOpen);
+					}}
+				>
+					<MoreVertical
+						className="cursor-pointer"
+						size={props.size || "2em"}
+					></MoreVertical>
+				</div>
+			)}
 		</Tippy>
 	);
 };

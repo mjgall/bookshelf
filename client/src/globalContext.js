@@ -22,10 +22,16 @@ const GlobalProvider = ({ children }) => {
   // here we only re-create setContext when its dependencies change ([global, setState])
   const setGlobal = useCallback(
     updates => {
-      setState({...global, ...updates})
+      setState({ ...global, ...updates })
     },
     [global, setState],
   )
+
+  const deleteProperty = useCallback(property => {
+    let newState = { ...global }
+    delete newState[property]
+    setState(newState)
+  }, [global, setState])
 
   const setAuth = useCallback(() => {
     fetchData()
@@ -37,9 +43,10 @@ const GlobalProvider = ({ children }) => {
       ...global,
       loading,
       setGlobal,
-      setAuth
+      setAuth,
+      deleteProperty
     }),
-    [global, setGlobal, loading, setAuth],
+    [global, setGlobal, loading, setAuth, deleteProperty],
   )
 
   return <Context.Provider value={getContextValue()}>{children}</Context.Provider>;

@@ -412,7 +412,7 @@ const Book = (props) => {
 							</div>
 						</div>
 					</div>
-					<div className="md:mx-0 mx-6">
+					<div className="mx-6 border-gray-400 border rounded-md shadow-md p-4 md:mr-3 ">
 						{book.on_loan ? (
 							<div className="bg-yellow-100 w-full h-12 rounded border-2 border-yellow-300 flex">
 								<div className="self-center text-center	w-full">

@@ -3,10 +3,10 @@ import Modal from "../common/Modal/Modal";
 import { Context } from "../globalContext";
 import Scanner from "./Scanner2";
 import axios from "axios";
-import useWindowSize from "../hooks/useWindowSize";
 import DetailsTab from "./DetailsTab";
-import { useToasts } from "react-toast-notifications";
 import { PlusCircleIcon as PlusCircle } from "@heroicons/react/outline";
+import { ArrowLeftSquare } from "@styled-icons/bootstrap";
+
 
 const Button = ({ text, action, children }) => {
     return (
@@ -17,11 +17,10 @@ const Button = ({ text, action, children }) => {
 }
 
 const AddBook = ({ closeModal }) => {
-    const modal = useRef(null);
+    const addBookModal = useRef(null);
     const scanTabRef = useRef(null);
     const [selection, setSelection] = useState(undefined)
     const global = useContext(Context);
-    const { addToast } = useToasts();
     const Scan = () => {
         return (
             <div
@@ -81,11 +80,7 @@ const AddBook = ({ closeModal }) => {
             <div
                 className="cursor-pointer inline-block mx-1 text-sm px-4 py-1 leading-none border rounded text-green bg-green-600 text-white border-green-600 hover:border-white hover:bg-green-600 lg:mt-0 "
                 onClick={() => {
-                    modal.current.open()
-                    addToast("Modal Open", {
-                        appearance: "error",
-                        autoDismiss: false,
-                    });
+                    addBookModal.current.open()
                 }}
             >
                 <div className="flex items-center justify-center">
@@ -93,17 +88,20 @@ const AddBook = ({ closeModal }) => {
                     <span className="hidden md:inline-block">Add Book</span>
                 </div>
             </div>
-            <Modal ref={modal} header="Add book">
+            <Modal ref={addBookModal} header="Add book" type="addBook">
                 <>
-                    {selection ? <Button action={() => setSelection(undefined)}>Back</Button> : <>
-                        <Button action={() => setSelection("search")}>Search</Button>
-                        <Button action={() => setSelection("scan")}>Scan barcode</Button>
-                        <Button action={() => setSelection("manual")}>Manually</Button>
-                    </>}
-                    {global.capturedBook ? <BookDetails closeModal={() => modal.current.close()}></BookDetails> : <div>
-                        {renderActiveSelection()}
-                    </div>}
+                    {global.capturedBook ? "We got one" : <>
+                        {selection ? <div onClick={() => setSelection(undefined)} className="flex"><ArrowLeftSquare className="h-6 w-6 cursor-pointer" aria-hidden="true"></ArrowLeftSquare><span className="text-lg font-bold">Back</span></div> : <>
 
+                            <Button action={() => setSelection("search")}>Search</Button>
+                            <Button action={() => setSelection("scan")}>Scan barcode</Button>
+                            <Button action={() => setSelection("manual")}>Manually</Button>
+
+                        </>}
+                        {global.capturedBook ? <BookDetails closeModal={() => addBookModal.current.close()}></BookDetails> : <div>
+                            {renderActiveSelection()}
+                        </div>}
+                    </>}
                 </>
             </Modal>
         </>

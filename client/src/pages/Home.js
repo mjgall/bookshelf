@@ -14,7 +14,7 @@ import Cancellation from "./Cancellation";
 const Home = (props) => {
 	const global = useContext(Context);
 	const match = useRouteMatch();
-	
+
 	useEffect(() => {
 		if (props.location.state?.redirect) {
 			// addRedirect(props.location.state.from)
@@ -28,7 +28,7 @@ const Home = (props) => {
 		}
 	}, [props, global]);
 
-	
+
 
 	return (
 		<>
@@ -44,27 +44,29 @@ const Home = (props) => {
 						<div className="md:bg-transparent">
 							<Subnav currentPage={match.url}></Subnav>
 						</div>
-						<Switch>
-							<Route path="/library">
-								<Library></Library>
-							</Route>
-							<Route path="/feed">
-								<Feed></Feed>
-							</Route>
-							<Route path="/account">
-								<Account></Account>
-							</Route>
-							<Route path="/loans">
-								<Loans></Loans>
-							</Route>
-							<Route path="/cancel">
-								<Cancellation></Cancellation>
-							</Route>
-							<Route path="/*">
-								<Library></Library>
-							</Route>
-							
-						</Switch>
+						<div className="border-gray-400 border rounded py-3 px-3 shadow-lg md:mx-0 mx-2">
+							<Switch>
+								<Route path="/library">
+									<Library></Library>
+								</Route>
+								<Route path="/feed">
+									<Feed></Feed>
+								</Route>
+								<Route path="/account">
+									<Account></Account>
+								</Route>
+								<Route path="/loans">
+									<Loans></Loans>
+								</Route>
+								<Route path="/cancel">
+									<Cancellation></Cancellation>
+								</Route>
+								<Route path="/*">
+									<Library></Library>
+								</Route>
+
+							</Switch>
+						</div>
 					</div>
 				</div>
 			) : (
