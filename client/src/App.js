@@ -9,7 +9,7 @@ import {
 	// Redirect,
 	// useRouteMatch,
 } from "react-router-dom";
-
+import { Toaster } from 'react-hot-toast';
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
 import Book from "./pages/Book";
@@ -61,79 +61,82 @@ const App = (props) => {
 	}, [global.currentUser, loading]);
 
 	return (
-		<ToastProvider transitionDuration="100" autoDismissTimeout="2000">
-			{global.currentUser ? (
-				<Helmet>
-					<script
-						async
-						src="https://widget.frill.co/v2/widget.js"
-					></script>
-				</Helmet>
-			) : null}
-			<Router>
-				{loading ? null : (
-					<>
-						<NavBar
-							// currentPage={match.url}
-							windowWidth={1000}
-							referrer={referrer}
-						></NavBar>
-						<Switch>
-							<Route exact path="/">
-								<Home
-									clearReferrer={clearReferrer}
-									updateNavReferrer={updateNavReferrer}
-								></Home>
-							</Route>
-							<Route
-								path="/logout"
-								component={() => {
-									window.location.href = "/api/logout";
-									return null;
-								}}
-							/>
-							<Route exact path="/login">
-								<Login></Login>
-							</Route>
-							<Route exact path="/register">
-								<Register></Register>
-							</Route>
-							<PrivateRoute path="/profile" exact>
-								<Profile
-									books={global.books}
-									members={global.householdMembers}
-									households={global.households}
-									user={global.currentUser}
-								></Profile>
-							</PrivateRoute>
-							<PrivateRoute exact path="/book/:id">
-								<Book></Book>
-							</PrivateRoute>
-							<Route path="/shelf/:shelfId">
-								<SharedShelf></SharedShelf>
-							</Route>
-							<PrivateRoute path="/transparent">
-								<Transparent></Transparent>
-							</PrivateRoute>
+		<>
+			<Toaster containerStyle={{ zIndex: 100000000000 }} position="top-right" />
+			<ToastProvider transitionDuration="100" autoDismissTimeout="2000">
+				{global.currentUser ? (
+					<Helmet>
+						<script
+							async
+							src="https://widget.frill.co/v2/widget.js"
+						></script>
+					</Helmet>
+				) : null}
+				<Router>
+					{loading ? null : (
+						<>
+							<NavBar
+								// currentPage={match.url}
+								windowWidth={1000}
+								referrer={referrer}
+							></NavBar>
+							<Switch>
+								<Route exact path="/">
+									<Home
+										clearReferrer={clearReferrer}
+										updateNavReferrer={updateNavReferrer}
+									></Home>
+								</Route>
+								<Route
+									path="/logout"
+									component={() => {
+										window.location.href = "/api/logout";
+										return null;
+									}}
+								/>
+								<Route exact path="/login">
+									<Login></Login>
+								</Route>
+								<Route exact path="/register">
+									<Register></Register>
+								</Route>
+								<PrivateRoute path="/profile" exact>
+									<Profile
+										books={global.books}
+										members={global.householdMembers}
+										households={global.households}
+										user={global.currentUser}
+									></Profile>
+								</PrivateRoute>
+								<PrivateRoute exact path="/book/:id">
+									<Book></Book>
+								</PrivateRoute>
+								<Route path="/shelf/:shelfId">
+									<SharedShelf></SharedShelf>
+								</Route>
+								<PrivateRoute path="/transparent">
+									<Transparent></Transparent>
+								</PrivateRoute>
 
-							<Route path="/scanner">
-								<Scanner></Scanner>
-							</Route>
-							<Route path="/upload">
-								<FileUpload></FileUpload>
-							</Route>
-							<Route path="/*">
-								<Home
-									clearReferrer={clearReferrer}
-									updateNavReferrer={updateNavReferrer}
-								></Home>
-							</Route>
-						</Switch>
-					</>
-				)}
-				<GlobalModal></GlobalModal>
-			</Router>
-		</ToastProvider>
+								<Route path="/scanner">
+									<Scanner></Scanner>
+								</Route>
+								<Route path="/upload">
+									<FileUpload></FileUpload>
+								</Route>
+								<Route path="/*">
+									<Home
+										clearReferrer={clearReferrer}
+										updateNavReferrer={updateNavReferrer}
+									></Home>
+								</Route>
+							</Switch>
+						</>
+					)}
+					<GlobalModal></GlobalModal>
+				</Router>
+			</ToastProvider>
+		</>
 	);
 };
 
