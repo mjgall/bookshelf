@@ -54,7 +54,7 @@ export function Modal({ children, fade = false, defaultOpened = false, header = 
                 <div
                     id="modal-container"
                     className="bg-white mx-auto rounded shadow-lg z-50 md:max-w-xl w-full overflow-auto flex-col"
-                    style={{ maxHeight: "calc(100vh - 10rem)", height: "calc(30vh + 2rem)" }}
+                    style={{ maxHeight: "calc(100vh - 10rem)", minHeight: "calc(30vh + 2rem)" }}
                 >
                     <div>
 
