@@ -566,7 +566,7 @@ export default class Profile extends React.Component {
 												className="w-full max-w-md"
 											>
 												{membership.is_owner ? (
-													<div className="flex items-center border-b border-b-2 border-newblue ">
+													<div className="flex items-center border-b-2 border-newblue ">
 														<input
 															className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 pr-2 leading-tight focus:outline-none"
 															type="text"
