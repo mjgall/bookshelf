@@ -229,7 +229,7 @@ const Book = (props) => {
 								{book.cover ? (
 									<div className="mx-0">
 										{type === "personal" ? (
-											<Tip renderChildren content="Change cover photo" placement="right">
+											<Tip renderChildren content="Change cover photo" placement="bottom">
 												<img
 													onClick={() => modal.current.open()}
 													alt="book cover"
@@ -286,7 +286,7 @@ const Book = (props) => {
 									<Tip
 										renderChildren
 										content="Mark as unread"
-										placement="right"
+										placement="bottom"
 									>
 										<div
 											onClick={() => updateBookField("read", !book.read)}
@@ -299,7 +299,7 @@ const Book = (props) => {
 										</div>
 									</Tip>
 								) : (
-									<Tip renderChildren content="Mark as read" placement="right">
+									<Tip renderChildren content="Mark as read" placement="bottom">
 										<div
 											onClick={() => updateBookField("read", !book.read)}
 											className="bg-newblue hover:bg-blue-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
@@ -314,7 +314,7 @@ const Book = (props) => {
 								{type === "personal" ? (
 									<>
 										{book.read ? null : book.started ? (
-											<Tip renderChildren content="Started" placement="right">
+											<Tip renderChildren content="Started" placement="bottom">
 												<div
 													onClick={() =>
 														updateBookField("started", !book.started)
@@ -331,7 +331,7 @@ const Book = (props) => {
 											<Tip
 												renderChildren
 												content="Not started"
-												placement="right"
+												placement="bottom"
 											>
 												<div
 													onClick={() =>
@@ -350,7 +350,7 @@ const Book = (props) => {
 											<Tip
 												renderChildren
 												content="Click to make public."
-												placement="right"
+												placement="bottom"
 											>
 												<div
 													className="bg-red-500 hover:bg-red-700 text-white my-1 mx-2 mt-6 py-2 px-3 rounded focus:outline-none focus:shadow-outline text-center cursor-pointer"
@@ -368,7 +368,7 @@ const Book = (props) => {
 											<Tip
 												renderChildren
 												content="Make private"
-												placement="right"
+												placement="bottom"
 											>
 												<div
 													onClick={() =>
