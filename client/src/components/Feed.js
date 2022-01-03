@@ -196,6 +196,31 @@ const Feed = (props) => {
 		setUserFilter(values)
 	}
 
+	const customStyles = {
+		option: (provided, state) => ({
+			...provided,
+			cursor: 'pointer',
+		}),
+		control: () => ({
+			// none of react-select's styles are passed to <Control />
+			cursor: "pointer",
+			alignItems: "center",
+			backgroundColor: "white",
+			borderColor: "hsl(0,0%,80%)",
+			borderRadius: "4px",
+			borderStyle: "solid",
+			borderWidth: "1px",
+			flexWrap: "wrap",
+			justifyContent: "space-between",
+			minHeight: "38px",
+			outline: "0",
+			position: "relative",
+			transition: "all 100ms",
+			boxSizing: "border-box",
+			display: "flex"
+		}),
+	}
+
 	return (
 		<div>
 			{!loaded ? (
@@ -212,6 +237,7 @@ const Feed = (props) => {
 							<div className="flex">
 								<div className="w-1/3">
 									<Select
+										styles={customStyles}
 										isMulti={true}
 										placeholder="Filter users"
 										isSearchable={true}

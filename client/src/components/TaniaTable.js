@@ -550,12 +550,38 @@ const Table = ({ columns, rows, history }) => {
 		});
 	}, [global.householdMembers, getHouseholdOptions]);
 
+	const customStyles = {
+		option: (provided, state) => ({
+			...provided,
+			cursor: 'pointer',
+		}),
+		control: () => ({
+			// none of react-select's styles are passed to <Control />
+			cursor: "pointer",
+			alignItems: "center",
+			backgroundColor: "white",
+			borderColor: "hsl(0,0%,80%)",
+			borderRadius: "4px",
+			borderStyle: "solid",
+			borderWidth: "1px",
+			flexWrap: "wrap",
+			justifyContent: "space-between",
+			minHeight: "38px",
+			outline: "0",
+			position: "relative",
+			transition: "all 100ms",
+			boxSizing: "border-box",
+			display: "flex"
+		}),
+	}
+
 	return (
 		<>
 			<div className="w-full">
 				<div className="flex w-full mb-2">
 					<div className="flex-1">
 						<Select
+							styles={customStyles}
 							className="cursor-pointer"
 							isOptionDisabled={(option) =>
 								option?.value === "no-households"
@@ -571,7 +597,7 @@ const Table = ({ columns, rows, history }) => {
 					{householdSelect?.value === "none" || viewPrivate ? null : (
 						<div className="flex-1 ml-1">
 							<Select
-								className="cursor-pointer"
+								styles={customStyles}
 								isOptionDisabled={(option) =>
 									option?.value === "no-households"
 								}
