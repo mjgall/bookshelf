@@ -219,7 +219,7 @@ const Book = (props) => {
 					style={{ gridTemplateColumns: `25% 70% 5%` }}
 				>
 					<div>
-						<div className="border-gray-400 border rounded-md shadow-md p-4 md:mr-3 mx-6">
+						<div className="border-gray-400 border rounded-md shadow-md p-4 md:mr-3 mx-6 bg-white">
 							<div id="book-details">
 								{book.cover ? (
 									<div className="mx-0">
@@ -412,7 +412,7 @@ const Book = (props) => {
 							</div>
 						</div>
 					</div>
-					<div className="mx-6 border-gray-400 border rounded-md shadow-md p-4 md:mr-3 ">
+					<div className="mx-6 border-gray-400 border rounded-md shadow-md p-4 md:mr-3 bg-white">
 						{book.on_loan ? (
 							<div className="bg-yellow-100 w-full h-12 rounded border-2 border-yellow-300 flex">
 								<div className="self-center text-center	w-full">

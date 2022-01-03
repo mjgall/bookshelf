@@ -84,6 +84,11 @@ const Feed = (props) => {
 		);
 		setActivities([...activities, ...result.data]);
 		setCurrentPage(currentPage + 1);
+
+		setUsers(_.uniqBy([...activities, ...result.data].map(activity => {
+			return { value: activity.friend_id, label: activity.friend_full }
+		}), "value"))
+		filter()
 	};
 
 	const updateActivity = async (id) => {
@@ -214,7 +219,7 @@ const Feed = (props) => {
 										onChange={handleUserFilter}
 										options={users}></Select>
 								</div>
-								<div className="flex items-center ml-2">
+								{/* <div className="flex items-center ml-2">
 									<input
 										style={{
 											height: "1.5rem",
@@ -239,7 +244,7 @@ const Feed = (props) => {
 										onChange={toggleHideOthers}
 									></input>
 									<div>Hide others</div>
-								</div>
+								</div> */}
 							</div>
 							<>
 								{filter().map((item, index) => {
