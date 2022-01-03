@@ -27,7 +27,7 @@ const HandleConfirm = ({ action, text, close, isConfirming, confirmingIndex }) =
 						onClick={() => {
 							setConfirm(!confirm);
 							isConfirming(!confirm, confirmingIndex)
-							close();
+							// close();
 						}}
 					>
 						<XSquare color="red" size="1.5rem"></XSquare>

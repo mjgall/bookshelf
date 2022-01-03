@@ -192,7 +192,7 @@ const Book = (props) => {
 					},
 					confirm: false,
 					text: "Loan",
-				},
+				}
 			];
 		}
 	};
