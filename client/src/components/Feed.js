@@ -10,6 +10,8 @@ import { ThumbUp } from "@styled-icons/heroicons-outline";
 import { ThumbUp as ThumbUpSolid } from "@styled-icons/heroicons-solid";
 import Tip from "../common/Tip";
 import LoadingSpinner from "./LoadingSpinner";
+import Select from "react-select";
+import _ from "lodash"
 
 const Feed = (props) => {
 	const getSavedSelfFilter = () => {
@@ -35,6 +37,9 @@ const Feed = (props) => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [hideSelf, setHideSelf] = useState(getSavedSelfFilter());
 	const [hideOthers, setHideOthers] = useState(getSavedOthersFilter());
+	const [users, setUsers] = useState([])
+	const [userFilter, setUserFilter] = useState(undefined)
+
 	const global = useContext(Context);
 
 	const filter = () => {
@@ -46,6 +51,12 @@ const Feed = (props) => {
 			return activities.filter((activity) => {
 				return activity.user_id === global.currentUser.id;
 			});
+		} else if (userFilter?.length > 0) {
+			return activities.filter((activity) => {
+				if (userFilter.map(user => user.value).includes(activity.user_id)) {
+					return activity
+				}
+			})
 		} else {
 			return activities;
 		}
@@ -93,9 +104,13 @@ const Feed = (props) => {
 		const fetchActivities = async () => {
 			const result = await axios.get(`/api/activities?page=1&limit=10`);
 			setActivities(result.data);
+			setUsers(_.uniqBy(result.data.map(activity => {
+				return { value: activity.friend_id, label: activity.friend_full }
+			}), "value"))
 			setLoaded(true);
 		};
 		fetchActivities();
+
 	}, []);
 
 	const determineAction = (actionNumber) => {
@@ -172,6 +187,10 @@ const Feed = (props) => {
 		}
 	};
 
+	const handleUserFilter = values => {
+		setUserFilter(values)
+	}
+
 	return (
 		<div>
 			{!loaded ? (
@@ -186,6 +205,15 @@ const Feed = (props) => {
 					{!activities.length < 1 ? (
 						<>
 							<div className="flex">
+								<div className="w-1/3">
+									<Select
+										isMulti={true}
+										placeholder="Filter users"
+										isSearchable={true}
+										value={userFilter}
+										onChange={handleUserFilter}
+										options={users}></Select>
+								</div>
 								<div className="flex items-center ml-2">
 									<input
 										style={{
@@ -222,7 +250,7 @@ const Feed = (props) => {
 										>
 											<div className="flex items-center">
 												{item.user_id ===
-												global.currentUser.id ? (
+													global.currentUser.id ? (
 													<div>
 														<MoreMenu
 															placement="left"
@@ -243,7 +271,7 @@ const Feed = (props) => {
 												<div
 													className={
 														item.user_id ===
-														global.currentUser.id
+															global.currentUser.id
 															? "h-12 w-12 mr-2"
 															: "h-12 w-12 mr-2 ml-4"
 													}
@@ -261,7 +289,7 @@ const Feed = (props) => {
 												<div>
 													<span className="font-bold">
 														{item.user_id ===
-														global.currentUser.id
+															global.currentUser.id
 															? "You"
 															: item.friend_full}
 													</span>{" "}
@@ -275,24 +303,22 @@ const Feed = (props) => {
 														{item.title}
 													</Link>
 													{item.action === 5
-														? ` to ${
-																item.interacted_user_id ===
-																global
-																	.currentUser
-																	.id
-																	? `you`
-																	: item.interacted_user_name
-														  }`
+														? ` to ${item.interacted_user_id ===
+															global
+																.currentUser
+																.id
+															? `you`
+															: item.interacted_user_name
+														}`
 														: null}
 													{item.action === 6
-														? ` from ${
-																item.interacted_user_id ===
-																global
-																	.currentUser
-																	.id
-																	? `you`
-																	: item.interacted_user_name
-														  }`
+														? ` from ${item.interacted_user_id ===
+															global
+																.currentUser
+																.id
+															? `you`
+															: item.interacted_user_name
+														}`
 														: null}
 												</div>
 
@@ -300,7 +326,7 @@ const Feed = (props) => {
 													{moment
 														.unix(
 															item.timestamp /
-																1000
+															1000
 														)
 														.format(
 															"dddd, MMMM Do YYYY, h:mm:ss a"
@@ -315,15 +341,15 @@ const Feed = (props) => {
 													>
 														{item.likeContent
 															?.people.length >
-														0 ? (
+															0 ? (
 															<Tip
 																content={
 																	item
 																		.likeContent
 																		.string
 																		? item
-																				.likeContent
-																				.string
+																			.likeContent
+																			.string
 																		: "Like"
 																}
 																renderChildren

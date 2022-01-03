@@ -14,8 +14,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@ericblade/quagga2": "^1.2.6",
-    "@zxing/library": "^0.18.3",
     "aws-sdk": "^2.1039.0",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",

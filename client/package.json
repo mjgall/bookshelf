@@ -41,7 +41,7 @@
     "react-textarea-autosize": "^7.1.2",
     "react-tippy": "^1.4.0",
     "react-toast-notifications": "^2.4.0",
-    "styled-components": "^5.2.0",
+    "styled-components": "^5.3.3",
     "styled-icons": "^10.22.0",
     "tailwind": "^4.0.0"
   },
