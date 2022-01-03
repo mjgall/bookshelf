@@ -4,7 +4,7 @@ import {
 	XSquare
 } from "@styled-icons/boxicons-solid";
 
-const HandleConfirm = ({ action, text, close }) => {
+const HandleConfirm = ({ action, text, close, isConfirming, confirmingIndex }) => {
 	const [confirm, setConfirm] = useState(false);
 
 	return (
@@ -16,6 +16,7 @@ const HandleConfirm = ({ action, text, close }) => {
 						onClick={() => {
 							action();
 							setConfirm(!confirm);
+							isConfirming(!confirm, confirmingIndex)
 							close();
 						}}
 					>
@@ -25,6 +26,7 @@ const HandleConfirm = ({ action, text, close }) => {
 						className="flex-auto text-center"
 						onClick={() => {
 							setConfirm(!confirm);
+							isConfirming(!confirm, confirmingIndex)
 							close();
 						}}
 					>
@@ -32,7 +34,7 @@ const HandleConfirm = ({ action, text, close }) => {
 					</div>
 				</div>
 			) : (
-				<div onClick={() => setConfirm(!confirm)}>{text}...</div>
+				<div onClick={() => { setConfirm(!confirm); isConfirming(!confirm, confirmingIndex) }}>{text}...</div>
 			)}
 		</>
 	);

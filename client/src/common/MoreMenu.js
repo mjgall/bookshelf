@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { usePopper } from "react-popper";
 import Tippy from "@tippyjs/react/headless"; // different import path!
 import { MoreVertical } from "@styled-icons/evaicons-solid";
@@ -6,12 +6,27 @@ import MenuConfirm from "./MenuConfirm";
 
 const MoreMenu = (props) => {
 	const [menuOpen, setMenuOpen] = useState(false);
+	const [confirmingState, setConfirmingState] = useState(false)
+	const [confirmingIndex, setConfirmingIndex] = useState(undefined)
+
+	const isConfirming = (state, index) => {
+		setConfirmingIndex(index)
+		setConfirmingState(state)
+	}
+
+	const determineStyle = (index) => {
+		if (confirmingState && index !== confirmingIndex) {
+			return { minWidth: "7rem", filter: "blur(.2rem)" }
+		} else {
+			return { minWidth: "7rem" }
+		}
+	}
 
 	return (
 		<Tippy
 			visible={menuOpen}
 			interactive
-			onClickOutside={() => setMenuOpen(false)}
+			onClickOutside={() => { setMenuOpen(false); setConfirmingState(false) }}
 			// trigger="click"
 			placement={props.placement || "bottom-end"}
 			render={(attrs) => (
@@ -24,11 +39,13 @@ const MoreMenu = (props) => {
 						return (
 							<div
 								key={index}
-								style={{ minWidth: "7rem" }}
+								style={determineStyle(index)}
 								className="cursor-pointer my-1 bg-white"
 							>
 								{option.confirm ? (
 									<MenuConfirm
+										confirmingIndex={index}
+										isConfirming={isConfirming}
 										close={() => setMenuOpen(false)}
 										action={option.action}
 										text={option.text}

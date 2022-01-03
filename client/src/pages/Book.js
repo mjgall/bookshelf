@@ -206,7 +206,7 @@ const Book = (props) => {
 	};
 
 	return (
-		<div className="container mx-auto mt-12">
+		<div className="container mx-auto md:mt-12 mt-2">
 			{/* Upload new cover image modal */}
 			<Modal ref={modal} header="Upload cover">
 				<FileUpload onUpload={onUpload}></FileUpload>
@@ -224,7 +224,7 @@ const Book = (props) => {
 					style={{ gridTemplateColumns: `25% 70% 5%` }}
 				>
 					<div>
-						<div className="border-gray-400 border rounded-md shadow-md p-4 md:mr-3 mx-6 bg-white">
+						<div className="border-gray-400 border rounded-md shadow-md p-4 md:mr-3 mx-6 bg-white md:mb-0 mb-2">
 							<div id="book-details">
 								{book.cover ? (
 									<div className="mx-0">
@@ -417,7 +417,7 @@ const Book = (props) => {
 							</div>
 						</div>
 					</div>
-					<div className="mx-6 border-gray-400 border rounded-md shadow-md p-4 md:mr-3 bg-white">
+					<div className="mx-6 border-gray-400 border rounded-md shadow-md p-4 md:mr-3 bg-white md:mb-0 mb-2">
 						{book.on_loan ? (
 							<div className="bg-yellow-100 w-full h-12 rounded border-2 border-yellow-300 flex">
 								<div className="self-center text-center	w-full">
