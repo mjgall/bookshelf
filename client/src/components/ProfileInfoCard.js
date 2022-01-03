@@ -5,6 +5,7 @@ import { Context } from "../globalContext";
 import Modal from "../common/Modal/Modal";
 import FileUpload from "./FileUpload";
 import axios from "axios";
+import addNotification from "../utils/addNotification"
 
 
 const ProfileInfoCard = (props) => {
@@ -14,8 +15,10 @@ const ProfileInfoCard = (props) => {
 
 	const onUpload = async (image) => {
 		await axios.put("/api/users", { field: "picture", value: image.Location })
-		setNewImage(image.Location)
 		modal.current.close()
+		global.setGlobal({ currentUser: { ...global.currentUser, picture: image.Location } })
+		setNewImage(image.Location)
+		addNotification("Profile picture updated.", "success")
 	}
 
 	return (
@@ -31,7 +34,9 @@ const ProfileInfoCard = (props) => {
 						<img
 							alt="user"
 							src={newImage || global.currentUser.picture}
-							onClick={() => modal.current.open()}
+							onClick={() => {
+								modal.current.open()
+							}}
 							className="rounded-full h-32 w-32 border-solid border-white border-2 cursor-pointer -mt-3"
 						></img>
 					</Tip>
