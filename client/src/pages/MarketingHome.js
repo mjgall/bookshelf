@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import banner3 from "../images/banner3.jpg";
 import banner2 from "../images/banner2.jpg";
 import banner1 from "../images/banner1.jpg";
-import screenshot1 from "../images/screenshot1.png";
-import screenshot6 from "../images/screenshot6.png";
-import screenshot7 from "../images/screenshot7.png";
-import screenshot8 from "../images/screenshot8.png";
+import screenshot1 from "../images/library.png";
+import screenshot6 from "../images/feed.png";
+import screenshot7 from "../images/loan.png";
+import screenshot8 from "../images/search.png";
+import screenshot9 from "../images/book.png";
 import axios from "axios";
 import { useEffect } from "react";
 
@@ -59,9 +60,9 @@ const MarketingHome = (props) => {
 										{props.redirect === "/profile"
 											? " your profile!"
 											: props.redirect.indexOf("/book") >
-											  -1
-											? " that book!"
-											: " that content!"}
+												-1
+												? " that book!"
+												: " that content!"}
 									</a>
 								</div>
 							</div>
@@ -92,36 +93,36 @@ const MarketingHome = (props) => {
 						</div>
 					</div>
 				</div>
-				<div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded-lg md:shadow-sm">
+				<div className="md:my-4 p-4 md:border md:rounded-lg md:shadow-sm bg-white flex items-center">
 					<img
 						alt="screenshot of Bookshelf"
-						className=" shadow-lg rounded-lg"
+						className=" shadow-lg rounded-lg w-1/2"
 						src={screenshot1}
 					></img>
-					<div className="text-3xl pl-10">Scan books</div>
+					<div className="text-3xl pl-10">Keep inventory of your physical copies of books.</div>
 				</div>
-				<div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded-lg md:shadow-sm">
-					<div className="text-3xl pr-10">Search for books</div>
+				<div className="md:my-4 p-4 md:border md:rounded-lg md:shadow-sm bg-white flex items-center">
+					<div className="text-3xl pr-10">Track books you've borrowed and books you've lent to friends.</div>
 					<img
 						alt="screenshot of Bookshelf"
-						className="shadow-lg rounded-lg"
+						className="shadow-lg rounded-lg w-1/2"
 						src={screenshot7}
 					></img>
 				</div>
-				<div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded-lg md:shadow-sm">
+				<div className="md:my-4 p-4 md:border md:rounded-lg md:shadow-sm bg-white flex items-center">
 					<img
 						alt="screenshot of Bookshelf"
-						className="shadow-lg rounded-lg"
+						className="shadow-lg rounded-lg w-1/2"
 						src={screenshot6}
 					></img>
-					<div className="text-3xl pl-10">Log notes</div>
+					<div className="text-3xl pl-10">Keep up with the reading activity of friends.</div>
 				</div>
-				<div className="md:my-4 p-4 grid grid-cols-2 md:border md:rounded-lg md:shadow-sm">
-					<div className="text-3xl pr-10">Create a household</div>
+				<div className="md:my-4 p-4 md:border md:rounded-lg md:shadow-sm bg-white flex items-center">
+					<div className="text-3xl pr-10">Keep track of personal notes and shared notes from other members of your household.</div>
 					<img
 						alt="screenshot of Bookshelf"
-						className="shadow-lg rounded-lg"
-						src={screenshot8}
+						className="shadow-lg rounded-lg w-1/2"
+						src={screenshot9}
 					></img>
 				</div>
 			</div>
