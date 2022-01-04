@@ -84,7 +84,7 @@ const Transparent = (props) => {
 					<tr>
 						<th className="text-left">Name</th>
 						<th className="text-left">Email</th>
-						<th className="text-left">Last login</th>
+						<th className="text-left md:table-cell hidden">Last login</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -94,7 +94,7 @@ const Transparent = (props) => {
 							<tr key={index}>
 								<td>{user.full}</td>
 								<td>{user.email}</td>
-								<td>{!user.last_login ? moment.utc(user.create_date).local().subtract(6, 'hours').format("dddd, MMMM Do YYYY, h:mm:ss a") : moment.utc(user.last_login).local().subtract(6, 'hours').format("dddd, MMMM Do YYYY, h:mm:ss a")}</td>
+								<td className="md:table-cell hidden">{!user.last_login ? moment.utc(user.create_date).local().subtract(6, 'hours').format("dddd, MMMM Do YYYY, h:mm:ss a") : moment.utc(user.last_login).local().subtract(6, 'hours').format("dddd, MMMM Do YYYY, h:mm:ss a")}</td>
 								<td>
 									<div>
 										<Tip
