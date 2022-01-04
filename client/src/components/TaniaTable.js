@@ -701,7 +701,7 @@ const Table = ({ columns, rows, history }) => {
 									onClick={() =>
 										history.push(`/book/${row.id}`)
 									}
-									key={row.id}
+									key={row?.id}
 								>
 									{columns.map((column) => {
 										if (column.format) {
