@@ -227,7 +227,14 @@ const filterRows = (rows, filters, currentUserId) => {
 				return false;
 			});
 		});
-	} else if (filters.title || filters.author) {
+	} else if (filters.householdSelect.value === "borrowed") {
+		results = rows.filter(row => {
+			if (row.loan_id) {
+				return row
+			}
+		})
+	}
+	else if (filters.title || filters.author) {
 		results = rows.filter((row) => {
 			return Object.keys(filters).every((accessor) => {
 				const value = row[accessor];
@@ -263,7 +270,7 @@ const filterRows = (rows, filters, currentUserId) => {
 		// 	filteredBooks = books.filter((book) => book.private === 1);
 		// }
 		// else
-		if (householdSelect?.value == null || !ownerSelect) {
+		if (householdSelect?.value == null || !ownerSelect || householdSelect?.value == "borrowed") {
 			filteredBooks = books;
 		} else if (householdSelect?.value === "none") {
 			filteredBooks = books.filter(
@@ -389,14 +396,27 @@ const Table = ({ columns, rows, history }) => {
 
 	const handleHouseholdChange = useCallback(
 		(selected) => {
-			getOwners(global.householdMembers, selected?.value);
-			setHouseholdSelect(selected);
-			setOwnerSelect({ label: "All members", value: "all" });
-			setFilters((prevFilters) => ({
-				...prevFilters,
-				householdSelect: selected,
-				owner: { value: "all", label: "All members" },
-			}));
+			console.log(selected.value === "borrowed");
+			if (selected.value === "borrowed") {
+				getOwners(global.householdMembers, selected?.value);
+				setHouseholdSelect(selected);
+				setOwnerSelect({ label: "All members", value: "all" });
+				setFilters((prevFilters) => ({
+					...prevFilters,
+					householdSelect: selected,
+					owner: { value: "all", label: "All members" },
+				}));
+			} else {
+				getOwners(global.householdMembers, selected?.value);
+				setHouseholdSelect(selected);
+				setOwnerSelect({ label: "All members", value: "all" });
+				setFilters((prevFilters) => ({
+					...prevFilters,
+					householdSelect: selected,
+					owner: { value: "all", label: "All members" },
+				}));
+			}
+
 			localStorage.setItem("householdFilter", JSON.stringify(selected));
 			localStorage.setItem("ownerFilter", null);
 		},
@@ -452,6 +472,7 @@ const Table = ({ columns, rows, history }) => {
 		if (global.households.length < 1) {
 			options = [
 				{ value: "none", label: `⛔ None (Only your own books)` },
+				{ value: "borrowed", label: `⏰ Borrowed books` },
 				{
 					value: "no-households",
 					label: `🏠 You don't have any households! Add one from Profile`,
@@ -469,7 +490,7 @@ const Table = ({ columns, rows, history }) => {
 						label: `🏠 ${household.name}`,
 					};
 				});
-
+			options.unshift({ value: "borrowed", label: `⏰ Borrowed books` })
 			options.unshift({
 				value: "none",
 				label: `⛔ None (Only your own books)`,
@@ -482,6 +503,7 @@ const Table = ({ columns, rows, history }) => {
 				};
 			});
 			options.unshift({ value: "all", label: `🏠 All households` });
+			options.unshift({ value: "borrowed", label: `⏰ Borrowed books` })
 			options.unshift({
 				value: "none",
 				label: `⛔ None (Only your own books)`,
@@ -594,7 +616,7 @@ const Table = ({ columns, rows, history }) => {
 							onChange={handleHouseholdChange}
 						></Select>
 					</div>
-					{householdSelect?.value === "none" || viewPrivate ? null : (
+					{householdSelect?.value === "none" || householdSelect?.value === "borrowed" || viewPrivate ? null : (
 						<div className="flex-1 ml-1">
 							<Select
 								styles={customStyles}

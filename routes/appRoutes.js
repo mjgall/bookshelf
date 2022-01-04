@@ -55,6 +55,7 @@ const updateLoan = require("../queries/updateLoan");
 const getSharedShelfBooks = require("../queries/getSharedShelfBooks");
 const updateUser = require("../queries/updateUser");
 const getFriendsWithBook = require("../queries/getFriendsWithBook");
+const getBorrowedBooks = require("../queries/getBorrowedBooks")
 
 const checkAuthed = (req, res, next) => {
 	if (req?.user?.id) {
@@ -93,7 +94,7 @@ module.exports = (app) => {
 				req.user.id,
 				req.body.householdId
 			);
-
+			const borrowedBooks = await getBorrowedBooks(req.user.id)
 			const households = await getHouseholds(req.user.id);
 			const householdMembers = await getHouseholdMembersByUserId(
 				req.user.id
@@ -101,10 +102,11 @@ module.exports = (app) => {
 
 			res.send({
 				currentUser,
-				allBooks: userBooks.concat(householdBooks),
+				allBooks: userBooks.concat(householdBooks).concat(borrowedBooks),
 				books: {
 					userBooks,
 					householdBooks,
+					borrowedBooks
 				},
 				households,
 				householdBooks,

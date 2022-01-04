@@ -6,7 +6,7 @@ import { Context } from "../globalContext";
 
 const Library = () => {
 	const global = useContext(Context);
-
+	console.log(global.books.borrowedBooks);
 	return (
 		<div>
 			<div className="md:text-left text-center">
@@ -16,7 +16,7 @@ const Library = () => {
 			<TaniaTable
 				rows={global.books.userBooks.concat(
 					global.books.householdBooks
-				)}
+				).concat(global.books.borrowedBooks)}
 				columns={[
 					{
 						accessor: "cover",
