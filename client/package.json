@@ -17,6 +17,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
     "browser-image-compression": "^1.0.17",
+    "formik": "^2.2.9",
     "http-proxy-middleware": "^1.0.6",
     "lodash": "^4.17.20",
     "logrocket": "^1.0.14",

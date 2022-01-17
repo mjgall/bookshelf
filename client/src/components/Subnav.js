@@ -7,6 +7,7 @@ const Subnav = (props) => {
 		{ to: "/library", text: "Library" },
 		{ to: "/account", text: "Account" },
 		{ to: "/loans", text: "Loans" },
+		{ to: "/clubs", text: "Clubs" },
 	];
 
 	const determineClass = (currentPage, to) => {

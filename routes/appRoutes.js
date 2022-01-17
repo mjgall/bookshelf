@@ -55,7 +55,11 @@ const updateLoan = require("../queries/updateLoan");
 const getSharedShelfBooks = require("../queries/getSharedShelfBooks");
 const updateUser = require("../queries/updateUser");
 const getFriendsWithBook = require("../queries/getFriendsWithBook");
-const getBorrowedBooks = require("../queries/getBorrowedBooks")
+const getBorrowedBooks = require("../queries/getBorrowedBooks");
+const addBookClub = require("../queries/addBookClub");
+const getBookClubs = require("../queries/getBookClubs");
+const getBookClubMembersByUserId = require("../queries/getBookClubMembersByUserId")
+
 
 const checkAuthed = (req, res, next) => {
 	if (req?.user?.id) {
@@ -891,4 +895,39 @@ module.exports = (app) => {
 			console.log(error);
 		}
 	});
+
+	//BOOK CLUBS
+	app.post("/api/bookclub", async (req, res) => {
+		const {name} = req.body
+		const userId = req.user.id
+		try {
+			const bookClub = await addBookClub(name, userId)
+		res.send(bookClub) 
+		} catch (error) {
+			console.error(error)
+			res.send(error)
+		}
+	})
+
+	app.get("/api/bookclubs", async (req, res) => {
+		try {
+			const bookClubs = await getBookClubs(req.user.id)
+			const bookClubMembers = await getBookClubMembersByUserId(req.user.id)
+			const total = bookClubs.map((club) => {
+				let newClub = {...club, members: []}
+				bookClubMembers.forEach(member => {
+					if (member.book_club_id === club.id) {
+						newClub.members = [...newClub.members, member]
+					}
+				});
+				return newClub
+			})
+
+			// console.log(total);
+			res.send(total)
+		} catch (error) {
+			console.error(error)
+			res.send(error)
+		}
+	}) 
 };

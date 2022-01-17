@@ -235,7 +235,7 @@ const Feed = (props) => {
 					{!activities.length < 1 ? (
 						<>
 							<div className="flex">
-								<div className="w-1/3">
+								<div className="w-full md:w-1/3">
 									<Select
 										styles={customStyles}
 										isMulti={true}
