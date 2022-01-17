@@ -11,6 +11,8 @@ import Account from "./Account";
 import Loans from "./Loans"
 import Cancellation from "./Cancellation";
 import Clubs from "./Clubs";
+import Club from "./Club";
+
 
 const Home = (props) => {
 	const global = useContext(Context);
@@ -58,6 +60,9 @@ const Home = (props) => {
 								</Route>
 								<Route path="/loans">
 									<Loans></Loans>
+								</Route>
+								<Route path="/clubs/:id">
+									<Club></Club>
 								</Route>
 								<Route path="/clubs">
 									<Clubs></Clubs>

@@ -3,6 +3,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { Context } from "../globalContext";
+import { withRouter } from "react-router-dom";
 
 import LoadingSpinner from "../components/LoadingSpinner";
 
@@ -81,7 +82,7 @@ const Clubs = (props) => {
 							<tbody>
 								{bookClubs.map((club, index) => {
 									return (
-										<tr key={index}>
+										<tr key={index} onClick={() => props.history.push(`/clubs/${club.id}`)} className="cursor-pointer">
 											<td>{club.name}</td>
 											<td>{club.members.length}</td>
 											<td>
@@ -99,4 +100,4 @@ const Clubs = (props) => {
 	);
 };
 
-export default Clubs;
+export default withRouter(Clubs);

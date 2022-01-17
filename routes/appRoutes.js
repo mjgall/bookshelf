@@ -59,6 +59,7 @@ const getBorrowedBooks = require("../queries/getBorrowedBooks");
 const addBookClub = require("../queries/addBookClub");
 const getBookClubs = require("../queries/getBookClubs");
 const getBookClubMembersByUserId = require("../queries/getBookClubMembersByUserId")
+const getBookClub = require("../queries/getBookClub")
 
 
 const checkAuthed = (req, res, next) => {
@@ -909,6 +910,19 @@ module.exports = (app) => {
 		}
 	})
 
+	app.get("/api/bookclubs/:id", async (req, res) => {
+		let bookClub = await getBookClub(req.params.id)
+		bookClub = {...bookClub, members: []}
+		console.log(bookClub);
+		const bookClubMembers = await getBookClubMembersByUserId(req.user.id)
+		bookClubMembers.forEach(member => {
+			if (member.book_club_id === bookClub.book_club_id) {
+				bookClub = {...bookClub, members: [...bookClub.members, member]}
+			}
+		});
+		res.send(bookClub)
+	})
+
 	app.get("/api/bookclubs", async (req, res) => {
 		try {
 			const bookClubs = await getBookClubs(req.user.id)
@@ -929,5 +943,6 @@ module.exports = (app) => {
 			console.error(error)
 			res.send(error)
 		}
-	}) 
+	})
+	
 };
