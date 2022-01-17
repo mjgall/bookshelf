@@ -41,28 +41,42 @@ const Clubs = (props) => {
 							className="ml-2"
 						></Tip>
 					</div>
-					<div>
-						<div className="text-lg font-semibold mb-4">
-							Currently Reading
-						</div>
-						<div className="flex gap-6">
-							<img className="h-32" src={club.cover}></img>
-							<div>
-								<div className="font-bold text-lg">{club.title}</div>
-								<div className="font-thin text-sm">{club.author}</div>
+
+					<div className="flex gap-6">
+						<img className="h-32" src={club.cover}></img>
+						<div>
+							<div className="font-bold text-lg">
+								{club.title}
+							</div>
+							<div className="font-thin text-sm">
+								{club.author}
 							</div>
 						</div>
 					</div>
-					<div className="text-lg font-semibold">
-						Book Club Members
+					<div className="flex gap-6 mt-4">
+						<div className="flex-1">
+							<div className="font-semibold">
+								Members
+							</div>
+							<div>
+								{club.members.map((member) => {
+									return <div>{member.member_first}</div>;
+								})}
+							</div>
 						</div>
-					<div>
-						{club.members.map((member) => {
-							return <div>{member.member_first}</div>;
-						})}
-					
+						<div className="flex-1">
+						<div className="font-semibold">
+								Notes
+							</div>
+							<div>
+								{club.notes.map(note => {
+									return (
+										<div className="border-gray-400 border mt-2 mb-2 pr-6 rounded flex items-center">{note.note}</div>
+									)
+								})}
+							</div>
+						</div>
 					</div>
-					
 				</>
 			)}
 		</div>

@@ -16,7 +16,7 @@ const Clubs = (props) => {
 
 	const [loaded, setLoaded] = useState(false);
 	const [bookClubs, setbookClubs] = useState([]);
-
+	const [newBookClubForm, setNewBookClubForm] = useState(false);
 	const getBookClubs = async () => {
 		const response = await axios.get("/api/bookclubs");
 		setbookClubs(response.data);
@@ -28,10 +28,15 @@ const Clubs = (props) => {
 	}, []);
 
 	const addBookClub = async (values) => {
-		const response = await axios.post("/api/bookclub", {
-			name: values.bookClubName,
-		});
-		console.log(response.data);
+		if (values.bookClubName) {
+			const response = await axios.post("/api/bookclub", {
+				name: values.bookClubName,
+			});
+			setNewBookClubForm(false)
+			console.log(response.data);
+		} else {
+			return;
+		}
 	};
 
 	return (
@@ -48,26 +53,37 @@ const Clubs = (props) => {
 							size="1rem"
 							className="ml-2"
 						></Tip>
+						<button
+							className="cursor-pointer inline-block mx-1 px-4 py-1 rounded text-green bg-green-600 text-white  hover:bg-green-500"
+							onClick={() => setNewBookClubForm(!newBookClubForm)}
+						>Create Club</button>
 					</div>
-					<div>
-						<div>Add Book Club</div>
-						<Formik
-							initialValues={{
-								bookClubName: "",
-							}}
-							onSubmit={(values) => addBookClub(values)}
-						>
-							<Form>
-								<label htmlFor="bookClubName">Name</label>
-								<Field
-									id="bookClubName"
-									name="bookClubName"
-									placeholder="Book club name..."
-								/>
-								<button type="submit">Submit</button>
-							</Form>
-						</Formik>
-					</div>
+					{newBookClubForm ? (
+						<div>
+							<Formik
+								initialValues={{
+									bookClubName: "",
+								}}
+								onSubmit={(values) => addBookClub(values)}
+							>
+								<Form>
+									<Field
+										id="bookClubName"
+										name="bookClubName"
+										placeholder="Book club name..."
+										className="leading-8 w-1/2 m-auto rounded-md border border-gray-400 px-2"
+									/>
+									<button
+										className="cursor-pointer inline-block mx-1 px-4 py-1 rounded text-green bg-green-600 text-white  hover:bg-green-500"
+										type="submit"
+									>
+										Submit
+									</button>
+								</Form>
+							</Formik>
+						</div>
+					) : null}
+
 					<div>
 						<table className="w-full">
 							<thead>
@@ -82,7 +98,15 @@ const Clubs = (props) => {
 							<tbody>
 								{bookClubs.map((club, index) => {
 									return (
-										<tr key={index} onClick={() => props.history.push(`/clubs/${club.id}`)} className="cursor-pointer">
+										<tr
+											key={index}
+											onClick={() =>
+												props.history.push(
+													`/clubs/${club.id}`
+												)
+											}
+											className="cursor-pointer"
+										>
 											<td>{club.name}</td>
 											<td>{club.members.length}</td>
 											<td>
