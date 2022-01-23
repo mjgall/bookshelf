@@ -3,6 +3,7 @@ const pages = [
     { to: "/library", text: "Library" },
     { to: "/account", text: "Account" },
     { to: "/loans", text: "Loans" },
+    { to: "/clubs", text: "Clubs" }
 ];
 
 export default pages

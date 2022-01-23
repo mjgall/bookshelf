@@ -1,14 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import links from "../common/pages";
 
 const Subnav = (props) => {
-	const links = [
-		{ to: "/feed", text: "Feed" },
-		{ to: "/library", text: "Library" },
-		{ to: "/account", text: "Account" },
-		{ to: "/loans", text: "Loans" },
-		{ to: "/clubs", text: "Clubs" },
-	];
 
 	const determineClass = (currentPage, to) => {
 		if (currentPage === to || (currentPage === "/" && to === "/library")) {
