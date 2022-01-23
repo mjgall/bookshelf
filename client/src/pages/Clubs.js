@@ -33,7 +33,9 @@ const Clubs = (props) => {
 				name: values.bookClubName,
 			});
 			setNewBookClubForm(false)
-			console.log(response.data);
+			props.history.push(
+				`/clubs/${response.data.book_club_id}`
+			)
 		} else {
 			return;
 		}
@@ -105,7 +107,7 @@ const Clubs = (props) => {
 													`/clubs/${club.id}`
 												)
 											}
-											className="cursor-pointer"
+											className="cursor-pointer hover:bg-gray-200"
 										>
 											<td>{club.name}</td>
 											<td>{club.members.length}</td>

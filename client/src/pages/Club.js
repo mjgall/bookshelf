@@ -100,7 +100,7 @@ const Club = (props) => {
 						></Tip>
 					</div>
 					<div className="flex gap-6">
-						{club.title ? <div>
+						{club.title ? <div className="flex gap-6">
 							<img className="h-32" src={club.cover}></img>
 							<div>
 								<div className="font-bold text-lg">{club.title}</div>
@@ -176,7 +176,7 @@ const Club = (props) => {
 												</div>
 
 												<div className="text-xs font-thin">
-													{moment(note.create_date).format(
+													{moment(note.note_date).subtract(6, 'hours').format(
 														"dddd, MMMM Do YYYY, h:mm:ss a"
 													)}
 												</div>
