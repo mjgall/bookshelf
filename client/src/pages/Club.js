@@ -101,7 +101,7 @@ const Club = (props) => {
 					</div>
 					<div className="flex gap-6">
 						{club.title ? <div className="flex gap-6">
-							<img className="h-32" src={club.cover}></img>
+							<img className="h-48" src={club.cover}></img>
 							<div>
 								<div className="font-bold text-lg">{club.title}</div>
 								<div className="font-thin text-sm">{club.author}</div>
