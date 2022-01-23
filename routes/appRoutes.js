@@ -44,6 +44,7 @@ const addLike = require("../queries/updateLike");
 const updateLike = require("../queries/updateLike");
 const getFriendLikes = require("../queries/getFriendLikes");
 const searchUsers = require("../queries/searchUsers");
+const searchBooks = require("../queries/searchBooks");
 const getLikes = require("../queries/getLikes");
 const getBookActivities = require("../queries/getBookActivities");
 const getUsers = require("../queries/getUsers");
@@ -61,6 +62,8 @@ const getBookClubs = require("../queries/getBookClubs");
 const getBookClubMembersByUserId = require("../queries/getBookClubMembersByUserId")
 const getBookClub = require("../queries/getBookClub")
 const getBookClubNotes = require("../queries/getBookClubNotes")
+const addNoteToClub = require("../queries/addNoteToClub")
+const deleteNote = require("../queries/deleteNote")
 
 
 const checkAuthed = (req, res, next) => {
@@ -211,9 +214,13 @@ module.exports = (app) => {
 	app.get("/api/book/lookup/:isbn", checkAuthed, async (req, res) => {
 		const book = await getGlobalBookByISBN(req.params.isbn);
 
+		console.log({ location: "appRoutes:216", isbn: req.params.isbn, bookExist: book })
+
 		if (book) {
-			res.send(book);
+			console.log("Book did exist already in global_books, sending what we have in global_books");
+			res.send({ ...book, existsInGlobalBooks: true });
 		} else {
+			console.log("Book did not exist already in global_books, fetching from isbndb");
 			try {
 				const response = await axios.get(
 					`https://api2.isbndb.com/book/${req.params.isbn}`,
@@ -319,6 +326,11 @@ module.exports = (app) => {
 			});
 		}
 	});
+
+	app.get("/api/books/search/:searchTerm", async (req, res) => {
+		const response = await searchBooks(req.params.searchTerm)
+		res.send(response)
+	})
 
 	//update the information about a book
 	app.put("/api/books", checkAuthed, async (req, res) => {
@@ -900,11 +912,11 @@ module.exports = (app) => {
 
 	//BOOK CLUBS
 	app.post("/api/bookclub", async (req, res) => {
-		const {name} = req.body
+		const { name } = req.body
 		const userId = req.user.id
 		try {
 			const bookClub = await addBookClub(name, userId)
-		res.send(bookClub) 
+			res.send(bookClub)
 		} catch (error) {
 			console.error(error)
 			res.send(error)
@@ -913,13 +925,13 @@ module.exports = (app) => {
 
 	app.get("/api/bookclubs/:id", async (req, res) => {
 		let bookClub = await getBookClub(req.params.id)
-		bookClub = {...bookClub, members: [], notes: []}
+		bookClub = { ...bookClub, members: [], notes: [] }
 		const bookClubMembers = await getBookClubMembersByUserId(req.user.id)
 		const bookClubNotes = await getBookClubNotes(req.params.id)
-		bookClub = {...bookClub, notes: bookClubNotes}
+		bookClub = { ...bookClub, notes: bookClubNotes }
 		bookClubMembers.forEach(member => {
 			if (member.book_club_id === bookClub.book_club_id) {
-				bookClub = {...bookClub, members: [...bookClub.members, member]}
+				bookClub = { ...bookClub, members: [...bookClub.members, member] }
 			}
 		});
 
@@ -931,7 +943,7 @@ module.exports = (app) => {
 			const bookClubs = await getBookClubs(req.user.id)
 			const bookClubMembers = await getBookClubMembersByUserId(req.user.id)
 			const total = bookClubs.map((club) => {
-				let newClub = {...club, members: []}
+				let newClub = { ...club, members: [] }
 				bookClubMembers.forEach(member => {
 					if (member.book_club_id === club.id) {
 						newClub.members = [...newClub.members, member]
@@ -951,5 +963,15 @@ module.exports = (app) => {
 	app.get("/api/bookclubs/notes/:id", (req, res) => {
 
 	})
-	
+
+	app.post("/api/bookclubs/notes", async (req, res) => {
+		const { bookId, clubId, bookClubsGlobalBooksId, note } = req.body
+		const response = await addNoteToClub(req.user.id, bookId, clubId, bookClubsGlobalBooksId, note)
+		res.send(response)
+	})
+
+	app.delete("/api/bookclubs/notes/:noteId", async (req, res) => {
+		const response = await deleteNote(req.user.id, req.params.noteId)
+		res.send(response)
+	})
 };

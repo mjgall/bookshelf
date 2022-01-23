@@ -59,17 +59,15 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 			console.log("already exists!");
 			return;
 		} else {
-			const book = await axios
-
-				.post("/api/books", {
-					...state,
-					author:
-						state.id || !global.capturedBook
-							? state.author
-							: state.authors[0],
-					manual: global.capturedBook ? false : true,
-					addGlobal: true,
-				})
+			const book = await axios.post("/api/books", {
+				...state,
+				author:
+					state.id || !global.capturedBook
+						? state.author
+						: state.authors[0],
+				manual: global.capturedBook ? false : true,
+				addGlobal: !global.capturedBook.existsInGlobalBooks,
+			})
 				.then((response) => response.data);
 
 			book.user_book_id = book.id;
@@ -159,8 +157,8 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 											{object.display}
 										</div>
 										{object.key === "binding" ||
-										object.key === "publisher" ||
-										object.key === "isbn" ? (
+											object.key === "publisher" ||
+											object.key === "isbn" ? (
 											<div>{state[object.key] || ""}</div>
 										) : (
 											<InlineEdit

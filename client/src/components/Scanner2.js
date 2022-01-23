@@ -11,6 +11,8 @@ const Scanner = ({ onFound, currentTab }) => {
 	const global = useContext(Context);
 
 	const captureISBN = async (isbn) => {
+		console.log({ line: "Scanner2:14", isbn })
+
 		let isNumerical = /^\d+$/.test(isbn);
 		const index = global.books.userBooks.findIndex((element) => {
 			return element.isbn10 === isbn || element.isbn13 === isbn;
@@ -24,7 +26,7 @@ const Scanner = ({ onFound, currentTab }) => {
 					console.log(response.data);
 					global.setGlobal({
 						...global,
-						capturedBook: response.data,
+						capturedBook: { ...response.data, existsInGlobalBooks: true },
 					});
 				});
 				onFound();

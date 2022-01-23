@@ -9,8 +9,3 @@ module.exports = (householdId) => {
     });
   });
 };
-//Error Code: 1064. You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'households_users ON' at line 1
-
-//Error Code: 1064. You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.household_id WHERE id = 67' at line 1
-
-//Error Code: 1064. You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'households.' at line 1

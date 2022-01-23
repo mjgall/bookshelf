@@ -2,7 +2,7 @@ const db = require('../config/db/mysql').pool;
 
 module.exports = userId => {
   return new Promise((resolve, reject) => {
-    const query = `SELECT DISTINCT book_clubs_users.*, users.email AS member_email, users.first AS member_first, users.picture, book_clubs.name AS book_club_name
+    const query = `SELECT DISTINCT book_clubs_users.*, users.email AS member_email, users.first AS member_first, users.full AS member_full, users.picture, book_clubs.name AS book_club_name
 
     FROM book_clubs_users
     
