@@ -77,6 +77,13 @@ const Club = (props) => {
 		selectBookModal.current.open();
 	}
 
+	const selectBook = async (result) => {
+
+		const { author, title, cover, id } = result
+		await axios.put(`/api/bookclubs/${club.book_club_id}/book`, { bookId: id })
+		setClub({ ...club, author, title, cover, global_book_id: id })
+	}
+
 	return (
 		<div>
 			{!loaded ? (
@@ -230,7 +237,7 @@ const Club = (props) => {
 										key={index}
 										className="flex my-1 border-gray-500 rounded-sm px-2 border items-center"
 									>
-										<div>{result.title}</div>
+										<div className="cursor-pointer" onClick={() => selectBook(result)}>{result.title}</div>
 									</div>
 								);
 

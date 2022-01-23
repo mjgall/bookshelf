@@ -64,6 +64,7 @@ const getBookClub = require("../queries/getBookClub")
 const getBookClubNotes = require("../queries/getBookClubNotes")
 const addNoteToClub = require("../queries/addNoteToClub")
 const deleteNote = require("../queries/deleteNote")
+const updateBookClubsGlobalBooks = require("../queries/updateBookClubsGlobalBooks")
 
 
 const checkAuthed = (req, res, next) => {
@@ -938,6 +939,11 @@ module.exports = (app) => {
 		res.send(bookClub)
 	})
 
+	app.put("/api/bookclubs/:bookClubId/book", async (req, res) => {
+		const response = await updateBookClubsGlobalBooks(req.params.bookClubId, req.body.bookId)
+		res.send(response)
+	})
+
 	app.get("/api/bookclubs", async (req, res) => {
 		try {
 			const bookClubs = await getBookClubs(req.user.id)
@@ -958,10 +964,6 @@ module.exports = (app) => {
 			console.error(error)
 			res.send(error)
 		}
-	})
-
-	app.get("/api/bookclubs/notes/:id", (req, res) => {
-
 	})
 
 	app.post("/api/bookclubs/notes", async (req, res) => {
