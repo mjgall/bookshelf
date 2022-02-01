@@ -7,7 +7,6 @@ module.exports = (id) => {
 		LEFT JOIN global_books ON book_clubs_global_books.global_book_id = global_books.id
 		WHERE book_clubs.id = ${id}
         ORDER BY book_clubs_global_books.id DESC LIMIT 0, 1;`;
-		console.log(query);
 		db.query(query, (err, clubs, fields) => {
 			if (err) {
 				reject(err);

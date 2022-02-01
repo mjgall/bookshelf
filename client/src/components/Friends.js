@@ -204,9 +204,8 @@ const Friends = (props) => {
 										></img>
 										<Link
 											className="cursor-pointer"
-											to={`/shelf/${
-												friend.shelf_id
-											}`}
+											to={`/shelf/${friend.shelf_id
+												}`}
 										>
 											<div>{friend.full}</div>
 										</Link>
@@ -231,7 +230,7 @@ const Friends = (props) => {
 										!friendship.accepted &&
 										!friendship.declined &&
 										friendship.user_id_2 ===
-											global.currentUser.id
+										global.currentUser.id
 									);
 								})
 								.map((friend, index) => {
