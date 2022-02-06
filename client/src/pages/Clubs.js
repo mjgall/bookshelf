@@ -1,18 +1,12 @@
 import axios from "axios";
-import React, { useEffect, useState, useContext } from "react";
-import { Link } from "react-router-dom";
-import moment from "moment";
-import { Context } from "../globalContext";
+import React, { useEffect, useState } from "react";
+
 import { withRouter } from "react-router-dom";
-
 import LoadingSpinner from "../components/LoadingSpinner";
-
-import MoreMenu from "../common/MoreMenu";
 import Tip from "../common/Tip";
 import { Formik, Field, Form } from "formik";
 
 const Clubs = (props) => {
-	const global = useContext(Context);
 
 	const [loaded, setLoaded] = useState(false);
 	const [bookClubs, setbookClubs] = useState([]);

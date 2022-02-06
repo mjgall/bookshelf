@@ -5,7 +5,6 @@ module.exports = (bookClubId, bookId) => {
   return new Promise((resolve, reject) => {
 
     const query = `INSERT INTO book_clubs_global_books (global_book_id, book_club_id, create_date) VALUES (${bookId}, ${bookClubId}, NOW());`;
-    console.log(query);
     db.query(query, (err, results, fields) => {
       if (err) {
         reject(err);

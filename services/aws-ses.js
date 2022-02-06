@@ -6,7 +6,6 @@ module.exports = (recipientAddress, subject, raw, html) => {
     try {
       // const jsonPath = path.join(__dirname, '..', 'config', 'aws_key.json');
       // AWS.config.loadFromPath(jsonPath);
-      console.log({ recipientAddress, subject, raw, html })
       AWS.config.update({ accessKeyId: keys.accessKeyId, secretAccessKey: keys.secretAccessKey, region: keys.region })
       const sender = 'Papyr.io <mike@gllghr.io>';
 

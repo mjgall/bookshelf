@@ -4,7 +4,6 @@ const sendEmail = require('../services/aws-ses');
 module.exports = (field, value, bookType, householdsBookId, userBookId) => {
   return new Promise((resolve, reject) => {
     let query;
-    console.log(bookType)
     if (bookType === 'household') {
       query = `UPDATE households_books SET ${field} = ${sqlString.escape(
         value

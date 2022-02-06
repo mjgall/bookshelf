@@ -30,7 +30,6 @@ module.exports = (file) => {
 
 			const newImage = await resizeImage(buf)
 
-			console.log(newImage);
 
 			const s3 = new AWS.S3();
 
@@ -41,7 +40,6 @@ module.exports = (file) => {
 				Body: await newImage
 			};
 
-			console.log(params);
 
 			// Uploading files to the bucket
 			s3.upload(params, function (err, file) {

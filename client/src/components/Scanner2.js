@@ -11,7 +11,6 @@ const Scanner = ({ onFound, currentTab }) => {
 	const global = useContext(Context);
 
 	const captureISBN = async (isbn) => {
-		console.log({ line: "Scanner2:14", isbn })
 
 		let isNumerical = /^\d+$/.test(isbn);
 		const index = global.books.userBooks.findIndex((element) => {
@@ -23,7 +22,7 @@ const Scanner = ({ onFound, currentTab }) => {
 				setReason("This book has already been saved.");
 			} else {
 				await axios.get(`/api/book/lookup/${isbn}`).then((response) => {
-					console.log(response.data);
+	
 					global.setGlobal({
 						...global,
 						capturedBook: { ...response.data, existsInGlobalBooks: true },

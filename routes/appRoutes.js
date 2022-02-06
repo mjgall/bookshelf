@@ -189,7 +189,6 @@ module.exports = (app) => {
 	);
 
 	app.post("/api/global_book", checkAuthed, async (req, res) => {
-		console.log({ isbn10: req.body.isbn, isbn13: req.body.isbn13 });
 		try {
 			const book = await getGlobalBookByISBN(
 				req.body.isbn,
@@ -199,7 +198,6 @@ module.exports = (app) => {
 			if (book) {
 				res.send({ success: true, existed: true });
 			} else {
-				console.log(req.body);
 				const response = await saveGlobalBook({
 					...req.body,
 					isbn10: req.body.isbn,
@@ -215,13 +213,10 @@ module.exports = (app) => {
 	app.get("/api/book/lookup/:isbn", checkAuthed, async (req, res) => {
 		const book = await getGlobalBookByISBN(req.params.isbn);
 
-		console.log({ location: "appRoutes:216", isbn: req.params.isbn, bookExist: book })
 
 		if (book) {
-			console.log("Book did exist already in global_books, sending what we have in global_books");
 			res.send({ ...book, existsInGlobalBooks: true });
 		} else {
-			console.log("Book did not exist already in global_books, fetching from isbndb");
 			try {
 				const response = await axios.get(
 					`https://api2.isbndb.com/book/${req.params.isbn}`,
@@ -339,7 +334,6 @@ module.exports = (app) => {
 			...req.body,
 		};
 
-		console.log(book);
 
 		if (req.body.field === "read") {
 			if (book.bookType === "personal") {
@@ -584,7 +578,6 @@ module.exports = (app) => {
 					"Go to Bookshelf to view your pending requests.",
 					`Check your <a href="https://bookshelf.mikegallagher.app/profile">Profile</a> to view your pending requests!`
 				);
-				console.log(email);
 			}
 		} catch (error) {
 			res.send({ reason: error });
@@ -826,7 +819,6 @@ module.exports = (app) => {
 	});
 
 	app.put("/api/loans", checkAuthed, async (req, res) => {
-		console.log(req.body.action);
 		switch (req.body.action) {
 			case "hide":
 				const hide = await updateLoan(
@@ -958,7 +950,6 @@ module.exports = (app) => {
 				return newClub
 			})
 
-			// console.log(total);
 			res.send(total)
 		} catch (error) {
 			console.error(error)

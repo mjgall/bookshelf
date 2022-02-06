@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 // import { usePopper } from "react-popper";
 import Tippy from "@tippyjs/react/headless"; // different import path!
 import { MoreVertical } from "@styled-icons/evaicons-solid";

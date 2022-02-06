@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, {  useContext } from "react";
 import { Context } from "../globalContext";
-import { Link } from "react-router-dom";
+
 import FileUpload from "./FileUpload";
 const UploadModal = (props) => {
 	const global = useContext(Context);

@@ -5,7 +5,6 @@ import banner1 from "../images/banner1.jpg";
 import screenshot1 from "../images/library.png";
 import screenshot6 from "../images/feed.png";
 import screenshot7 from "../images/loan.png";
-import screenshot8 from "../images/search.png";
 import screenshot9 from "../images/book.png";
 import axios from "axios";
 import { useEffect } from "react";

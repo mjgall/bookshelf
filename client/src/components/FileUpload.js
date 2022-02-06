@@ -2,7 +2,6 @@ import axios from "axios";
 import React, {
 	useCallback,
 	useState,
-	useRef,
 	useEffect,
 	useMemo,
 } from "react";
@@ -36,7 +35,7 @@ const FileUpload = ({ onUpload }) => {
 			);
 		}
 
-	}, []);
+	}, [addToast]);
 
 	const {
 		getRootProps,
@@ -86,7 +85,7 @@ const FileUpload = ({ onUpload }) => {
 			...(isDragAccept ? acceptStyle : {}),
 			...(isDragReject ? rejectStyle : {}),
 		}),
-		[isDragActive, isDragReject, isDragAccept]
+		[isDragActive, isDragReject, isDragAccept, acceptStyle, activeStyle, baseStyle, rejectStyle]
 	);
 
 	const thumbs = files.map((file) => (

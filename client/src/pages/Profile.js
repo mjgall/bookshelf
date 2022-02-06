@@ -282,7 +282,6 @@ export default class Profile extends React.Component {
 	};
 
 	editHouseholdName = (householdIndex, householdName) => {
-		console.log(householdIndex);
 
 		this.setState({
 			editingHousehold: !this.state.editingHousehold,
@@ -622,7 +621,7 @@ export default class Profile extends React.Component {
 																	<img
 																		alt="user"
 																		className="h-12 w-12 rounded-full"
-																		src={member.user_id == this.props.user.id ? this.props.user.picture :
+																		src={parseInt(member.user_id) === parseInt(this.props.user.id) ? this.props.user.picture :
 																			member.picture
 																		}
 																	/>

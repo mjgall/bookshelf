@@ -15,7 +15,6 @@ const Cancellation = (props) => {
 
     const handleSubscriberIdChange = (e) => {
         setsubscriberId(e.target.value);
-        console.log(e.target.value);
     };
 
     const callProsperstack = () => {
@@ -26,7 +25,6 @@ const Cancellation = (props) => {
                 paymentProviderId: subscriberId,
             },
             onCompleted: (result) => {
-                console.log(result)
                 if (result.status === 'saved' && result.offer.id === 'offr_vwXnBZyQiN10J6ii8YSjSPhU') {
                     console.log('This customer should get access to the bonus feature!')
                 }

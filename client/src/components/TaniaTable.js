@@ -93,7 +93,7 @@ const Pagination = ({
 								.map((page, index) => {
 									if (page === activePage) {
 										return (
-											<div
+											<div key={index}
 												aria-current="page"
 												className="z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"
 											>
@@ -102,7 +102,7 @@ const Pagination = ({
 										);
 									} else {
 										return (
-											<div
+											<div key={index}
 												className="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium cursor-pointer"
 												onClick={() => {
 													setActivePage(page)
@@ -194,7 +194,7 @@ const convertType = (value) => {
 };
 
 const filterRows = (rows, filters, currentUserId) => {
-	console.log({ rows, filters });
+
 	if (isEmpty(filters)) return rows;
 	let results;
 	if (filters.global) {
@@ -221,14 +221,14 @@ const filterRows = (rows, filters, currentUserId) => {
 				}
 
 				if (isNumber(value)) {
-					return value == searchValue;
+					return value === searchValue;
 				}
 
 				return false;
 			});
 		});
 	} else if (filters.householdSelect.value === "borrowed") {
-		results = rows.filter(row => {
+		results = rows.forEach(row => {
 			if (row.loan_id) {
 				return row
 			}
@@ -252,7 +252,7 @@ const filterRows = (rows, filters, currentUserId) => {
 				}
 
 				if (isNumber(value)) {
-					return value == searchValue;
+					return value === searchValue;
 				}
 
 				return false;
@@ -260,17 +260,13 @@ const filterRows = (rows, filters, currentUserId) => {
 		});
 	} else {
 		results = rows;
-		console.log({ results });
+
 	}
 
 	let filterBooksByHouseholdOwner = (books, householdSelect, ownerSelect) => {
 		let filteredBooks;
-		console.log({ books, householdSelect, ownerSelect });
-		// if (viewPrivate) {
-		// 	filteredBooks = books.filter((book) => book.private === 1);
-		// }
-		// else
-		if (householdSelect?.value == null || !ownerSelect || householdSelect?.value == "borrowed") {
+
+		if (householdSelect?.value === null || !ownerSelect || householdSelect?.value === "borrowed") {
 			filteredBooks = books;
 		} else if (householdSelect?.value === "none") {
 			filteredBooks = books.filter(
@@ -376,7 +372,7 @@ const Table = ({ columns, rows, history }) => {
 	);
 	const [ownerSelect, setOwnerSelect] = useState(getSavedOwnerSelect());
 	const [owners, setOwners] = useState([]);
-	const [viewPrivate, setViewPrivate] = useState(false);
+	const [viewPrivate] = useState(false);
 	const rowsPerPage = 25;
 
 	const filteredRows = useMemo(
@@ -396,7 +392,7 @@ const Table = ({ columns, rows, history }) => {
 
 	const handleHouseholdChange = useCallback(
 		(selected) => {
-			console.log(selected.value === "borrowed");
+
 			if (selected.value === "borrowed") {
 				getOwners(global.householdMembers, selected?.value);
 				setHouseholdSelect(selected);
@@ -516,7 +512,7 @@ const Table = ({ columns, rows, history }) => {
 	const handleSearch = (value, accessor) => {
 		setActivePage(1);
 
-		console.log(value, accessor);
+
 
 		if (value) {
 			setFilters((prevFilters) => ({
@@ -543,13 +539,13 @@ const Table = ({ columns, rows, history }) => {
 		}));
 	};
 
-	const clearAll = () => {
-		setSort({ order: "asc", orderBy: "id" });
-		setHouseholdSelect(null);
-		setOwnerSelect(null);
-		setActivePage(1);
-		setFilters({});
-	};
+	// const clearAll = () => {
+	// 	setSort({ order: "asc", orderBy: "id" });
+	// 	setHouseholdSelect(null);
+	// 	setOwnerSelect(null);
+	// 	setActivePage(1);
+	// 	setFilters({});
+	// };
 
 	const getSavedActivePage = () => {
 		const localSaved = JSON.parse(localStorage.getItem("activePage"));
@@ -570,7 +566,7 @@ const Table = ({ columns, rows, history }) => {
 			householdSelect: getSavedHouseholdSelect(),
 			owner: getSavedOwnerSelect(),
 		});
-	}, [global.householdMembers, getHouseholdOptions]);
+	}, [global.householdMembers, getHouseholdOptions, householdSelect.value]);
 
 	const customStyles = {
 		option: (provided, state) => ({

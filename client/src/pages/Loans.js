@@ -43,7 +43,6 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 	};
 
 	const grantLoan = async (loan, book) => {
-		console.log({ loan, book });
 
 		await axios.put("/api/loans", {
 			action: "grant",
@@ -54,14 +53,12 @@ const LoanBox = ({ book, user, loan, index, update }) => {
 		const index = global.allBooks.findIndex(
 			(book) => book.user_book_id === loan.user_books_id
 		);
-		console.log(index);
 		let updatedAllBooks = [...global.allBooks];
 		updatedAllBooks[index].on_loan = 1;
 		updatedAllBooks[index].borrower_id = loan.borrower_id;
 		updatedAllBooks[index].full = loan.full;
 		global.setGlobal({ allBooks: updatedAllBooks });
 
-		console.log("loan granted");
 		update();
 	};
 
@@ -259,7 +256,6 @@ const Loans = (props) => {
 	}, []);
 
 	const determineLoanType = (lenderId, currentUserId, startDate, endDate) => {
-		console.log(endDate);
 		if (lenderId === currentUserId && startDate && !endDate) {
 			return "lend";
 		} else if (lenderId !== currentUserId && startDate && !endDate) {

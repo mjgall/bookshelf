@@ -2,7 +2,6 @@ import React, { useState, useRef, useContext } from "react";
 import Modal from "../common/Modal/Modal";
 import { Context } from "../globalContext";
 import Scanner from "./Scanner2";
-import axios from "axios";
 import DetailsTab from "./DetailsTab";
 import { PlusCircleIcon as PlusCircle } from "@heroicons/react/outline";
 import { ArrowLeftSquare } from "@styled-icons/bootstrap";
@@ -31,7 +30,6 @@ const AddBook = ({ closeModal }) => {
                     currentTab={
                         selection === "scan" ? true : false
                     }
-                    onFound={() => console.log("found")}
                 ></Scanner>
             </div>
         )

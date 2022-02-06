@@ -135,7 +135,6 @@ module.exports = (app) => {
       res.sendStatus(500);
     }
 
-    // console.log(req.body)
     // res.send(req.body)
   });
 };

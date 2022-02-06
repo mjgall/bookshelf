@@ -52,7 +52,7 @@ const Feed = (props) => {
 				return activity.user_id === global.currentUser.id;
 			});
 		} else if (userFilter?.length > 0) {
-			return activities.filter((activity) => {
+			return activities.forEach((activity) => {
 				if (userFilter.map(user => user.value).includes(activity.user_id)) {
 					return activity
 				}

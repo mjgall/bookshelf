@@ -1,7 +1,6 @@
 const db = require('../config/db/mysql').pool;
 
 module.exports = userId => {
-    console.log(userId);
     return new Promise((resolve, reject) => {
         const query = `SELECT 
     global_books.author,

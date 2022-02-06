@@ -108,12 +108,12 @@ const Book = (props) => {
 			case "cover":
 				options.id = book.user_book_id;
 				options.globalId = book.id;
-
+				break;
 			default:
 				break;
 		}
 
-		console.log(options);
+
 
 		axios.put("/api/books", options).then((response) => {
 			if (type !== "global") {
@@ -199,8 +199,7 @@ const Book = (props) => {
 
 	const onUpload = async (image) => {
 		// await axios.put("/api/users", { field: "picture", value: image.Location })
-		const response = await updateBookField("cover", image.Location);
-		console.log(response);
+		await updateBookField("cover", image.Location);
 		setNewImage(image.Location);
 		modal.current.close();
 	};

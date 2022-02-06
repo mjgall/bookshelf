@@ -44,7 +44,7 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 		const foundBook = global.books.userBooks.find(
 			({ isbn10 }) => isbn10 === searchedIsbn
 		);
-		console.log(foundBook);
+
 		return foundBook || false;
 	};
 
@@ -56,7 +56,6 @@ const DetailsTab = ({ closeModal, setOpenTab }) => {
 			});
 			return;
 		} else if (checkIfUserBookExists()) {
-			console.log("already exists!");
 			return;
 		} else {
 			const book = await axios.post("/api/books", {

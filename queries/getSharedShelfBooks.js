@@ -7,7 +7,6 @@ module.exports = (sharedShelfId) => {
     JOIN users ON users.id = user_books.user_id 
     WHERE users.shelf_id = ? AND user_books.private != true AND users.shelf_enabled = TRUE;`;
 
-    console.log(query)
 
 		db.query(
 			query,

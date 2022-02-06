@@ -6,7 +6,6 @@ module.exports = (bookClubId) => {
         JOIN book_clubs_global_books ON book_clubs_global_books.book_club_id = ${bookClubId}
 		JOIN users ON users.id = book_clubs_notes.user_id
         WHERE book_clubs_notes.book_clubs_global_books_id = book_clubs_global_books.id`;
-		console.log(query);
 		db.query(query, (err, notes, fields) => {
 			if (err) {
 				reject(err);
