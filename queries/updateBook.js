@@ -1,5 +1,5 @@
-const db = require('../config/db/mysql').pool;
-const sqlString = require('sqlstring');
+const db = require("../config/db/mysql").pool;
+const sqlString = require("sqlstring");
 
 // module.exports = book => {
 //   return new Promise((resolve, reject) => {
@@ -20,11 +20,10 @@ const sqlString = require('sqlstring');
 
 module.exports = (field, value, id) => {
   return new Promise((resolve, reject) => {
-
     const query = `UPDATE user_books SET user_books.${field} = ${sqlString.escape(
       value
     )} WHERE id = ${id};`;
-    
+
     db.query(query, (err, results, fields) => {
       if (err) {
         reject(err);

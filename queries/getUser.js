@@ -1,6 +1,6 @@
-const db = require('../config/db/mysql').pool;
+const db = require("../config/db/mysql").pool;
 
-module.exports = id => {
+module.exports = (id) => {
   return new Promise((resolve, reject) => {
     db.query(
       `SELECT * FROM users WHERE googleId = '${id}'`,

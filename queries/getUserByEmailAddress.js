@@ -1,7 +1,7 @@
 const db = require("../config/db/mysql").pool;
-const sqlString = require('sqlstring');
+const sqlString = require("sqlstring");
 
-module.exports = email => {
+module.exports = (email) => {
   return new Promise((resolve, reject) => {
     db.query(
       `SELECT * FROM users WHERE email = ${sqlString.escape(email)}`,

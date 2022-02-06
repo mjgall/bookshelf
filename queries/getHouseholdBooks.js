@@ -1,12 +1,9 @@
-const db = require('../config/db/mysql').pool;
-
+const db = require("../config/db/mysql").pool;
 
 module.exports = (userId) => {
-
   // const query = `SELECT global_books.* FROM global_books INNER JOIN global_books ON global_books.id = user_books.global_id WHERE user_books.user_id = ${acceptedUserId}`
 
   return new Promise((resolve, reject) => {
-
     const query = `
     SELECT 
 	  global_books.*,
@@ -26,7 +23,7 @@ module.exports = (userId) => {
     LEFT JOIN households_books ON global_books.id = households_books.global_book_id AND households.id = households_books.household_id
     WHERE households_users.user_id = ${userId} AND hu.user_id != ${userId}
     ORDER BY global_books.id DESC
-    `
+    `;
     db.query(query, (err, results, fields) => {
       if (err) {
         throw new Error(err);

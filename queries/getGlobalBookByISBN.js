@@ -1,4 +1,4 @@
-const db = require('../config/db/mysql').pool;
+const db = require("../config/db/mysql").pool;
 
 module.exports = (isbn10, isbn13) => {
   return new Promise((resolve, reject) => {
@@ -9,11 +9,10 @@ module.exports = (isbn10, isbn13) => {
       }
 
       if (!books) {
-        resolve(false)
+        resolve(false);
       } else {
         resolve(books[0]);
       }
-
     });
   });
 };

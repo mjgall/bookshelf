@@ -1,7 +1,6 @@
-const db = require('../config/db/mysql').pool;
+const db = require("../config/db/mysql").pool;
 
-module.exports = id => {
-  
+module.exports = (id) => {
   return new Promise((resolve, reject) => {
     const query = `UPDATE households_users SET invite_declined = true WHERE id = ${id};`;
 

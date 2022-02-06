@@ -1,6 +1,6 @@
-const db = require('../config/db/mysql').pool;
+const db = require("../config/db/mysql").pool;
 
-module.exports = email => {
+module.exports = (email) => {
   return new Promise((resolve, reject) => {
     db.query(
       `SELECT * FROM users WHERE email = '${email}'`,

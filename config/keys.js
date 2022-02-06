@@ -1,5 +1,5 @@
-if (process.env.ENV === 'production') {
-  module.exports = module.require('./keys-prod');
+if (process.env.ENV === "production") {
+  module.exports = module.require("./keys-prod");
 } else {
-  module.exports = module.require('./keys-dev');
+  module.exports = module.require("./keys-dev");
 }

@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import InlineEdit from '@atlaskit/inline-edit';
-import TextArea from '@atlaskit/textarea';
-import { Context } from '../globalContext';
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import InlineEdit from "@atlaskit/inline-edit";
+import TextArea from "@atlaskit/textarea";
+import { Context } from "../globalContext";
 
 const NotesFromHouseholds = (props) => {
   const global = useContext(Context);
@@ -29,7 +29,7 @@ const NotesFromHouseholds = (props) => {
   ) => {
     axios
       .post(`/api/households/books`, {
-        field: 'notes',
+        field: "notes",
         value,
         globalBookId,
         householdId,
@@ -40,7 +40,6 @@ const NotesFromHouseholds = (props) => {
 
     setHouseholdNotes(updatedHouseholdNotes);
   };
-
 
   return (
     <>
@@ -54,18 +53,18 @@ const NotesFromHouseholds = (props) => {
                 defaultValue={householdNote.notes}
                 label={`Notes from ${householdNote.household_name}`}
                 editView={(fieldProps, ref) => (
-                  <TextArea
-                    {...fieldProps}></TextArea>
+                  <TextArea {...fieldProps}></TextArea>
                 )}
                 readView={() => {
                   if (householdNote.notes) {
                     return (
-                      <div className='multiline'>{householdNote.notes}</div>
+                      <div className="multiline">{householdNote.notes}</div>
                     );
                   } else {
                     return (
-                      <div className='text-gray-500'>
-                        No one in the {householdNote.household_name} household has left public notes.
+                      <div className="text-gray-500">
+                        No one in the {householdNote.household_name} household
+                        has left public notes.
                       </div>
                     );
                   }

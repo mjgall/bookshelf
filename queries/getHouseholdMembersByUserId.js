@@ -1,6 +1,6 @@
-const db = require('../config/db/mysql').pool;
+const db = require("../config/db/mysql").pool;
 
-module.exports = userId => {
+module.exports = (userId) => {
   return new Promise((resolve, reject) => {
     const query = `SELECT DISTINCT households_users.*, users.email AS member_email, users.first AS member_first, users.picture, inviters.email AS inviter_email, inviters.full AS inviter_full, households.name AS household_name
 
@@ -17,7 +17,6 @@ module.exports = userId => {
     
     WHERE invite_declined = false AND household_id 
     IN (SELECT household_id FROM households_users WHERE user_id = ${userId} AND households_users.invite_declined = FALSE)`;
-
 
     db.query(query, (err, results, fields) => {
       if (err) throw Error(err);

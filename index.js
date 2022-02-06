@@ -10,7 +10,7 @@ const enforce = require("express-sslify");
 require("./services/passport");
 
 if (process.env.NODE_ENV === "production") {
-	app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
 // The request handler must be the first middleware on the app
@@ -18,7 +18,7 @@ app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use(
-	cookieSession({ maxAge: 30 * 24 * 60 * 60 * 1000, keys: [keys.cookieKey] })
+  cookieSession({ maxAge: 30 * 24 * 60 * 60 * 1000, keys: [keys.cookieKey] })
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -31,16 +31,16 @@ require("./routes/appRoutes")(app);
 
 //CONDITIONS IF DEPLOYED TO PRODUCTION
 if (process.env.NODE_ENV === "production") {
-	// Express will serve up production assets
-	app.use(express.static(path.join(__dirname, "client", "build")));
+  // Express will serve up production assets
+  app.use(express.static(path.join(__dirname, "client", "build")));
 
-	// Express will serve up the index.html file
-	// if it doesn't recognize the route
-	app.get("*", (req, res) => {
-		res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-	});
+  // Express will serve up the index.html file
+  // if it doesn't recognize the route
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
 }
 
 app.listen(process.env.PORT || 2001, () =>
-	console.log("Server running on 2001")
+  console.log("Server running on 2001")
 );

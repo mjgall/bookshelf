@@ -8,5 +8,5 @@ module.exports = {
   accessKeyId: process.env.accessKeyId,
   secretAccessKey: process.env.secretAccessKey,
   region: process.env.region,
-  ISBN_AUTH_API: process.env.ISBN_AUTH_API
+  ISBN_AUTH_API: process.env.ISBN_AUTH_API,
 };

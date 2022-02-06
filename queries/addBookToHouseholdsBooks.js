@@ -1,5 +1,5 @@
-const db = require('../config/db/mysql').pool;
-   //here we need to add a new row for each household that the user is a part of
+const db = require("../config/db/mysql").pool;
+//here we need to add a new row for each household that the user is a part of
 module.exports = (userId, globalBookId) => {
   return new Promise((resolve, reject) => {
     const query = `
@@ -10,7 +10,5 @@ module.exports = (userId, globalBookId) => {
       if (err) throw Error(err);
       resolve(results);
     });
-
- 
   });
 };

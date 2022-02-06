@@ -62,9 +62,7 @@ module.exports = (app) => {
     } else {
       passport.authenticate("local", (err, user, info) => {
         if (err) {
-          return res
-            .status(400)
-            .send({ error: "Something went wrong." });
+          return res.status(400).send({ error: "Something went wrong." });
         }
         if (!user) {
           return res.status(200).send(info);
@@ -126,7 +124,8 @@ module.exports = (app) => {
           first: firstName,
           last: lastName,
           googleId: null,
-          picture: "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png",
+          picture:
+            "https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png",
         });
         res.status(200).send({ message: "success" });
       }

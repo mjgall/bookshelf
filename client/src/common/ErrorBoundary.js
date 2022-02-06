@@ -1,11 +1,9 @@
-import React from 'react'
-
-
+import React from "react";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, error: '' };
+    this.state = { hasError: false, error: "" };
   }
 
   static getDerivedStateFromError(error) {
@@ -15,19 +13,24 @@ class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     // You can also log the error to an error reporting service
-    console.error(error)
+    console.error(error);
   }
 
   render() {
     if (this.state.hasError) {
       // You can render any custom fallback UI
-      return <div><h1>Looks like something's broken - contact <a href="mailto:mike@gllghr.io">mike@gllghr.io</a>.</h1>
-      
-      </div>;
+      return (
+        <div>
+          <h1>
+            Looks like something's broken - contact{" "}
+            <a href="mailto:mike@gllghr.io">mike@gllghr.io</a>.
+          </h1>
+        </div>
+      );
     }
 
     return this.props.children;
   }
 }
 
-export default ErrorBoundary
+export default ErrorBoundary;

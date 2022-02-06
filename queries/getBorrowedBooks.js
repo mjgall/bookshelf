@@ -1,8 +1,8 @@
-const db = require('../config/db/mysql').pool;
+const db = require("../config/db/mysql").pool;
 
-module.exports = userId => {
-    return new Promise((resolve, reject) => {
-        const query = `SELECT 
+module.exports = (userId) => {
+  return new Promise((resolve, reject) => {
+    const query = `SELECT 
     global_books.author,
     global_books.cover,
     global_books.title,
@@ -16,15 +16,12 @@ WHERE
     loans.borrower_id = ${userId}
     AND (loans.end_date IS NULL OR loans.end_date = '');`;
 
-        db.query(
-            query,
-            (err, books, fields) => {
-                if (err) {
-                    reject(err);
-                }
+    db.query(query, (err, books, fields) => {
+      if (err) {
+        reject(err);
+      }
 
-                resolve(books);
-            }
-        );
+      resolve(books);
     });
+  });
 };

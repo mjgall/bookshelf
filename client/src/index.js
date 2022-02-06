@@ -1,10 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import { GlobalProvider } from './globalContext';
-import * as serviceWorker from './serviceWorker';
-import ErrorBoundary from './common/ErrorBoundary';
-
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import { GlobalProvider } from "./globalContext";
+import * as serviceWorker from "./serviceWorker";
+import ErrorBoundary from "./common/ErrorBoundary";
 
 ReactDOM.render(
   <ErrorBoundary>
@@ -13,7 +12,7 @@ ReactDOM.render(
     </GlobalProvider>
   </ErrorBoundary>,
 
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

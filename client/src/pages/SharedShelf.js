@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
-import axios from 'axios';
-import { Context } from '../globalContext';
-import { withRouter } from 'react-router-dom';
-import BookTable from '../components/BookTable';
+import React, { useEffect, useState, useContext } from "react";
+import axios from "axios";
+import { Context } from "../globalContext";
+import { withRouter } from "react-router-dom";
+import BookTable from "../components/BookTable";
 
 const SharedShelf = (props) => {
   const user = useContext(Context).currentUser;
@@ -26,7 +26,7 @@ const SharedShelf = (props) => {
 
   const findRelation = () => {
     if (user.id === Number(props.match.params.shelfId)) {
-      return 'self';
+      return "self";
     } else if (
       members.filter(
         (member) =>
@@ -34,29 +34,30 @@ const SharedShelf = (props) => {
           member.invite_accepted
       ).length > 0
     ) {
-      return 'household';
-    } else return 'none';
+      return "household";
+    } else return "none";
   };
 
   if (loaded) {
     if (books.length > 0) {
       return (
-        <div className='my-6'>
-          <div className='text-3xl text-center my-6'>
+        <div className="my-6">
+          <div className="text-3xl text-center my-6">
             {books[0].full}'s shared books
           </div>
           <BookTable
             relation={user ? findRelation() : null}
             sharedShelf={true}
-            householdSelect={{ value: 'none' }}
+            householdSelect={{ value: "none" }}
             user={user}
             history={props.history}
-            books={books || []}></BookTable>
+            books={books || []}
+          ></BookTable>
         </div>
       );
     } else {
       return (
-        <div className='w-1/2 mt-16 m-auto text-center'>
+        <div className="w-1/2 mt-16 m-auto text-center">
           Either this user does not exist or they don't have any books on their
           shared shelf!
         </div>

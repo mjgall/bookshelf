@@ -61,7 +61,7 @@ video {
 }
 
 .read-indicator::after {
-  content: 'Read';
+  content: "Read";
 }
 
 /* .ReactModal__Body--open {
@@ -89,7 +89,6 @@ video {
 
 @media only screen and (max-width: 600px) {
   .Frill_Trigger_Floating--bottom-right {
-    right: 20%!important;
+    right: 20% !important;
   }
 }
-

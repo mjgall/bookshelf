@@ -1,5 +1,5 @@
-const db = require('../config/db/mysql').pool;
-const sqlString = require('sqlstring');
+const db = require("../config/db/mysql").pool;
+const sqlString = require("sqlstring");
 
 module.exports = (userId, globalBookId) => {
   return new Promise((resolve, reject) => {

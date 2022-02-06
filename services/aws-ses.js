@@ -1,13 +1,17 @@
-const AWS = require('aws-sdk');
-const keys = require('../config/keys')
+const AWS = require("aws-sdk");
+const keys = require("../config/keys");
 
 module.exports = (recipientAddress, subject, raw, html) => {
   return new Promise(async (resolve, reject) => {
     try {
       // const jsonPath = path.join(__dirname, '..', 'config', 'aws_key.json');
       // AWS.config.loadFromPath(jsonPath);
-      AWS.config.update({ accessKeyId: keys.accessKeyId, secretAccessKey: keys.secretAccessKey, region: keys.region })
-      const sender = 'Papyr.io <mike@gllghr.io>';
+      AWS.config.update({
+        accessKeyId: keys.accessKeyId,
+        secretAccessKey: keys.secretAccessKey,
+        region: keys.region,
+      });
+      const sender = "Papyr.io <mike@gllghr.io>";
 
       const recipient = recipientAddress;
 
@@ -98,31 +102,31 @@ module.exports = (recipientAddress, subject, raw, html) => {
       </body>
       </html>`;
 
-      const charset = 'UTF-8';
+      const charset = "UTF-8";
 
       const ses = new AWS.SES();
 
       const params = {
         Source: sender,
         Destination: {
-          ToAddresses: [recipient]
+          ToAddresses: [recipient],
         },
         Message: {
           Subject: {
             Data: subject,
-            Charset: charset
+            Charset: charset,
           },
           Body: {
             Text: {
               Data: body_text,
-              Charset: charset
+              Charset: charset,
             },
             Html: {
               Data: body_html,
-              Charset: charset
-            }
-          }
-        }
+              Charset: charset,
+            },
+          },
+        },
         // ConfigurationSetName: configuration_set
       };
 
@@ -133,7 +137,7 @@ module.exports = (recipientAddress, subject, raw, html) => {
           console.log(err.message);
           reject(err.message);
         } else {
-          console.log('Email sent! Message ID: ', data.MessageId);
+          console.log("Email sent! Message ID: ", data.MessageId);
           resolve(data.MessageId);
         }
       });

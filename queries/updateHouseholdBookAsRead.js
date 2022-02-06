@@ -1,4 +1,4 @@
-const db = require('../config/db/mysql').pool;
+const db = require("../config/db/mysql").pool;
 
 module.exports = (usersGlobalBookId) => {
   return new Promise((resolve, reject) => {

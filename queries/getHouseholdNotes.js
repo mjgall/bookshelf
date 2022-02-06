@@ -1,4 +1,4 @@
-const db = require('../config/db/mysql').pool;
+const db = require("../config/db/mysql").pool;
 
 module.exports = (globalBookId, userId) => {
   return new Promise((resolve, reject) => {
@@ -22,7 +22,7 @@ module.exports = (globalBookId, userId) => {
     AND global_books.id = ${globalBookId}
     AND households_users.invite_accepted = true
     AND households_users.invite_declined = false;
-    `
+    `;
 
     db.query(query, (err, results, fields) => {
       if (err) {

@@ -3,11 +3,11 @@ import LogRocket from "logrocket";
 import "./App.css";
 import "./styles/tailwind.css";
 import {
-	BrowserRouter as Router,
-	Switch,
-	Route,
-	// Redirect,
-	// useRouteMatch,
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  // Redirect,
+  // useRouteMatch,
 } from "react-router-dom";
 
 import NavBar from "./components/NavBar";
@@ -27,120 +27,119 @@ import { Helmet } from "react-helmet";
 import NewAddBook from "./components/NewAddBook";
 
 const App = (props) => {
-	const global = useContext(Context);
-	const { loading } = global;
-	const [referrer, setReferrer] = useState("");
-	// const match = useRouteMatch();
+  const global = useContext(Context);
+  const { loading } = global;
+  const [referrer, setReferrer] = useState("");
+  // const match = useRouteMatch();
 
-	const updateNavReferrer = (referrer) => {
-		setReferrer(referrer);
-	};
+  const updateNavReferrer = (referrer) => {
+    setReferrer(referrer);
+  };
 
-	const clearReferrer = () => {
-		setReferrer(null);
-	};
+  const clearReferrer = () => {
+    setReferrer(null);
+  };
 
-	useEffect(() => {
-		if (
-			!loading &&
-			global.currentUser &&
-			process.env.NODE_ENV === "production"
-		) {
-			LogRocket.init("e6mxy2/bookshelf");
-			LogRocket.identify(global.currentUser.id, {
-				name: global.currentUser.full,
-				email: global.currentUser.email,
-			});
-		}
-		if (global.currentUser && !window.Frill_Config) {
-			window.Frill_Config = window.Frill_Config || [];
-			window.Frill_Config.push({
-				key: "766e4f5e-5a68-446c-8d0c-71dbf086c7ae",
-			});
-		}
-	}, [global.currentUser, loading]);
+  useEffect(() => {
+    if (
+      !loading &&
+      global.currentUser &&
+      process.env.NODE_ENV === "production"
+    ) {
+      LogRocket.init("e6mxy2/bookshelf");
+      LogRocket.identify(global.currentUser.id, {
+        name: global.currentUser.full,
+        email: global.currentUser.email,
+      });
+    }
+    if (global.currentUser && !window.Frill_Config) {
+      window.Frill_Config = window.Frill_Config || [];
+      window.Frill_Config.push({
+        key: "766e4f5e-5a68-446c-8d0c-71dbf086c7ae",
+      });
+    }
+  }, [global.currentUser, loading]);
 
-	const CustomToast = ({ children, ...props }) => (
-		<DefaultToast {...props}>
-			{children}
-		</DefaultToast>
-	);
+  const CustomToast = ({ children, ...props }) => (
+    <DefaultToast {...props}>{children}</DefaultToast>
+  );
 
-	return (
-		<ToastProvider transitionDuration="100" autoDismissTimeout="2000" components={{ Toast: CustomToast }}>
-			{global.currentUser ? (
-				<Helmet>
-					<script
-						async
-						src="https://widget.frill.co/v2/widget.js"
-					></script>
-				</Helmet>
-			) : null}
-			<Router>
-				{loading ? null : (
-					<>
-						<NavBar
-							// currentPage={match.url}
-							windowWidth={1000}
-							referrer={referrer}
-						></NavBar>
-						<Switch>
-							<Route exact path="/">
-								<Home
-									clearReferrer={clearReferrer}
-									updateNavReferrer={updateNavReferrer}
-								></Home>
-							</Route>
-							<Route
-								path="/logout"
-								component={() => {
-									window.location.href = "/api/logout";
-									return null;
-								}}
-							/>
-							<Route exact path="/login">
-								<Login></Login>
-							</Route>
-							<Route exact path="/register">
-								<Register></Register>
-							</Route>
-							<PrivateRoute path="/profile" exact>
-								<Profile
-									books={global.books}
-									members={global.householdMembers}
-									households={global.households}
-									user={global.currentUser}
-								></Profile>
-							</PrivateRoute>
-							<PrivateRoute exact path="/book/:id">
-								<Book></Book>
-							</PrivateRoute>
-							<Route path="/shelf/:shelfId">
-								<SharedShelf></SharedShelf>
-							</Route>
-							<PrivateRoute path="/transparent">
-								<Transparent></Transparent>
-							</PrivateRoute>
+  return (
+    <ToastProvider
+      transitionDuration="100"
+      autoDismissTimeout="2000"
+      components={{ Toast: CustomToast }}
+    >
+      {global.currentUser ? (
+        <Helmet>
+          <script async src="https://widget.frill.co/v2/widget.js"></script>
+        </Helmet>
+      ) : null}
+      <Router>
+        {loading ? null : (
+          <>
+            <NavBar
+              // currentPage={match.url}
+              windowWidth={1000}
+              referrer={referrer}
+            ></NavBar>
+            <Switch>
+              <Route exact path="/">
+                <Home
+                  clearReferrer={clearReferrer}
+                  updateNavReferrer={updateNavReferrer}
+                ></Home>
+              </Route>
+              <Route
+                path="/logout"
+                component={() => {
+                  window.location.href = "/api/logout";
+                  return null;
+                }}
+              />
+              <Route exact path="/login">
+                <Login></Login>
+              </Route>
+              <Route exact path="/register">
+                <Register></Register>
+              </Route>
+              <PrivateRoute path="/profile" exact>
+                <Profile
+                  books={global.books}
+                  members={global.householdMembers}
+                  households={global.households}
+                  user={global.currentUser}
+                ></Profile>
+              </PrivateRoute>
+              <PrivateRoute exact path="/book/:id">
+                <Book></Book>
+              </PrivateRoute>
+              <Route path="/shelf/:shelfId">
+                <SharedShelf></SharedShelf>
+              </Route>
+              <PrivateRoute path="/transparent">
+                <Transparent></Transparent>
+              </PrivateRoute>
 
-							<Route path="/scanner">
-								<Scanner></Scanner>
-							</Route>
-							<Route path="/sandbox">
-								<NewAddBook></NewAddBook>
-							</Route>
-							<Route path="/*">
-								<Home
-									clearReferrer={clearReferrer}
-									updateNavReferrer={updateNavReferrer}
-								></Home>
-							</Route>
-						</Switch>
-					</>
-				)}
-				<GlobalModal></GlobalModal>
-			</Router>
-		</ToastProvider>
-	);
+              <Route path="/scanner">
+                <Scanner></Scanner>
+              </Route>
+              <Route path="/sandbox">
+                <NewAddBook></NewAddBook>
+              </Route>
+              <Route path="/*">
+                <Home
+                  clearReferrer={clearReferrer}
+                  updateNavReferrer={updateNavReferrer}
+                ></Home>
+              </Route>
+            </Switch>
+          </>
+        )}
+        <GlobalModal></GlobalModal>
+      </Router>
+    </ToastProvider>
+  );
 };
 
 export default App;

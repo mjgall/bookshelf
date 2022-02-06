@@ -1,12 +1,12 @@
-import React from 'react';
-import Quagga from 'quagga';
-import axios from 'axios';
+import React from "react";
+import Quagga from "quagga";
+import axios from "axios";
 // import Card from 'react-bootstrap/Card';
 
-import Button from '../common/Button';
-import Input from '../styles/Input';
+import Button from "../common/Button";
+import Input from "../styles/Input";
 
-import Modal from 'react-modal';
+import Modal from "react-modal";
 
 //TODO convert to function component
 export default class Scanner extends React.Component {
@@ -23,7 +23,7 @@ export default class Scanner extends React.Component {
       context: {},
       video: {},
       imageUrls: [],
-      search_value: '',
+      search_value: "",
       isOpen: false,
       currentBook: null,
       useCamera: false,
@@ -63,9 +63,9 @@ export default class Scanner extends React.Component {
     Quagga.init(
       {
         inputStream: {
-          name: 'Barcode Scanner',
-          type: 'LiveStream',
-          target: document.querySelector('#live-stream'),
+          name: "Barcode Scanner",
+          type: "LiveStream",
+          target: document.querySelector("#live-stream"),
           constraints: {
             width: 640,
             height: 240,
@@ -73,7 +73,7 @@ export default class Scanner extends React.Component {
         },
         frequency: 2,
         decoder: {
-          readers: ['ean_reader'],
+          readers: ["ean_reader"],
           multiple: false,
         },
         locate: true,
@@ -94,18 +94,18 @@ export default class Scanner extends React.Component {
 
     // once Quagga barcode scanner has instantiated, barcode scanner HTML elements are present and ready to be attached to state.
     this.setState({
-      canvas: document.querySelector('#live-stream canvas'),
+      canvas: document.querySelector("#live-stream canvas"),
     });
 
     this.setState({
-      context: this.state.canvas.getContext('2d'),
-      video: document.querySelector('#live-stream video'),
+      context: this.state.canvas.getContext("2d"),
+      video: document.querySelector("#live-stream video"),
     });
   }
 
   // display alert if a barcode is scanned a second time.
   displayDuplicateAlert() {
-    console.log('already scanned');
+    console.log("already scanned");
   }
 
   // destructure argument into the information we need, to avoid imperative variable declarations with all the usual verbose validity checks.
@@ -190,15 +190,14 @@ export default class Scanner extends React.Component {
 
   // remove the scanner instance
   stopScanning() {
-    console.log(Quagga.stop)
+    console.log(Quagga.stop);
     Quagga.stop();
-   
   }
 
   handleManualSubmit = (e) => {
     e.preventDefault();
     const isbn = this.state.manualISBN;
-    this.setState({ manualISBN: '' });
+    this.setState({ manualISBN: "" });
     this.getBook(isbn);
   };
 
@@ -211,7 +210,7 @@ export default class Scanner extends React.Component {
   };
 
   addBook = async () => {
-    await axios.post('/api/books', {
+    await axios.post("/api/books", {
       ...this.state.currentBook,
       cover: this.state.currentBook.image,
       author: this.state.currentBook.authors[0],
@@ -222,29 +221,29 @@ export default class Scanner extends React.Component {
   };
 
   render = () => {
-    Modal.setAppElement(document.querySelector('#root'));
+    Modal.setAppElement(document.querySelector("#root"));
     Modal.defaultStyles = {
       overlay: {
-        position: 'fixed',
+        position: "fixed",
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(255, 255, 255, 0.75)',
+        backgroundColor: "rgba(255, 255, 255, 0.75)",
       },
       content: {
-        position: 'absolute',
-        top: '40px',
-        left: '40px',
-        right: '40px',
-        bottom: '40px',
-        border: '1px solid #ccc',
-        borderRadius: '5px',
-        background: '#fff',
-        overflow: 'auto',
-        WebkitOverflowScrolling: 'touch',
-        outline: 'none',
-        padding: '20px',
+        position: "absolute",
+        top: "40px",
+        left: "40px",
+        right: "40px",
+        bottom: "40px",
+        border: "1px solid #ccc",
+        borderRadius: "5px",
+        background: "#fff",
+        overflow: "auto",
+        WebkitOverflowScrolling: "touch",
+        outline: "none",
+        padding: "20px",
       },
     };
     return (
@@ -252,46 +251,53 @@ export default class Scanner extends React.Component {
         <div className={`${this.props.className} scanner`}>
           {this.state.alert ? (
             <div
-              className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded absolute .z-50 w-full'
-              role='alert'>
-              <strong className='font-bold'>Scanned</strong>
+              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded absolute .z-50 w-full"
+              role="alert"
+            >
+              <strong className="font-bold">Scanned</strong>
             </div>
           ) : null}
           <div
-            style={{ display: this.state.useCamera ? 'block' : 'none' }}
-            id='live-stream'></div>
+            style={{ display: this.state.useCamera ? "block" : "none" }}
+            id="live-stream"
+          ></div>
 
           <form
             onSubmit={this.handleManualSubmit}
-            className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
-            <div className='flex items-center justify-between'>
+            className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          >
+            <div className="flex items-center justify-between">
               <Input
-                placeholder='Type in ISBN or scan'
+                placeholder="Type in ISBN or scan"
                 onChange={this.handleManualChange}
                 value={this.state.manualISBN}
-                name='isbn'></Input>
+                name="isbn"
+              ></Input>
               <Button onClick={this.useCamera}>
-                {this.state.useCamera ? 'Close' : 'Scan'}
+                {this.state.useCamera ? "Close" : "Scan"}
               </Button>
               <Button
                 onClick={this.handleManualSubmit}
-                className='inline-block'>
+                className="inline-block"
+              >
                 Submit
               </Button>
             </div>
           </form>
           <Modal
-            className='custom-modal border-solid border-2 border-gray-600 w-1/2 rounded outline-none bg-white container mx-auto relative p-4'
+            className="custom-modal border-solid border-2 border-gray-600 w-1/2 rounded outline-none bg-white container mx-auto relative p-4"
             shouldCloseOnEsc
             shouldCloseOnOverlayClick
-            isOpen={this.state.isOpen}>
+            isOpen={this.state.isOpen}
+          >
             {this.state.currentBook ? (
               <div>
                 <h3>{this.state.currentBook.title}</h3>
                 <img
-                  style={{ maxHeight: '50vh' }}
+                  style={{ maxHeight: "50vh" }}
                   src={this.state.currentBook.image}
-                  alt='cover'></img>
+                  alt="cover"
+                ></img>
               </div>
             ) : null}
             <Button onClick={this.addBook}>Add</Button>
