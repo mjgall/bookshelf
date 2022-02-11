@@ -11,17 +11,16 @@ import { Context } from "../globalContext";
 import { useParams } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Modal from "../common/Modal/Modal";
-import { Checkbox, CheckboxChecked } from "@styled-icons/boxicons-regular";
-import { PlusSquare, ChevronDownSquare } from "@styled-icons/boxicons-solid";
+
 import { PlusCircleIcon as PlusCircle } from "@heroicons/react/outline";
-import { MailSend } from "@styled-icons/boxicons-regular";
+
 import MoreMenu from "../common/MoreMenu";
 import Tip from "../common/Tip";
 
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { searchWithCancel } from "../utils";
-import { Formik, Field, Form } from "formik";
+
 const Club = (props) => {
 	const [value, setValue] = useState("");
 	const global = useContext(Context);
@@ -41,7 +40,6 @@ const Club = (props) => {
 	const [friendSearchResults, setFriendSearchResults] = useState([]);
 	const [friendSearchResultsSelected, setFriendSearchResultsSelected] =
 		useState([]);
-	const [friendMenuOpen, setFriendMenuOpen] = useState(false);
 	const [friendValues, setFriendValues] = useState({
 		email: "",
 		quantity: 0,
