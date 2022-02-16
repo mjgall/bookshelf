@@ -31,11 +31,10 @@
     "passport-local": "^1.0.0",
     "sharp": "^0.29.3",
     "sqlstring": "^2.3.2",
-    "tailwind": "^4.0.0",
-    "tailwindcss": "^1.9.6",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "cloc": "^2.9.0",
     "nodemon": "^2.0.6"
   }
 }

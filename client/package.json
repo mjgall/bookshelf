@@ -51,7 +51,7 @@
     "tailwind": "^4.0.0"
   },
   "scripts": {
-    "build:style": "tailwind build src/styles/index.css -o src/styles/tailwind.css",
+    "build:style": "tailwindcss build -i src/styles/index.css -o src/styles/tailwind.css",
     "start": "npm run build:style && PORT=3600 react-scripts start",
     "build": "npm run build:style && react-scripts build",
     "test": "react-scripts test",
