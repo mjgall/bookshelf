@@ -10,7 +10,11 @@ import MoreMenu from "../common/MoreMenu";
 import Tip from "../common/Tip";
 
 const LoanBox = ({ book, user, loan, index, update }) => {
+
+
   const global = useContext(Context);
+
+  console.log({ book, user, loan, index, update })
 
   const hideLoan = async () => {
     await axios.put("/api/loans", {
@@ -190,7 +194,7 @@ const LoanBox = ({ book, user, loan, index, update }) => {
             {book.title}
           </Link>
           {loan.type === "lend" ? " to " : " from "}
-          <span>{loan.type === "request" ? "you." : `${user.user_name}.`}</span>
+          <span>{loan.type === "request" ? "you." : `${loan.manualName || user.user_name}.`}</span>
         </div>
         <span className="text-xs font-thin">
           {moment
@@ -413,6 +417,7 @@ const Loans = (props) => {
                   .map((loan, index) => {
                     return (
                       <LoanBox
+                        manualName={loan.manual_name}
                         key={index}
                         book={{
                           global_id: loan.global_id,
@@ -438,6 +443,7 @@ const Loans = (props) => {
                             loan.start_date,
                             loan.endDate
                           ),
+                          manualName: loan.manual_name
                         }}
                         index={index}
                         update={update}

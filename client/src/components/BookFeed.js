@@ -111,18 +111,17 @@ const BookFeed = (props) => {
                     {item.title}
                   </Link>
                   {item.action === 5
-                    ? ` to ${
-                        item.interacted_user_id === global.currentUser.id
-                          ? `you`
-                          : item.interacted_user_name
-                      }`
+                    ? ` to ${item.manual_name ? item.manual_name :
+                      item.interacted_user_id === global.currentUser.id
+                        ? `you`
+                        : item.interacted_user_name
+                    }`
                     : item.action === 6
-                    ? ` from ${
-                        item.interacted_user_id === global.currentUser.id
-                          ? `you`
-                          : item.interacted_user_name
+                      ? ` from ${item.interacted_user_id === global.currentUser.id
+                        ? `you`
+                        : item.interacted_user_name
                       }`
-                    : null}
+                      : null}
                 </div>
 
                 <div className="text-xs font-thin">

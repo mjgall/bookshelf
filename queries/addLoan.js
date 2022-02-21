@@ -1,13 +1,20 @@
 const db = require("../config/db/mysql").pool;
 const sqlString = require("sqlstring");
 
-module.exports = (bookId, lenderId, borrowerId, startDate, requesting) => {
+module.exports = (bookId, lenderId, borrowerId, startDate, requesting, manual_name) => {
+  console.log({ bookId, lenderId, borrowerId, startDate, requesting, manual_name });
+  let query
   return new Promise((resolve, reject) => {
-    if (requesting) {
-      query = `INSERT INTO loans (global_id, lender_id, borrower_id) VALUES (${bookId}, ${lenderId}, ${borrowerId})`;
+    if (borrowerId) {
+      if (requesting) {
+        query = `INSERT INTO loans (global_id, lender_id, borrower_id) VALUES (${bookId}, ${lenderId}, ${borrowerId})`;
+      } else {
+        query = `INSERT INTO loans (global_id, lender_id, borrower_id, start_date) VALUES (${bookId}, ${lenderId}, ${borrowerId}, '${startDate}')`;
+      }
     } else {
-      query = `INSERT INTO loans (global_id, lender_id, borrower_id, start_date) VALUES (${bookId}, ${lenderId}, ${borrowerId}, '${startDate}')`;
+      query = `INSERT INTO loans (global_id, lender_id, start_date, manual_name) VALUES (${bookId}, ${lenderId}, '${startDate}', '${manual_name}')`
     }
+
     // const query = `INSERT INTO loans (global_id, lender_id, borrower_id, start_date) VALUES (${bookId}, ${lenderId}, ${borrowerId}, '${startDate}')`;
     db.query(query, (err, results, fields) => {
       if (err) {

@@ -429,7 +429,7 @@ const Book = (props) => {
                       {` ${book.full}`}
                     </Link>
                   ) : (
-                    ` ${book.full}`
+                    ` ${book.full || book.manual_name}`
                   )}
                 </div>
               </div>

@@ -789,26 +789,32 @@ module.exports = (app) => {
 	});
 
 	app.post("/api/loans", checkAuthed, async (req, res) => {
-		const { bookId, lenderId, borrowerId, requesting } = req.body;
-		if (requesting) {
-			const response = await addLoan(
-				bookId,
-				lenderId,
-				borrowerId,
-				null,
-				requesting
-			);
+		const { bookId, lenderId, borrowerId, requesting, manualName } = req.body;
+		if (borrowerId) {
+			if (requesting) {
+				const response = await addLoan(
+					bookId,
+					lenderId,
+					borrowerId,
+					null,
+					requesting
+				);
 
-			res.send(response);
+				res.send(response);
+			} else {
+				const response = await addLoan(
+					bookId,
+					lenderId,
+					borrowerId,
+					Date.now()
+				);
+				await addActivity(lenderId, bookId, 5, borrowerId);
+				res.send(response);
+			}
 		} else {
-			const response = await addLoan(
-				bookId,
-				lenderId,
-				borrowerId,
-				Date.now()
-			);
-			await addActivity(lenderId, bookId, 5, borrowerId);
-			res.send(response);
+			const response = await addLoan(bookId, lenderId, null, Date.now(), false, manualName)
+			await addActivity(lenderId, bookId, 5, null, manualName);
+			res.send(response)
 		}
 	});
 
