@@ -74,6 +74,7 @@ const LoanBox = ({ book, user, loan, index, update }) => {
   };
 
   const determineVerb = (type) => {
+    console.log(type);
     switch (type) {
       case "lend":
         return "loaned ";

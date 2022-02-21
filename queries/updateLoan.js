@@ -9,9 +9,9 @@ module.exports = (action, loan_id, user_books_id) => {
     if (action === "end") {
       query = `UPDATE loans, user_books SET loans.end_date = '${Date.now()}', user_books.on_loan = FALSE, user_books.borrower_id = NULL WHERE loans.id = ${loan_id} AND user_books.id = ${user_books_id}`;
       needsSecondQuery = true;
-      secondQuery = `SELECT borrowers.full AS borrower_full, lenders.full as lender_full, borrowers.id AS borrower_id, lenders.id AS lender_id, loans.* FROM loans 
-			JOIN users borrowers ON loans.borrower_id = borrowers.id
-			JOIN users lenders ON loans.lender_id = lenders.id
+      secondQuery = `SELECT borrowers.full AS borrower_full, loans.manual_name AS borrower_manual_name, lenders.full as lender_full, borrowers.id AS borrower_id, lenders.id AS lender_id, loans.* FROM loans 
+			LEFT JOIN users borrowers ON loans.borrower_id = borrowers.id
+			LEFT JOIN users lenders ON loans.lender_id = lenders.id
 			WHERE loans.id = ${loan_id}`;
     }
     if (action === "grant") {
@@ -33,9 +33,9 @@ module.exports = (action, loan_id, user_books_id) => {
     if (action === "hide") {
       query = `UPDATE loans, user_books SET loans.hidden = TRUE WHERE loans.id = ${loan_id}`;
       needsSecondQuery = true;
-      secondQuery = `SELECT borrowers.full AS borrower_full, lenders.full as lender_full, borrowers.id AS borrower_id, lenders.id AS lender_id, loans.* FROM loans 
-			JOIN users borrowers ON loans.borrower_id = borrowers.id
-			JOIN users lenders ON loans.lender_id = lenders.id
+      secondQuery = `SELECT borrowers.full AS borrower_full, loans.manual_name AS borrower_manual_name, lenders.full as lender_full, borrowers.id AS borrower_id, lenders.id AS lender_id, loans.* FROM loans 
+			LEFT JOIN users borrowers ON loans.borrower_id = borrowers.id
+			LEFT JOIN users lenders ON loans.lender_id = lenders.id
 			WHERE loans.id = ${loan_id}`;
     }
 

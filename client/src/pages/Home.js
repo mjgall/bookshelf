@@ -33,7 +33,7 @@ const Home = (props) => {
   return (
     <>
       {global.currentUser ? (
-        <div className="md:container my-4">
+        <div className="w-full max-w-screen-xl mx-auto my-4">
           <div
             className="md:grid"
             style={{

@@ -853,13 +853,17 @@ module.exports = (app) => {
 					req.body.id,
 					req.body.user_books_id
 				);
+
 				const endActivity = await addActivity(
 					endResponse[0].lender_id,
 					endResponse[0].global_id,
 					6,
-					endResponse[0].borrower_id
+					endResponse[0].borrower_id || null,
+					endResponse[0].borrower_manual_name
 				);
 				res.send(endActivity);
+
+
 				break;
 			case "cancel":
 				const cancelResponse = await updateLoan("cancel", req.body.id);
