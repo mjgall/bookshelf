@@ -4,6 +4,7 @@ const keys = require("../config/keys");
 const randomId = require("../services/randomId");
 
 const awsS3 = require("../services/aws-s3");
+const googleBooksLookup = require("../services/gcp-books");
 const fs = require("fs");
 
 const _ = require("lodash");
@@ -575,7 +576,7 @@ module.exports = (app) => {
 					req.body.userEmail,
 					"You have a new friend request on Bookshelf!",
 					"Go to Bookshelf to view your pending requests.",
-					`Check your <a href="https://bookshelf.mikegallagher.app/profile">Profile</a> to view your pending requests!`
+					`Check your<a href="https://bookshelf.mikegallagher.app/profile">Profile</a> to view your pending requests!`
 				);
 			}
 		} catch (error) {
@@ -789,7 +790,8 @@ module.exports = (app) => {
 	});
 
 	app.post("/api/loans", checkAuthed, async (req, res) => {
-		const { bookId, lenderId, borrowerId, requesting, manualName } = req.body;
+		const { bookId, lenderId, borrowerId, requesting, manualName } =
+			req.body;
 		if (borrowerId) {
 			if (requesting) {
 				const response = await addLoan(
@@ -812,9 +814,16 @@ module.exports = (app) => {
 				res.send(response);
 			}
 		} else {
-			const response = await addLoan(bookId, lenderId, null, Date.now(), false, manualName)
+			const response = await addLoan(
+				bookId,
+				lenderId,
+				null,
+				Date.now(),
+				false,
+				manualName
+			);
 			await addActivity(lenderId, bookId, 5, null, manualName);
-			res.send(response)
+			res.send(response);
 		}
 	});
 
@@ -862,7 +871,6 @@ module.exports = (app) => {
 					endResponse[0].borrower_manual_name
 				);
 				res.send(endActivity);
-
 
 				break;
 			case "cancel":
@@ -992,5 +1000,10 @@ module.exports = (app) => {
 
 	app.post("/api/bookclubs/invites", (req, res) => {
 		res.send(req.body);
+	});
+
+	app.get("/api/gcpbooks/:isbn", async (req, res) => {
+		const response = await googleBooksLookup(req.params.isbn);
+		res.send(response);
 	});
 };
