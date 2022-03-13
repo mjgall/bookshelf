@@ -1003,7 +1003,12 @@ module.exports = (app) => {
 	});
 
 	app.get("/api/gcpbooks/:isbn", async (req, res) => {
-		const response = await googleBooksLookup(req.params.isbn);
-		res.send(response);
+		try {
+			const response = await googleBooksLookup(req.params.isbn);
+			res.send(response);
+		} catch (error) {
+			console.log(error);
+			res.sendStatus(404);
+		}
 	});
 };
