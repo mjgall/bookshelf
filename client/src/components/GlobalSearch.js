@@ -64,25 +64,26 @@ const GlobalSearch = () => {
 	};
 
 	return (
-		<div style={{ width: "18rem" }}>
-			{/* <SelectSearch
+		<>
+			<div style={{ width: "18rem" }}>
+				{/* <SelectSearch
 				options={[]}
 				getOptions={(query) => search(query)}
 				search
 				placeholder="Your favorite drink"
 			/> */}
-			<AsyncSelect
-				components={{
-					DropdownIndicator: () => null,
-					IndicatorSeparator: () => null,
-				}}
-				styles={customStyles}
-				cacheOptions
-				loadOptions={search}
-				onInputChange={(value) => setQuery(value)}
-				onChange={(value) => setSelection(value)}
-			/>
-			{/* <input
+				<AsyncSelect
+					components={{
+						DropdownIndicator: () => null,
+						IndicatorSeparator: () => null,
+					}}
+					styles={customStyles}
+					cacheOptions
+					loadOptions={search}
+					onInputChange={(value) => setQuery(value)}
+					onChange={(value) => setSelection(value)}
+				/>
+				{/* <input
 				className="w-full h-12 p-2 border-2 rounded"
 				key={`global-nav-search`}
 				type="search"
@@ -90,7 +91,8 @@ const GlobalSearch = () => {
 				value={global.searchValue}
 				onChange={(event) => console.log(event)}
 			/> */}
-		</div>
+			</div>
+		</>
 	);
 };
 
