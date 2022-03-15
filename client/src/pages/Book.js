@@ -52,7 +52,7 @@ const Book = (props) => {
 		const getGoogleInfo = async () => {
 			if (book?.isbn13) {
 				const response = await axios.get(
-					`/api/gcpbooks/${book?.isbn13}`
+					`/api/gcpbooks/isbn/${book?.isbn13 || book?.isbn10}`
 				);
 				setGoogleInfo(response.data);
 				setGoogleLoaded(true);
