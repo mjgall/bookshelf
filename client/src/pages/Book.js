@@ -90,7 +90,7 @@ const Book = (props) => {
 			fetchGlobalBook(paramId);
 			setGoogleLoaded(true);
 		}
-	}, [fetchGlobalBook, global, paramId, book?.isbn13]);
+	}, [fetchGlobalBook, global, paramId, book?.isbn13, book?.isbn10]);
 
 	const updateBookField = async (field, value) => {
 		let options = { bookType: type, field, value, id: undefined };
@@ -191,7 +191,7 @@ const Book = (props) => {
 				{
 					action: () => deleteBook(),
 					confirm: true,
-					text: "Delete",
+					text: "Remove from your shelf",
 				},
 			];
 		} else {
@@ -199,7 +199,7 @@ const Book = (props) => {
 				{
 					action: () => deleteBook(),
 					confirm: true,
-					text: "Delete",
+					text: "Remove from your shelf",
 				},
 				{
 					action: () => {
