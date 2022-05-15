@@ -12,6 +12,18 @@ const GlobalSearch = () => {
 	const [query, setQuery] = useState("");
 	const [selection, setSelection] = useState({});
 
+	const CustomOption = (props) =>
+		!props.isDisabled || props.data.cover ? (
+			<div
+				className="flex justify-between my-1 items-center"
+				{...props.innerProps}
+			>
+				{console.log(props)}
+				{props.data.label}
+				<img className="h-16" src={props.data.cover}></img>
+			</div>
+		) : null;
+
 	const search = async (query) => {
 		return new Promise((resolve, reject) => {
 			searchWithCancel(`/api/gcpbooks/query/${query}`)
@@ -23,6 +35,7 @@ const GlobalSearch = () => {
 									(object) => object.type === "ISBN_13"
 								)?.identifier,
 								label: book.volumeInfo.title,
+								cover: book.volumeInfo.imageLinks.thumbnail,
 							}))
 						);
 					}
@@ -76,6 +89,7 @@ const GlobalSearch = () => {
 					components={{
 						DropdownIndicator: () => null,
 						IndicatorSeparator: () => null,
+						Option: CustomOption,
 					}}
 					styles={customStyles}
 					cacheOptions
