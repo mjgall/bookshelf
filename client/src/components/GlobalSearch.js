@@ -1,41 +1,71 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Context } from "../globalContext";
 import { withRouter } from "react-router-dom";
-import SelectSearch from "react-select-search";
 import AsyncSelect from "react-select/async";
 import _ from "lodash";
 
 import { searchWithCancel } from "../utils";
+import Modal from "../common/Modal/Modal";
 
-const GlobalSearch = () => {
+import GlobalSearchModal from "./GlobalSearchModal";
+
+const GlobalSearch = (props) => {
 	const global = React.useContext(Context);
 	const [query, setQuery] = useState("");
 	const [selection, setSelection] = useState({});
+	const globalSearchModal = useRef(null);
 
-	const CustomOption = (props) =>
-		!props.isDisabled || props.data.cover ? (
+	const handleSelection = (selection) => {
+		const selectedBook = global.allBooks.filter((book) => {
+			if (
+				book.isbn10 === selection.value ||
+				book.isbn13 === selection.value
+			) {
+				return book.id;
+			}
+		});
+
+		if (selectedBook[0]) {
+			props.history.push(`/book/${selectedBook[0].id}`);
+		} else {
+			setSelection(selection);
+			globalSearchModal.current.open();
+		}
+	};
+
+	const CustomOption = (props) => {
+		console.log(props);
+		const { innerRef, innerProps } = props;
+		return !props.isDisabled || props.data.cover ? (
 			<div
+				ref={innerRef}
+				{...innerProps}
+				{...props}
+				onClick={() => handleSelection(props.data)}
 				className="flex justify-between my-1 items-center"
-				{...props.innerProps}
 			>
-				{console.log(props)}
 				{props.data.label}
 				<img className="h-16" src={props.data.cover}></img>
 			</div>
 		) : null;
+	};
 
 	const search = async (query) => {
 		return new Promise((resolve, reject) => {
 			searchWithCancel(`/api/gcpbooks/query/${query}`)
 				.then((response) => {
 					if (response) {
+						const filteredBooks = response;
+
+						console.log(filteredBooks);
+
 						resolve(
-							response?.map((book) => ({
+							filteredBooks?.map((book) => ({
 								value: book.volumeInfo.industryIdentifiers?.find(
 									(object) => object.type === "ISBN_13"
 								)?.identifier,
 								label: book.volumeInfo.title,
-								cover: book.volumeInfo.imageLinks.thumbnail,
+								cover: book.volumeInfo?.imageLinks?.thumbnail,
 							}))
 						);
 					}
@@ -92,7 +122,6 @@ const GlobalSearch = () => {
 						Option: CustomOption,
 					}}
 					styles={customStyles}
-					cacheOptions
 					loadOptions={search}
 					onInputChange={(value) => setQuery(value)}
 					onChange={(value) => setSelection(value)}
@@ -106,6 +135,12 @@ const GlobalSearch = () => {
 				onChange={(event) => console.log(event)}
 			/> */}
 			</div>
+			<Modal ref={globalSearchModal} header="Book">
+				<GlobalSearchModal
+					isbn={selection.value}
+					closeModal={() => globalSearchModal.current.close()}
+				></GlobalSearchModal>
+			</Modal>
 		</>
 	);
 };

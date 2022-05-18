@@ -21,7 +21,15 @@ module.exports = (value, type) => {
 			} else if (type === "isbn") {
 				resolve(response.data.items[0]);
 			} else {
-				resolve(response.data.items);
+				resolve(
+					response.data.items.filter((result) => {
+						if (result.saleInfo.isEbook) {
+							return;
+						} else {
+							return result;
+						}
+					})
+				);
 			}
 		} catch (error) {
 			reject(`Something went wrong: ${error}`);
