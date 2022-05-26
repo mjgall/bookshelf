@@ -50,11 +50,14 @@ const Book = (props) => {
 
 	useEffect(() => {
 		const getGoogleInfo = async () => {
-			if (book?.isbn13) {
+			if (book?.isbn13 || book?.isbn10) {
 				const response = await axios.get(
 					`/api/gcpbooks/${book?.isbn13}`
 				);
 				setGoogleInfo(response.data);
+				setGoogleLoaded(true);
+			} else {
+				setGoogleInfo("Nothing available");
 				setGoogleLoaded(true);
 			}
 		};
@@ -266,7 +269,11 @@ const Book = (props) => {
 											></img>
 										)}
 									</div>
-								) : null}
+								) : (
+									<div onClick={() => modal.current.open()}>
+										No cover
+									</div>
+								)}
 
 								{type === "household" || type === "global" ? (
 									<div className="mt-2">{book.title}</div>
