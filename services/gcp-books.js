@@ -3,6 +3,7 @@ const keys = require("../config/keys");
 
 module.exports = (value, type) => {
 	return new Promise(async (resolve, reject) => {
+		console.log(value, type);
 		let response;
 
 		try {
