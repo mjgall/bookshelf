@@ -52,7 +52,7 @@ const Book = (props) => {
 		const getGoogleInfo = async () => {
 			if (book?.isbn13 || book?.isbn10) {
 				const response = await axios.get(
-					`/api/gcpbooks/${book?.isbn13}`
+					`/api/gcpbooks/isbn/${book?.isbn13 || book?.isbn10}`
 				);
 				setGoogleInfo(response.data);
 				setGoogleLoaded(true);
@@ -93,7 +93,7 @@ const Book = (props) => {
 			fetchGlobalBook(paramId);
 			setGoogleLoaded(true);
 		}
-	}, [fetchGlobalBook, global, paramId, book?.isbn13]);
+	}, [fetchGlobalBook, global, paramId, book?.isbn13, book?.isbn10]);
 
 	const updateBookField = async (field, value) => {
 		let options = { bookType: type, field, value, id: undefined };
@@ -194,7 +194,7 @@ const Book = (props) => {
 				{
 					action: () => deleteBook(),
 					confirm: true,
-					text: "Delete",
+					text: "Remove from your shelf",
 				},
 			];
 		} else {
@@ -202,7 +202,7 @@ const Book = (props) => {
 				{
 					action: () => deleteBook(),
 					confirm: true,
-					text: "Delete",
+					text: "Remove from your shelf",
 				},
 				{
 					action: () => {

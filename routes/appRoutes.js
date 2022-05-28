@@ -1002,9 +1002,19 @@ module.exports = (app) => {
 		res.send(req.body);
 	});
 
-	app.get("/api/gcpbooks/:isbn", async (req, res) => {
+	app.get("/api/gcpbooks/query/:query", async (req, res) => {
 		try {
-			const response = await googleBooksLookup(req.params.isbn);
+			const response = await googleBooksLookup(req.params.query, "query");
+			res.send(response);
+		} catch (error) {
+			console.log(error);
+			res.sendStatus(404);
+		}
+	});
+
+	app.get("/api/gcpbooks/isbn/:isbn", async (req, res) => {
+		try {
+			const response = await googleBooksLookup(req.params.isbn, "isbn");
 			res.send(response);
 		} catch (error) {
 			console.log(error);
