@@ -301,7 +301,7 @@ const filterRows = (rows, filters, currentUserId) => {
 };
 
 const sortRows = (rows, sort) => {
-  return rows.sort((a, b) => {
+  return rows?.sort((a, b) => {
     const { order, orderBy } = sort;
 
     if (isNil(a[orderBy])) return 1;
@@ -592,8 +592,8 @@ const Table = ({ columns, rows, history }) => {
             ></Select>
           </div>
           {householdSelect?.value === "none" ||
-          householdSelect?.value === "borrowed" ||
-          viewPrivate ? null : (
+            householdSelect?.value === "borrowed" ||
+            viewPrivate ? null : (
             <div className="flex-1 ml-1">
               <Select
                 styles={customStyles}

@@ -77,9 +77,14 @@ const GlobalSearch = (props) => {
 		});
 	};
 
+	const openModal = (value) => {
+		props.select(value)
+	}
+
 	useEffect(() => {
 		console.log(selection);
-	}, [selection]);
+
+	}, [selection, props]);
 
 	const customStyles = {
 		option: (provided, state) => ({
@@ -124,7 +129,7 @@ const GlobalSearch = (props) => {
 					styles={customStyles}
 					loadOptions={search}
 					onInputChange={(value) => setQuery(value)}
-					onChange={(value) => setSelection(value)}
+					onChange={(value) => openModal(value)}
 				/>
 				{/* <input
 				className="w-full h-12 p-2 border-2 rounded"
