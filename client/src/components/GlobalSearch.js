@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { Context } from "../globalContext";
 import { withRouter } from "react-router-dom";
 import AsyncSelect from "react-select/async";
-import _ from "lodash";
 
 import { searchWithCancel } from "../utils";
 import Modal from "../common/Modal/Modal";
@@ -11,7 +10,7 @@ import GlobalSearchModal from "./GlobalSearchModal";
 
 const GlobalSearch = (props) => {
 	const global = React.useContext(Context);
-	const [query, setQuery] = useState("");
+	const [setQuery] = useState("");
 	const [selection, setSelection] = useState({});
 	const globalSearchModal = useRef(null);
 
@@ -22,6 +21,8 @@ const GlobalSearch = (props) => {
 				book.isbn13 === selection.value
 			) {
 				return book.id;
+			} else {
+				return null;
 			}
 		});
 
@@ -44,7 +45,11 @@ const GlobalSearch = (props) => {
 				className="flex justify-between my-1 items-center"
 			>
 				{props.data.label}
-				<img className="h-16" src={props.data.cover}></img>
+				<img
+					alt="book cover"
+					className="h-16"
+					src={props.data.cover}
+				></img>
 			</div>
 		) : null;
 	};

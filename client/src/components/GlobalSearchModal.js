@@ -1,9 +1,6 @@
-import React, { useEffect, useContext } from "react";
-import { Context } from "../globalContext";
+import React, { useEffect } from "react";
 
 const GlobalSearchModal = (props) => {
-	const global = useContext(Context);
-
 	useEffect(() => {}, []);
 
 	return (
