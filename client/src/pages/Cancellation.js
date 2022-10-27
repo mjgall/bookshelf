@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import ReactJson from "react-json-view";
+import { Helmet } from "react-helmet";
 
 import flow from "@prosperstack/flow";
 
@@ -119,77 +120,83 @@ const Cancellation = (props) => {
 	}, [cancellationStatus]);
 
 	return (
-		<div>
-			<div
-				className="text-center w-32 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mt-8 rounded cursor-pointer cente"
-				onClick={callProsperstack}
-			>
-				Cancel
-			</div>
+		<>
+			<Helmet>
+				<title>{"PS Cancellation Sandbox"}</title>
+			</Helmet>
 
 			<div>
-				<label>
-					<input
-						type="checkbox"
-						className="form-checkbox cursor-pointer"
-						onChange={updatePaymentProvider}
-						checked={customPaymentProvider}
-					></input>
-					<span>Custom Payment Provider</span>
-				</label>
-			</div>
-			<div>
-				<label>
-					<input
-						type="checkbox"
-						className="form-checkbox cursor-pointer"
-						onChange={updateTestMode}
-						checked={testMode}
-					></input>
-					<span>Test Mode</span>
-				</label>
-			</div>
-			{testMode ? null : (
-				<div>
-					{customPaymentProvider ? (
-						<>
-							<input
-								placeholder="Internal ID"
-								onChange={handleInternalIdChange}
-								value={internalId}
-								className="border border-gray-400 rounded-sm w-1/4"
-							></input>
-							<input
-								placeholder="Name"
-								onChange={handleNameChange}
-								value={name}
-								className="border border-gray-400 rounded-sm w-1/4"
-							></input>
-							<input
-								placeholder="Email"
-								onChange={handleEmailChange}
-								value={email}
-								className="border border-gray-400 rounded-sm w-1/4"
-							></input>
-						</>
-					) : (
-						<input
-							placeholder="Stripe ID"
-							onChange={handleSubscriberIdChange}
-							value={subscriberId}
-							className="border border-gray-400 rounded-sm w-1/4"
-						></input>
-					)}
+				<div
+					className="text-center w-32 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mt-8 rounded cursor-pointer cente"
+					onClick={callProsperstack}
+				>
+					Cancel
 				</div>
-			)}
-			{/* <div>{JSON.stringify(cancellationStatus, null, 2)}</div> */}
-			{cancellationStatus ? (
-				<ReactJson
-					theme="grayscale:inverted"
-					src={cancellationStatus}
-				/>
-			) : null}
-		</div>
+
+				<div>
+					<label>
+						<input
+							type="checkbox"
+							className="form-checkbox cursor-pointer"
+							onChange={updatePaymentProvider}
+							checked={customPaymentProvider}
+						></input>
+						<span>Custom Payment Provider</span>
+					</label>
+				</div>
+				<div>
+					<label>
+						<input
+							type="checkbox"
+							className="form-checkbox cursor-pointer"
+							onChange={updateTestMode}
+							checked={testMode}
+						></input>
+						<span>Test Mode</span>
+					</label>
+				</div>
+				{testMode ? null : (
+					<div>
+						{customPaymentProvider ? (
+							<>
+								<input
+									placeholder="Internal ID"
+									onChange={handleInternalIdChange}
+									value={internalId}
+									className="border border-gray-400 rounded-sm w-1/4"
+								></input>
+								<input
+									placeholder="Name"
+									onChange={handleNameChange}
+									value={name}
+									className="border border-gray-400 rounded-sm w-1/4"
+								></input>
+								<input
+									placeholder="Email"
+									onChange={handleEmailChange}
+									value={email}
+									className="border border-gray-400 rounded-sm w-1/4"
+								></input>
+							</>
+						) : (
+							<input
+								placeholder="Stripe ID"
+								onChange={handleSubscriberIdChange}
+								value={subscriberId}
+								className="border border-gray-400 rounded-sm w-1/4"
+							></input>
+						)}
+					</div>
+				)}
+				{/* <div>{JSON.stringify(cancellationStatus, null, 2)}</div> */}
+				{cancellationStatus ? (
+					<ReactJson
+						theme="grayscale:inverted"
+						src={cancellationStatus}
+					/>
+				) : null}
+			</div>
+		</>
 	);
 };
 
