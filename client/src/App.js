@@ -57,6 +57,13 @@ const App = (props) => {
 			window.Frill_Config.push({
 				key: "766e4f5e-5a68-446c-8d0c-71dbf086c7ae",
 			});
+			if (global.currentUser) {
+				window.Beacon("identify", {
+					name: global.currentUser.full,
+					email: global.currentUser.email,
+					avatar: global.currentUser.picture,
+				});
+			}
 		}
 	}, [global.currentUser, loading]);
 
@@ -76,7 +83,6 @@ const App = (props) => {
 						async
 						src="https://widget.frill.co/v2/widget.js"
 					></script>
-
 					<title>{"papyr.io"}</title>
 				</Helmet>
 			) : null}
