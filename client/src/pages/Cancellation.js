@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router-dom";
 import ReactJson from "react-json-view";
 import { Helmet } from "react-helmet";
+import { Context } from "../globalContext";
 
 import flow from "@prosperstack/flow";
 
@@ -13,6 +14,8 @@ const Cancellation = (props) => {
 	const [internalId, setInternalId] = useState("");
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
+
+	const global = React.useContext(Context);
 
 	if (customPaymentProvider) {
 		window.__PROSPERSTACK_DEBUG_APP_HOST__ = "https://app.prosperstack.com";
@@ -115,6 +118,21 @@ const Cancellation = (props) => {
 		setCustomPaymentProvider(!customPaymentProvider);
 	};
 
+	const cancelBrightback = () => {
+		console.log(global.currentUser);
+		if (window.Brightback) {
+			window.Brightback.handleData({
+				app_id: "papyr",
+				email: global.currentUser.email,
+				save_return_url: "https://papyr.io",
+				cancel_confirmation_url: "https://papyr.io",
+				account: {
+					//   internal_id: "UNIQUE_USER_ID"
+				},
+			});
+		}
+	};
+
 	useEffect(() => {
 		console.log(cancellationStatus);
 	}, [cancellationStatus]);
@@ -195,6 +213,11 @@ const Cancellation = (props) => {
 						src={cancellationStatus}
 					/>
 				) : null}
+				<div>
+					<span onClick={cancelBrightback} className="cursor-pointer">
+						Brightback Cancel
+					</span>
+				</div>
 			</div>
 		</>
 	);
