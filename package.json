@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "server": "nodemon --ignore './client/' index.js",
     "start": "node index.js",
