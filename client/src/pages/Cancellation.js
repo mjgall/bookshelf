@@ -3,7 +3,8 @@ import { withRouter } from "react-router-dom";
 import ReactJson from "react-json-view";
 import { Helmet } from "react-helmet";
 import { Context } from "../globalContext";
-
+import Tip from "../common/Tip";
+import Switch from "react-switch";
 import flow from "@prosperstack/flow";
 
 const Cancellation = (props) => {
@@ -14,6 +15,10 @@ const Cancellation = (props) => {
 	const [internalId, setInternalId] = useState("");
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
+	const [subscriptionTrial, setTrial] = useState(false);
+	const [subscriptionProperties, setSubscriptionProperties] = useState("");
+	const [subscriberProperties, setSubscriberProperties] = useState("");
+	const [mrr, setMRR] = useState(0);
 
 	const global = React.useContext(Context);
 
@@ -43,6 +48,18 @@ const Cancellation = (props) => {
 		setEmail(e.target.value);
 	};
 
+	const handleSubscriberPropertiesChange = (e) => {
+		setSubscriberProperties(e.target.value);
+	};
+
+	const handleSubcriptionPropertiesChange = (e) => {
+		setSubscriptionProperties(e.target.value);
+	};
+
+	const handleMRRChange = (e) => {
+		setMRR(e.target.value);
+	};
+
 	const callProsperstack = () => {
 		if (customPaymentProvider) {
 			flow(
@@ -53,11 +70,11 @@ const Cancellation = (props) => {
 						internalId: internalId,
 						name: name,
 						email: email,
+						properties: JSON.parse(subscriberProperties),
 					},
 					subscription: {
-						properties: {
-							"Total Books": 100,
-						},
+						mrr: mrr,
+						properties: JSON.parse(subscriptionProperties),
 					},
 				},
 				{
@@ -118,21 +135,6 @@ const Cancellation = (props) => {
 		setCustomPaymentProvider(!customPaymentProvider);
 	};
 
-	const cancelBrightback = () => {
-		console.log(global.currentUser);
-		if (window.Brightback) {
-			window.Brightback.handleData({
-				app_id: "papyr",
-				email: global.currentUser.email,
-				save_return_url: "https://papyr.io",
-				cancel_confirmation_url: "https://papyr.io",
-				account: {
-					//   internal_id: "UNIQUE_USER_ID"
-				},
-			});
-		}
-	};
-
 	useEffect(() => {
 		console.log(cancellationStatus);
 	}, [cancellationStatus]);
@@ -177,24 +179,72 @@ const Cancellation = (props) => {
 					<div>
 						{customPaymentProvider ? (
 							<>
-								<input
-									placeholder="Internal ID"
-									onChange={handleInternalIdChange}
-									value={internalId}
-									className="border border-gray-400 rounded-sm w-1/4"
-								></input>
-								<input
-									placeholder="Name"
-									onChange={handleNameChange}
-									value={name}
-									className="border border-gray-400 rounded-sm w-1/4"
-								></input>
-								<input
-									placeholder="Email"
-									onChange={handleEmailChange}
-									value={email}
-									className="border border-gray-400 rounded-sm w-1/4"
-								></input>
+								<div className="mt-4">
+									<div className="text-lg">
+										Subscriber Information
+									</div>
+									<div className="flex flex-col">
+										<input
+											placeholder="Internal ID"
+											onChange={handleInternalIdChange}
+											value={internalId}
+											className="border border-gray-400 rounded-sm w-1/4"
+										></input>
+										<input
+											placeholder="Name"
+											onChange={handleNameChange}
+											value={name}
+											className="border border-gray-400 rounded-sm w-1/4"
+										></input>
+										<input
+											placeholder="Email"
+											onChange={handleEmailChange}
+											value={email}
+											className="border border-gray-400 rounded-sm w-1/4"
+										></input>
+										<textarea
+											placeholder="Subscriber Properties JSON"
+											onChange={
+												handleSubscriberPropertiesChange
+											}
+											value={subscriberProperties}
+											className="border border-gray-400 rounded-sm w-1/4"
+										></textarea>
+									</div>
+								</div>
+								<div className="mt-4">
+									<div className="text-lg">
+										Subscription Information
+									</div>
+									<div className="flex flex-col">
+										<input
+											placeholder="MRR"
+											onChange={handleMRRChange}
+											value={mrr}
+											className="border border-gray-400 rounded-sm w-1/4"
+										></input>
+										<div className="flex content-center my-2">
+											<div className="text-sm mr-4">
+												Trial
+											</div>
+											<Switch
+												onChange={setTrial}
+												checked={subscriptionTrial}
+												handleDiameter={14}
+												height={18}
+												width={36}
+											/>
+										</div>
+										<textarea
+											placeholder="Subscription Properties JSON"
+											onChange={
+												handleSubcriptionPropertiesChange
+											}
+											value={subscriptionProperties}
+											className="border border-gray-400 rounded-sm w-1/4"
+										></textarea>
+									</div>
+								</div>
 							</>
 						) : (
 							<input
@@ -213,11 +263,6 @@ const Cancellation = (props) => {
 						src={cancellationStatus}
 					/>
 				) : null}
-				<div>
-					<span onClick={cancelBrightback} className="cursor-pointer">
-						Brightback Cancel
-					</span>
-				</div>
 			</div>
 		</>
 	);
