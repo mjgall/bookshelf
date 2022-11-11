@@ -70,7 +70,10 @@ const Cancellation = (props) => {
 						internalId: internalId,
 						name: name,
 						email: email,
-						properties: JSON.parse(subscriberProperties),
+						properties: {
+							books: global.allBooks.count,
+							...JSON.parse(subscriberProperties),
+						},
 					},
 					subscription: {
 						mrr: mrr,
