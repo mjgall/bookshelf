@@ -25,6 +25,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { Helmet } from "react-helmet";
 import NewAddBook from "./components/NewAddBook";
+import Upzelo from "./pages/Upzelo";
 
 const App = (props) => {
 	const global = useContext(Context);
@@ -131,7 +132,9 @@ const App = (props) => {
 							<PrivateRoute path="/transparent">
 								<Transparent></Transparent>
 							</PrivateRoute>
-
+							<Route path="/upzelo">
+								<Upzelo></Upzelo>
+							</Route>
 							<Route path="/scanner">
 								<Scanner></Scanner>
 							</Route>
