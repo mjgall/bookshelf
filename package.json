@@ -31,6 +31,7 @@
     "passport": "0.5.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
+    "posthog-node": "^2.5.4",
     "sharp": "^0.30.5",
     "sqlstring": "^2.3.2",
     "tailwindcss": "^3.0.22",

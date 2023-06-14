@@ -3,9 +3,9 @@ import { withRouter } from "react-router-dom";
 import ReactJson from "react-json-view";
 import { Helmet } from "react-helmet";
 import { Context } from "../globalContext";
-import Tip from "../common/Tip";
 import Switch from "react-switch";
 import flow from "@prosperstack/flow";
+import Button from "../common/Button";
 
 const Cancellation = (props) => {
 	const [customPaymentProvider, setCustomPaymentProvider] = useState(true);
@@ -257,6 +257,17 @@ const Cancellation = (props) => {
 								className="border border-gray-400 rounded-sm w-1/4"
 							></input>
 						)}
+						<div
+							onClick={async () => {
+								let psResponse =
+									await window.ProsperStack.convert.init(
+										"sub_1NIe5NFdi6zax6LRC0s82mky"
+									);
+								console.log(psResponse);
+							}}
+						>
+							<Button>Convert Test</Button>
+						</div>
 					</div>
 				)}
 				{/* <div>{JSON.stringify(cancellationStatus, null, 2)}</div> */}

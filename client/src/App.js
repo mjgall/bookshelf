@@ -26,6 +26,7 @@ import Register from "./pages/Register";
 import { Helmet } from "react-helmet";
 import NewAddBook from "./components/NewAddBook";
 import Upzelo from "./pages/Upzelo";
+import posthog from "posthog-js";
 
 const App = (props) => {
 	const global = useContext(Context);
@@ -53,6 +54,17 @@ const App = (props) => {
 				email: global.currentUser.email,
 			});
 		}
+
+		posthog.init("phc_DbgHM9qK6bG9vPMnws0tFkyNVKJvS6CUsyq81XLXGFA", {
+			api_host: "https://app.posthog.com",
+		});
+
+		if (!loading && global.currentUser) {
+		}
+		posthog.identify(global.currentUser?.id, {
+			email: global.currentUser?.email,
+		});
+
 		if (global.currentUser && !window.Frill_Config) {
 			window.Frill_Config = window.Frill_Config || [];
 			window.Frill_Config.push({
@@ -105,6 +117,7 @@ const App = (props) => {
 							<Route
 								path="/logout"
 								component={() => {
+									posthog.reset();
 									window.location.href = "/api/logout";
 									return null;
 								}}

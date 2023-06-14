@@ -10,4 +10,6 @@ module.exports = {
 	region: process.env.region,
 	ISBN_AUTH_API: process.env.ISBN_AUTH_API,
 	GOOGLE_BOOKS_API: process.env.GOOGLE_BOOKS_API,
+	REACT_APP_PUBLIC_POSTHOG_KEY: process.env.PUBLIC_POSTHOG_KEY,
+	REACT_APP_PUBLIC_POSTHOG_HOST: process.env.PUBLIC_POSTHOG_HOST,
 };
