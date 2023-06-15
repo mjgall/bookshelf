@@ -10,11 +10,13 @@ import { useToasts } from "react-toast-notifications";
 const Account = (props) => {
 	const global = useContext(Context);
 	const [shelfEnabled, setShelfEnabled] = useState(
-		global.currentUser.shelf_enabled
+		global.currentUser.shelf_enabled === 1 ? true : false
 	);
 	const { addToast } = useToasts();
 
-	const [searchable, setSearchable] = useState(global.currentUser.searchable);
+	const [searchable, setSearchable] = useState(
+		global.currentUser.searchable === 1 ? true : false
+	);
 
 	const toggleSearchable = () => {
 		axios.put("/api/users", {
