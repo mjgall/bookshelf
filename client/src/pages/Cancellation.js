@@ -11,6 +11,7 @@ const Cancellation = (props) => {
 	const [customPaymentProvider, setCustomPaymentProvider] = useState(true);
 	const [cancellationStatus, setCancellationStatus] = useState("");
 	const [subscriberId, setsubscriberId] = useState("");
+	const [convertSubscriberId, setConvertSubscriberId] = useState("");
 	const [testMode, setTestMode] = useState(false);
 	const [internalId, setInternalId] = useState("");
 	const [name, setName] = useState("");
@@ -34,6 +35,10 @@ const Cancellation = (props) => {
 
 	const handleSubscriberIdChange = (e) => {
 		setsubscriberId(e.target.value);
+	};
+
+	const handleConvertSubscriberIdChange = (e) => {
+		setConvertSubscriberId(e.target.value);
 	};
 
 	const handleInternalIdChange = (e) => {
@@ -119,7 +124,7 @@ const Cancellation = (props) => {
 						) {
 							console.log("bonus featur unlocked!");
 						}
-						setCancellationStatus(JSON.stringify(result));
+						setCancellationStatus(result);
 					},
 				}
 			);
@@ -145,138 +150,151 @@ const Cancellation = (props) => {
 	return (
 		<>
 			<Helmet>
-				<title>{"PS Cancellation Sandbox"}</title>
+				<title>{"ProsperStack Playground"}</title>
 			</Helmet>
-
-			<div>
-				<div
-					className="text-center w-32 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mt-8 rounded cursor-pointer cente"
-					onClick={callProsperstack}
-				>
-					Cancel
-				</div>
+			<div className="border border-gray-500 mt-4 px-6 py-4">
+				<div className="mb-2">Cancel Flow Playground:</div>
 
 				<div>
-					<label>
-						<input
-							type="checkbox"
-							className="form-checkbox cursor-pointer"
-							onChange={updatePaymentProvider}
-							checked={customPaymentProvider}
-						></input>
-						<span>Custom Payment Provider</span>
-					</label>
-				</div>
-				<div>
-					<label>
-						<input
-							type="checkbox"
-							className="form-checkbox cursor-pointer"
-							onChange={updateTestMode}
-							checked={testMode}
-						></input>
-						<span>Test Mode</span>
-					</label>
-				</div>
-				{testMode ? null : (
 					<div>
-						{customPaymentProvider ? (
-							<>
-								<div className="mt-4">
-									<div className="text-lg">
-										Subscriber Information
-									</div>
-									<div className="flex flex-col">
-										<input
-											placeholder="Internal ID"
-											onChange={handleInternalIdChange}
-											value={internalId}
-											className="border border-gray-400 rounded-sm w-1/4"
-										></input>
-										<input
-											placeholder="Name"
-											onChange={handleNameChange}
-											value={name}
-											className="border border-gray-400 rounded-sm w-1/4"
-										></input>
-										<input
-											placeholder="Email"
-											onChange={handleEmailChange}
-											value={email}
-											className="border border-gray-400 rounded-sm w-1/4"
-										></input>
-										<textarea
-											placeholder="Subscriber Properties JSON"
-											onChange={
-												handleSubscriberPropertiesChange
-											}
-											value={subscriberProperties}
-											className="border border-gray-400 rounded-sm w-1/4"
-										></textarea>
-									</div>
-								</div>
-								<div className="mt-4">
-									<div className="text-lg">
-										Subscription Information
-									</div>
-									<div className="flex flex-col">
-										<input
-											placeholder="MRR"
-											onChange={handleMRRChange}
-											value={mrr}
-											className="border border-gray-400 rounded-sm w-1/4"
-										></input>
-										<div className="flex content-center my-2">
-											<div className="text-sm mr-4">
-												Trial
-											</div>
-											<Switch
-												onChange={setTrial}
-												checked={subscriptionTrial}
-												handleDiameter={14}
-												height={18}
-												width={36}
-											/>
-										</div>
-										<textarea
-											placeholder="Subscription Properties JSON"
-											onChange={
-												handleSubcriptionPropertiesChange
-											}
-											value={subscriptionProperties}
-											className="border border-gray-400 rounded-sm w-1/4"
-										></textarea>
-									</div>
-								</div>
-							</>
-						) : (
+						<label>
 							<input
-								placeholder="Stripe ID"
-								onChange={handleSubscriberIdChange}
-								value={subscriberId}
-								className="border border-gray-400 rounded-sm w-1/4"
+								type="checkbox"
+								className="form-checkbox cursor-pointer"
+								onChange={updatePaymentProvider}
+								checked={customPaymentProvider}
 							></input>
-						)}
-						<div
-							onClick={async () => {
-								let psResponse =
-									await window.ProsperStack.convert.init(
-										"sub_1NIe5NFdi6zax6LRC0s82mky"
-									);
-								console.log(psResponse);
-							}}
-						>
-							<Button>Convert Test</Button>
-						</div>
+							<span>Custom Payment Provider</span>
+						</label>
 					</div>
-				)}
-				{/* <div>{JSON.stringify(cancellationStatus, null, 2)}</div> */}
-				{cancellationStatus ? (
-					<ReactJson
-						theme="grayscale:inverted"
-						src={cancellationStatus}
-					/>
-				) : null}
+					<div>
+						<label>
+							<input
+								type="checkbox"
+								className="form-checkbox cursor-pointer"
+								onChange={updateTestMode}
+								checked={testMode}
+							></input>
+							<span>Test Mode</span>
+						</label>
+					</div>
+					{testMode ? null : (
+						<div>
+							{customPaymentProvider ? (
+								<>
+									<div className="mt-4">
+										<div className="text-lg">
+											Subscriber Information
+										</div>
+										<div className="flex flex-col">
+											<input
+												placeholder="Internal ID"
+												onChange={
+													handleInternalIdChange
+												}
+												value={internalId}
+												className="border border-gray-400 rounded-sm w-1/4"
+											></input>
+											<input
+												placeholder="Name"
+												onChange={handleNameChange}
+												value={name}
+												className="border border-gray-400 rounded-sm w-1/4"
+											></input>
+											<input
+												placeholder="Email"
+												onChange={handleEmailChange}
+												value={email}
+												className="border border-gray-400 rounded-sm w-1/4"
+											></input>
+											<textarea
+												placeholder="Subscriber Properties JSON"
+												onChange={
+													handleSubscriberPropertiesChange
+												}
+												value={subscriberProperties}
+												className="border border-gray-400 rounded-sm w-1/4"
+											></textarea>
+										</div>
+									</div>
+									<div className="mt-4">
+										<div className="text-lg">
+											Subscription Information
+										</div>
+										<div className="flex flex-col">
+											<input
+												placeholder="MRR"
+												onChange={handleMRRChange}
+												value={mrr}
+												className="border border-gray-400 rounded-sm w-1/4"
+											></input>
+											<div className="flex content-center my-2">
+												<div className="text-sm mr-4">
+													Trial
+												</div>
+												<Switch
+													onChange={setTrial}
+													checked={subscriptionTrial}
+													handleDiameter={14}
+													height={18}
+													width={36}
+												/>
+											</div>
+											<textarea
+												placeholder="Subscription Properties JSON"
+												onChange={
+													handleSubcriptionPropertiesChange
+												}
+												value={subscriptionProperties}
+												className="border border-gray-400 rounded-sm w-1/4"
+											></textarea>
+										</div>
+									</div>
+								</>
+							) : (
+								<input
+									placeholder="Stripe ID"
+									onChange={handleSubscriberIdChange}
+									value={subscriberId}
+									className="border border-gray-400 rounded-sm w-1/4"
+								></input>
+							)}
+						</div>
+					)}
+					<div
+						className="text-center w-32 bg-red-500 hover:bg-red-700 text-white font-bold mt-2 py-2 px-4 rounded cursor-pointer cente"
+						onClick={callProsperstack}
+					>
+						Cancel
+					</div>
+					{/* <div>{JSON.stringify(cancellationStatus, null, 2)}</div> */}
+					{cancellationStatus ? (
+						<ReactJson
+							theme="grayscale:inverted"
+							src={cancellationStatus}
+						/>
+					) : null}
+				</div>
+			</div>
+			<div className="border border-gray-500 mt-4 px-6 py-4">
+				<div className="mb-2">Convert Playground:</div>
+				<input
+					placeholder="Convert subscription ID (Stripe sub_)"
+					onChange={handleConvertSubscriberIdChange}
+					value={convertSubscriberId}
+					className="border border-gray-400 rounded-sm w-1/4"
+				></input>
+				<div
+					onClick={async () => {
+						let psResponse = await window.ProsperStack.convert.init(
+							convertSubscriberId ||
+								"sub_1NIe5NFdi6zax6LRC0s82mky"
+						);
+						console.log(psResponse);
+					}}
+				>
+					<Button>Convert Test</Button>
+				</div>
 			</div>
 		</>
 	);
