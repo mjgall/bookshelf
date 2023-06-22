@@ -8,7 +8,7 @@ import flow from "@prosperstack/flow";
 import Button from "../common/Button";
 
 const Cancellation = (props) => {
-	const [customPaymentProvider, setCustomPaymentProvider] = useState(true);
+	const [customPaymentProvider, setCustomPaymentProvider] = useState(false);
 	const [cancellationStatus, setCancellationStatus] = useState("");
 	const [subscriberId, setsubscriberId] = useState("");
 	const [convertSubscriberId, setConvertSubscriberId] = useState("");
@@ -20,6 +20,7 @@ const Cancellation = (props) => {
 	const [subscriptionProperties, setSubscriptionProperties] = useState("");
 	const [subscriberProperties, setSubscriberProperties] = useState("");
 	const [mrr, setMRR] = useState(0);
+	const [staging, setStaging] = useState(false);
 
 	const global = React.useContext(Context);
 
@@ -98,6 +99,23 @@ const Cancellation = (props) => {
 					},
 				}
 			);
+		} else if (staging) {
+			flow(
+				{
+					clientId: "acct_XRTIa9ArbEB0mj1kS5e0vMFv",
+					subscription: {
+						paymentProviderId: testMode
+							? "random_string"
+							: subscriberId,
+					},
+				},
+				{
+					testMode: testMode,
+					onCompleted: (result) => {
+						setCancellationStatus(result);
+					},
+				}
+			);
 		} else {
 			flow(
 				{
@@ -140,7 +158,14 @@ const Cancellation = (props) => {
 
 	const updatePaymentProvider = () => {
 		setTestMode(false);
+		setStaging(false);
 		setCustomPaymentProvider(!customPaymentProvider);
+	};
+
+	const updateStaging = () => {
+		setTestMode(false);
+		setCustomPaymentProvider(false);
+		setStaging(!staging);
 	};
 
 	useEffect(() => {
@@ -161,6 +186,17 @@ const Cancellation = (props) => {
 							<input
 								type="checkbox"
 								className="form-checkbox cursor-pointer"
+								onChange={updateStaging}
+								checked={staging}
+							></input>
+							<span>Staging (with test mode)</span>
+						</label>
+					</div>
+					<div>
+						<label>
+							<input
+								type="checkbox"
+								className="form-checkbox cursor-pointer"
 								onChange={updatePaymentProvider}
 								checked={customPaymentProvider}
 							></input>
@@ -175,7 +211,7 @@ const Cancellation = (props) => {
 								onChange={updateTestMode}
 								checked={testMode}
 							></input>
-							<span>Test Mode</span>
+							<span>Test Mode (deprecated)</span>
 						</label>
 					</div>
 					{testMode ? null : (
