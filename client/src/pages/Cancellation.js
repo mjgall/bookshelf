@@ -6,6 +6,7 @@ import { Context } from "../globalContext";
 import Switch from "react-switch";
 import flow from "@prosperstack/flow";
 import Button from "../common/Button";
+import axios from "axios";
 
 const Cancellation = (props) => {
 	const [customPaymentProvider, setCustomPaymentProvider] = useState(false);
@@ -320,16 +321,34 @@ const Cancellation = (props) => {
 					value={convertSubscriberId}
 					className="border border-gray-400 rounded-sm w-1/4"
 				></input>
-				<div
-					onClick={async () => {
-						let psResponse = await window.ProsperStack.convert.init(
-							convertSubscriberId ||
-								"sub_1NIe5NFdi6zax6LRC0s82mky"
-						);
-						console.log(psResponse);
-					}}
-				>
-					<Button>Convert Test</Button>
+				<div>
+					<Button
+						onClick={async () => {
+							let psResponse =
+								await window.ProsperStack.convert.init(
+									convertSubscriberId ||
+										"sub_1NIe5NFdi6zax6LRC0s82mky"
+								);
+							console.log(psResponse);
+						}}
+					>
+						Convert Test
+					</Button>
+				</div>
+				<div>
+					<Button
+						onClick={async () => {
+							setConvertSubscriberId("");
+							//create new subscription for mike@gllghr.io customer in stripe
+							const response = await axios.post(
+								"/api/create-subscription"
+							);
+
+							setConvertSubscriberId(response.data.id);
+						}}
+					>
+						Generate sub_
+					</Button>
 				</div>
 			</div>
 		</>

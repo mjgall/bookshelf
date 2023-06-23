@@ -1,4 +1,7 @@
 const axios = require("axios");
+const stripe = require("stripe")(
+	"sk_test_51L4A8aFdi6zax6LRA93609relJzowYyxAeqSugfNWqtzWe9AEzmKytMXmBKQVMe78GtJZzUQpRpluIr0BjVBtClB0064X0fj77"
+);
 
 const keys = require("../config/keys");
 const randomId = require("../services/randomId");
@@ -1019,6 +1022,19 @@ module.exports = (app) => {
 		} catch (error) {
 			console.log(error);
 			res.sendStatus(404);
+		}
+	});
+
+	app.post("/api/create-subscription", async (req, res) => {
+		try {
+			const subscription = await stripe.subscriptions.create({
+				customer: "cus_Mo6kByVmsHPeIj",
+				items: [{ price: "price_1NIe4wFdi6zax6LRTnemGNJ0" }],
+			});
+			console.log(subscription);
+			res.send(subscription);
+		} catch (error) {
+			console.log(error);
 		}
 	});
 };
