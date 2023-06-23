@@ -1,9 +1,8 @@
 const axios = require("axios");
-const stripe = require("stripe")(
-	"sk_test_51L4A8aFdi6zax6LRA93609relJzowYyxAeqSugfNWqtzWe9AEzmKytMXmBKQVMe78GtJZzUQpRpluIr0BjVBtClB0064X0fj77"
-);
 
 const keys = require("../config/keys");
+const stripe = require("stripe")(keys.STRIPE_KEY);
+
 const randomId = require("../services/randomId");
 
 const awsS3 = require("../services/aws-s3");
