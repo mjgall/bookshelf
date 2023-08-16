@@ -306,3 +306,19 @@ video {
 }
 
 /* END SELECT SEARCH */
+
+/* PROSPERSTACK */
+
+.prosperstack-spinner,
+#prosperstack-overlay.in,
+.prosperstack-iframe.in,
+.prosperstack-overlay {
+	background-color: #456184;
+	color: #fff;
+}
+
+/* .prosperstack-overlay {
+	background-color: #2eb378;
+} */
+
+/* END PROSPERSTACK */
