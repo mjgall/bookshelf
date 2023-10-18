@@ -63,6 +63,7 @@ const Book = (props) => {
 		};
 
 		const determineBookType = (id) => {
+			console.log(id);
 			const index = global.allBooks.findIndex((book) => {
 				return book.id === id;
 			});
@@ -75,11 +76,15 @@ const Book = (props) => {
 				return "personal";
 			} else if (global.allBooks[index].household_id) {
 				return "household";
+			} else if (
+				global.books.borrowedBooks.some((book) => book.id === id)
+			) {
+				return "borrowed";
 			}
 		};
 
 		const bookType = determineBookType(paramId);
-
+		console.log(bookType);
 		setType(bookType);
 
 		if (bookType === "personal" || bookType === "household") {
@@ -117,10 +122,15 @@ const Book = (props) => {
 				break;
 			case "notes":
 				//updating personal notes
+				console.log({ book, type });
 				if (type === "personal") {
 					options.id = book.user_book_id;
 					options.globalId = book.id;
-				} else if (type === "global" || type === "household") {
+				} else if (
+					type === "global" ||
+					type === "household" ||
+					type === "borrowed"
+				) {
 					options.id = book.id;
 					options.usersGlobalBooksId = book.users_globalbooks_id;
 				}
@@ -133,11 +143,16 @@ const Book = (props) => {
 				break;
 		}
 
+		console.log(options);
+
 		axios.put("/api/books", options).then((response) => {
-			if (type !== "global") {
-				global.allBooks[book.index][field] = response.data[field];
-			}
+			console.log(type);
 			setBook({ ...book, [field]: response.data[field] });
+			if (type !== "global") {
+				if (type !== "borrowed") {
+					global.allBooks[book.index][field] = response.data[field];
+				}
+			}
 		});
 	};
 
