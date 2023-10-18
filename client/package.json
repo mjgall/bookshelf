@@ -24,7 +24,7 @@
     "logrocket": "^3.0.1",
     "match-sorter": "^6.3.1",
     "moment": "^2.29.2",
-    "posthog-js": "^1.50.3",
+    "posthog-js": "^1.83.0",
     "quagga": "^0.12.1",
     "query-string": "^7.1.1",
     "quill": "^1.3.7",
@@ -50,7 +50,8 @@
     "react-tippy": "^1.4.0",
     "react-toast-notifications": "^2.5.1",
     "styled-components": "^5.3.3",
-    "styled-icons": "^10.45.0"
+    "styled-icons": "^10.45.0",
+    "zipyai": "^1.7.3"
   },
   "scripts": {
     "build:style": "tailwindcss build -i src/styles/index.css -o src/styles/tailwind.css",

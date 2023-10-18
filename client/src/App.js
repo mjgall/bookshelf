@@ -27,6 +27,7 @@ import { Helmet } from "react-helmet";
 import NewAddBook from "./components/NewAddBook";
 import Upzelo from "./pages/Upzelo";
 import posthog from "posthog-js";
+import zipy from "zipyai";
 
 const App = (props) => {
 	const global = useContext(Context);
@@ -59,8 +60,23 @@ const App = (props) => {
 			api_host: "https://app.posthog.com",
 		});
 
+		zipy.init("1b69acc2");
+
 		if (!loading && global.currentUser) {
+			console.log("identifying zipy");
+			console.log({
+				firstName: global.currentUser.first,
+				lastName: global.currentUser.last,
+				email: global.currentUser.email,
+				userId: global.currentUser.id,
+			});
+			zipy.identify(global.currentUser.id, {
+				firstName: global.currentUser.first,
+				lastName: global.currentUser.last,
+				email: global.currentUser.email,
+			});
 		}
+
 		posthog.identify(global.currentUser?.id, {
 			email: global.currentUser?.email,
 		});
