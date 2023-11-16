@@ -32,7 +32,7 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
     "posthog-node": "^2.5.4",
-    "sharp": "^0.30.5",
+    "sharp": "^0.32.6",
     "sqlstring": "^2.3.2",
     "stripe": "^12.10.0",
     "tailwindcss": "^3.0.22",
