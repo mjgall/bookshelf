@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import links from "../common/pages";
+import { useFeatureFlagEnabled } from "posthog-js/react";
 
 const Subnav = (props) => {
 	const determineClass = (currentPage, to) => {
@@ -18,29 +19,35 @@ const Subnav = (props) => {
 		window.Beacon("navigate", "/ask");
 	};
 
+	const clubsEnabled = useFeatureFlagEnabled("clubs");
+
 	return (
 		<div className="md:w-full hidden md:block md:sticky md:top-sticky">
 			<div className="w-full mx-auto">
 				{links.map((link, index) => {
-					return (
-						<>
-							<Link
-								key={index}
-								onClick={() => window.scrollTo(0, 0)}
-								style={{
-									borderRadius: "4px",
-									display: "block",
-								}}
-								className={`px-2 text-center text-lg my-1 ${determineClass(
-									props.currentPage,
-									link.to
-								)}`}
-								to={link.to}
-							>
-								{link.text}
-							</Link>
-						</>
-					);
+					if (link.text === "Clubs" && !clubsEnabled) {
+						return null;
+					} else {
+						return (
+							<>
+								<Link
+									key={index}
+									onClick={() => window.scrollTo(0, 0)}
+									style={{
+										borderRadius: "4px",
+										display: "block",
+									}}
+									className={`px-2 text-center text-lg my-1 ${determineClass(
+										props.currentPage,
+										link.to
+									)}`}
+									to={link.to}
+								>
+									{link.text}
+								</Link>
+							</>
+						);
+					}
 				})}
 				<Link
 					onClick={startHelpScout}

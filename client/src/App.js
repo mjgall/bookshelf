@@ -58,6 +58,11 @@ const App = (props) => {
 
 		posthog.init("phc_DbgHM9qK6bG9vPMnws0tFkyNVKJvS6CUsyq81XLXGFA", {
 			api_host: "https://app.posthog.com",
+			bootstrap: {
+				featureFlags: {
+					clubs: false,
+				},
+			},
 		});
 
 		zipy.init("1b69acc2");
