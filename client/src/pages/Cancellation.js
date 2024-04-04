@@ -18,10 +18,11 @@ const Cancellation = (props) => {
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [subscriptionTrial, setTrial] = useState(false);
-	const [subscriptionProperties, setSubscriptionProperties] = useState("");
-	const [subscriberProperties, setSubscriberProperties] = useState("");
+	const [subscriptionProperties, setSubscriptionProperties] = useState("{}");
+	const [subscriberProperties, setSubscriberProperties] = useState("{}");
 	const [mrr, setMRR] = useState(0);
 	const [staging, setStaging] = useState(false);
+	const [modal, setModal] = useState(false);
 
 	const global = React.useContext(Context);
 
@@ -68,7 +69,8 @@ const Cancellation = (props) => {
 	};
 
 	const callProsperstack = () => {
-		if (customPaymentProvider) {
+		if (customPaymentProvider && !modal) {
+			console.log("calling custom and not modal flow");
 			flow(
 				{
 					clientId: "acct_k82PIoYRCo32YCglABzogqed",
@@ -89,6 +91,9 @@ const Cancellation = (props) => {
 				},
 				{
 					testMode: testMode,
+					onClosed: (result) => {
+						console.log("onClosed fired.");
+					},
 					onCompleted: (result) => {
 						if (
 							result.status === "saved" &&
@@ -96,11 +101,13 @@ const Cancellation = (props) => {
 						) {
 							console.log("bonus featur unlocked!");
 						}
+						console.log("onCompleted fired");
 						setCancellationStatus(result);
 					},
 				}
 			);
 		} else if (staging) {
+			console.log("calling staging flow");
 			flow(
 				{
 					clientId: "acct_XRTIa9ArbEB0mj1kS5e0vMFv",
@@ -113,6 +120,44 @@ const Cancellation = (props) => {
 				{
 					testMode: testMode,
 					onCompleted: (result) => {
+						setCancellationStatus(result);
+					},
+				}
+			);
+		} else if (modal && customPaymentProvider) {
+			console.log("calling modal flow");
+			flow(
+				{
+					clientId: "acct_k82PIoYRCo32YCglABzogqed",
+					flowId: "flow_ak50s5PjbpHQlAHMysdg3WjQ",
+					subscriber: {
+						internalId: internalId,
+						name: name,
+						email: email,
+						properties: {
+							books: global.allBooks.count,
+							...JSON.parse(subscriberProperties),
+						},
+					},
+					subscription: {
+						mrr: mrr,
+						properties: JSON.parse(subscriptionProperties),
+					},
+				},
+				{
+					displayMode: "modal",
+					testMode: testMode,
+					onClosed: (result) => {
+						console.log("onClosed fired.");
+					},
+					onCompleted: (result) => {
+						if (
+							result.status === "saved" &&
+							result.offer.id === "offr_vwXnBZyQiN10J6ii8YSjSPhU"
+						) {
+							console.log("bonus featur unlocked!");
+						}
+						console.log("onCompleted fired");
 						setCancellationStatus(result);
 					},
 				}
@@ -158,15 +203,26 @@ const Cancellation = (props) => {
 	};
 
 	const updatePaymentProvider = () => {
+		if (customPaymentProvider) {
+			setModal(false);
+		}
+
 		setTestMode(false);
 		setStaging(false);
 		setCustomPaymentProvider(!customPaymentProvider);
 	};
 
 	const updateStaging = () => {
+		setModal(false);
 		setTestMode(false);
 		setCustomPaymentProvider(false);
 		setStaging(!staging);
+	};
+
+	const updateModal = () => {
+		setTestMode(false);
+		setStaging(false);
+		setModal(!modal);
 	};
 
 	useEffect(() => {
@@ -182,6 +238,17 @@ const Cancellation = (props) => {
 				<div className="mb-2">Cancel Flow Playground:</div>
 
 				<div>
+					<div>
+						<label>
+							<input
+								type="checkbox"
+								className="form-checkbox cursor-pointer"
+								onChange={updateModal}
+								checked={modal}
+							></input>
+							<span>Modal</span>
+						</label>
+					</div>
 					<div>
 						<label>
 							<input
