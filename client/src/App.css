@@ -309,23 +309,21 @@ video {
 
 /* PROSPERSTACK */
 
-/* .prosperstack-spinner,
-#prosperstack-overlay.in,
-.prosperstack-iframe.in,
-.prosperstack-overlay {
-	background-color: #456184;
-	color: #fff;
+
+#prosperstack-overlay.in {
+	background-color: #000;
 }
 
-.prosperstack-overlay {
-	background-color: #2eb378;
-} */
 
 body .prosperstack-iframe.modal {
 	min-width: auto;
 	width: 25vw;
 	height: 80vh;
 	padding: 0;
+	border-radius: 1rem;
 }
 
+/* iframe.prosperstack-iframe.modal {
+	padding: 0;
+} */
 /* END PROSPERSTACK */

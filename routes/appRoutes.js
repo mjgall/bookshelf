@@ -11,6 +11,7 @@ const googleBooksLookup = require("../services/gcp-books");
 const fs = require("fs");
 
 const _ = require("lodash");
+const crypto = require("crypto");
 
 const getBooks = require("../queries/getBooks");
 const addBook = require("../queries/addBook.js");
@@ -1035,6 +1036,24 @@ module.exports = (app) => {
 			res.send(subscription);
 		} catch (error) {
 			console.log(error);
+		}
+	});
+
+	app.post("/api/sign-prosperstack", async (req, res) => {
+		try {
+			const { payload } = req.body;
+
+			const secret =
+				"csec_f9d8a43631d7e7a9dcff24f2a74d876c36a5d0ec64f8efb49a8076b201c59ced";
+
+			const digest = crypto
+				.createHmac("sha256", secret)
+				.update(payload)
+				.digest("hex");
+
+			res.send({ digest });
+		} catch (error) {
+			res.send(500);
 		}
 	});
 };

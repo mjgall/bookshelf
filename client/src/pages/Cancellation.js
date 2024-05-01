@@ -80,7 +80,7 @@ const Cancellation = (props) => {
 						name: name,
 						email: email,
 						properties: {
-							books: global.allBooks.count,
+							books: global.allBooks.length,
 							...JSON.parse(subscriberProperties),
 						},
 					},
@@ -135,7 +135,7 @@ const Cancellation = (props) => {
 						name: name,
 						email: email,
 						properties: {
-							books: global.allBooks.count,
+							books: global.allBooks.length,
 							...JSON.parse(subscriberProperties),
 						},
 					},
@@ -223,6 +223,51 @@ const Cancellation = (props) => {
 		setTestMode(false);
 		setStaging(false);
 		setModal(!modal);
+	};
+
+	const callStripeProdPS = async () => {
+		// const payload = {
+		// 	clientId: "acct_xWnc1RG2xF0QLCcc5HBizyhA",
+		// 	subscription: {
+		// 		platformId: convertSubscriberId,
+		// 	},
+		// };
+		// const signature = await axios
+		// 	.post("/api/sign-prosperstack")
+		// 	.then((res) => res.data);
+		// console.log(signature);
+		// flow({
+		// 	payload: JSON.stringify(payload),
+		// 	signature: signature,
+		// });
+
+		flow(
+			{
+				clientId: "acct_xWnc1RG2xF0QLCcc5HBizyhA",
+				subscription: {
+					platformId: convertSubscriberId,
+				},
+			},
+			{
+				sign: async (payload) => {
+					try {
+						const response = await fetch("/api/sign-prosperstack", {
+							method: "POST",
+							body: JSON.stringify({ payload }),
+							headers: {
+								"Content-Type": "application/json",
+							},
+						});
+						const signature = (await response.json()).digest;
+
+						return signature;
+					} catch (error) {
+						console.log(error);
+						return;
+					}
+				},
+			}
+		);
 	};
 
 	useEffect(() => {
@@ -379,6 +424,39 @@ const Cancellation = (props) => {
 						/>
 					) : null}
 				</div>
+			</div>
+			<div className="border border-gray-500 mt-4 px-6 py-4">
+				<div className="mb-2">MJG - Stripe + Convert (620):</div>
+				<input
+					placeholder="Convert subscription ID (Stripe sub_)"
+					onChange={handleConvertSubscriberIdChange}
+					value={convertSubscriberId}
+					className="border border-gray-400 rounded-sm w-1/4"
+				></input>
+				<div>
+					<Button onClick={() => callStripeProdPS()}>Cancel</Button>
+				</div>
+				<div>
+					<Button
+						onClick={async () => {
+							setConvertSubscriberId("");
+							//create new subscription for mike@gllghr.io customer in stripe
+							const response = await axios.post(
+								"/api/create-subscription"
+							);
+
+							setConvertSubscriberId(response.data.id);
+						}}
+					>
+						Generate sub_
+					</Button>
+				</div>
+				{cancellationStatus ? (
+					<ReactJson
+						theme="grayscale:inverted"
+						src={cancellationStatus}
+					/>
+				) : null}
 			</div>
 			<div className="border border-gray-500 mt-4 px-6 py-4">
 				<div className="mb-2">Convert Playground:</div>
