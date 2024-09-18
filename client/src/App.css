@@ -317,7 +317,6 @@ video {
 
 body .prosperstack-iframe.modal {
 	min-width: auto;
-	width: 25vw;
 	height: 80vh;
 	padding: 0;
 	border-radius: 1rem;

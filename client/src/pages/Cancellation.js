@@ -104,6 +104,9 @@ const Cancellation = (props) => {
 						console.log("onCompleted fired");
 						setCancellationStatus(result);
 					},
+					onError: function (error) {
+						console.error("ProsperStack flow error:", error);
+					},
 				}
 			);
 		} else if (staging) {
@@ -121,6 +124,13 @@ const Cancellation = (props) => {
 					testMode: testMode,
 					onCompleted: (result) => {
 						setCancellationStatus(result);
+					},
+					onError: function (error) {
+						console.error(
+							"ProsperStack flow error:",
+
+							error
+						);
 					},
 				}
 			);
@@ -145,6 +155,7 @@ const Cancellation = (props) => {
 					},
 				},
 				{
+					language: "de-DE",
 					displayMode: "modal",
 					testMode: testMode,
 					onClosed: (result) => {
@@ -159,6 +170,13 @@ const Cancellation = (props) => {
 						}
 						console.log("onCompleted fired");
 						setCancellationStatus(result);
+					},
+					onError: function (error) {
+						console.error(
+							"ProsperStack flow error:",
+
+							error
+						);
 					},
 				}
 			);
@@ -189,6 +207,13 @@ const Cancellation = (props) => {
 							console.log("bonus featur unlocked!");
 						}
 						setCancellationStatus(result);
+					},
+					onError: function (error) {
+						console.error(
+							"ProsperStack flow error:",
+
+							error
+						);
 					},
 				}
 			);
@@ -249,6 +274,13 @@ const Cancellation = (props) => {
 				},
 			},
 			{
+				onError: function (error) {
+					console.error(
+						"ProsperStack flow error:",
+
+						error
+					);
+				},
 				sign: async (payload) => {
 					try {
 						const response = await fetch("/api/sign-prosperstack", {
@@ -289,8 +321,7 @@ const Cancellation = (props) => {
 								type="checkbox"
 								className="form-checkbox cursor-pointer"
 								onChange={updateModal}
-								checked={modal}
-							></input>
+								checked={modal}></input>
 							<span>Modal</span>
 						</label>
 					</div>
@@ -300,8 +331,7 @@ const Cancellation = (props) => {
 								type="checkbox"
 								className="form-checkbox cursor-pointer"
 								onChange={updateStaging}
-								checked={staging}
-							></input>
+								checked={staging}></input>
 							<span>Staging (with test mode)</span>
 						</label>
 					</div>
@@ -311,8 +341,7 @@ const Cancellation = (props) => {
 								type="checkbox"
 								className="form-checkbox cursor-pointer"
 								onChange={updatePaymentProvider}
-								checked={customPaymentProvider}
-							></input>
+								checked={customPaymentProvider}></input>
 							<span>Custom Payment Provider</span>
 						</label>
 					</div>
@@ -322,8 +351,7 @@ const Cancellation = (props) => {
 								type="checkbox"
 								className="form-checkbox cursor-pointer"
 								onChange={updateTestMode}
-								checked={testMode}
-							></input>
+								checked={testMode}></input>
 							<span>Test Mode (deprecated)</span>
 						</label>
 					</div>
@@ -342,28 +370,24 @@ const Cancellation = (props) => {
 													handleInternalIdChange
 												}
 												value={internalId}
-												className="border border-gray-400 rounded-sm w-1/4"
-											></input>
+												className="border border-gray-400 rounded-sm w-1/4"></input>
 											<input
 												placeholder="Name"
 												onChange={handleNameChange}
 												value={name}
-												className="border border-gray-400 rounded-sm w-1/4"
-											></input>
+												className="border border-gray-400 rounded-sm w-1/4"></input>
 											<input
 												placeholder="Email"
 												onChange={handleEmailChange}
 												value={email}
-												className="border border-gray-400 rounded-sm w-1/4"
-											></input>
+												className="border border-gray-400 rounded-sm w-1/4"></input>
 											<textarea
 												placeholder="Subscriber Properties JSON"
 												onChange={
 													handleSubscriberPropertiesChange
 												}
 												value={subscriberProperties}
-												className="border border-gray-400 rounded-sm w-1/4"
-											></textarea>
+												className="border border-gray-400 rounded-sm w-1/4"></textarea>
 										</div>
 									</div>
 									<div className="mt-4">
@@ -375,8 +399,7 @@ const Cancellation = (props) => {
 												placeholder="MRR"
 												onChange={handleMRRChange}
 												value={mrr}
-												className="border border-gray-400 rounded-sm w-1/4"
-											></input>
+												className="border border-gray-400 rounded-sm w-1/4"></input>
 											<div className="flex content-center my-2">
 												<div className="text-sm mr-4">
 													Trial
@@ -395,8 +418,7 @@ const Cancellation = (props) => {
 													handleSubcriptionPropertiesChange
 												}
 												value={subscriptionProperties}
-												className="border border-gray-400 rounded-sm w-1/4"
-											></textarea>
+												className="border border-gray-400 rounded-sm w-1/4"></textarea>
 										</div>
 									</div>
 								</>
@@ -405,15 +427,13 @@ const Cancellation = (props) => {
 									placeholder="Stripe ID"
 									onChange={handleSubscriberIdChange}
 									value={subscriberId}
-									className="border border-gray-400 rounded-sm w-1/4"
-								></input>
+									className="border border-gray-400 rounded-sm w-1/4"></input>
 							)}
 						</div>
 					)}
 					<div
 						className="text-center w-32 bg-red-500 hover:bg-red-700 text-white font-bold mt-2 py-2 px-4 rounded cursor-pointer cente"
-						onClick={callProsperstack}
-					>
+						onClick={callProsperstack}>
 						Cancel
 					</div>
 					{/* <div>{JSON.stringify(cancellationStatus, null, 2)}</div> */}
@@ -431,8 +451,7 @@ const Cancellation = (props) => {
 					placeholder="Convert subscription ID (Stripe sub_)"
 					onChange={handleConvertSubscriberIdChange}
 					value={convertSubscriberId}
-					className="border border-gray-400 rounded-sm w-1/4"
-				></input>
+					className="border border-gray-400 rounded-sm w-1/4"></input>
 				<div>
 					<Button onClick={() => callStripeProdPS()}>Cancel</Button>
 				</div>
@@ -446,8 +465,7 @@ const Cancellation = (props) => {
 							);
 
 							setConvertSubscriberId(response.data.id);
-						}}
-					>
+						}}>
 						Generate sub_
 					</Button>
 				</div>
@@ -464,8 +482,7 @@ const Cancellation = (props) => {
 					placeholder="Convert subscription ID (Stripe sub_)"
 					onChange={handleConvertSubscriberIdChange}
 					value={convertSubscriberId}
-					className="border border-gray-400 rounded-sm w-1/4"
-				></input>
+					className="border border-gray-400 rounded-sm w-1/4"></input>
 				<div>
 					<Button
 						onClick={async () => {
@@ -475,8 +492,7 @@ const Cancellation = (props) => {
 										"sub_1NIe5NFdi6zax6LRC0s82mky"
 								);
 							console.log(psResponse);
-						}}
-					>
+						}}>
 						Convert Test
 					</Button>
 				</div>
@@ -490,8 +506,7 @@ const Cancellation = (props) => {
 							);
 
 							setConvertSubscriberId(response.data.id);
-						}}
-					>
+						}}>
 						Generate sub_
 					</Button>
 				</div>
