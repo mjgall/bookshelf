@@ -19,7 +19,7 @@
     "browser-image-compression": "^1.0.17",
     "draft-js": "^0.11.7",
     "formik": "^2.2.9",
-    "http-proxy-middleware": "^2.0.7",
+    "http-proxy-middleware": "^2.0.9",
     "lodash": "^4.17.21",
     "logrocket": "^3.0.1",
     "match-sorter": "^6.3.1",
